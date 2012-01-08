@@ -24,7 +24,7 @@
 
 
 ARDUINO=stub
-
+BUILD_FROM_VCS=true
 SHLIB=libtest.so
 SHLIB_LIBS= -L../../faked-arduino/ -lsearduino-stub -lpthread
 SRC_C=test.c
