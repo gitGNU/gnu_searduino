@@ -37,9 +37,9 @@ clean: ARDUINO=mega
 clean: stub-clean lib-clean test-clean
 
 lib:
-	ARDUINO=uno  && BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean uno
-	ARDUINO=due  && BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean due
-	ARDUINO=mega && BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean mega
+	ARDUINO=uno  && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean uno
+	ARDUINO=due  && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean due
+	ARDUINO=mega && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean mega
 
 stub:
 	ARDUINO=stub && BOARD=stub && export BUILD_FROM_VCS=true  && cd $(FAKED_ARDUINO_SRC) && make lib shlib
@@ -127,6 +127,7 @@ install:
 	cp -r example/ $(INSTALL_DIR)/searduino
 
 dist: clean
-	tar cvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test
-
+	-rm searduino-*.tar
+	tar cvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
+	@echo "Created: $(DIST_FILE)"
 
