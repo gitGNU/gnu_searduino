@@ -21,32 +21,6 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-
-#ifndef SEARDUINO_PRINT_H
-#define SEARDUINO_PRINT_H
-
-#include <stdio.h>
-#include "utils/include/types.h"
+#include "utils/types.h"
 
 
-#define INFO_STREM stdout
-#define ERR_STREM  stderr
-
-void print_function_name (FILE* stream,  const char* fun, char * str,  ...) ;
-
-
-/* #define ENANLE_DEBUG_PRINTOUTS */
-
-#ifdef ENANLE_DEBUG_PRINTOUTS
-#define PRINT_FUNCTION_NAME_NOARGS() printf( "function: %s (",__func__); printf (")\n");
-#define PRINT_FUNCTION_NAME(a)       printf( "function: %s (",__func__); printf a; printf (")\n");
-#define DEBUG_INFO(a)                printf( "info:     %s (",__func__); printf a; printf (")\n");
-#else
-#define PRINT_FUNCTION_NAME_NOARGS() 
-#define PRINT_FUNCTION_NAME(a)       
-#define DEBUG_INFO(a)                
-#endif /* ENANLE_FUNCTION_PRINT_NAME */
-
-
-
-#endif /* SEARDUINO_PRINT_H */

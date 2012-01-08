@@ -21,6 +21,20 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "../../../utils/include/types.h"
+#include "utils/types.h"
+
+void searduino_setup(void);
+
+void pinMode(uint8_t pin, uint8_t mode);
+
+void digitalWrite(uint8_t pin, uint8_t val);
+
+int digitalRead(uint8_t pin);
+
+int digitalReadMode(uint8_t pin);
 
 
+uint8_t 
+get_nr_of_pins(void);
+
+int ext_set_input(uint8_t pin, uint8_t val);

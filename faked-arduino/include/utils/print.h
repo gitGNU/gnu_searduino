@@ -21,20 +21,32 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "utils/include/types.h"
 
-void searduino_setup(void);
+#ifndef SEARDUINO_PRINT_H
+#define SEARDUINO_PRINT_H
 
-void pinMode(uint8_t pin, uint8_t mode);
-
-void digitalWrite(uint8_t pin, uint8_t val);
-
-int digitalRead(uint8_t pin);
-
-int digitalReadMode(uint8_t pin);
+#include <stdio.h>
+#include "utils/types.h"
 
 
-uint8_t 
-get_nr_of_pins(void);
+#define INFO_STREM stdout
+#define ERR_STREM  stderr
 
-int ext_set_input(uint8_t pin, uint8_t val);
+void print_function_name (FILE* stream,  const char* fun, char * str,  ...) ;
+
+
+/* #define ENANLE_DEBUG_PRINTOUTS */
+
+#ifdef ENANLE_DEBUG_PRINTOUTS
+#define PRINT_FUNCTION_NAME_NOARGS() printf( "function: %s (",__func__); printf (")\n");
+#define PRINT_FUNCTION_NAME(a)       printf( "function: %s (",__func__); printf a; printf (")\n");
+#define DEBUG_INFO(a)                printf( "info:     %s (",__func__); printf a; printf (")\n");
+#else
+#define PRINT_FUNCTION_NAME_NOARGS() 
+#define PRINT_FUNCTION_NAME(a)       
+#define DEBUG_INFO(a)                
+#endif /* ENANLE_FUNCTION_PRINT_NAME */
+
+
+
+#endif /* SEARDUINO_PRINT_H */

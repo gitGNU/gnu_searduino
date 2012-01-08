@@ -26,9 +26,9 @@
 #include <string.h>
 #include <unistd.h>
 
-#include "utils/include/types.h"
-#include "../include/comm.h"
-#include "../include/read_command.h"
+#include "utils/types.h"
+#include "communication/comm.h"
+#include "communication/read_command.h"
 
 
 void init_command_reader(void)

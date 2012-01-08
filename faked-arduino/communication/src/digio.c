@@ -21,11 +21,11 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "utils/include/types.h"
-#include "utils/include/print.h"
+#include "utils/types.h"
+#include "utils/print.h"
 
-#include "../include/comm.h"
-#include "../include/error.h"
+#include "communication/comm.h"
+#include "communication/error.h"
 
 int 
 comm_digital_write_outpin(uint8_t pin, uint8_t val)

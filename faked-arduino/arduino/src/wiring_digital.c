@@ -21,15 +21,16 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "wiring_private.h"
-#include "pins_arduino.h"
+#include "arduino/wiring_private.h"
+#include "arduino/pins_arduino.h"
 #include "../include/error.h"
-#include "utils/include/print.h"
-#include "utils/include/types.h"
-#include "utils/include/error.h"
+#include "utils/print.h"
+#include "utils/types.h"
+#include "arduino/error.h"
+#include "utils/error.h"
 
-#include "digio.h"
-#include "comm.h"
+#include "communication/digio.h"
+#include "communication/comm.h"
 
 
 typedef struct arduino_pin
@@ -40,39 +41,6 @@ typedef struct arduino_pin
 
 static arduino_pin arduino_out_pins[NR_OF_OUT_PINS];
 static arduino_pin arduino_in_pins[NR_OF_IN_PINS];
-
-void digin_callback(uint8_t pin, uint8_t val); 
-int  digout_callback(uint8_t pin);
-
-
-void searduino_setup(void)
-{
-  static int already_setup = 0;
-  int ret;
-
-  if (already_setup)
-    {
-      return;
-    }
-  PRINT_FUNCTION_NAME_NOARGS();
-
-  printf ("Registering callbacks....\n");
-
-  init_comm();
-  ret = comm_register_digin_cb(digin_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf(stderr, "Failed to register di callback");
-    }
-
-  ret = comm_register_digout_cb(digout_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf(stderr, "Failed to register do callback");
-    }
-
-  already_setup=1;
-}
 
 
 /*
@@ -104,7 +72,7 @@ digin_callback(uint8_t pin, uint8_t val)
  *   used in comm layer
  *
  */
-int
+uint8_t
 digout_callback(uint8_t pin)
 {
   searduino_setup();
@@ -144,7 +112,7 @@ static void turnOffPWM(uint8_t timer)
 void digitalWrite(uint8_t pin, uint8_t val)
 {
   int ret;
-  static discard_ctr;
+  static int discard_ctr;
   searduino_setup();
 /*   printf ("PYTHON   (stub) pin:%d=%d   GUI | will set value \n" ,pin,val); */
 

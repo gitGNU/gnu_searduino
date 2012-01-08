@@ -35,6 +35,7 @@ SRC_C= ./communication/src/comm.c      \
        ./communication/src/read_command.c \
        ./utils/src/print.c             \
        ./arduino/src/wiring_digital.c  \
+       ./arduino/src/setup.c  \
        ./arduino/src/time_stuff.c
 
 LIB=$(SEARDUINO_PATH)/faked-arduino/libsearduino-stub.a
@@ -46,20 +47,7 @@ BOARD=stub
 SEARDUINO_PATH=..
 SEARDUINO_MK=../mk/searduino.mk
 SEARDUINO_LIB_MK=../mk/searduino_lib.mk
-SRC_HEADERS=./communication/include/comm.h  \
-            ./communication/include/ext_io.h  \
-            ./communication/include/digio.h  \
-            ./communication/include/read_command.h  \
-            ./utils/include/types.h        \
-            ./utils/include/error.h        \
-            ./utils/include/print.h        \
-            ./arduino/include/error.h      \
-            ./arduino/include/wiring_private.h  \
-            ./arduino/include/pins_arduino.h    \
-            ./arduino/include/avr/delay.h       \
-            ./arduino/include/avr/interrupt.h   \
-            ./arduino/include/avr/pgmspace.h    \
-            ./arduino/include/avr/io.h    
+SRC_HEADERS=
 
 lib: $(LIB)
 shlib: $(SHLIB)
@@ -67,3 +55,11 @@ shlib: $(SHLIB)
 include $(SEARDUINO_MK)
 include $(SEARDUINO_LIB_MK)
 
+install: 
+#$(LIB) $(SHLIB)
+	@echo "installing to $(INSTALL_DIR)"
+	@cp $(LIB) $(SHLIB) $(INSTALL_DIR)/searduino/libs/
+	@mkdir -p $(INSTALL_DIR)/searduino/include/faked-arduino/communication/
+	@mkdir -p $(INSTALL_DIR)/searduino/include/faked-arduino/arduino/
+	@mkdir -p $(INSTALL_DIR)/searduino/include/faked-arduino/utils/
+	@cp -r include/* $(INSTALL_DIR)/searduino/include/faked-arduino/

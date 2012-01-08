@@ -21,11 +21,11 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "utils/include/types.h"
-#include "utils/include/error.h"
-#include "utils/include/print.h"
+#include "utils/types.h"
+#include "utils/error.h"
+#include "utils/print.h"
 
-#include "../include/comm.h"
+#include "communication/comm.h"
 
 int ext_set_dig_input(uint8_t pin, uint8_t val)
 {

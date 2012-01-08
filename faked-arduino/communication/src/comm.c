@@ -25,12 +25,12 @@
 #include "string.h"
 #include "unistd.h"
 
-#include "utils/include/types.h"
-#include "utils/include/print.h"
+#include "utils/types.h"
+#include "utils/print.h"
 
-#include "../include/comm.h"
-#include "../include/error.h"
-#include "../include/read_command.h"
+#include "communication/comm.h"
+#include "communication/error.h"
+#include "communication/read_command.h"
 
 
 

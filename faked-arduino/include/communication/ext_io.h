@@ -28,3 +28,10 @@ int ext_set_dig_input(uint8_t pin, uint8_t val);
 
 int ext__dig_input(uint8_t pin, uint8_t val);
 
+/*
+ * 
+ * This is a prototype for the main function
+ * in the simulator
+ * 
+ */
+int searduino_main(void);
