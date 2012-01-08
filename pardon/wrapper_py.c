@@ -26,8 +26,9 @@
 #include <pthread.h>
 
 
-#include "comm.h"
-#include "ext_io.h"
+#include "communication/comm.h"
+#include "communication/ext_io.h"
+#include "arduino/setup.h"
 
 static PyObject *my_callback = NULL;
 static PyObject *my_set_callback(PyObject *dummy, PyObject *args);
@@ -38,11 +39,11 @@ void new_dig_out(uint8_t pin, uint8_t val)
 /* 	  pin, val); */
 
   PyObject *arglist;
-  PyObject *result;
+/*   PyObject *result; */
 
   /* Time to call the callback */
   arglist = Py_BuildValue("(i,i)", pin, val);
-  result = PyObject_CallObject(my_callback, arglist);
+/*   result = PyObject_CallObject(my_callback, arglist); */
   Py_DECREF(arglist);
 }
 
@@ -139,8 +140,5 @@ void initpardon()
 
   comm_register_digout_sim_cb(new_dig_out);
 
-
   pthread_create(&p, NULL, arduino_code, NULL);
-  
-
 }

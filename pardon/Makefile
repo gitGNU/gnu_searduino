@@ -22,5 +22,31 @@
 #
 
 
-lib:
-	gcc -shared wrapper_py.c -Wall  -I../arduino-sources/core/ -I../faked-arduino/arduino/include/ -I../faked-arduino/communication/include/ -I/usr/include/python2.7/ -lpython2.7 -o pardon.so -L../faked-arduino/ -lsearduino-stub -L../test/shared -ltest
+BUILD_FROM_VCS=true
+ARDUINO=stub
+SRC_C=wrapper_py.c
+SHLIB=pardon.so
+USER_C_FLAGS=-I/usr/include/python2.7/ -lpython2.7
+SHLIB_LIBS=  -L../test/shared -L../faked-arduino -ltest -lsearduino-stub
+
+
+#lib:
+#	gcc -shared wrapper_py.c -o $(SHLIB) 
+
+
+SEARDUINO_PATH=..
+SEARDUINO_MK=../mk/searduino.mk
+SEARDUINO_LIB_MK=../mk/searduino_lib.mk
+SRC_HEADERS=
+
+shlib: $(SHLIB)
+lib: $(LIB)
+
+
+
+include $(SEARDUINO_MK)
+include $(SEARDUINO_LIB_MK)
+
+
+check:
+	export LD_LIBRARY_PATH=../faked-arduino:../test/shared/ && ./pardon.py
