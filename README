@@ -1,0 +1,20 @@
+Arduino devel tool:
+
+* Stub libraries for Arduino
+
+* Python scripting interface to test your Arduino programs locally
+
+* Arduino simulator to test your Arduino programs locally
+
+* Stding/Stdout "simualtor" with which you can talk with your Arduino program (locally)
+
+* C/C++ interfaces for Arduino easier accessible 
+
+* Makefiles to ease up development and uploading from command line
+
+* Currently supports: Uno, Due and Mega and basic Digital in/out on GNU/Linux
+
+
+
+
+
