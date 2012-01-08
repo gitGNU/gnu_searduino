@@ -31,21 +31,18 @@ DIST_FILE=searduino-$(shell date '+%y%m%d-%H%M%S').tar
 
 all: lib stub 
 
-date:
-	echo $(DATE)
-
 check: check-hw check-sw
 
 clean: ARDUINO=mega
 clean: stub-clean lib-clean test-clean
 
 lib:
-	ARDUINO=uno  && cd $(ARDUINO_SRC) && make clean uno
-	ARDUINO=due  && cd $(ARDUINO_SRC) && make clean due
-	ARDUINO=mega && cd $(ARDUINO_SRC) && make clean mega
+	ARDUINO=uno  && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean uno
+	ARDUINO=due  && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean due
+	ARDUINO=mega && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean mega
 
 stub:
-	ARDUINO=stub && BOARD=stub && cd $(FAKED_ARDUINO_SRC) && make lib shlib
+	ARDUINO=stub && BOARD=stub && export BUILD_FROM_VCS=true  && cd $(FAKED_ARDUINO_SRC) && make lib shlib
 
 stub-clean:
 	cd $(FAKED_ARDUINO_SRC) && make clean
@@ -97,17 +94,17 @@ uno-test: lib
 uno: ARDUINO=uno
 uno: CPU=
 uno:
-	cd $(ARDUINO_SRC)  &&  make light-clean uno
-	cd test/hw  && make clean 
-	cd test/hw  && make  
-	cd test/hw  && make  upload
+#	cd $(ARDUINO_SRC)  &&  make light-clean uno
+#	cd test/hw  && make clean 
+#	cd test/hw  && export BUILD_FROM_VCS=true && make  
+	cd test/hw  && export BUILD_FROM_VCS=true && make  upload
 
 due: ARDUINO=due
 due: CPU=
 due:
 	cd $(ARDUINO_SRC)  &&  make light-clean due
 	cd test/hw  && make clean 
-	cd test/hw  && make  
+	cd test/hw  && export BUILD_FROM_VCS=true && make  
 	cd test/hw  && make  upload
 
 mega: ARDUINO=mega
@@ -115,11 +112,22 @@ mega: CPU=
 mega:
 	cd $(ARDUINO_SRC)  &&  make light-clean mega
 	cd test/hw  && make clean 
-	cd test/hw  && make  
+	cd test/hw  && export BUILD_FROM_VCS=true && make  
 	cd test/hw  && make  upload
 
 
-dist: clean
-	tar cvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test
+install: INSTALL_DIR=/usr/local
+install: ARDUINO=uno
+install: 
+	mkdir -p $(INSTALL_DIR)/searduino
+	echo "Will install in directory: $(INSTALL_DIR)"
+	export INSTALL_DIR=$(INSTALL_DIR) && cd arduino-sources && make install
+	export INSTALL_DIR=$(INSTALL_DIR) && cd faked-arduino && make install
+	cp -r mk/ $(INSTALL_DIR)/searduino
+	cp -r example/ $(INSTALL_DIR)/searduino
 
+dist: clean
+	-rm searduino-*.tar
+	tar cvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
+	@echo "Created: $(DIST_FILE)"
 
