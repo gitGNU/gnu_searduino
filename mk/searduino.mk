@@ -21,9 +21,10 @@
 #
 #
 
-OBJ_C = $(SRC_C:.c=.o)
-OBJ_CXX = $(SRC_CXX:.cpp=.o)
-OBJ_JAVA= $(SRC_JAVA:.java=.o)
+
+stubbed: ARDUINO=stub
+stubbed: 
+	make $(PROG)
 
 
 ifeq (${ARDUINO},due)
@@ -46,6 +47,15 @@ CPU=atmega1280
 VARIANT=mega
 ARDUINO_CPU=ATmega1280
 USB_DEV=/dev/ttyUSB0
+endif
+
+
+ifeq (${ARDUINO},stub)
+OBJ_C = $(SRC_C:.c=.o) $(MAIN_SRC:.c=.o)
+OBJ_CXX = $(SRC_CXX:.cpp=.o) 
+else
+OBJ_C = $(SRC_C:.c=.o) 
+OBJ_CXX = $(SRC_CXX:.cpp=.o) 
 endif
 
 ifeq ($(ARDUINO),stub)
@@ -84,30 +94,52 @@ endif
 
 
 
-
 ifeq ($(ARDUINO),stub)
+ifeq ($(BUILD_FROM_VCS),true)
+INC_FLAGS= -I$(SEARDUINO_PATH)/include/arduino/core \
+           -I$(SEARDUINO_PATH)/include/arduino/variants \
+           -I$(SEARDUINO_PATH)/faked-arduino/arduino/include \
+           -I$(SEARDUINO_PATH)/faked-arduino/include \
+           -I$(SEARDUINO_PATH)/faked-arduino/include/arduino \
+           -I$(SEARDUINO_PATH)/faked-arduino/utils/include \
+           -I$(SEARDUINO_PATH)/faked-arduino/commnication/include \
+           -I$(SEARDUINO_PATH)/arduino-sources/core
+
+SEARDUINO_LIB_PATH= $(SEARDUINO_PATH)/libs
+else
+INC_FLAGS=  -I$(SEARDUINO_PATH)/include/arduino/core \
+           -I$(SEARDUINO_PATH)/include/arduino/variants \
+           -I$(SEARDUINO_PATH)/include/faked-arduino/arduino \
+           -I$(SEARDUINO_PATH)/include/faked-arduino/
+SEARDUINO_LIB_PATH= $(SEARDUINO_PATH)/libs
+endif
+
 CFLAGS=   -g $(USER_C_FLAGS) -Wall \
            $(LIB_FLAGS) \
            $(MODULE_C_FLAGS) \
-           -I$(SEARDUINO_PATH)/arduino-sources/core \
-           -I$(SEARDUINO_PATH)/faked-arduino/arduino/include  
+           $(INC_FLAGS)
 
 CXXFLAGS=-g $(USER_CXX_FLAGS) \
             $(MODULE_CXX_FLAGS) \
-           -I$(SEARDUINO_PATH)/arduino-sources/core  
+           $(INC_FLAGS)
 
-SEARDUINO_LIB_PATH= $(SEARDUINO_PATH)/faked-arduino 
 
-LDFLAGS = -L$(SEARDUINO_LIB_PATH) -lsearduino-stub $(USER_LD_FLAGS)
+LDFLAGS = -L$(SEARDUINO_LIB_PATH) -lsearduino-stub $(USER_LD_FLAGS) -lpthread
 
 else
+ifeq ($(BUILD_FROM_VCS),true)
+INC_FLAGS=  -I$(SEARDUINO_PATH)/arduino-sources/core  \
+            -I$(SEARDUINO_PATH)/arduino-sources/variants/$(VARIANT) 
+else
+INC_FLAGS=  -I$(SEARDUINO_PATH)/include/arduino/core \
+            -I$(SEARDUINO_PATH)/include/arduino/variants/$(VARIANT) 
+endif
 
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -ffunction-sections -fdata-sections \
                           -mmcu=$(CPU) -DF_CPU=$(F_CPU) \
                           -DARDUINO=$(ARDUINO_VERSION) \
-                          -I$(SEARDUINO_PATH)/arduino-sources/core \
-                          -I$(SEARDUINO_PATH)/arduino-sources/variants/$(VARIANT)
+                           $(INC_FLAGS)
 
 #-I$(SEARDUINO_PATH)/src
 #-Wall -Wa,-ahlms=$(PROG).lst -fno-exceptions -w = -fno-exceptions
@@ -118,16 +150,19 @@ LIBSEARDUINO_CXXFLAGS=
 CFLAGS= $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CFLAGS) $(USER_C_FLAGS)
 CXXFLAGS=$(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CXXFLAGS) $(USER_CXX_FLAGS)
 
+
+ifeq ($(BUILD_FROM_VCS),true)
 SEARDUINO_LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD)
-LDFLAGS=-L$(SEARDUINO_LIB_PATH) -lsearduino
+else
+SEARDUINO_LIB_PATH=$(SEARDUINO_PATH)/libs/$(BOARD) 
+endif
+LDFLAGS=-L$(SEARDUINO_LIB_PATH) -lsearduino 
 
 endif
 
 
-
-
-$(OBJ_C): $(SRC_HEADERS) $(SRC_C)
-$(OBJ_CXX): $(SRC_HEADERS) $(SRC_CXX)
+$(OBJ_C): $(SRC_HEADERS) $(SRC_C) 
+$(OBJ_CXX): $(SRC_HEADERS) $(SRC_CXX)  
 
 INTERNAL_FLAGS= -DMY_ARDUINO=$(ARDUINO) -DMY_BOARD=$(BOARD)
 
@@ -140,10 +175,10 @@ INTERNAL_FLAGS= -DMY_ARDUINO=$(ARDUINO) -DMY_BOARD=$(BOARD)
 	$(CXX) -c $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
 
 
-$(MAIN_SRC).elf: $(MAIN_SRC).o 
-	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(MAIN_SRC).elf $(MAIN_SRC).o $(LIB) -lm $(LDFLAGS)
+$(MAIN_SRC).elf: $(MAIN_SRC).o  $(OBJ_C) $(OBJ_CXX)
+	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(MAIN_SRC).elf $(MAIN_SRC).o $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX)
 
-$(MAIN_SRC).o: $(MAIN_SRC)
+$(MAIN_SRC).o: $(MAIN_SRC) 
 	$(CC) -c $(CFLAGS)  $(MAIN_SRC) -o  $(MAIN_SRC).o
 
 hex: $(MAIN_SRC).hex
@@ -154,20 +189,20 @@ $(MAIN_SRC).hex:   $(MAIN_SRC).o $(LIB) $(MAIN_SRC).elf
 
 ifeq ($(ARDUINO),stub)
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX)
-	$(CC) $(LIB) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS)
+	$(CC) $(LIB) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS) 
 else
 $(PROG): $(MAIN_SRC).hex 
 	@echo "--- Program '$(PROG).hex' ready for upload ---"
 endif
 upload: $(MAIN_SRC).hex
+	echo "$(ARDUINO)   $(BOARD)"
 	$(AVRDUDE) -q -q -p$(CPU) -carduino -P$(USB_DEV) -b$(board_upload.speed) -D -Uflash:w:${MAIN_SRC}.hex:i
 
 clean:
-	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex *.a $(LIB) $(SHLIB) *.so libs/*/*
+	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex *.a $(LIB) $(SHLIB) *.so libs/*/* $(PROG) *.pyc
 
 light-clean:
 	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex 
-
 
 
 all: $(PROG) $(LIB) $(OBJ_C) $(OBJ_CXX)
