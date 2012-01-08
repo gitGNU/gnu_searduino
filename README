@@ -6,7 +6,7 @@ Arduino devel tool:
 
 * Arduino simulator to test your Arduino programs locally
 
-* Stding/Stdout "simualtor" with which you can talk with your Arduino program (locally)
+* stdin/stdout "simualtor" with which you can talk with your Arduino program (locally)
 
 * C/C++ interfaces for Arduino easier accessible 
 
