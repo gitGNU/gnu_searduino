@@ -1,5 +1,11 @@
 #!/bin/sh
 
+if [ -d arduino-sources ]
+then
+    echo "Already setup... "
+    exit 0 
+fi
+
 
 MY_OS=$(uname -s)
 
@@ -43,9 +49,11 @@ setup_sources()
 
     cp -r download-tmp/arduino-1.0/hardware/arduino/cores/arduino/* arduino-sources/core
     cp -r download-tmp/arduino-1.0/hardware/arduino/variants/* arduino-sources/variants/
+
+    cp misc/Makefile-arduino-sources  arduino-sources/Makefile
 }
 
-#get_sources
-#unpack_sources
+get_sources
+unpack_sources
 setup_sources
 
