@@ -46,10 +46,7 @@ int main(void)
   init();  
   setup();
 
-  printf ("PYTHON  Gearing up\n");
-
-/*   while (ctr++<50) */
-  while (1)
+  while (ctr++<50)
     {
       if (tmp) tmp=0 ; else tmp=1;
 
