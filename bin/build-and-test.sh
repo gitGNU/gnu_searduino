@@ -59,6 +59,7 @@ find_dist_file()
 
 build_local()
 {
+    exec_comm ./configure
     exec_comm make clean
     exec_comm make lib
     exec_comm make stub
@@ -111,8 +112,8 @@ build_bin_dist()
 }
 
 
-#build_local
-#build_dist
+build_local
+build_dist
 build_bin_dist
 
 
