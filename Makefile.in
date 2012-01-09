@@ -27,7 +27,14 @@
 ARDUINO_SRC=arduino-sources
 FAKED_ARDUINO_SRC=faked-arduino
 DATE=$(shell date '+%y%m%d-%H%M%S')
-DIST_FILE=searduino-$(shell date '+%y%m%d-%H%M%S').tar
+
+DAILY_DIST_FILE=searduino-$(shell date '+%y%m%d-%H%M%S').tar
+VERSION=$(shell cat mk/VERSION)
+ifeq ($(VERSION),)
+$(errror mk/VERSION file missing)
+endif
+DIST_FILE=searduino-${VERSION}.tar
+
 
 all: lib stub 
 
@@ -37,9 +44,12 @@ clean: ARDUINO=mega
 clean: stub-clean lib-clean test-clean
 
 lib:
-	ARDUINO=uno  && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean uno
-	ARDUINO=due  && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean due
-	ARDUINO=mega && export BUILD_FROM_VCS=true && cd $(ARDUINO_SRC) && make light-clean mega
+	export ARDUINO=uno  && export BUILD_FROM_VCS=true && export CPU=true && \
+             cd $(ARDUINO_SRC) && make light-clean uno
+	export ARDUINO=uno  && export BUILD_FROM_VCS=true && export CPU=true && \
+             cd $(ARDUINO_SRC) && make light-clean due
+	export ARDUINO=uno  && export BUILD_FROM_VCS=true && export CPU=true && \
+             cd $(ARDUINO_SRC) && make light-clean mega
 
 stub:
 	ARDUINO=stub && BOARD=stub && export BUILD_FROM_VCS=true  && cd $(FAKED_ARDUINO_SRC) && make lib shlib
@@ -64,21 +74,21 @@ test-clean:
 
 check-sw:
 	make stub
-	cd test/stub        && make check
-	cd test/shared      && make clean && make && make shlib && make check
-	cd test/shared-main && make clean all check check2
+	cd test/stub        && export BUILD_FROM_VCS=true && make check
+	cd test/shared      && export BUILD_FROM_VCS=true && make clean && make && make shlib && make check
+	cd test/shared-main && export BUILD_FROM_VCS=true && make clean all check check2
 
 check-hw: ARDUINO=mega
 check-hw:
-	cd test/hw          && make clean hex
+	cd test/hw          && export BUILD_FROM_VCS=true && make clean hex
 
 check2: check-hw2 check-stub2
 
 check-hw2: 
-	cd test/hw && make clean upload
+	cd test/hw && export BUILD_FROM_VCS=true && make clean upload
 
 check-stub2: stub
-	cd test/stub && make clean check check2
+	cd test/stub && export BUILD_FROM_VCS=true && make clean check check2
 
 all: lib stub
 
@@ -94,10 +104,10 @@ uno-test: lib
 uno: ARDUINO=uno
 uno: CPU=
 uno:
-#	cd $(ARDUINO_SRC)  &&  make light-clean uno
-#	cd test/hw  && make clean 
-#	cd test/hw  && export BUILD_FROM_VCS=true && make  
-	cd test/hw  && export BUILD_FROM_VCS=true && make  upload
+	cd $(ARDUINO_SRC)  &&  make light-clean uno
+	cd test/hw  && make clean 
+	cd test/hw  && export BUILD_FROM_VCS=true && make  
+#	cd test/hw  && export BUILD_FROM_VCS=true && make  upload
 
 due: ARDUINO=due
 due: CPU=
@@ -105,7 +115,7 @@ due:
 	cd $(ARDUINO_SRC)  &&  make light-clean due
 	cd test/hw  && make clean 
 	cd test/hw  && export BUILD_FROM_VCS=true && make  
-	cd test/hw  && make  upload
+#	cd test/hw  && make  upload
 
 mega: ARDUINO=mega
 mega: CPU=
@@ -113,7 +123,7 @@ mega:
 	cd $(ARDUINO_SRC)  &&  make light-clean mega
 	cd test/hw  && make clean 
 	cd test/hw  && export BUILD_FROM_VCS=true && make  
-	cd test/hw  && make  upload
+#	cd test/hw  && make  upload
 
 
 install: INSTALL_DIR=__INSTALL_DIR__
@@ -130,4 +140,9 @@ dist: clean
 	-rm searduino-*.tar
 	tar cvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
 	@echo "Created: $(DIST_FILE)"
+
+daily-dist: clean
+	-rm searduino-*.tar
+	tar cvf $(DAILY_DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
+	@echo "Created: $(DAILY_DIST_FILE)"
 
