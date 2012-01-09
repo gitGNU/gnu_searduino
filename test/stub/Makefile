@@ -32,7 +32,7 @@ SEARDUINO_PATH=../..
 
 
 USER_C_FLAGS=-DINTERVAL=$(INTERVAL)
-USER_LD_FLAGS=-lpthread
+USER_LD_FLAGS= -L$(SEARDUINO_PATH)/faked-arduino/ -lpthread
 
 $(PROG):
 
