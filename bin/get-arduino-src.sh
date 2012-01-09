@@ -56,8 +56,7 @@ get_sources()
 {
     exec_comm mkdir -p download-tmp
     exec_comm rm -f $ARD_FILE
-#    wget $ARD_URL
-    exec_comm cp /tmp/arduino-1**.tgz .
+    wget $ARD_URL
     exec_comm mv   $ARD_FILE download-tmp
 }
 

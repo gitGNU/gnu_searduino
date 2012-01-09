@@ -6,6 +6,11 @@ export ARDUINO=
 export BOARD=
 export CPU=
 
+LOG_FILE=/tmp/searduino-build.log
+rm $LOG_FILE
+
+CURR_DIR=$(pwd)
+
 MY_OS=$(uname -s)
 
 if [ "$MY_OS" = "Linux" ]
@@ -40,6 +45,7 @@ exit_on_failure()
 exec_comm()
 {
     echo "$*"
+    echo "$*" >> $LOG_FILE
     $*
     exit_on_failure "$?" "$*"
 
@@ -76,14 +82,15 @@ build_dist()
 {
     find_dist_file
 
-    exec_comm rm -fr tmp-searduino
+    exec_comm rm -fr tmp-searduino/
     exec_comm mkdir -p tmp-searduino
     exec_comm cp  $DIST_FILE tmp-searduino/
     cd tmp-searduino/
     
     exec_comm tar xvf $DIST_FILE
+    cp $DIST_FILE ${CURR_DIR}/
     
-    exec_comm rm -fr /opt/searduino
+    exec_comm rm -fr /opt/searduino/*
     exec_comm ./configure --prefix=/opt/
 
     exec_comm make clean
@@ -92,11 +99,12 @@ build_dist()
     exec_comm make check-hw
     exec_comm make check-sw
     exec_comm make install
+
+    cd -
 }
 
 build_bin_dist()
 {
-    CURR_DIR=$(pwd)
     cd /opt
 
     exec_comm tar zcvf /tmp/${BIN_DIST_FILE} searduino
@@ -104,17 +112,27 @@ build_bin_dist()
     cd /tmp
     exec_comm cp -r /opt/searduino/example .
     cd example/digpins/
-    pwd
     exec_comm make clean
     exec_comm make all
     export LD_LIBRARY_PATH=/opt/searduino/libs
-    ./blinker
+    ./blinker &
+    sleep 10
+    pkill blinker
+
+    cp /tmp/${BIN_DIST_FILE} ${CURR_DIR}
+
 }
 
 
 build_local
 build_dist
 build_bin_dist
+cd $CURR_DIR
+    
 
-
+#
+#
+#
+echo "SRC DIST:   $DIST_FILE"
+echo "BIN DIST:   $BIN_DIST_FILE"
 echo "Done :)"
