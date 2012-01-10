@@ -1,0 +1,38 @@
+\input texinfo   @c -*-texinfo-*-
+
+@c %**start of header
+@setfilename architecture.texi
+@settitle Searduino - Manual
+@c %**end of header
+@afourpaper
+@c @setchapternewpage odd
+
+
+@titlepage
+@title Searduino - Manual
+@subtitle January 2012
+@end titlepage
+
+@contents
+
+@chapter Background
+@include background.texi
+
+@chapter Abbreviations
+@include abbrevs.texi
+
+@chapter Building the Arduino program
+
+@section Building for Arduino boards
+
+@section Building for PC
+
+@subsection Build with stubs only
+
+@subsection Build with streamed input/output
+
+@subsection Build for Simulator
+
+@bye
+
+
