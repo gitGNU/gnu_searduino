@@ -55,7 +55,7 @@ exec_comm()
 
 find_dist_file()
 {
-    export DIST_FILE=$(ls -1t searduino-*.tar | head -1)
+    export DIST_FILE=$(ls -1t searduino-*.tar.gz | head -1)
     if [ ! -f $DIST_FILE ]
     then
 	echo "DIST_FILE ($DIST_FILE) missing"
