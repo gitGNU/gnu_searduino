@@ -7,11 +7,40 @@
 @afourpaper
 @c @setchapternewpage odd
 
+@include version.texi
+
+
+@c Put everything in one index (arbitrarily chosen to be the concept index).
+@syncodeindex fn cp
+@syncodeindex ky cp
+@syncodeindex pg cp
+@syncodeindex vr cp
+
 
 @titlepage
-@title Searduino - Manual
-@subtitle January 2012
+@sp 10
+@c omment The title is printed in a large font
+@c @center @titlefont{Searduino Manual}
+
+
+@c @page
+@vskip 0pt plus 1filll
+@title Searduino Manual
+@subtitle C/C++ environment
+@subtitle Stubs
+@subtitle Simulator
+@subtitle ... for Arduino
+@subtitle 
+@subtitle Version: @value{VERSION} 
+@subtitle Date: @value{UPDATED} 
+@author Henrik Sandklef
+@include searduino_copying
 @end titlepage
+
+@c @titlepage
+@c @title Searduino - Manual
+@c @subtitle January 2012
+@c @end titlepage
 
 
 @contents
@@ -181,9 +210,9 @@ variable in the Makefile. The following values of that variable are implemented.
 
 @b{Build types}
 @itemize @bullet
-@item UNO - builds software for the Arduino UNO board
-@item MEGA - builds software for the Arduino Mega board
-@item DUE - builds software for the Arduino Mega board
+@item uno - builds software for the Arduino UNO board
+@item mega - builds software for the Arduino Mega board
+@item due - builds software for the Arduino Mega board
 @item stub - builds software for the PC
 @end itemize
 

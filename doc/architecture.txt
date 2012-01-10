@@ -11,8 +11,6 @@ Table of Contents
 1 Background
 ************
 
-bladi bladi .. Arduino bg bg bg
-
 2 Abbreviations
 ***************
 
