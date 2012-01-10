@@ -1,0 +1,71 @@
+@chapter Installing Searduino
+
+@section Source code releases
+@*
+Download from 
+@*
+@url{http://download.savannah.gnu.org/releases/searduino/}
+@section Latest Source code
+@*
+
+Download from 
+@*
+@url{http://git.savannah.gnu.org/gitweb/?p=searduino.git;a=snapshot;h=HEAD;sf=tgz}
+
+@section From git repository
+@*
+Download from 
+@*
+@code{git clone git://git.savannah.nongnu.org/searduino.git}
+
+@section Binary releases
+
+@subsection GNU/Linux
+@*
+@b{Create a installation directiory (e.g /opt/searduino)}
+@*
+@code{mkdir -p /opt/searduino}
+@*
+@*
+@b{Go to the installation directory}
+@*
+@code{cd /opt/searduino}
+@*
+@*
+@b{Download a release from}
+@*
+@url{http://download.savannah.gnu.org/releases/searduino/bin/}
+@*
+E.g http://download.savannah.gnu.org/releases/searduino/bin/searduino-bin-0.4-x86.tar.gz
+@*
+@*
+@b{Unpack}
+@*
+@code{tar zxvf searduino-bin-0.4-x86.tar.gz}
+@*
+@*
+@b{Verify installation - with the digpins example}
+@*
+@code{cd example/digpins/}
+@*
+Make sure that the SEARDUINO_PATH in the Makefile points to your
+Searduino installation dir. 
+@*
+@*
+@b{Build blinker program for PC}
+@*
+@code{make}
+@*
+@*
+@b{Set up environment to find the Searduino shared libs}
+@*
+@code{export LD_LIBRARY_PATH=/opt/searduino/libs}
+@*
+@*
+@b{Execute blinker}
+@*
+@code{make check-sw}
+@*
+The blinker program should run and print out (the printouts comes from
+the stub libraries). Interrupt the program by sending a signal, e g by
+pressing Ctrl-C.

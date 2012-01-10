@@ -18,15 +18,77 @@
 @chapter Background
 @include background.texi
 
-@chapter Supported boards and platforms
-@include supported.texi
-
 @chapter Abbreviations
 @include abbrevs.texi
 
-@chapter Building with Searduino
+@chapter Supported boards and platforms
+@include supported.texi
+
+@include download.texi
+
+@chapter Using Searduino
 
 @section Going through the digpins example
+
+@subsection Write your own Makefile
+
+@b{Inporant settings in the Makefile}
+@itemize @bullet
+@item SEARDUINO_PATH - should be set to the directory of your
+Searduino installation
+@item PROG - name of the program to build
+@item SRC_C - a list (separated with space) of C files to compile
+@item SRC_CXX - a list (separated with space) of C++ files to compile
+@item MAIN_SRC - the C (not C++) file containing the main
+fuction. Should not be included in the SRC_C variable
+@item ARDUINO - should be set to the type of software you want to
+build (see @b{Build types} below)
+@end itemize
+
+@b{include the searduino makefile}
+You need to include the settings, targets and rules from
+Searduino. This is done by adding the following line to your Makefile.
+
+@code{include $(SEARDUINO_PATH)/mk/searduino.mk}
+
+@b{Build types}
+@itemize @bullet
+@item UNO - builds software for the Arduino UNO board
+@item MEGA - builds software for the Arduino Mega board
+@item DUE - builds software for the Arduino Mega board
+@item stub - builds software for the PC
+@end itemize
+
+Note: You don't have to use the makefiles provided by Searduino. The
+makefiles do however provide a lot of help (board settings etc).
+
+
+@subsection Example Makefile
+
+@code{SEARDUINO_PATH=/opt/searduino}
+@*
+@code{PROG=blinker}
+@*
+@code{SRC_C=blink.c}
+@*
+@code{SRC_CXX=}
+@*
+@code{MAIN_SRC=main.c}
+@*
+@code{ARDUINO=stub}
+@*
+@code{$(PROG):}
+@*
+@code{upload:}
+@*
+@code{include}
+@*
+@code{check-sw:}
+@*
+@code{./$(PROG)}
+@*
+
+
 
 @chapter Building for Arduino boards
 

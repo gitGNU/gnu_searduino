@@ -3,7 +3,7 @@ VERSION=$(shell cat ../mk/VERSION)
 all: doc
 VIEWER=evince
 TEXI=architecture.texi manual.texi
-TEXI_INC=abbrevs.texi  background.texi  supported.texi
+TEXI_INC=abbrevs.texi  background.texi  supported.texi download.texi
 PDF := $(TEXI:.texi=.pdf)
 HTML := $(TEXI:.texi=.html)
 TXT := $(TEXI:.texi=.txt)
