@@ -66,30 +66,6 @@ int main(void)
 	  digitalWrite(13, LOW);
 	  delay(50);
 	}
-
-      /*digitalWrite(13, HIGH);
-      delay(200);
-      digitalWrite(13, LOW);
-      delay(2000);
-      */
     }
 }
 
-int main2(void)
-{
-  char i ;
-  char j ;
-  int interval = 100 ;
-  char direction = 1;
-
-  init();  
-  setup();
-  for (;;)
-    {
-      digitalWrite(13, 1);
-      delay(interval);
-      digitalWrite(13, 0);
-      delay(interval);
-    }
-  return 0;
-}
