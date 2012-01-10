@@ -1,0 +1,18 @@
+
+@*
+
+@b{Supported Arduino boards}
+@itemize @bullet
+@item Uno - @url{http://arduino.cc/en/Main/arduinoBoardUno}
+@item Mega - @url{http://arduino.cc/en/Main/ArduinoBoardMega}
+@item Due - @url{http://arduino.cc/en/Main/arduinoBoardDuemilanove}
+@end itemize
+
+@*
+
+@b{Supported Operating Systems}
+@itemize @bullet
+@item GNU/Linux (source code supports both 32 and 64 bits. Binaries
+available for 32 bits only)
+@end itemize
+

@@ -18,20 +18,39 @@
 @chapter Background
 @include background.texi
 
+@chapter Supported boards and platforms
+@include supported.texi
+
 @chapter Abbreviations
 @include abbrevs.texi
 
-@chapter Building the Arduino program
+@chapter Building with Searduino
 
-@section Building for Arduino boards
+@section Going through the digpins example
 
-@section Building for PC
+@chapter Building for Arduino boards
 
-@subsection Build with stubs only
+@chapter Building for PC
 
-@subsection Build with streamed input/output
+@section Build with stubs only
+@subsection Preparing your Makefile
+@subsection Writing C/C++ code
+@subsection Building
+@subsection Executing
 
-@subsection Build for Simulator
+@section Build with streamed input/output
+@subsection Preparing your Makefile
+@subsection Writing C/C++ code
+@subsection Building
+@subsection Executing
+@subsection Faking input
+@subsection Writing test scripts
+
+@section Build for Simulator
+
+@chapter Write your own simulator
+@subsection Writing a simulator in C/C++ 
+@subsection Writing a simulator in Python
 
 @bye
 

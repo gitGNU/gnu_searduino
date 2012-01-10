@@ -1,0 +1,38 @@
+Table of Contents
+*****************
+
+1 Background
+2 Abbreviations
+3 Layers
+  3.1 Faked Arduino layer - the Arduino stub
+  3.2 Communication layer -
+
+
+1 Background
+************
+
+bladi bladi .. Arduino bg bg bg
+
+2 Abbreviations
+***************
+
+   * Arduino program - a program that is written for the Arduino board.
+     Uses only the Arduio and avr APIs.
+
+   * Arduino stub - library implementing the Arduino and avr APIs
+
+   * Streamed input/output - instead of a fullblown simulator GUI
+     Searduino provides you with a stdin/stdout interface. This can be
+     used to script (bash, Python..) your test cases. Using programs
+     such as netcat you can also run the Arduino program on one PC and
+     the test on another PC.
+
+3 Layers
+********
+
+3.1 Faked Arduino layer - the Arduino stub
+==========================================
+
+3.2 Communication layer -
+=========================
+

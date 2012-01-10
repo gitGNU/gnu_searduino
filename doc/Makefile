@@ -1,13 +1,15 @@
 DATE=$(shell date '+%Y%m%d-%H%M%S')
+VERSION=$(shell cat ../mk/VERSION)
 all: doc
 VIEWER=evince
 TEXI=architecture.texi manual.texi
+TEXI_INC=abbrevs.texi  background.texi  supported.texi
 PDF := $(TEXI:.texi=.pdf)
 HTML := $(TEXI:.texi=.html)
 TXT := $(TEXI:.texi=.txt)
 DOC= $(PDF) $(HTML) $(TXT)
-DOC_DIST=searduino-docs-$(DATE).tar.gz
-SRC=$(TEXI) Makefile
+DOC_DIST=searduino-docs-$(VERSION).tar.gz
+SRC=$(TEXI) Makefile ../mk/VERSION $(TEXI_INC)
 
 
 REMOVE=*.aux *.cp *.fn *.ky *.log *.pdf *.pg *.toc *.tp *.vr *~  $(DOC)
