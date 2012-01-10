@@ -67,17 +67,19 @@ now proceed by writing our first Arduino program using Searduino.
 @subsection The first C file
 @*
 @*
-To use the Arduino functionality you need to inlude Arduino.h, so
-we need to add this:
+Open up your favorite editor (emacs?) and begin....
+@*
+@*
+To use the Arduino functionality you need to icnlude Arduino.h, so
+we need to add this to our file:
 @*
 @*
 @code{#include <Arduino.h>}
 @*
 @*
-When using Arduino IDE you're used to having the @code{loop}
-function as the starting point for the program. With Searduino we're
-back to the normal C way with a @code{main} function, so we need to
-define a main function.
+When using Arduino IDE you've seen the @code{loop} function as the
+starting point for the program. With Searduino we're back to the
+normal C way of doing this with a @code{main} function, so we need to define a main function.
 @*
 @*
 @code{int main(void)}
@@ -85,7 +87,7 @@ define a main function.
 @}
 @*
 @*
-As with the loop function you write when you're using the Arduino IDE,
+As with the loop function you're writing when you're using the Arduino IDE,
 the main function needs to never exit or return. It's a simple control
 loop (see @uref{http://en.wikipedia.org/wiki/Embedded_system#Simple_control_loop}).
 @*
