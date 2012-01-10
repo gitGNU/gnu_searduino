@@ -28,12 +28,12 @@ ARDUINO_SRC=arduino-sources
 FAKED_ARDUINO_SRC=faked-arduino
 DATE=$(shell date '+%y%m%d-%H%M%S')
 
-DAILY_DIST_FILE=searduino-$(shell date '+%y%m%d-%H%M%S').tar
+DAILY_DIST_FILE=searduino-$(shell date '+%y%m%d-%H%M%S').tar.gz
 VERSION=$(shell cat mk/VERSION)
 ifeq ($(VERSION),)
 $(errror mk/VERSION file missing)
 endif
-DIST_FILE=searduino-${VERSION}.tar
+DIST_FILE=searduino-${VERSION}.tar.gz
 
 
 all: lib stub 
@@ -138,11 +138,11 @@ install:
 
 dist: clean
 	-rm searduino-*.tar
-	tar cvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
+	tar zcvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
 	@echo "Created: $(DIST_FILE)"
 
 daily-dist: clean
 	-rm searduino-*.tar
-	tar cvf $(DAILY_DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
+	tar zcvf $(DAILY_DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
 	@echo "Created: $(DAILY_DIST_FILE)"
 
