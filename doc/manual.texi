@@ -13,6 +13,7 @@
 @subtitle January 2012
 @end titlepage
 
+
 @contents
 
 @chapter Background
@@ -28,9 +29,70 @@
 
 @chapter Using Searduino
 
-@section Going through the digpins example
+In the previous chapter we looked a bit at the digpins example, so we
+now have some feeling for what a Searduino Makefile contains. We will
+now proceed by writing our first Arduino program using Searduino.
 
-@subsection Write your own Makefile
+@section Writing the first program
+
+@subsection The first C file
+@*
+@*
+To use the Arduino functionality you need to inlude Arduino.h, so
+we need to add this:
+@*
+@*
+@code{#include <Arduino.h>}
+@*
+@*
+When using Arduino IDE you're used to having the @code{loop}
+function as the starting point for the program. With Searduino we're
+back to the normal C way with a @code{main} function, so we need to
+define a main function.
+@*
+@*
+@code{int main(void)}
+@{
+@}
+@*
+@*
+As with the loop function you write when you're using the Arduino IDE,
+the main function needs to never exit or return. It's a simple control
+loop (see @uref{http://en.wikipedia.org/wiki/Embedded_system#Simple_control_loop}).
+@*
+@*
+So a very simple main function looks like this
+@*
+@*
+@code{int main(void)}
+@*
+@{
+@*
+@code{  for(;;)}
+@*
+@code{    }
+@{
+@*
+@code{       digitalWrite(13, 1);}
+@*
+@code{       delay(100);}
+@*
+@code{       digitalWrite(13, 0);}
+@*
+@code{       delay(100);}
+@*
+@code{   }
+@}
+@*
+@}
+@*
+@*
+@*
+@i{Note: this program sets pin 13 high and low with 0.1 secs
+interval. You don't need to connect a led to output pin 13, since
+pin 13 already has a built in led on the board.}
+
+@subsection Write the first Makefile
 
 @b{Inporant settings in the Makefile}
 @itemize @bullet
@@ -44,12 +106,78 @@ fuction. Should not be included in the SRC_C variable
 @item ARDUINO - should be set to the type of software you want to
 build (see @b{Build types} below)
 @end itemize
-
-@b{include the searduino makefile}
-You need to include the settings, targets and rules from
+@*
+@*
+@b{Include the searduino makefile}
+@*
+You need to include somce settings, targets and rules from
 Searduino. This is done by adding the following line to your Makefile.
-
+@*
+@*
 @code{include $(SEARDUINO_PATH)/mk/searduino.mk}
+@*
+@*
+@*
+
+Note: You don't have to use the makefiles provided by Searduino. The
+makefiles do however provide a lot of help (board settings etc).
+
+
+
+@subsection Building the program for PC
+To build your software to be executed on your PC:
+
+make sure the the variable @b{ARDUINO} in the Makefile is set to
+@b{stub}.
+
+
+ and type:
+@*
+@*
+@code{make clean}
+@*
+@code{make}
+@*
+
+To run the program
+@*
+@*
+@code{./blinker}
+
+
+@subsection Building the program for UNO
+To build your software to be executed on your PC:
+
+make sure the the variable @b{ARDUINO} in the Makefile is set to
+@b{uno} and type:
+@*
+@*
+By setting ARDUINO to uno the Searduino makefiles will use the
+settings for building and uploading for the Arduino UNO board. 
+@*
+To build the program, all we have to do now is to type:
+@*
+@*
+@code{make clean}
+@*
+@code{make}
+@*
+@*
+@*
+To upload and run the program on the Arduino UNO board:
+@*
+@*
+@code{make upload}
+@*
+@*
+You should now be able to see the built in led (pin 13) flash. If not,
+the author of this document need to his homework.
+
+@chapter Build for different targets
+
+With Searduino it's (relatively) easy to compile your program for
+various boards. You decide what targets to build for with the ARDUINO
+variable in the Makefile. The following values of that variable are implemented.
 
 @b{Build types}
 @itemize @bullet
@@ -59,19 +187,49 @@ Searduino. This is done by adding the following line to your Makefile.
 @item stub - builds software for the PC
 @end itemize
 
-Note: You don't have to use the makefiles provided by Searduino. The
-makefiles do however provide a lot of help (board settings etc).
+@chapter Various Searduino functions/macros
 
+@section print functions/macros
 
-@subsection Example Makefile
+@chapter Simulators
 
+With Searduino you can easily build your code with the following stubs/simulators:
+
+@itemize @bullet
+@item stub - the Arduino fuctions print whne they are being called
+(stdout by default)
+@item stream - same as with stub, but now also with a listening
+(stdin) thread to which you can send commands (such as settig digital input
+pin 2 to 1).
+@item pardon - a Simulator, written in Python, using the Python
+simulator interface
+@item xxxx - a simulator, written in C++/Qt/Qml.
+simulator interface
+@end itemize
+
+@section Stub 
+@section Streamed simulator
+@subsection Scripting with bash
+@subsection Scripting over the network
+@section Pardon simulator
+@section xxx simulator
+
+@chapter Using the Python scripting interface
+
+@chapter Debugging Arduino code
+
+@chapter Examples
+
+@section Example Makefile
+@*
+@*
 @code{SEARDUINO_PATH=/opt/searduino}
 @*
 @code{PROG=blinker}
 @*
 @code{SRC_C=blink.c}
 @*
-@code{SRC_CXX=}
+@code{SRC_CXX= stuff.cpp morestuff.cpp}
 @*
 @code{MAIN_SRC=main.c}
 @*
@@ -81,35 +239,36 @@ makefiles do however provide a lot of help (board settings etc).
 @*
 @code{upload:}
 @*
-@code{include}
+@code{include $(SEARDUINO_PATH)/mk/searduino.mk}
 @*
-@code{check-sw:}
+@section Example C code
 @*
-@code{./$(PROG)}
 @*
-
-
-
-@chapter Building for Arduino boards
-
-@chapter Building for PC
-
-@section Build with stubs only
-@subsection Preparing your Makefile
-@subsection Writing C/C++ code
-@subsection Building
-@subsection Executing
-
-@section Build with streamed input/output
-@subsection Preparing your Makefile
-@subsection Writing C/C++ code
-@subsection Building
-@subsection Executing
-@subsection Faking input
-@subsection Writing test scripts
-
-@section Build for Simulator
-
+@code{#include <Arduino.h>}
+@*
+@*
+@code{int main(void)}
+@*
+@{
+@*
+@code{  for(;;)}
+@*
+@code{    }
+@{
+@*
+@code{       digitalWrite(13, 1);}
+@*
+@code{       delay(100);}
+@*
+@code{       digitalWrite(13, 0);}
+@*
+@code{       delay(100);}
+@*
+@code{   }
+@}
+@*
+@}
+@*
 @chapter Write your own simulator
 @subsection Writing a simulator in C/C++ 
 @subsection Writing a simulator in Python
