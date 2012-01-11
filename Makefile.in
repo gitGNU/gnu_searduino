@@ -131,8 +131,12 @@ install: ARDUINO=uno
 install: 
 	mkdir -p $(INSTALL_DIR)/searduino
 	echo "Will install in directory: $(INSTALL_DIR)"
+	export ARDUINO=uno  && export BUILD_FROM_VCS=true && export CPU=true && \
 	export INSTALL_DIR=$(INSTALL_DIR) && cd arduino-sources && make install
+
+	export ARDUINO=uno  && export BUILD_FROM_VCS=true && export CPU=true && \
 	export INSTALL_DIR=$(INSTALL_DIR) && cd faked-arduino && make install
+
 	cp -r mk/ $(INSTALL_DIR)/searduino
 	cp -r example/ $(INSTALL_DIR)/searduino
 
