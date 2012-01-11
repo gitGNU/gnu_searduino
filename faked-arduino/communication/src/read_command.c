@@ -30,6 +30,20 @@
 #include "communication/comm.h"
 #include "communication/read_command.h"
 
+static int   enable_command_reader;
+
+void 
+searduino_enable_command_reader(void)
+{
+  enable_command_reader=1;
+}
+
+void 
+searduino_disable_command_reader(void)
+{
+  enable_command_reader=0;
+}
+
 
 void init_command_reader(void)
 {

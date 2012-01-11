@@ -27,12 +27,32 @@
 #include "communication/comm.h"
 #include "communication/error.h"
 
+static int   stub_output_enabled = 1;
+
+
+void
+searduino_enable_streamed_output(void)
+{
+  stub_output_enabled = 1;
+}
+
+void
+searduino_disable_streamed_output(void)
+{
+  stub_output_enabled = 0;
+}
+
+
 int 
 comm_digital_write_outpin(uint8_t pin, uint8_t val)
 {
   init_comm();
-  fprintf(stderr, "pin:%d:%d\n", pin, val); 
-  fflush(proto_stream);
+
+  if ( stub_output_enabled ) 
+    {
+      fprintf(stderr, "pin:%d:%d\n", pin, val); 
+      fflush(proto_stream);
+    }
 
   /*
    *
