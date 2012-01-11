@@ -17,6 +17,23 @@ Download from
 Download from 
 @*
 @code{git clone git://git.savannah.nongnu.org/searduino.git}
+@*
+@*
+You must now configure the makefile etc by typing:
+@*
+@code{./configure}
+@*
+@*
+and then continue with building 
+@*
+@*
+@code{make}
+@*
+@*
+and then continue with installating
+@*
+@*
+@code{make install}
 
 @section Binary releases
 
