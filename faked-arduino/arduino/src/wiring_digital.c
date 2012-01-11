@@ -146,7 +146,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
 	  SEARD_ERROR(ret);
 	  return;
 	}
-      printf ("discarded calls (not on change) so far: %d\n", discard_ctr);
+      printf ("                       discarded calls (not on change) so far: %d\n", discard_ctr);
     }
   else
     {
