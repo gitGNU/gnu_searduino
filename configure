@@ -1,0 +1,29 @@
+#!/bin/sh
+
+INSTALL_DEST=/usr/local
+
+while [ "$1" != "" ]
+do
+    FIRST=$(echo $1 | awk 'BEGIN {FS="="} {print $1 }')
+    SECOND=$(echo $1 | awk 'BEGIN {FS="="} {print $2 }')
+    echo FIRS $FIRST
+    if [ "$FIRST" = "--prefix" ]
+	then
+	INSTALL_DEST=$SECOND
+    fi
+    shift
+done
+
+
+#
+# Get arduino sources
+#
+./bin/get-arduino-src.sh
+if [ "$?" != "0" ] ; then echo "Failed getting Arduino sources" ; exit 1 ; fi
+#
+# Create Makefile
+#
+
+cat Makefile.in | sed "s,__INSTALL_DIR__,$INSTALL_DEST,g" > Makefile
+cat example/digpins/Makefile.in | sed "s,__INSTALL_DIR__,$INSTALL_DEST,g" > example/digpins/Makefile
+
