@@ -24,3 +24,10 @@
 void init_command_reader(void);
 
 void* command_reader(void* in);
+
+void 
+searduino_enable_command_reader(void);
+
+void 
+searduino_disable_command_reader(void);
+

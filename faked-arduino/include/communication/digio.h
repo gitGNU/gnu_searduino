@@ -23,3 +23,7 @@
 
 int  comm_digital_write_outpin(uint8_t pin, uint8_t val);
 
+void searduino_enable_streamed_output(void);
+
+void searduino_disable_streamed_output(void);
+
