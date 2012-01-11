@@ -29,7 +29,7 @@
 
 
 typedef int (*main_ptr)(void); 
-void* (*searduino_setup)(void);
+void* (*searduino_setup_ptr)(void);
 void* (*set_dig_input)(int,int);
 int   (*get_dig_output)(int);
 
@@ -40,15 +40,15 @@ int main(int argc, char **argv)
   printf ("dlib:         %d \n", (int)dlib);
   DLERR(dlib);
 
-  searduino_setup  = dlsym (dlib, "searduino_setup");
-  printf ("setup      %d \n",  (int)searduino_setup);
-  DLERR(searduino_setup); 
+  searduino_setup_ptr  = dlsym (dlib, "searduino_setup");
+  printf ("setup      %d \n",  (int)searduino_setup_ptr);
+  DLERR(searduino_setup_ptr); 
   
   main_ptr main_fun  = dlsym (dlib, "searduino_main");
   printf ("main_fun      %d \n",  (int)main_fun);
   DLERR(main_fun); 
 
-  searduino_setup();
+  searduino_setup_ptr();
 
 
   set_dig_input = dlsym (dlib, "ext_set_dig_input");
@@ -59,24 +59,7 @@ int main(int argc, char **argv)
   printf ("get_dig_output %d \n",  (int)get_dig_output);
   DLERR(get_dig_output); 
 
-  /*
-#define PRINT_PIN(a) printf("Output pin: %d: %d\n",a,get_dig_output(a));
-  PRINT_PIN(1);
-  PRINT_PIN(2);
-  PRINT_PIN(3);
-  */
-
   main_fun(); 
 
-  /*
-  PRINT_PIN(1);
-  set_dig_input(1,1);
-  PRINT_PIN(1);
-  set_dig_input(1,2);
-  PRINT_PIN(1);
-  set_dig_input(1,3);
-  PRINT_PIN(1);
-  PRINT_PIN(2);
-  */
   return 0;
 }
