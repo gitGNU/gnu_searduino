@@ -12,8 +12,9 @@ if [ "$MY_OS" = "Linux" ]
 then
     if [ "$(uname -m | grep -c _64)" != "0" ]
 	then
-	echo "No support for 64 bit"
-	exit 1
+	ARD_BASE=http://arduino.googlecode.com/files/
+	ARD_FILE=arduino-1.0-linux64.tgz
+	ARD_URL=$ARD_BASE/$ARD_FILE
     else
 	ARD_BASE=http://arduino.googlecode.com/files/
 	ARD_FILE=arduino-1.0-linux.tgz
