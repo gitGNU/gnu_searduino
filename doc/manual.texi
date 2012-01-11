@@ -239,7 +239,65 @@ simulator interface
 @end itemize
 
 @section Stub 
+
+
+
+@section Stub output syntax
+
+With this mode set Searduino print messages to a stream (default to
+stdout) for the function calls where some hardware is set. 
+@*
+@*
+You switch on and off this mode as many times you want during execution using the functions:
+@*
+@code{void searduino_enable_streamed_output(void)}
+@*
+@code{void searduino_disable_streamed_output(void)}
+
+@multitable  @columnfractions .0 .30 .20 .50
+@item 
+@tab @b{Directive}
+@tab @b{Example}
+@tab @b{Description}
+
+@item
+@tab @code{dpin:<pin>:<value>}
+@tab @code{dpin:1:0}
+@tab Digital output pin 1 is 0
+
+@item
+@tab @code{apin:<pin>:<value>}
+@tab @code{apin:2:1.123}
+@tab Analogue pin 2 is 1.123
+
+@end multitable
+
+
+
 @section Streamed simulator
+With this mode you can enter commands to the Arduino code. To enable this code you have to call the function @code{void searduino_enable_command_reader(void)} before you call @code{void init_comm(void)}.
+
+@subsection Streamed simulator input syntax
+
+@multitable  @columnfractions .0 .30 .20 .50
+@item 
+@tab @b{Directive}
+@tab @b{Example}
+@tab @b{Description}
+
+@item
+@tab @code{dpin:<pin>:<value>}
+@tab @code{dpin:13:1}
+@tab Set digital pin 13 to 1
+
+@item
+@tab @code{apin:<pin>:<value>}
+@tab @code{apin:7:1.123}
+@tab Set analogue pin 7 to 1.123
+
+@end multitable
+
+
 @subsection Scripting with bash
 @subsection Scripting over the network
 @section Pardon simulator
@@ -302,8 +360,12 @@ simulator interface
 @*
 @chapter Write your own simulator
 @subsection Writing a simulator in C/C++ 
-@subsection Writing a simulator in Python
 
+
+
+@subsection Writing a simulator in Python
+For now, we would like to refer to pardon in the Searduino source
+treee for en example on how to write a simulator in Python.
 @bye
 
 
