@@ -32,20 +32,6 @@
 #include "arduino/setup.h"
 
 
-
-
-void my_di_callback(uint8_t pin, uint8_t val)
-{
-  printf ("Digital in callback pin:%d:%d\n", pin, val);
-}
-
-
-uint8_t my_do_callback(uint8_t pin)
-{
-  printf ("Digital out callback pin:%d\n", pin);
-  return 0;
-}
-
 /* 
  * Function to register in the Searduino code
  *
@@ -54,14 +40,16 @@ uint8_t my_do_callback(uint8_t pin)
 void 
 my_do_sim_callback(uint8_t pin, uint8_t val)
 {
-  printf ("Digital output pin set by Arduino: pin:%d:%d\n", 
-	  pin, val);
+  printf ("%s:%s(%d:%d)\n",__FILE__, __func__, pin, val);
+  printf ("\n");
 }
 
 int sim_setup(void)
 {
   int ret ; 
 
+  searduino_disable_streamed_output();
+  
   searduino_setup();
   
   ret  = comm_register_digout_sim_cb(my_do_sim_callback);
@@ -72,14 +60,6 @@ int sim_setup(void)
     }
  
 
-  comm_register_digout_cb(my_do_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf (stderr, "Failed to register callback for Digital output (pin)\n");
-      return ret;
-    }
- 
-  
 
   return 0;
 }
@@ -103,7 +83,7 @@ int main(void)
     {
       i++;
       usleep (1000*200);
-      printf ("Set   %d %d\n", i%6,i%7);
+      printf ("%s:%s() setting dpin:%d:%d\n",__FILE__, __func__, i%6,i%7);
       ext_set_dig_input(i%6,i%7);
     }
 }
