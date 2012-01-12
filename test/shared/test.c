@@ -51,7 +51,8 @@ int main(void)
     {
       if (tmp) tmp=0 ; else tmp=1;
 
-      digitalWrite(1,digitalRead(1));
+      printf ("send on 1 %d     \n", tmp);
+      digitalWrite(1,digitalRead(tmp));
       for (i=2;i<11;i++)
 	{
 	  digitalWrite(i,digitalRead(i));
