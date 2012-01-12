@@ -35,15 +35,24 @@ static PyObject *my_set_callback(PyObject *dummy, PyObject *args);
 
 void new_dig_out(uint8_t pin, uint8_t val)
 {
-/*   printf ("  new DIG OUT: %d %d\n", */
-/* 	  pin, val); */
-
   PyObject *arglist;
-/*   PyObject *result; */
+  PyObject *result; 
+
+  /* printf ("  new DIG OUT: %d %d\n",   */
+  /* 	  pin, val);   */
 
   /* Time to call the callback */
   arglist = Py_BuildValue("(i,i)", pin, val);
-/*   result = PyObject_CallObject(my_callback, arglist); */
+
+  printf ("Calling.....%p\n",my_callback);
+  fflush(stdout);
+  if (my_callback!=NULL)
+    {
+      result = PyEval_CallObject(my_callback, arglist);
+      printf ("result.....%p\n",result);
+      fflush(stdout);
+      /* PyObject_CallObject(my_callback, arglist);  */
+    }
   Py_DECREF(arglist);
 }
 
@@ -98,6 +107,9 @@ static PyMethodDef myModule_methods[] = {
 
 void* arduino_code(void *in)
 {
+
+  usleep(1000*1000);
+  printf ("Starting Arduino code\n");
   searduino_main();
   return NULL;
 }
