@@ -26,9 +26,9 @@ BUILD_FROM_VCS=true
 ARDUINO=stub
 SRC_C=wrapper_py.c
 SHLIB=pardon.so
-USER_C_FLAGS=-I/usr/include/python2.7/ -lpython2.7
-SHLIB_LIBS=  -L../test/shared -L../faked-arduino -ltest -lsearduino-stub
-
+USER_C_FLAGS=-I/usr/include/python2.7/ -lpython2.7 -fPIC
+SHLIB_LIBS=   -lsearduino-stub -L../faked-arduino   -L../test/shared -ltest
+#-L../example/python-digcounter/ -ldigcounter
 
 #lib:
 #	gcc -shared wrapper_py.c -o $(SHLIB) 
@@ -50,3 +50,6 @@ include $(SEARDUINO_LIB_MK)
 
 check:
 	export LD_LIBRARY_PATH=../faked-arduino:../test/shared/ && ./pardon.py
+
+install:
+	@cp $(SHLIB) $(INSTALL_DIR)/searduino/libs/
