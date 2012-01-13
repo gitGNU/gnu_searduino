@@ -47,22 +47,16 @@ int main(void)
   setup();
 
 /*   while (ctr++<50) */
+  /* while (ctr++<50) */
   while (1)
     {
       if (tmp) tmp=0 ; else tmp=1;
 
-      digitalWrite(1,digitalRead(1));
+      printf ("send on 1 %d     \n", tmp);
+      digitalWrite(1,digitalRead(tmp));
       for (i=2;i<11;i++)
 	{
-/* 	  printf ("PYTHON GUI CHECK (arduino code) Pin 2 => %d  \n" ,digitalRead(i)); */
-	  if (digitalRead(i-1))
-	    {
-	      digitalWrite(i,digitalRead(i));
-	    }
-	  else 
-	    {
-	      digitalWrite(i,0);
-	    }
+	  digitalWrite(i,digitalRead(i));
 	}
 
       delay(interval);

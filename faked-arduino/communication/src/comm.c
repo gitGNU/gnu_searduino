@@ -40,7 +40,6 @@
  *
  */
 FILE* proto_stream ;
-int   enable_command_reader;
 di_callback_ptr di_callback;
 do_callback_ptr do_callback;
 do_to_sim_callback_ptr do_sim_callback;
@@ -56,7 +55,6 @@ init_comm(void)
   if (!init)
     {
       set_proto_stream(COMM_STREAM_DEFAULT); 
-      enable_command_reader=1;
       init_command_reader();
       init=1;
     }

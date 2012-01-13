@@ -144,9 +144,12 @@ class MyWindow(Gtk.Window):
         self.updateAllOut()
 
 
+
+
 def newDigOutCallback(pin, val):
-#    print "in Py:  new dig out: " + str(pin) + " = " + str(val)
+#    print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
     win.updateOutPin(pin,val)
+
 
 my_set_callback(newDigOutCallback)
 

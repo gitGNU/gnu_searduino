@@ -105,7 +105,7 @@ INC_FLAGS= -I$(SEARDUINO_PATH)/include/arduino/core \
            -I$(SEARDUINO_PATH)/faked-arduino/commnication/include \
            -I$(SEARDUINO_PATH)/arduino-sources/core
 
-SEARDUINO_LIB_PATH= $(SEARDUINO_PATH)/libs
+SEARDUINO_LIB_PATH= $(SEARDUINO_PATH)/faked-arduino
 else
 INC_FLAGS=  -I$(SEARDUINO_PATH)/include/arduino/core \
            -I$(SEARDUINO_PATH)/include/arduino/variants \
@@ -127,6 +127,7 @@ CXXFLAGS=-g $(USER_CXX_FLAGS) \
 LDFLAGS = -L$(SEARDUINO_LIB_PATH) -lsearduino-stub $(USER_LD_FLAGS) -lpthread
 
 else
+
 ifeq ($(BUILD_FROM_VCS),true)
 INC_FLAGS=  -I$(SEARDUINO_PATH)/arduino-sources/core  \
             -I$(SEARDUINO_PATH)/arduino-sources/variants/$(VARIANT) 
@@ -144,7 +145,7 @@ LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
 #-I$(SEARDUINO_PATH)/src
 #-Wall -Wa,-ahlms=$(PROG).lst -fno-exceptions -w = -fno-exceptions
 
-LIBSEARDUINO_CFLAGS=
+LIBSEARDUINOx_CFLAGS=
 LIBSEARDUINO_CXXFLAGS=
 
 CFLAGS=  $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CFLAGS) $(USER_C_FLAGS)
@@ -194,6 +195,7 @@ $(MAIN_SRC).hex:   $(MAIN_SRC).o $(LIB) $(MAIN_SRC).elf
 
 ifeq ($(ARDUINO),stub)
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX)
+	echo "OBJ_C  $(OBJ_C)"
 	$(CC) $(LIB) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS) 
 else
 $(PROG): $(MAIN_SRC).hex 

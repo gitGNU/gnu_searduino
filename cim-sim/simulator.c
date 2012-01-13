@@ -21,67 +21,69 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#include "stdio.h"
+#include "unistd.h"
+
+#include <Arduino.h>
 #include <pthread.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
-#include "utils/types.h"
 #include "communication/comm.h"
-#include "communication/read_command.h"
+#include "communication/ext_io.h"
+#include "arduino/setup.h"
 
-static int   enable_command_reader;
 
+/* 
+ * Function to register in the Searduino code
+ *
+ * This function will be called every time the Arduino program updates a digital output pin (on change only!)
+ */
 void 
-searduino_enable_command_reader(void)
+my_do_sim_callback(uint8_t pin, uint8_t val)
 {
-  enable_command_reader=1;
+  printf ("%s:%s(%d:%d)\n",__FILE__, __func__, pin, val);
+  printf ("\n");
 }
 
-void 
-searduino_disable_command_reader(void)
+int sim_setup(void)
 {
-  enable_command_reader=0;
+  int ret ; 
+
+  searduino_disable_streamed_output();
+  
+  searduino_setup();
+  
+  ret  = comm_register_digout_sim_cb(my_do_sim_callback);
+  if (ret != SEARD_COMM_OK)
+    {
+      fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
+      return ret;
+    }
+ 
+
+
+  return 0;
+}
+
+void* arduino_code(void *in)
+{
+  searduino_main();
+  return NULL;
 }
 
 
-void init_command_reader(void)
+int main(void)
 {
   pthread_t p;
-  if (enable_command_reader)
+  int i = 0;
+  sim_setup();
+
+  pthread_create(&p, NULL, arduino_code, NULL);
+
+  while(1)
     {
-      pthread_create(&p, NULL, command_reader, NULL);
-    }
-  return;
-}
-
-
-void* command_reader(void* in)
-{
-  char buf[100];
-  char *tmp;
-  int  pin;
-  int  val;
-
-  printf ("COMMAND READER begins\n");
-    
-  for (;;)
-    {
-/*       printf ("COMMAND READER reads\n"); */
-      fgets(buf, 100, stdin);
-/*       printf ("Just read: '%s'\n", buf);  */
-      
-      if (strncmp(buf,"pin:",4)==0)
-	{
-	  tmp=&buf[4];
-/* 	  printf (": '%s'\n", buf);  */
-/*  	  printf ("will parse: '%s'\n", tmp);  */
-	  sscanf(tmp, "%d:%d", &pin, &val);
-  	  printf ("SET pin:%d val:%d  \n", pin, val);  
-	  di_callback(pin,val);
-	}
-
-      usleep (1000);
+      i++;
+      usleep (1000*200);
+      printf ("%s:%s() setting dpin:%d:%d\n",__FILE__, __func__, i%6,i%7);
+      ext_set_dig_input(i%6,i%7);
     }
 }
-

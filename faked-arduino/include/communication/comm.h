@@ -38,7 +38,6 @@ typedef void (*do_to_sim_callback_ptr)(uint8_t pin, uint8_t val);
 typedef uint8_t (*do_callback_ptr)(uint8_t pin); 
 
 extern FILE* proto_stream ;
-extern int   enable_command_reader;
 extern di_callback_ptr di_callback;
 extern do_callback_ptr do_callback;
 extern do_to_sim_callback_ptr do_sim_callback;
@@ -51,6 +50,13 @@ int comm_register_digin_cb(di_callback_ptr cb);
 
 int comm_register_digout_cb(do_callback_ptr cb);
 
+
+/*
+ * 
+ * Register a callback to get notifications on 
+ *   digital out from as set by the Arduino program
+ *
+ */
 int comm_register_digout_sim_cb(do_to_sim_callback_ptr cb);
 
 void init_comm(void);
