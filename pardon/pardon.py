@@ -25,14 +25,55 @@
 
 from pardon import *
 from threading import Thread
+from threading import BoundedSemaphore
 import time
+import sys
 from gi.repository import Gtk
 from gi.repository import Gdk
+#from gi.repository import Glib
 from gi.repository import GObject
 
 #
 # searduino
 #
+
+paused = 0 
+
+def pardonPause():
+    searduino_pause();
+    global pause 
+    pause = 1
+
+def pardonResume():
+    searduino_resume();
+    global pause 
+    pause = 0
+
+
+class pauseButton(Gtk.HBox):
+    def __init__(self, parent):
+        Gtk.HBox.__init__(self)
+        self.par = parent
+    
+        self.label = Gtk.Label("Pause")
+        self.pin = Gtk.ToggleButton()
+        self.pin.set_active(True)
+        
+        self.pack_start(self.label, False, True, 0)
+        self.pack_start(self.pin, False, True, 0)
+
+        self.pin.connect("clicked", self.on_pin_toggled, "1")
+
+    def on_pin_toggled(self, widget, name):
+        if self.pin.get_active():
+            pardonResume()
+            print "pause"
+            self.label.set_text("Pause  ")
+        else:
+            pardonPause()
+            self.label.set_text("Resume ")
+        
+
 
 class inPin(Gtk.HBox):
 
@@ -68,10 +109,16 @@ class MyWindow(Gtk.Window):
     size = 10 
     ins  = [None]*size
     outs = [None]*size
+    semaphore = BoundedSemaphore(1)
+
 
     def updateGUI(self):
-        print "Updating GUI manually"
-        self.updateAllOut()
+        print "updateGUI()  <-- " + str(paused)
+        if (paused):
+            print "no GUI update"
+        else:
+            print "Updating GUI manually"
+            self.updateAllOut()
         return True
         
     def __init__(self):
@@ -83,7 +130,6 @@ class MyWindow(Gtk.Window):
         
         ioTable = Gtk.Table(1, 2, True)
         topTable.attach(ioTable, 0,1,1,2)
-#        topTable.attach(Gtk.Label("ett"),0,1,1,2)
         topTable.attach(Gtk.Label("Analogue table soom"),1,2,1,2)
 
         outTable = Gtk.Table(10, 2, True)
@@ -94,12 +140,14 @@ class MyWindow(Gtk.Window):
         topTable.attach(outTable, 0, 1, 0, 1)
         topTable.attach(inTable, 1, 2, 0, 1)
 
-        self.box = Gtk.Box(spacing=6)
+
+        pause = pauseButton(self)
+
+        self.box = Gtk.VBox(spacing=6)
         self.add(self.box)
-
-
-#        self.box.pack_start(ioTable, True, True, 0)
         self.box.pack_start(topTable, False, True, 0)
+        self.box.pack_start(pause, False, True, 0)
+
 
         for i in range(1,(self.size-1)):
             vb = Gtk.HBox()
@@ -112,7 +160,6 @@ class MyWindow(Gtk.Window):
             outTable.attach(vb, 0, 1, i, i+1)
 
         for i in range(1,(self.size-1)):
-#            print "Adding ... " + str(i)
             self.ins[i] = inPin(self,i)
             inTable.attach(self.ins[i], 0, 1, i, i+1)
             self.pinUpdate(i,"on")
@@ -126,7 +173,14 @@ class MyWindow(Gtk.Window):
     #t.start()
 
     def updateOutPin(self,pin, val):
+        print "---> get sem #####################################################################"
+        self.semaphore.acquire()        
+#        Gtk.threads_leave()
+        print "self.outs[" + str(pin) + "].set_text(" + str(val)+ ")"
         self.outs[pin].set_text(str(val))
+#        Gtk.threads_leave()
+        self.semaphore.release()
+        print "<--- rel sem #####################################################################"
 
     def updateAllOut(self):
         for i in range(1,(self.size-1)):
@@ -141,13 +195,14 @@ class MyWindow(Gtk.Window):
         if (val_str=="on"):
             val=1
         py_ext_set_input(nr,val)            
-        self.updateAllOut()
+#        self.updateAllOut()
 
 
 
 
 def newDigOutCallback(pin, val):
-#    print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
+    print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
+    global win
     win.updateOutPin(pin,val)
 
 
@@ -157,5 +212,10 @@ win = MyWindow()
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
 
+GObject.idle_add(newDigOutCallback)
+GObject.threads_init()
 
+#GObject.threads_init()
+#mainloop = GObject.MainLoop()
+#mainloop.run()
 Gtk.main()

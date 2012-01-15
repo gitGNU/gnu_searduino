@@ -22,12 +22,16 @@
 #
 
 
+
 BUILD_FROM_VCS=true
 ARDUINO=stub
 SRC_C=wrapper_py.c
+SRC_CXX=
 SHLIB=pardon.so
 USER_C_FLAGS=-I/usr/include/python2.7/ -lpython2.7 -fPIC
-SHLIB_LIBS=   -lsearduino-stub -L../faked-arduino   -L../test/shared -ltest
+USER_CXX_FLAGS=-I/usr/include/python2.7/ -lpython2.7 -fPIC
+SHLIB_LIBS=   -lsearduino-stub -L../faked-arduino  -L../example/python-digcounter/ -ldigcounter
+# -L../test/shared -ltest
 #-L../example/python-digcounter/ -ldigcounter
 
 #lib:
