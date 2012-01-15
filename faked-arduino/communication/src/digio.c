@@ -50,7 +50,7 @@ comm_digital_write_outpin(uint8_t pin, uint8_t val)
 
   if ( stub_output_enabled ) 
     {
-      fprintf(stderr, "pin:%d:%d\n", pin, val); 
+      fprintf(stderr, "pin:%d:%d  (in stub)\n", pin, val); 
       fflush(proto_stream);
     }
 

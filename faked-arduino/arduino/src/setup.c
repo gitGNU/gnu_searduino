@@ -31,7 +31,8 @@
 #include "utils/error.h"
 #include "communication/comm.h"
 
-void digin_callback(uint8_t pin, uint8_t val); 
+void digin_callback
+(uint8_t pin, uint8_t val); 
 uint8_t  digout_callback(uint8_t pin);
 
 
@@ -46,8 +47,6 @@ void searduino_setup(void)
       return;
     }
   PRINT_FUNCTION_NAME_NOARGS();
-
-  printf ("Registering callbacks....\n");
 
   init_comm();
   ret = comm_register_digin_cb(digin_callback);

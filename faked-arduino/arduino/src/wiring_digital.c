@@ -62,7 +62,7 @@ digin_callback(uint8_t pin, uint8_t val)
     }
 
   arduino_in_pins[pin].val=val;
-/*   printf ("PYTHON (in C stub)   storing in[%d].val=%d  (%d)\n", pin, arduino_in_pins[pin].val, val); */
+  /* printf ("%s:%s   storing in[%d].val=%d  (%d)\n",__FILE__, __func__, pin, arduino_in_pins[pin].val, val);  */
   return;
 }
 
@@ -138,7 +138,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
   if ( arduino_out_pins[pin].val != val)
     {
       arduino_out_pins[pin].val=val;
-      /*   printf ("PYTHON   (stub) pin:%d=%d   GUI | setting value \n" ,pin,val); */
+      /* printf ("wiring_digital()   (will call comm) pin:%d=%d  \n" ,pin,val);  */
       
       ret = comm_digital_write_outpin(pin,val);
       if (ret != SEARD_ARDUINO_OK)
