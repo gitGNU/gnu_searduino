@@ -49,7 +49,7 @@ void setup() {
 #define ENABLE_SLEEP
 
 #ifdef ENABLE_SLEEP
-#define   SEARDUINO_LOOP() for (;;) if (!searduino_exec) { fprintf (stderr, "%s:%s  main <=============================== FAKED PAUSE, sleeping ", __FILE__, __func__); usleep(1000*200); fprintf (stderr, "waiting for resume\n");  } else 
+#define   SEARDUINO_LOOP() for (;;) if (!searduino_exec) { fprintf (stderr, "%s:%s  main: Zzzzz ", __FILE__, __func__); usleep(1000*200); } else 
 #else
 #define   SEARDUINO_LOOP() for (;;) 
 #endif
