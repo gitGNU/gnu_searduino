@@ -42,29 +42,49 @@ ardInputPin=1
 ardAckPin=5
 
 
+sim_pause=0
+
 receivedAck=0
 
 def newDigOutCallback(pin, val):
-    print "====================================> Py Callback:  new dig out: " + str(pin) + " = " + str(val)
+    print "pyc:" + str(pin) + ":" + str(val) + "   callbacked Arduino dig out"
     
 
 def tickOneTime():
+
+    global sim_pause
+
     tmp=0
     tmp2=0
     while True:
-        limit = 10
-        
-        tmp = tmp + 1
+        if (sim_pause):
+            print "Zzzzz"
+            time.sleep(1)
+        else:
+            limit = 10
+            
+            tmp = tmp + 1
+            
+            py_ext_set_input(ardInputPin,(tmp%2))
+            
+        #        print "setting dig in: " + str(tmp) + " to: " +  str((tmp+tmp2)%2)
+            print "pys:" + str(tmp) + ":" + str((tmp+tmp2)%2) + "   setting Arduino dig in from sim"
+            py_ext_set_input(tmp,(tmp+tmp2)%2)
+            time.sleep(0.1)
 
-        py_ext_set_input(ardInputPin,(tmp%2))
+            if (tmp==8):
+                tmp=0
+                tmp2=tmp2+1
 
-#        print "setting dig in: " + str(tmp) + " to: " +  str((tmp+tmp2)%2)
-        py_ext_set_input(tmp,(tmp+tmp2)%2)
-        time.sleep(0.1)
-
-        if (tmp==8):
-            tmp=0
-            tmp2=tmp2+1
+def pause():
+    global sim_pause
+    sim_pause=1;
+    searduino_pause();
+      
+def resume():
+    global sim_pause
+    sim_pause=0;
+    searduino_resume();
       
 def main():
 
@@ -82,14 +102,17 @@ def main():
     tt = Thread(target=tickOneTime, args=())
     tt.start()
 
-    tmp = 0 
+    tmp = 2 
     while True:
         time.sleep (1)
+
         if (tmp==0):
-            searduino_resume();
+            resume();
+            time.sleep(10)
             tmp=1
         elif (tmp==10):
-            searduino_pause();
+            pause();
+            time.sleep(10)
             tmp=0
         else:
             tmp = tmp + 1

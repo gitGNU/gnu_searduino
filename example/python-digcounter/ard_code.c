@@ -46,15 +46,20 @@ void setup() {
 }
 
 #define DEBUG_PIN_OUT2
+#define ENABLE_SLEEP
+
+#ifdef ENABLE_SLEEP
+#define   SEARDUINO_LOOP() for (;;) if (!searduino_exec) { fprintf (stderr, "%s:%s  main <=============================== FAKED PAUSE, sleeping ", __FILE__, __func__); usleep(1000*200); fprintf (stderr, "waiting for resume\n");  } else 
+#else
+#define   SEARDUINO_LOOP() for (;;) 
+#endif
 
 #ifdef DEBUG_PIN_OUT
 #define   DEBUG_MSG(str)    printf("%s\n", str);fflush(stdout);
 #define   DEBUG_IN_PIN(pin) printf(" %d ", pin);fflush(stdout);
-#define   SEARDUINO_LOOP() for (;;) if (!searduino_exec) { fprintf (stderr, "%s:%s  main <=============================== FAKED PAUSE, sleeping ", __FILE__, __func__); usleep(1000*200); fprintf (stderr, "waiting for resume\n");  } else 
 #else
 #define   DEBUG_MSG(str)    
 #define   DEBUG_IN_PIN(pin) 
-#define   SEARDUINO_LOOP() for (;;) 
 #endif
 
 int main(void)
