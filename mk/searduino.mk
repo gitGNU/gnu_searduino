@@ -51,6 +51,8 @@ endif
 
 
 ifeq (${ARDUINO},stub)
+E_C = $(SRC_C:.c=.E) $(MAIN_SRC:.c=.o)
+E_CXX = $(SRC_CXX:.cpp=.E) 
 OBJ_C = $(SRC_C:.c=.o) $(MAIN_SRC:.c=.o)
 OBJ_CXX = $(SRC_CXX:.cpp=.o) 
 else
@@ -180,6 +182,13 @@ INTERNAL_FLAGS= -DMY_ARDUINO=$(ARDUINO) -DMY_BOARD=$(BOARD)
 %.o: %.cpp
 	$(CXX) -c $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
 
+%.E: %.cpp
+	$(CXX) -E $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
+
+%.E: %.c
+	$(CC) -E $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
+
+
 
 $(MAIN_SRC).elf: $(MAIN_SRC).o  $(OBJ_C) $(OBJ_CXX)
 	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(MAIN_SRC).elf $(MAIN_SRC).o $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX)
@@ -210,6 +219,8 @@ clean:
 
 light-clean:
 	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex 
+
+efile: $(E_C) $(E_CXX)
 
 
 all: $(PROG) $(LIB) $(OBJ_C) $(OBJ_CXX)
