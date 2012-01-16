@@ -153,6 +153,8 @@ daily-dist: clean
 .PHONY: pardon
 pardon:
 	ARDUINO=stub && BOARD=stub && export BUILD_FROM_VCS=true  && cd pardon && make clean && make
+test-pardon:
+	cd example/python-digcounter/ && export LD_LIBRARY_PATH=../../faked-arduino/:. && export PYTHONPATH=../../pardon && ./simple-hw.py
 
 .PHONY: cim-sim
 cim-sim:
