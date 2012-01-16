@@ -150,3 +150,13 @@ daily-dist: clean
 	tar zcvf $(DAILY_DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  pardon  qard  README  test Makefile.in misc configure bin example
 	@echo "Created: $(DAILY_DIST_FILE)"
 
+.PHONY: pardon
+pardon:
+	ARDUINO=stub && BOARD=stub && export BUILD_FROM_VCS=true  && cd pardon && make clean && make
+
+.PHONY: cim-sim
+cim-sim:
+	ARDUINO=stub && BOARD=stub && export BUILD_FROM_VCS=true  && cd cim-sim && make clean && make
+test-cim-sim:
+	cd cim-sim && export LD_LIBRARY_PATH=../faked-arduino/:../test/shared && ./cim_sim
+
