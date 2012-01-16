@@ -49,7 +49,7 @@ void setup() {
 #define ENABLE_SLEEP
 
 #ifdef ENABLE_SLEEP
-#define   SEARDUINO_LOOP() for (;;) if (!searduino_exec) { fprintf (stderr, "%s:%s  main: Zzzzz ", __FILE__, __func__); usleep(1000*200); } else 
+#define   SEARDUINO_LOOP() for (;;) if (!searduino_exec) { fprintf (stderr, "z"); usleep(1000*200); } else 
 #else
 #define   SEARDUINO_LOOP() for (;;) 
 #endif
@@ -87,7 +87,7 @@ int main(void)
       i++;
       if (i==8) i=0;
 
-      usleep(1000*100); 
+      usleep(1000*50); 
     }
   DEBUG_MSG("");
 }

@@ -58,7 +58,6 @@ def tickOneTime():
     tmp2=0
     while True:
         if (sim_pause):
-            print "Zzzzz"
             time.sleep(1)
         else:
             limit = 10
@@ -70,7 +69,7 @@ def tickOneTime():
         #        print "setting dig in: " + str(tmp) + " to: " +  str((tmp+tmp2)%2)
             print "pys:" + str(tmp) + ":" + str((tmp+tmp2)%2) + "   setting Arduino dig in from sim"
             py_ext_set_input(tmp,(tmp+tmp2)%2)
-            time.sleep(0.1)
+            time.sleep(0.2)
 
             if (tmp==8):
                 tmp=0
