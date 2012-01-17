@@ -40,6 +40,23 @@
  *
  */
 FILE* proto_stream ;
+
+/*
+ *
+ * Callback functions used througout this module
+ *
+ *  di_callback 
+ *     used to callback layer above, 
+ *     when someone updated the Arduino digital input pin
+ *
+ *  do_callback
+ *     used to callback layer above, 
+ *     when someone requests the value for an Arduino output pin
+ * 
+ *  do_to_sim_callback
+ *     used to callback listener when an Arduino output pin is set
+ *
+ */
 di_callback_ptr di_callback;
 do_callback_ptr do_callback;
 do_to_sim_callback_ptr do_sim_callback;
@@ -61,15 +78,19 @@ init_comm(void)
 }
 
 
-int 
+uint8_t
 set_proto_stream(FILE *f)
 {
-  proto_stream = f;
-  return SEARD_COMM_OK;
+  if (f!=NULL)
+    {
+      proto_stream = f;
+      return SEARD_COMM_OK;
+    }
+  return SEARD_INVALID_STREAM;
 }
 
 
-int 
+uint8_t
 comm_register_digin_cb(di_callback_ptr cb)
 {
   PRINT_FUNCTION_NAME(("%d",(int)cb));
@@ -86,7 +107,7 @@ comm_register_digin_cb(di_callback_ptr cb)
 
 
 
-int 
+uint8_t
 comm_register_digout_cb(do_callback_ptr cb)
 {
   PRINT_FUNCTION_NAME(("%d",(int)cb));
@@ -101,7 +122,7 @@ comm_register_digout_cb(do_callback_ptr cb)
   return SEARD_COMM_OK;
 }
 
-int 
+uint8_t
 comm_register_digout_sim_cb(do_to_sim_callback_ptr cb)
 {
   PRINT_FUNCTION_NAME(("%d",(int)cb));
@@ -112,6 +133,7 @@ comm_register_digout_sim_cb(do_to_sim_callback_ptr cb)
     }
 
   do_sim_callback = cb;
+
   return SEARD_COMM_OK;
 }
 
