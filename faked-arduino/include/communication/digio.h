@@ -21,9 +21,57 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-int  comm_digital_write_outpin(uint8_t pin, uint8_t val);
+#ifndef COMMUNICATION_DIGIO_H
+#define COMMUNICATION_DIGIO_H
 
+/*
+ *
+ * Description:   
+ *  
+ *    Callback registered function (one function)
+ *    with value and pin (Arduino board's output pins)
+ * 
+ * Function name: comm_digital_write_outpin
+ *
+ * Arguments:     uint8_t pin, uint8_t val
+ *
+ *    pin - the output pin to inform value for
+ *    val - the value (for the pin) to report
+ *
+ * Return:        uint8_t
+ *    If ok:      SEARD_COMM_OK 
+ *
+ */
+uint8_t  comm_digital_write_outpin(uint8_t pin, uint8_t val);
+
+/*
+ *
+ * Description:   searduino_enable_streamed_output
+ *  
+ *    Enable printouts to stream
+ * 
+ * Function name: 
+ *
+ * Arguments:     void
+ *
+ * Returns:       void
+ *
+ */
 void searduino_enable_streamed_output(void);
 
+/*
+ *
+ * Description:   searduino_disable_streamed_output
+ *  
+ *    Disable printouts to stream
+ * 
+ * Function name: 
+ *
+ * Arguments:     void
+ *
+ * Returns:       void
+ *
+ */
 void searduino_disable_streamed_output(void);
 
+#endif  /* COMMUNICATION_DIGIO_H */

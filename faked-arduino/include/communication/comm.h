@@ -21,9 +21,14 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#ifndef COMMUNICATION_COMM_H
+#define COMMUNICATION_COMM_H
+
+
+
 
 /*
- *%
+ *
  *
  */
 #define  COMM_STREAM_TERMINAL stdout
@@ -32,34 +37,146 @@
 
 #define  SEARD_COMM_OK            0
 #define  SEARD_COMM_NULL_CALLBACK 1
+#define  SEARD_INVALID_STREAM     2
 
+
+/*
+ * Function pointer definitions
+ *  
+ */
 typedef void (*di_callback_ptr)(uint8_t pin, uint8_t val); 
 typedef void (*do_to_sim_callback_ptr)(uint8_t pin, uint8_t val); 
 typedef uint8_t (*do_callback_ptr)(uint8_t pin); 
 
+/*
+ * Streams to print messages to
+ */
 extern FILE* proto_stream ;
+
+/*
+ * External function pointers
+ */
 extern di_callback_ptr di_callback;
 extern do_callback_ptr do_callback;
 extern do_to_sim_callback_ptr do_sim_callback;
 
-int set_proto_stream(FILE *f);
 
-void  comm_setup(void);
+/*
+ *
+ * Description:   
+ *  
+ *    Set stream to use for stub printout
+ * 
+ * Function name: set_proto_stream
+ *
+ * Arguments:     FILE *f
+ *
+ *    f - stream to print to
+ *
+ * Return:           uint8_t
+ * ----------------------------------
+ *    If ok:         SEARD_COMM_OK 
+ *    if bad stream  SEARD_INVALID_STREAM
+ *
+ */
+uint8_t set_proto_stream(FILE *f);
 
-int comm_register_digin_cb(di_callback_ptr cb);
-
-int comm_register_digout_cb(do_callback_ptr cb);
+/* void  comm_setup(void); */
 
 
 /*
+ *
+ * Description:   
+ *  
+ *    Set callback for function anwsering on calls
+ *    for the value of Arduino's digital input pin
  * 
+ * Function name: comm_register_digin_cb
+ *
+ * Arguments:     di_callback_ptr cb
+ *
+ *    cb callback to register
+ *
+ * Return:           uint8_t
+ * ----------------------------------
+ *    If ok:         SEARD_COMM_OK 
+ *    if cb NULL     SEARD_COMM_NULL_CALLBACK
+ *
+ * Comment: This is used by module "above" communication 
+ *          (most likely faked-arduino/arduino). Comm
+ *          module (this module) need to ask for values.
+ *
+ */
+uint8_t comm_register_digin_cb(di_callback_ptr cb);
+
+/*
+ *
+ * Description:   
+ *  
+ *    Set callback for function wanting info on 
+ *    updates on Arduino's digital output pin
+ * 
+ * Function name: comm_register_digout_cb
+ *
+ * Arguments:     do_callback_ptr cb
+ *
+ *    cb callback to register
+ *
+ * Return:           uint8_t
+ * ----------------------------------
+ *    If ok:         SEARD_COMM_OK 
+ *    if cb NULL     SEARD_COMM_NULL_CALLBACK
+ *
+ * Comment: This is used by module "above" communication 
+ *          (most likely faked-arduino/arduino). Comm
+ *          module (this module) need to ask for values.
+ *
+ */
+uint8_t comm_register_digout_cb(do_callback_ptr cb);
+
+
+/*
+ *
+ * Description:   
+ *  
  * Register a callback to get notifications on 
  *   digital out from as set by the Arduino program
  *
+ * 
+ * Function name: comm_register_digout_sim_cb
+ *
+ * Arguments:     do_to_sim_callback_ptr
+ *
+ *    cb callback to register
+ *
+ * Return:           uint8_t
+ * ----------------------------------
+ *    If ok:         SEARD_COMM_OK 
+ *    if cb NULL     SEARD_COMM_NULL_CALLBACK
+ *
+ * Comment: This is used by simulator, comm module
+ *          calls back on this function when an output
+ *          digital pin is set in the Arduino code
+ *
  */
-int comm_register_digout_sim_cb(do_to_sim_callback_ptr cb);
+uint8_t comm_register_digout_sim_cb(do_to_sim_callback_ptr cb);
 
+
+/*
+ *
+ * Description:   
+ *  
+ *    Initialize the communication module
+ * 
+ * Function name: init_comm
+ *
+ * Arguments:     void
+ *
+ * Return:        void
+ *
+ */
 void init_comm(void);
 
 
 
+#endif /* COMMUNICATION_COMM_H */

@@ -21,13 +21,91 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#ifndef COMM_READ_COMMAND_H
+#define COMM_READ_COMMAND_H
+
+/*
+ *
+ * Description:   
+ *  
+ * Initialises the command reader
+ * Creates and starts a thread, to get input from user via stdin
+ *
+ * 
+ * Function name: init_command_reader
+ *
+ * Arguments:     none
+ *
+ * Return:        none
+ *
+ * Comment: 
+ *          
+ */
 void init_command_reader(void);
 
+/*
+ *
+ * Description:   
+ *  
+ * Function that actually reads input from user via stdin
+ *
+ * 
+ * Function name: command_reader
+ *
+ * Arguments:     void *in
+ *
+ *    not used
+ *
+ * Return:        none
+ *
+ * Comment: 
+ *          
+ */
 void* command_reader(void* in);
 
+
+
+/*
+ *
+ * Description:   
+ *  
+ *    Enable command reader
+ *
+ * 
+ * Function name: searduino_ensable_command_reader
+ *
+ * Arguments:     void
+ *
+ * Return:        none
+ *
+ * Comment: 
+ *
+ *    This has to be called before the call to init_command_reader
+ *          
+ */
 void 
 searduino_enable_command_reader(void);
 
+/*
+ *
+ * Description:   
+ *  
+ *    Disable command reader
+ *
+ * 
+ * Function name: searduino_disable_command_reader
+ *
+ * Arguments:     void
+ *
+ * Return:        none
+ *
+ * Comment: 
+ *
+ *    This has to be called before the call to init_command_reader
+ *          
+ */
 void 
 searduino_disable_command_reader(void);
 
+
+#endif /* COMM_READ_COMMAND_H */
