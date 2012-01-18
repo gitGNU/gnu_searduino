@@ -98,8 +98,7 @@ endif
 
 ifeq ($(ARDUINO),stub)
 ifeq ($(BUILD_FROM_VCS),true)
-INC_FLAGS= -I$(SEARDUINO_PATH)/include/arduino/core \
-           -I$(SEARDUINO_PATH)/include/arduino/variants \
+INC_FLAGS= \
            -I$(SEARDUINO_PATH)/faked-arduino/arduino/include \
            -I$(SEARDUINO_PATH)/faked-arduino/include \
            -I$(SEARDUINO_PATH)/faked-arduino/include/arduino \
@@ -107,7 +106,10 @@ INC_FLAGS= -I$(SEARDUINO_PATH)/include/arduino/core \
            -I$(SEARDUINO_PATH)/faked-arduino/commnication/include \
            -I$(SEARDUINO_PATH)/arduino-sources/core
 
-SEARDUINO_LIB_PATH= $(SEARDUINO_PATH)/faked-arduino
+#-I$(SEARDUINO_PATH)/include/arduino/core \
+#           -I$(SEARDUINO_PATH)/include/arduino/variants \
+
+SEARDUINO_LIB_PATH=$(SEARDUINO_PATH)/faked-arduino
 else
 INC_FLAGS=  -I$(SEARDUINO_PATH)/include/arduino/core \
            -I$(SEARDUINO_PATH)/include/arduino/variants \
@@ -126,7 +128,7 @@ CXXFLAGS=-g $(USER_CXX_FLAGS) \
            $(INC_FLAGS)
 
 
-LDFLAGS = -L$(SEARDUINO_LIB_PATH) -lsearduino-stub $(USER_LD_FLAGS) -lpthread
+LDFLAGS = $(USER_LD_FLAGS) -lpthread 
 
 else
 
