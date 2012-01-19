@@ -140,6 +140,9 @@ install:
 	cp -r mk/ $(INSTALL_DIR)/searduino
 	cp -r example/ $(INSTALL_DIR)/searduino
 
+	mkdir -p $(INSTALL_DIR)/searduino/arduino-code
+	cp extensions/arduino-lib/lib* $(INSTALL_DIR)/searduino/arduino-code
+
 dist: clean
 	-rm searduino-*.tar
 	tar zcvf $(DIST_FILE) AUTHORS  ChangeLog  faked-arduino  Makefile  mk  NEWS  extensions  qard  README  test Makefile.in misc configure bin example
