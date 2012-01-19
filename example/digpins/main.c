@@ -24,6 +24,25 @@
 #include <Arduino.h>
 #include "blink.h"
 
+long A  = 110;
+long As =117;
+long B  =123;
+long C =131;
+long Cs =139;
+long D =147;
+long Ds =156;
+long E =165;
+long F =175;
+long Fs =185;
+long G =196;
+long Gs =208;
+
+int pitcher = 1;
+
+#define WHOLE 600
+#define HALF  300
+#define QUART 150
+
 void setup() {
   int i ; 
   for (i=FIRST_LED;i<=LAST_LED;i++)
@@ -33,26 +52,94 @@ void setup() {
 }
 
 
+
+void buzz(long freq, long len) {
+  long  i ;
+
+  long tone_delay;
+  long cycles;
+
+  tone_delay = 1000000/freq/2; 
+  cycles = freq * len/ 1000;
+
+
+  digitalWrite(13, HIGH);
+  for (i=0; i < cycles; i++){
+    digitalWrite(12,HIGH); 
+    delayMicroseconds(tone_delay); 
+    digitalWrite(12,LOW); 
+    delayMicroseconds(tone_delay); 
+  }
+  digitalWrite(13, LOW);
+}
+
+
+void twinkle()
+{
+      #define SYMP_DELAY 150
+      buzz(C,HALF);
+      delay(SYMP_DELAY);
+      buzz(C,HALF);
+      delay(SYMP_DELAY);
+
+      buzz(G,HALF);
+      delay(SYMP_DELAY);
+      buzz(G,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(A*2,HALF);
+      delay(SYMP_DELAY);
+      buzz(A*2,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(G,WHOLE);
+      delay(SYMP_DELAY);
+
+      buzz(F,HALF);
+      delay(SYMP_DELAY);
+      buzz(F,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(E,HALF);
+      delay(SYMP_DELAY);
+      buzz(E,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(D,HALF);
+      delay(SYMP_DELAY);
+      buzz(D,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(C,WHOLE);
+      delay(SYMP_DELAY);
+      
+      delay(1000);
+      
+}
+
+
+void anabuzz(void)
+{
+  pitcher = 1.5*analogRead(2);
+
+  digitalWrite(13, HIGH);
+  buzz(pitcher/2, 10);
+  digitalWrite(13, LOW);
+}
+
 int main(void)
 {
   int i ;
-  int j ;
   
   init();  
   setup();
   
   for (;;)
     {
-      blink_stupidly(13);
       
-      for (i=0;i<25;i++)
-	{
-	  digitalWrite(13, HIGH);
-	  delay(50);
-	  digitalWrite(13, LOW);
-	  delay(50);
-	}
-      
+      //      twinkle();
+      anabuzz();
+
     }
   
 }

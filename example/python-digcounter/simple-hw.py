@@ -23,7 +23,7 @@
 #
 #
 
-from pardon import *
+from pearduino import *
 from threading import Thread
 import time
 import sys

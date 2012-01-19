@@ -23,19 +23,27 @@
 
 #include <Arduino.h>
 
+
+void blink_helper(uint8_t pin, unsigned long indelay)
+{
+  digitalWrite(pin, HIGH);
+  delay(indelay);
+  digitalWrite(pin, LOW);
+  delay(indelay);
+}
+
 void 
 blink_stupidly(uint8_t pin)
 {
-  digitalWrite(pin, HIGH);
+  int i ;
+  unsigned long mydelay = 5000;
+
+  for (i=0;i<20;i++)
+    {
+      blink_helper(pin, mydelay);
+      mydelay = mydelay / 2;
+    }
+  digitalWrite(13, LOW);
   delay(2000);
-  digitalWrite(pin, LOW);
-  delay(200);
-  digitalWrite(pin, HIGH);
-  delay(1000);
-  digitalWrite(pin, LOW);
-  delay(200);
-  digitalWrite(pin, HIGH);
-  delay(500);
-  digitalWrite(pin, LOW);
-  delay(200);
+  
 }

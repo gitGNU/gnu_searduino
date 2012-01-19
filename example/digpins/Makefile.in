@@ -26,7 +26,7 @@ PROG=blinker
 SRC_C=blink.c 
 SRC_CXX=
 MAIN_SRC=main.c
-ARDUINO=stub
+ARDUINO=due
 
 
 $(PROG): ARDUINO=stub
