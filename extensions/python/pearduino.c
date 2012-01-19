@@ -31,20 +31,19 @@
 #include "communication/ext_io.h"
 #include "arduino/setup.h"
 
-extern int searduino_exec;
 pthread_t   searduino_thread_impl;
 pthread_t  *searduino_thread = &searduino_thread_impl;
 
-#ifdef PARD_DEBUG_FUNCATION_CALLS
-#define PARD_PRINT_IN()            printf ("--->  %s() \n", __func__); fflush(stdout); 
-#define PARD_PRINT_INSIDE()        printf ("--- INSIDE  %s()\n", __func__); fflush(stdout);
-#define PARD_PRINT_INSIDE_STR(str) printf ("--- INSIDE  %s():  %s\n", __func__, str); fflush(stdout);
-#define PARD_PRINT_OUT()           printf ("<---  %s()\n", __func__);fflush(stdout); 
+#ifdef PEARDUINO_DEBUG_FUNCATION_CALLS
+#define PEARDUINO_PRINT_IN()            printf ("--->  %s() \n", __func__); fflush(stdout); 
+#define PEARDUINO_PRINT_INSIDE()        printf ("--- INSIDE  %s()\n", __func__); fflush(stdout);
+#define PEARDUINO_PRINT_INSIDE_STR(str) printf ("--- INSIDE  %s():  %s\n", __func__, str); fflush(stdout);
+#define PEARDUINO_PRINT_OUT()           printf ("<---  %s()\n", __func__);fflush(stdout); 
 #else
-#define PARD_PRINT_IN() 
-#define PARD_PRINT_INSIDE() 
-#define PARD_PRINT_INSIDE_STR(str) 
-#define PARD_PRINT_OUT() 
+#define PEARDUINO_PRINT_IN() 
+#define PEARDUINO_PRINT_INSIDE() 
+#define PEARDUINO_PRINT_INSIDE_STR(str) 
+#define PEARDUINO_PRINT_OUT() 
 #endif
 
 
@@ -64,9 +63,9 @@ void new_dig_out(uint8_t pin, uint8_t val)
   PyGILState_STATE gstate;   
   gstate = PyGILState_Ensure();   
 
-  PARD_PRINT_IN();
+  PEARDUINO_PRINT_IN();
 
-  PARD_PRINT_INSIDE();
+  PEARDUINO_PRINT_INSIDE();
 
   if (my_callback!=NULL)
     {
@@ -80,9 +79,9 @@ void new_dig_out(uint8_t pin, uint8_t val)
 	}
 
       /* printf(" Arguments to callback:  ");      fflush(stdout); */
-      //PyObject_Print(arglist, stdout, Py_PARD_PRINT_RAW);
+      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
-      PARD_PRINT_INSIDE_STR("    Will call callback\n");
+      PEARDUINO_PRINT_INSIDE_STR("    Will call callback\n");
       result = PyEval_CallObject(my_callback, arglist);
 
       Py_DECREF(arglist);
@@ -99,7 +98,7 @@ void new_dig_out(uint8_t pin, uint8_t val)
     }
 
   PyGILState_Release(gstate);
-  PARD_PRINT_OUT();
+  PEARDUINO_PRINT_OUT();
 }
 
 /*
@@ -109,14 +108,14 @@ static PyObject* py_c_digitalRead(PyObject* self, PyObject* args)
 {
   int pin;
   uint8_t val ;
-  PARD_PRINT_IN();
+  PEARDUINO_PRINT_IN();
   
   PyArg_ParseTuple(args, "i", &pin);
 
   val = ext_get_dig_output(pin);
   PyObject* o = Py_BuildValue("i", val);
 
-  PARD_PRINT_OUT();
+  PEARDUINO_PRINT_OUT();
   return o;
 }
 
@@ -128,19 +127,19 @@ static PyObject* py_c_ext_set_input(PyObject* self, PyObject* args)
 {
   int pin;
   int val;
-  PARD_PRINT_IN();
+  PEARDUINO_PRINT_IN();
 
   if (!PyArg_ParseTuple(args, "ii", &pin, &val))
     {
       return NULL;
     }
 
-  PARD_PRINT_INSIDE_STR("wrapper code sets input pin\n");
+  PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
 
   val= ext_set_dig_input(pin, val);
   PyObject* o = Py_BuildValue("i", val);
 
-  PARD_PRINT_OUT();
+  PEARDUINO_PRINT_OUT();
   return o;
 }
 
@@ -149,13 +148,13 @@ static PyObject* py_c_ext_set_input(PyObject* self, PyObject* args)
 
 PyObject * c_searduino_pause(void)
 {
-  PARD_PRINT_INSIDE_STR("in C wrapper: want to pause\n");
+  PEARDUINO_PRINT_INSIDE_STR("in C wrapper: want to pause\n");
 
   PyObject* res = Py_BuildValue("i", 0);
-    
-  searduino_exec=0;
 
-  PARD_PRINT_INSIDE_STR("in C: have paused\n");
+  searduino_set_paused();
+
+  PEARDUINO_PRINT_INSIDE_STR("in C: have paused\n");
   return res;
 }
 
@@ -163,11 +162,11 @@ PyObject * c_searduino_resume(void)
 {
   PyObject* res = Py_BuildValue("i", 0);
   Py_INCREF(Py_None);
-  PARD_PRINT_INSIDE_STR("in C wrapper: want to resume\n");
+  PEARDUINO_PRINT_INSIDE_STR("in C wrapper: want to resume\n");
 
-  searduino_exec=1;
+  searduino_set_running();
 
-  PARD_PRINT_INSIDE_STR("in C: is resumed\n");
+  PEARDUINO_PRINT_INSIDE_STR("in C: is resumed\n");
   return res;
 }
 
@@ -207,12 +206,12 @@ py_my_set_callback(PyObject *dummy, PyObject *args)
 {
   PyObject *result = NULL;
   PyObject *temp;
-  PARD_PRINT_IN();
+  PEARDUINO_PRINT_IN();
 
   if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
     if (!PyCallable_Check(temp)) {
       PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-      PARD_PRINT_OUT();
+      PEARDUINO_PRINT_OUT();
 
       return NULL;
     }
@@ -225,36 +224,36 @@ py_my_set_callback(PyObject *dummy, PyObject *args)
     Py_INCREF(Py_None);
     result = Py_None;
 
-    PARD_PRINT_INSIDE_STR("Python callck is registered");
+    PEARDUINO_PRINT_INSIDE_STR("Python callck is registered");
     usleep (1000);
   }
 
-  PARD_PRINT_OUT();
+  PEARDUINO_PRINT_OUT();
   return result;
 }
 
 /*
  * Python calls this to let us initialize our module
  */
-void initpardon()
+void initpearduino()
 {
 
   PyEval_InitThreads();
   //PyEval_ReleaseLock();
 
 
-  PARD_PRINT_INSIDE_STR("Init pardon module\n");
-  (void) Py_InitModule("pardon", myModule_methods);
+  PEARDUINO_PRINT_INSIDE_STR("Init pearduino module\n");
+  (void) Py_InitModule("pearduino", myModule_methods);
 
-  PARD_PRINT_INSIDE_STR("Setting up searduino\n");
+  PEARDUINO_PRINT_INSIDE_STR("Setting up searduino\n");
   searduino_setup();
 
-  PARD_PRINT_INSIDE_STR("Register callback for dig out"
+  PEARDUINO_PRINT_INSIDE_STR("Register callback for dig out"
 			"(in communication module)\n");
   comm_register_digout_sim_cb(new_dig_out);
   
-  PARD_PRINT_INSIDE_STR("Starting thread for arduino code\n");
+  PEARDUINO_PRINT_INSIDE_STR("Starting thread for arduino code\n");
   pthread_create(searduino_thread, NULL, arduino_code, NULL);
 
-  PARD_PRINT_INSIDE_STR("*** All set up ***  in wrapper\n");
+  PEARDUINO_PRINT_INSIDE_STR("*** All set up ***  in wrapper\n");
 }
