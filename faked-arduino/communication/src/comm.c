@@ -30,7 +30,6 @@
 
 #include "communication/comm.h"
 #include "communication/error.h"
-#include "communication/read_command.h"
 
 
 
@@ -72,10 +71,10 @@ init_comm(void)
   if (!init)
     {
       set_proto_stream(COMM_STREAM_DEFAULT); 
-      init_command_reader();
       init=1;
     }
 }
+
 
 
 uint8_t

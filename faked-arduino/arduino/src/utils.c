@@ -21,6 +21,11 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#ifdef DEAD_CODE
+
+#include "stdio.h"
+#include "utils/types.h"
+
 
 int 
 seard_print_pin_mode(uint8_t pin, uint8_t mode)
@@ -41,6 +46,7 @@ void seard_prot_get_status()
       digitalReadMode(i);
     }
 }
+
 
 int
 comm_digital_read(uint8_t pin)
@@ -81,3 +87,6 @@ get_nr_of_out_pins()
 {
   return NR_OF_OUT_PINS;
 }
+
+
+#endif

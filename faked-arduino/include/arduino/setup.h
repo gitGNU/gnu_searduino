@@ -21,4 +21,33 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#define ENABLE_SLEEP
+#ifdef  ENABLE_SLEEP
+#define   SEARDUINO_LOOP() for (;;)  \
+    if      (searduino_is_paused())  { fprintf (stderr, "z"); usleep(1000*200); } \
+    else if ( searduino_is_halted()) { fprintf (stderr, "Simulator halted, will return\n"); return 0; } \
+    else  
+#else
+#define   SEARDUINO_LOOP() for (;;) 
+#endif
+
 void searduino_setup(void);
+
+
+void searduino_set_paused(void);
+
+void searduino_set_running(void);
+
+void searduino_set_halted(void);
+
+uint8_t searduino_is_running(void);
+
+uint8_t searduino_is_paused(void);
+
+uint8_t searduino_is_halted(void);
+
+
