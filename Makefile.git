@@ -3,8 +3,8 @@ generate:
 	./bin/get-arduino-src.sh
 #	if [ "$?" != "0" ] ; then echo "Failed getting Arduino sources" ; exit 1 ; fi
 
-#	@echo "*** Creating autotools dir"
-#	-mkdir autotools/
+	@echo "*** Creating autotools dir"
+	-mkdir autotools/
 	libtoolize --automake  --copy --force
 
 	@echo "*** Retrieving configure tests needed by configure.in"
