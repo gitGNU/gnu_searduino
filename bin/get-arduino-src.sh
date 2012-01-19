@@ -77,7 +77,9 @@ setup_sources()
     exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/cores/arduino/* arduino-sources/core
     exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/variants/* arduino-sources/variants/
 
-    exec_comm cp misc/Makefile-arduino-sources  arduino-sources/Makefile
+    exec_comm cp mk/arduino-sources/Makefile.*                arduino-sources/
+    exec_comm cp mk/arduino-sources/Makefile                  arduino-sources/
+    exec_comm cp mk/arduino-sources/arduino-sources.mk        arduino-sources/
 }
 
 get_sources
