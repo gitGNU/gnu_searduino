@@ -23,47 +23,27 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=..
 
-SRC_C=core/WInterrupts.c  core/wiring_analog.c  core/wiring.c  core/wiring_digital.c  core/wiring_pulse.c  core/wiring_shift.c
-SRC_CXX=core/CDC.cpp core/HID.cpp        core/main.cpp  core/Print.cpp   core/Tone.cpp     core/WMath.cpp core/HardwareSerial.cpp  core/IPAddress.cpp  core/new.cpp   core/Stream.cpp  core/USBCore.cpp  core/WString.cpp
+all: uno mega due
 
-LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD)/
-LIB=$(LIB_PATH)/libsearduino.a
+uno:
+	make -f Makefile.uno
 
+due:
+	make -f Makefile.due
 
-SEARDUINO_MK=../mk/searduino.mk
-SEARDUINO_LIB_MK=../mk/searduino_lib.mk
+mega:
+	make -f Makefile.mega
 
-lib: $(LIB)
-$(LIB): $(OBJ_C)  $(OBJ_CXX) 
-
-include $(SEARDUINO_LIB_MK)
-include $(SEARDUINO_MK)
-
-
-objs: $(OBJ_C) $(OBJ_CXX)
-	-ls -al $(OBJ_C)
-	-ls -al $(OBJ_CXX)
-
-due: ARDUINO=due
-due: 
-	make lib
-
-uno: ARDUINO=uno
-uno: 
-	make lib
-
-mega: ARDUINO=mega
-mega: 
-	make lib
-
+clean:
+	make -f Makefile.uno clean
 
 install: due uno mega
-	@echo "installing to $(INSTALL_DIR)"
-	@cp -r libs/ $(INSTALL_DIR)/searduino/
-	@mkdir -p $(INSTALL_DIR)/searduino/include/arduino
-	@mkdir -p $(INSTALL_DIR)/searduino/include/arduino/core
-	@cp -r core/*.h     $(INSTALL_DIR)/searduino/include/arduino/core
-	@cp -r variants $(INSTALL_DIR)/searduino/include/arduino/
+	 @echo "installing to __INSTALL_DIR__"
+	 mkdir -p  __INSTALL_DIR__/arduino-libs 
+	 @cp -r libs/*  __INSTALL_DIR__/arduino-libs/
+	 @mkdir -p __INSTALL_DIR__/include/arduino
+	 @mkdir -p __INSTALL_DIR__/include/arduino/core
+	 @cp -r core/*.h     __INSTALL_DIR__/include/arduino/core
+	 @cp -r variants __INSTALL_DIR__/include/arduino/
 
