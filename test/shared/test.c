@@ -46,8 +46,7 @@ int main(void)
   init();  
   setup();
 
-  /* while (ctr++<50) */
-  while (1)
+  while (ctr++<50)
     {
       if (tmp) tmp=0 ; else tmp=1;
 
