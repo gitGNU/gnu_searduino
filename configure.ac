@@ -68,8 +68,6 @@ AC_ARG_ENABLE([python],
 
 
 if test "$python_enabled" = yes; then
-   echo "python will be used"
-   echo "Make sure it's found!"   
    AX_PYTHON_DEVEL([>= '2.7'])
 #   AC_SUBST(PYTHON_LDFLAGS)
 fi
@@ -91,21 +89,23 @@ AC_MSG_NOTICE([summary of build options:
 
 
 
-get_arduino_code()
+prepare_examples()
 {
-    echo "Trying to get Arduino code"
-    
-    bin/get-arduino-src.sh
-
-    cat mk/arduino-sources/Makefile.tmpl         |  \
-             sed "s,__INSTALL_DIR__,${prefix},g" >  \
-             mk/arduino-sources/Makefile
+    cat example/digpins/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digpins/Makefile.digpins
 }
 
+prepare_searduino_mk()
+{
+    cat mk/searduino.mk.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > mk/searduino.mk
+    cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > arduino-sources/Makefile
+}
 
+prepare_examples
+prepare_searduino_mk
 
+cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > simulators/pardon/searduino-pardon.sh
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile ])
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/arduino/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile mk/arduino-sources/Makefile mk/board-makefiles/Makefile  ])
 
 AC_OUTPUT
 
