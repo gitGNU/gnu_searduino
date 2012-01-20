@@ -32,8 +32,8 @@ SEARDUINO_PATH=../../
 
 check: $(PROG)
 
-include $(SEARDUINO_PATH)/mk/searduino.mk
-include $(SEARDUINO_PATH)/mk/searduino_lib.mk
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+#include $(SEARDUINO_PATH)/mk/searduino_lib.mk
 
 check-upload:
 	BOARD=due
