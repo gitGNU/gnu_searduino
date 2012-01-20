@@ -12,20 +12,19 @@ AVRDUDE=
 AR=ar
 JAVAC=gcj
 
-INC_FLAGS= -I$(SEARDUINO_PATH)/arduino-sources/core \
-           -I$(SEARDUINO_PATH)/faked-arduino/include/arduino \
-           -I$(SEARDUINO_PATH)/faked-arduino/include
-
-SEARDUINO_LIB_PATH= $(SEARDUINO_PATH)/libs
+INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
+           -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino \
+           -I$(SEARDUINO_INC_PATH)/faked-arduino/include
+SEARDUINO_LIB=searduinostub
 
 _CFLAGS=   -g $(USER_C_FLAGS) -Wall \
-           $(LIB_FLAGS) \
-           $(MODULE_C_FLAGS) \
-           $(INC_FLAGS)
+            $(LIB_FLAGS) \
+            $(MODULE_C_FLAGS) \
+            $(INC_FLAGS)
 
 _CXXFLAGS=-g $(USER_CXX_FLAGS) \
-            $(MODULE_CXX_FLAGS) \
-           $(INC_FLAGS)
+             $(MODULE_CXX_FLAGS) \
+             $(INC_FLAGS)
 
 _LDFLAGS = $(USER_LD_FLAGS) -lpthread 
 

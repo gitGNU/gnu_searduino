@@ -25,58 +25,15 @@ ifndef ARDUINO
 $(error Variables not set correctly ARDUINO='${ARDUINO}')
 endif		
 
+SEARDUINO_MK_PATH=/tmp/TMP_INSTALL2/share/searduino/
+SEARDUINO_INC_PATH=/tmp/TMP_INSTALL2/include/searduino/
+
 ifeq (${ARDUINO},stub)
-include $(SEARDUINO_PATH)/mk/searduino-stub.mk
+include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
 else
-include $(SEARDUINO_PATH)/mk/searduino-arduino.mk
+include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
 endif
 
+SEARDUINO_LIB_PATH=/tmp/TMP_INSTALL2/searduino/arduino-libs/$(BOARD)
 
-#uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
-
-ifndef BOARD
-$(error Variables not set correctly BOARD='$(BOARD)' (ARDUINO='${ARDUINO}'))
-endif		
-
-
-LIBSEARDUINO_CFLAGS=
-LIBSEARDUINO_CXXFLAGS=
-
-CFLAGS=  $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CFLAGS) $(USER_C_FLAGS)  $(_CFLAGS)
-CXXFLAGS=$(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CXXFLAGS) $(USER_CXX_FLAGS) $(_CXXFLAGS)
-
-SEARDUINO_LIB_PATH=$(SEARDUINO_PATH)/arduino-libs/$(BOARD) 
-LDFLAGS=$(_LDFLAGS) -L$(SEARDUINO_LIB_PATH) -lsearduino 
-
-
-
-$(OBJ_C): $(SRC_HEADERS) $(SRC_C) 
-$(OBJ_CXX): $(SRC_HEADERS) $(SRC_CXX)  
-
-INTERNAL_FLAGS= -DMY_ARDUINO=$(ARDUINO) -DMY_BOARD=$(BOARD)
-
-%.o: %.c
-	echo "This rule?"
-	$(CC) -c $(CFLAGS) -I. $(INTERNAL_FLAGS) $<  -o $@
-
-%.o: %.cpp
-	$(CXX) -c $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
-
-%.E: %.cpp
-	$(CXX) -E $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
-
-%.E: %.c
-	$(CC) -E $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
-
-clean:
-	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex *.a $(LIB) $(SHLIB) *.so libs/*/* $(PROG) *.pyc
-
-
-
-light-clean:
-	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex 
-
-efile: $(E_C) $(E_CXX)
-
-all: $(PROG) $(LIB) $(OBJ_C) $(OBJ_CXX)
-
+include $(SEARDUINO_MK_PATH)/mk/searduino-functions.mk

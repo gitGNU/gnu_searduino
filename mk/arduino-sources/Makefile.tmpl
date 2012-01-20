@@ -40,10 +40,12 @@ clean:
 
 install: due uno mega
 	 @echo "installing to __INSTALL_DIR__"
-	 mkdir -p  __INSTALL_DIR__/arduino-libs 
-	 @cp -r libs/*  __INSTALL_DIR__/arduino-libs/
-	 @mkdir -p __INSTALL_DIR__/include/arduino
-	 @mkdir -p __INSTALL_DIR__/include/arduino/core
-	 @cp -r core/*.h     __INSTALL_DIR__/include/arduino/core
-	 @cp -r variants __INSTALL_DIR__/include/arduino/
+	 mkdir -p  __INSTALL_DIR__/searduino/arduino-libs 
+	 @cp -r libs/*     __INSTALL_DIR__/searduino/arduino-libs/
+
+	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/core
+	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/variants
+
+	 @cp -r core/*.h   __INSTALL_DIR__/include/searduino/arduino-sources/core/
+	 @cp -r variants/* __INSTALL_DIR__/include/searduino/arduino-sources/variants/
 

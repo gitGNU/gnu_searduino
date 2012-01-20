@@ -32,14 +32,16 @@ LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD)/
 LIB=$(LIB_PATH)/libsearduino.a
 
 
-SEARDUINO_MK=../mk/searduino.mk
-SEARDUINO_LIB_MK=../mk/searduino_lib.mk
+
+SEARDUINO_MK=../mk/searduino-vcs.mk
+SEARDUINO_FUNC=../mk/searduino-functions.mk
 
 lib: $(LIB)
 $(LIB): $(OBJ_C)  $(OBJ_CXX) 
 
-include $(SEARDUINO_LIB_MK)
 include $(SEARDUINO_MK)
+include $(SEARDUINO_FUNC)
+
 
 
 objs: $(OBJ_C) $(OBJ_CXX)

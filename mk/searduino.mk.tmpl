@@ -21,14 +21,19 @@
 #
 #
 
+ifndef ARDUINO
+$(error Variables not set correctly ARDUINO='${ARDUINO}')
+endif		
 
-li: 
-	@echo "LIB      $(LIB)"
-	@echo "BOARD    $(BOARD)"
-	@echo "ARDUINO  $(ARDUINO)"
-	@echo "C        $(OBJ_C)"
-	@echo "C        $(SRC_C)"
-	@echo "CXX      $(OBJ_CXX)"
-	@echo "CXX      $(SRC_CXX)"
-	@echo "SHF      $(LIB_FLAGS)"
+SEARDUINO_MK_PATH=__INSTALL_DIR__/share/searduino/
+SEARDUINO_INC_PATH=__INSTALL_DIR__/include/searduino/
 
+ifeq (${ARDUINO},stub)
+include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
+else
+include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
+endif
+
+SEARDUINO_LIB_PATH=__INSTALL_DIR__/searduino/arduino-libs/$(BOARD)
+
+include $(SEARDUINO_MK_PATH)/mk/searduino-functions.mk

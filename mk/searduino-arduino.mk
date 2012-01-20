@@ -20,7 +20,7 @@ ARDUINO_CPU=ATmega1280
 USB_DEV=/dev/ttyUSB0
 endif
 
-include $(SEARDUINO_PATH)/mk/board-makefiles/$(BOARD).mk
+include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
 
 
 
@@ -36,8 +36,8 @@ AR=avr-ar
 AVRDUDE=avrdude
 F_CPU=$(board_build.f_cpu)
 
-INC_FLAGS=  -I$(SEARDUINO_PATH)/arduino-sources/core \
-            -I$(SEARDUINO_PATH)/arduino-sources/variants/$(VARIANT) 
+INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/$(VARIANT) 
 
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -ffunction-sections -fdata-sections \
@@ -45,8 +45,11 @@ LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -DARDUINO=$(ARDUINO_VERSION) \
                            $(INC_FLAGS)
 
+SEARDUINO_LIB=searduino
+
+
 $(MAIN_SRC).elf: $(MAIN_SRC).o  $(OBJ_C) $(OBJ_CXX)
-	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(MAIN_SRC).elf $(MAIN_SRC).o $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX)
+	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(MAIN_SRC).elf $(MAIN_SRC).o $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX) 
 
 $(MAIN_SRC).o: $(MAIN_SRC) 
 	$(CC) -c $(CFLAGS)  $(MAIN_SRC) -o  $(MAIN_SRC).o
