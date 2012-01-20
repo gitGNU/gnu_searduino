@@ -23,6 +23,8 @@
 
 AUTOMAKE_OPTIONS = gnu
 
+SUDBIRS=include
+
 LIB_SEARDUINO_H_FILES=\
        ./include/communication/error.h \
        ./include/communication/comm.h \
