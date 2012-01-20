@@ -1,0 +1,4 @@
+SUBDIRS =   digpins 
+#python-digcounter
+
+
