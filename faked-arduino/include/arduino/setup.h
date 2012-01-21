@@ -25,6 +25,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
+#define NR_OF_DIGITAL_PINS 20
+
+
 #define ENABLE_SLEEP
 #ifdef  ENABLE_SLEEP
 #define   SEARDUINO_LOOP() for (;;)  \
