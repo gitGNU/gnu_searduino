@@ -15,4 +15,4 @@ cd test/ && cd hw && make && make check && cd ../.. && \
 cd test/ && cd shared && make && make check && cd ../.. && \
 cd test/ && cd shared-main && make && make check && cd ../.. && \
 cd test/ && cd stub && make && make check && cd ../..  && \
-pushd ${TMP_INSTA}/share/searduino/example/digpins/ && make -f Makefile.digpins clean all && popd
+pushd ${TMP_INST}/share/searduino/example/digpins/ && make -f Makefile.digpins clean all && popd
