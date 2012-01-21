@@ -32,4 +32,4 @@ AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/.libs  -L../arduino-lib/.lib
 
 install-exec-hook:
 	ln -s $(DESTDIR)$(libdir)/libpearduino.so \
-                $(DESTDIR)$(libdir)/pearduino.so
+              $(DESTDIR)$(libdir)/pearduino.so
