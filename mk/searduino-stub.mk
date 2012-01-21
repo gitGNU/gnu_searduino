@@ -14,7 +14,11 @@ JAVAC=gcj
 
 INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino \
-           -I$(SEARDUINO_INC_PATH)/faked-arduino/include
+           -I$(SEARDUINO_INC_PATH)/faked-arduino/include \
+           -I$(SEARDUINO_INC_PATH)/arduino \
+           -I$(SEARDUINO_INC_PATH)/boards \
+           -I$(SEARDUINO_INC_PATH)/
+
 SEARDUINO_LIB=searduinostub
 
 _CFLAGS=   -g $(USER_C_FLAGS) -Wall \
