@@ -24,12 +24,15 @@
 #include <Arduino.h>
 #include <stdio.h>
 
-#define FIRST_LED 1
-#define LAST_LED  10
+#define FIRST_OUT 1
+#define LAST_OUT  5
+
+#define FIRST_IN 6
+#define LAST_IN  10
 
 void setup() {
   int i ; 
-  for (i=FIRST_LED;i<=LAST_LED;i++)
+  for (i=FIRST_OUT;i<=LAST_OUT;i++)
     {
       pinMode(i, OUTPUT);      
     }
@@ -52,9 +55,9 @@ int main(void)
 
       printf ("send on 1 %d     \n", tmp);
       digitalWrite(1,digitalRead(tmp));
-      for (i=2;i<11;i++)
+      for (i=FIRST_OUT;i<=LAST_OUT;i++)
 	{
-	  digitalWrite(i,digitalRead(i));
+	  digitalWrite(i,digitalRead(LAST_OUT+i));
 	}
 
       delay(interval);
