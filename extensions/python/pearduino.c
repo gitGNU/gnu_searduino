@@ -101,6 +101,24 @@ void new_dig_out(uint8_t pin, uint8_t val)
   PEARDUINO_PRINT_OUT();
 }
 
+
+
+static PyObject* c_py_get_pin_mode(PyObject* self, PyObject* args)
+{
+  uint8_t pin;
+  uint8_t mode ;
+  PEARDUINO_PRINT_IN();
+  
+  PyArg_ParseTuple(args, "i", &pin);
+
+  mode = ext_get_dig_mode(pin);
+  PyObject* o = Py_BuildValue("i", mode);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
 /*
  * Function to be called from Python
  */
@@ -171,6 +189,19 @@ PyObject * c_searduino_resume(void)
 }
 
 
+PyObject * c_searduino_quit(void)
+{
+  PyObject* res = Py_BuildValue("i", 0);
+  Py_INCREF(Py_None);
+  PEARDUINO_PRINT_INSIDE_STR("in C wrapper: want to quit\n");
+
+  searduino_set_halted();
+
+  PEARDUINO_PRINT_INSIDE_STR("in C: is set to quit\n");
+  return res;
+}
+
+
 
 /*
  * Another function to be called from Python
@@ -185,6 +216,8 @@ static PyMethodDef myModule_methods[] = {
   {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
   {"searduino_pause", (PyCFunction)c_searduino_pause, METH_VARARGS, NULL},
   {"searduino_resume", (PyCFunction)c_searduino_resume, METH_VARARGS, NULL},
+  {"searduino_quit", (PyCFunction)c_searduino_quit, METH_VARARGS, NULL},
+  {"py_get_pin_mode", (PyCFunction)c_py_get_pin_mode, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
 
