@@ -71,6 +71,14 @@ uint8_t ext_set_dig_input(uint8_t pin, uint8_t val);
  */
 int searduino_main(void);
 
+/*
+ *  TODO: Document this function
+ *
+ *    ask registered callback for mode of pin
+ *
+ */
+uint8_t ext_get_dig_mode(uint8_t pin);
+
 
 
 #endif /* COMMUNICATION_EXT_IO_H */

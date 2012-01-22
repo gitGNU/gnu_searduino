@@ -44,9 +44,10 @@
  * Function pointer definitions
  *  
  */
-typedef void (*di_callback_ptr)(uint8_t pin, uint8_t val); 
-typedef void (*do_to_sim_callback_ptr)(uint8_t pin, uint8_t val); 
+typedef void    (*di_callback_ptr)(uint8_t pin, uint8_t val); 
+typedef void    (*do_to_sim_callback_ptr)(uint8_t pin, uint8_t val); 
 typedef uint8_t (*do_callback_ptr)(uint8_t pin); 
+typedef uint8_t (*d_mode_callback_ptr)(uint8_t pin); 
 
 /*
  * Streams to print messages to
@@ -59,7 +60,7 @@ extern FILE* proto_stream ;
 extern di_callback_ptr di_callback;
 extern do_callback_ptr do_callback;
 extern do_to_sim_callback_ptr do_sim_callback;
-
+extern d_mode_callback_ptr    d_mode_callback;
 
 /*
  *

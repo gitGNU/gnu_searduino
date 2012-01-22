@@ -59,7 +59,7 @@ static arduino_pin arduino_digital_pins[NR_OF_DIGITAL_PINS];
 #define get_digital_pin_mode(pin)      (arduino_digital_pins[pin].mode) 
 #define set_digital_pin_mode(pin,mode)  arduino_digital_pins[pin].mode=mode; 
 #define get_digital_pin_val(pin)       (arduino_digital_pins[pin].val) 
-#define set_digital_pin_val(pin,val)    arduino_digital_pins[pin].val=val;
+#define set_digital_pin_val(pin,val)    arduino_digital_pins[pin].val=(val!=0);
 
 /*
  *
@@ -88,6 +88,29 @@ digin_callback(uint8_t pin, uint8_t val)
   arduino_digital_pins[pin].val=val;
   /* printf ("%s:%s   storing in[%d].val=%d  (%d)\n",__FILE__, __func__, pin, arduino_in_pins[pin].val, val);  */
   return;
+}
+
+
+
+/*
+ *
+ * Callback used to read pin mode
+ *   used in comm layer
+ *
+ */
+uint8_t
+dig_mode_callback(uint8_t pin)
+{
+  searduino_setup();
+  PRINT_FUNCTION_NAME(("%d",pin));
+
+  if (PIN_OUT_OF_RANGE(pin))
+    {
+      SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
+      return 0;
+    }
+
+  return get_digital_pin_mode(pin);
 }
 
 /*

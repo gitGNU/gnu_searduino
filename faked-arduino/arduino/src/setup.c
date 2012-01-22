@@ -33,6 +33,7 @@
 
 void     digin_callback (uint8_t pin, uint8_t val); 
 uint8_t  digout_callback(uint8_t pin);
+uint8_t  dig_mode_callback(uint8_t pin);
 
 static int searduino_exec ;
 
@@ -93,6 +94,13 @@ void searduino_setup(void)
     {
       fprintf(stderr, "Failed to register do callback");
     }
+
+  ret = comm_register_dig_mode_sim_cb(dig_mode_callback);
+  if (ret != SEARD_COMM_OK)
+    {
+      fprintf(stderr, "Failed to register do callback");
+    }
+
 
   searduino_set_running();
 
