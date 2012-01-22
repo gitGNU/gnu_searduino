@@ -36,6 +36,9 @@
 
 void setup() {
   pinMode(13,1);
+  pinMode(6,1);
+  pinMode(7,1);
+  pinMode(8,1);
 }
 
 int main(void)
@@ -46,13 +49,25 @@ int main(void)
   
   SEARDUINO_LOOP()
     {
+      digitalWrite(3,digitalRead(2));
+      printf ("===================================-------------------------------               %d %d %d | %d %d %d\n",
+	      digitalRead(2) , digitalRead(3) , digitalRead(4),
+	      digitalRead(2) ,
+	      digitalRead(2) && digitalRead(3) ,
+	      digitalRead(2) && digitalRead(3) && digitalRead(4));
+      digitalWrite(6,
+		   digitalRead(2)  );
+      digitalWrite(7,
+		   digitalRead(2) && digitalRead(3)  );
+      digitalWrite(8,
+		   digitalRead(2) && digitalRead(3) && digitalRead(4) );
       digitalWrite(13,0);
-      delay(500);
+      delay(200);
       /* Simulator should not get this extra write, 
        * we should only send on change */
       digitalWrite(13,0);
       digitalWrite(13,1);
-      delay(500);
+      delay(200);
     }
   return 0;
 }
