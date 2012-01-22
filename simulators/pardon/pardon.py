@@ -39,6 +39,17 @@ from gi.repository import GObject
 
 paused = 0 
 
+size = 20 
+
+redColor = Gdk.RGBA()
+redColor.red=1.0
+redColor.green=0.0
+redColor.blue=0.5
+redColor.alpha=0.7
+#gdk_color_parse ("red");
+#redColor = Gdk.Color("red")
+#redColor = Gdk.color_parse("red")
+
 def pardonPause():
     searduino_pause();
     global pause 
@@ -56,6 +67,7 @@ class pauseButton(Gtk.HBox):
         self.par = parent
     
         self.label = Gtk.Label("Pause")
+        self.label.set_width_chars(10);
         self.pin = Gtk.ToggleButton()
         self.pin.set_active(True)
         
@@ -74,8 +86,7 @@ class pauseButton(Gtk.HBox):
             self.label.set_text("Resume ")
         
 
-
-class inPin(Gtk.HBox):
+class digitalPin(Gtk.HBox):
 
     def __init__(self, parent, nr):
         Gtk.HBox.__init__(self)
@@ -83,18 +94,57 @@ class inPin(Gtk.HBox):
         self.myNr = nr
         
 
-        label = Gtk.Label("Digital in " + str(nr) + "   ")
-        self.pin = Gtk.ToggleButton()
-        self.pin.set_active(True)
+        # Label 
+        label = Gtk.Label("Digital pin ")
+        pinLabel = Gtk.Label(str(nr))
+        pinLabel.set_width_chars(2);
+
+        # Mode 
+        self.mode_box=Gtk.HBox()
+        self.mode_label = Gtk.Label(" Mode ")
+        self.mode = Gtk.Label("Undef")
+        self.mode.set_width_chars(7);
+
+        self.mode_box.pack_start(self.mode_label, False, True,0)
+        self.mode_box.pack_start(self.mode, False, True,0)
+
+        # Input 
+        self.input_box=Gtk.HBox()
+        self.input = Gtk.ToggleButton()
+        self.input.set_active(True)
+        self.input_box.pack_start(self.input, False, True,0)
+        
+        # Output
+        self.output_box=Gtk.HBox()
+        self.output_label = Gtk.Label("NaN")
+        self.output_box.pack_start(self.output_label, False, True, 0)
         
         self.pack_start(label, False, True, 0)
-        self.pack_start(self.pin, False, True, 0)
+        self.pack_start(pinLabel, False, True, 0)
+        self.pack_start(self.mode_box, False, True, 0)
+        self.pack_start(self.input_box, False, True, 0)
+        self.pack_start(self.output_box, False, True, 0)
 
-        self.pin.connect("clicked", self.on_pin_toggled, "1")
+        self.input.connect("clicked", self.on_dig_toggled, "1")
 
-    def on_pin_toggled(self, widget, name):
+    def setMode(self, mode):
+        if (mode==1):
+            self.mode.set_text("OUTPUT")
+        else:
+            self.mode.set_text("INPUT")
+            self.output_label.set_text("")
+
+    def setVal(self, val):
+        self.output_label.set_text(str(val))
+
+    def setValCond(self):
+
+        if py_get_pin_mode(self.myNr)==1:
+            self.output_label.set_text(str(py_digitalRead(self.myNr)))
+
+    def on_dig_toggled(self, widget, name):
 #        print "GUI 1 toggle"
-        if self.pin.get_active():
+        if self.input.get_active():
 #            py_ext_set_input(1,1)
             state = "on"
         else:
@@ -104,13 +154,13 @@ class inPin(Gtk.HBox):
         self.par.pinUpdate(self.myNr,state)
 
 
+
+
 class MyWindow(Gtk.Window):
 
-    size = 10 
-    ins  = [None]*size
-    outs = [None]*size
+    
     semaphore = BoundedSemaphore(1)
-
+    digs = [None]*size
 
     def updateGUI(self):
         print "updateGUI()  <-- " + str(paused)
@@ -119,6 +169,17 @@ class MyWindow(Gtk.Window):
         else:
             print "Updating GUI manually"
             self.updateAllOut()
+                
+        return True
+
+
+    def updateModes(self):
+        if (paused):
+            print "no GUI update"
+        else:
+            for i in range(1,size-1):
+                self.pinUpdateMode(i,py_get_pin_mode(i));
+                
         return True
         
     def __init__(self):
@@ -133,12 +194,12 @@ class MyWindow(Gtk.Window):
         topTable.attach(Gtk.Label("Analogue table soom"),1,2,1,2)
 
         outTable = Gtk.Table(10, 2, True)
-        inTable = Gtk.Table(10, 1, True)
+        digTable = Gtk.Table(10, 1, True)
 
         ioTable.attach(outTable, 0, 1, 0, 1)
-        ioTable.attach(inTable, 1, 2, 0, 1)
+        ioTable.attach(digTable, 1, 2, 0, 1)
         topTable.attach(outTable, 0, 1, 0, 1)
-        topTable.attach(inTable, 1, 2, 0, 1)
+        topTable.attach(digTable, 1, 2, 0, 1)
 
 
         pause = pauseButton(self)
@@ -149,45 +210,33 @@ class MyWindow(Gtk.Window):
         self.box.pack_start(pause, False, True, 0)
 
 
-        for i in range(1,(self.size-1)):
-            vb = Gtk.HBox()
-            vbl = Gtk.Label("Digital out " + str(i) +"  ")
-            vb.pack_start(Gtk.Label("Digital out " + str(i) +"  "), False, True, 0)
-            vb.pack_start(vbl, False, True, 0)
-            vb.modify_bg(Gtk.StateType.NORMAL, Gdk.Color(65535,1212,1212))
-            vb.modify_bg(Gtk.StateType.ACTIVE, Gdk.Color(5535,5535,5535))
-            self.outs[i] = vbl
-            outTable.attach(vb, 0, 1, i, i+1)
-
-        for i in range(1,(self.size-1)):
-            self.ins[i] = inPin(self,i)
-            inTable.attach(self.ins[i], 0, 1, i, i+1)
+        for i in range(1,(size-1)):
+            self.digs[i] = digitalPin(self,i)
+            digTable.attach(self.digs[i], 0, 1, i, i+1)
             self.pinUpdate(i,"on")
-
+            
         self.updateAllOut()
+        self._positiontimeoutid = GObject.timeout_add(2000, self.updateModes)
         self._positiontimeoutid = GObject.timeout_add(10000, self.updateGUI)
-
-
-
-    #t = monitorThread()
-    #t.start()
+        self.updateGUI()
 
     def updateOutPin(self,pin, val):
-        print "---> get sem #####################################################################"
+#        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
         self.semaphore.acquire()        
-#        Gtk.threads_leave()
-        print "self.outs[" + str(pin) + "].set_text(" + str(val)+ ")"
-        self.outs[pin].set_text(str(val))
-#        Gtk.threads_leave()
+#        print "self.digs[" + str(pin) + "].set_text(" + str(val)+ ")"
+        self.digs[pin].setVal(val)
         self.semaphore.release()
-        print "<--- rel sem #####################################################################"
+#        print "<--- rel sem #####################################################################"
 
     def updateAllOut(self):
-        for i in range(1,(self.size-1)):
-            self.updateOutPin(i,py_digitalRead(i))
-#            val = py_digitalRead(i)
-#            self.outs[i].set_text(str(val))
+#        print "will update late"
+        for i in range(1,(size-1)):
+            self.digs[i].setValCond()
 
+
+    def pinUpdateMode(self, pin, mode):
+#        print "digs at  " + str(pin) + " : " + str(self.digs[pin])
+        self.digs[pin].setMode(mode)
 
     def pinUpdate(self, nr, val_str):
         val=0
@@ -201,12 +250,17 @@ class MyWindow(Gtk.Window):
 
 
 def newDigOutCallback(pin, val):
+    print ""
     print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
+    print ""
     global win
     win.updateOutPin(pin,val)
 
 
+
+
 my_set_callback(newDigOutCallback)
+
 
 win = MyWindow()
 win.connect("delete-event", Gtk.main_quit)
@@ -214,6 +268,7 @@ win.show_all()
 
 GObject.idle_add(newDigOutCallback)
 GObject.threads_init()
+
 
 #GObject.threads_init()
 #mainloop = GObject.MainLoop()
