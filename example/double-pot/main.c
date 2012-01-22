@@ -22,8 +22,6 @@
  ****/
 
 #include <Arduino.h>
-#include "blink.h"
-
 long A  = 110;
 long As =117;
 long B  =123;
@@ -37,45 +35,88 @@ long Fs =185;
 long G =196;
 long Gs =208;
 
-int pitcher = 1;
+int pitcher1 = 1;
+int pitcher2 = 1;
 
 #define WHOLE 600
 #define HALF  300
 #define QUART 150
 
+
 void setup() {
-  int i ; 
-  for (i=FIRST_LED;i<=LAST_LED;i++)
-    {
-      pinMode(i, OUTPUT);      
-    }
+  pinMode(11, OUTPUT);      
+  pinMode(12, OUTPUT);      
+  pinMode(13, OUTPUT);      
 }
 
 
+#define analogRead(p) 500
 
-void buzz(long freq, long len) {
+void buzzd(long freq, long len) {
   long  i ;
 
   long tone_delay;
   long cycles;
 
-  tone_delay = 1000000/freq/2; 
+  tone_delay = 1000000/freq; 
+  cycles = freq * len/ 1000 / 2;
+
+
+  for (i=0; i < cycles; i++){
+    digitalWrite(12,HIGH); 
+
+    digitalWrite(11,HIGH); 
+    delayMicroseconds(tone_delay/2); 
+    digitalWrite(11,LOW); 
+    delayMicroseconds(tone_delay/2); 
+
+    digitalWrite(12,LOW); 
+
+    digitalWrite(11,HIGH); 
+    delayMicroseconds(tone_delay/2); 
+    digitalWrite(11,LOW); 
+    delayMicroseconds(tone_delay/2); 
+
+  }
+}
+void buzz(long freq, long len) {
+  long  i ;
+
+  long myfreq ;
+  long tone_delay;
+  long cycles;
+
+  pitcher1 = analogRead(2) + 100;
+  myfreq = freq * pitcher1 / 200;
+
+  tone_delay = 1000000/myfreq/2; 
   cycles = freq * len/ 1000;
 
 
   digitalWrite(13, HIGH);
   for (i=0; i < cycles; i++){
     digitalWrite(12,HIGH); 
-    delayMicroseconds(tone_delay); 
+
+    digitalWrite(11,HIGH); 
+    delayMicroseconds(tone_delay/2); 
+    digitalWrite(11,LOW); 
+    delayMicroseconds(tone_delay/2); 
+
     digitalWrite(12,LOW); 
-    delayMicroseconds(tone_delay); 
+
+    digitalWrite(11,HIGH); 
+    delayMicroseconds(tone_delay/2); 
+    digitalWrite(11,LOW); 
+    delayMicroseconds(tone_delay/2); 
+
   }
   digitalWrite(13, LOW);
 }
 
-
 void twinkle()
 {
+  pitcher1 = 1.5*analogRead(2);
+
       #define SYMP_DELAY 150
       buzz(C,HALF);
       delay(SYMP_DELAY);
@@ -118,13 +159,12 @@ void twinkle()
 }
 
 
+
 void anabuzz(void)
 {
-  pitcher = 1.5*analogRead(2);
+  pitcher1 = 1.5*analogRead(2);
 
-  digitalWrite(13, HIGH);
-  buzz(pitcher/2, 10);
-  digitalWrite(13, LOW);
+  buzz(pitcher1/2, 10);
 }
 
 int main(void)
@@ -138,7 +178,7 @@ int main(void)
     {
       
       twinkle();
-      //	    anabuzz();
+      //anabuzz();
 
     }
   
