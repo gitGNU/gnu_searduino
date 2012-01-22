@@ -157,12 +157,15 @@ void digitalWrite(uint8_t pin, uint8_t val)
     {
       if (arduino_digital_pins[pin].last_time.tv_sec!=0)
 	{
-	  time_diff = (cur_time.tv_sec - arduino_digital_pins[pin].last_time.tv_sec) * 1000 +
+	  time_diff = (cur_time.tv_sec - arduino_digital_pins[pin].last_time.tv_sec) * 1000000 +
 	    cur_time.tv_usec - arduino_digital_pins[pin].last_time.tv_usec ;
-	  if (0)
-	  fprintf (stderr,"millis since last update on pin %d : %lu\n", 
-		   pin,
-		   time_diff);
+
+	  /* if (time_diff<20) */
+	  /*   { */
+	      fprintf (stderr,"micro seconds since last update on pin %d : %lu\n", 
+		       pin,
+		       time_diff);
+	    /* } */
 	}
       arduino_digital_pins[pin].last_time = cur_time;
     }

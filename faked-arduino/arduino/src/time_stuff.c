@@ -37,3 +37,10 @@ delay(unsigned long del)
   PRINT_FUNCTION_NAME(("%lu",del));
   usleep(del*1000);
 }
+
+void 
+delayMicroseconds(unsigned long del)
+{
+  PRINT_FUNCTION_NAME(("%lu",del));
+  usleep(del);
+}
