@@ -87,6 +87,8 @@ AC_MSG_NOTICE([summary of build options:
   Python:           $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
 ])
 
+./bin/get-arduino-src.sh
+
 
 
 prepare_examples()
