@@ -25,8 +25,9 @@ SEARDUINO_PATH=/tmp/TMP_INSTALL3/
 PROG=beeper
 SRC_C= 
 SRC_CXX=
+#fun.cpp
 MAIN_SRC=main.c
-ARDUINO=stub
+ARDUINO=uno
 
 
 $(PROG): ARDUINO=stub
