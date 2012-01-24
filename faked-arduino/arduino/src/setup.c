@@ -83,6 +83,9 @@ void searduino_setup(void)
   PRINT_FUNCTION_NAME_NOARGS();
 
   init_comm();
+
+  init_time();
+
   ret = comm_register_digin_cb(digin_callback);
   if (ret != SEARD_COMM_OK)
     {
