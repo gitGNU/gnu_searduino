@@ -111,7 +111,7 @@ class digitalPin(Gtk.HBox):
         # Input 
         self.input_box=Gtk.HBox()
         self.input = Gtk.ToggleButton()
-        self.input.set_active(True)
+        self.input.set_active(False)
         self.input_box.pack_start(self.input, False, True,0)
         
         # Output
@@ -137,8 +137,13 @@ class digitalPin(Gtk.HBox):
     def setVal(self, val):
         self.output_label.set_text(str(val))
 
-    def setValCond(self):
+    def getVal(self):
+        if self.input.get_active():
+            return 1
+        else:
+            return 0
 
+    def setValCond(self):
         if py_get_pin_mode(self.myNr)==1:
             self.output_label.set_text(str(py_digitalRead(self.myNr)))
 
@@ -163,7 +168,7 @@ class MyWindow(Gtk.Window):
     digs = [None]*size
 
     def updateGUI(self):
-        print "updateGUI()  <-- " + str(paused)
+#        print "updateGUI()  <-- " + str(paused)
         if (paused):
             print "no GUI update"
         else:
@@ -174,11 +179,30 @@ class MyWindow(Gtk.Window):
 
 
     def updateModes(self):
+#        print "  --------------------------------------------- UPDATEMODES ============================================================"
         if (paused):
             print "no GUI update"
         else:
             for i in range(1,size-1):
                 self.pinUpdateMode(i,py_get_pin_mode(i));
+                
+        self.sendInputPins()        
+        return True
+        
+    def sendInputPins(self):
+        if (paused):
+            print "no GUI update"
+        else:
+ #           print "  --------------------------------------------- SIN"
+            for i in range(1,size-1):
+  #              print "  --------------------------------------------- SIN " + str(i)
+                if (py_get_pin_mode(i)==0):
+                    self.semaphore.acquire()        
+                    value = self.digs[i].getVal()
+                    self.semaphore.release()
+#                    print "                                                                         WILL SEND: " + str(value) + "  from " + str(i)
+                    py_ext_set_input(i,
+                                     value)
                 
         return True
         
@@ -217,7 +241,7 @@ class MyWindow(Gtk.Window):
             
         self.updateAllOut()
         self._positiontimeoutid = GObject.timeout_add(2000, self.updateModes)
-        self._positiontimeoutid = GObject.timeout_add(10000, self.updateGUI)
+        self._positiontimeoutid = GObject.timeout_add(5000, self.updateGUI)
         self.updateGUI()
 
     def updateOutPin(self,pin, val):
@@ -236,7 +260,9 @@ class MyWindow(Gtk.Window):
 
     def pinUpdateMode(self, pin, mode):
 #        print "digs at  " + str(pin) + " : " + str(self.digs[pin])
+        self.semaphore.acquire()        
         self.digs[pin].setMode(mode)
+        self.semaphore.release()
 
     def pinUpdate(self, nr, val_str):
         val=0
