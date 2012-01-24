@@ -22,35 +22,65 @@
  ****/
 
 #include <Arduino.h>
-long A  = 110;
-long As =117;
-long B  =123;
-long C =131;
-long Cs =139;
-long D =147;
-long Ds =156;
-long E =165;
-long F =175;
-long Fs =185;
-long G =196;
-long Gs =208;
 
-int pitcher1 = 1;
+void setup() {
+  pinMode(11, OUTPUT);      
+  pinMode(12, OUTPUT);      
+  pinMode(13, OUTPUT);      
+  pinMode(5, OUTPUT);      
+  pinMode(6, OUTPUT);      
+  pinMode(7, OUTPUT);      
+  pinMode(8, OUTPUT);      
+}
+
+
+long toneA  = 110;
+long toneAs =117;
+long toneB  =123;
+long toneC =131;
+long toneCs =139;
+long toneD =147;
+long toneDs =156;
+long toneE =165;
+long toneF =175;
+long toneFs =185;
+long toneG =196;
+long toneGs =208;
+
+long pitcher1 = 1;
 int pitcher2 = 1;
 
 #define WHOLE 600
 #define HALF  300
 #define QUART 150
 
+long
+my_analog_read(uint8_t pin)
+{
+  long val = analogRead(pin);
 
-void setup() {
-  pinMode(11, OUTPUT);      
-  pinMode(12, OUTPUT);      
-  pinMode(13, OUTPUT);      
+  digitalWrite(5,0);
+  digitalWrite(6,0);
+  digitalWrite(7,0);
+  digitalWrite(8,0);
+  if (val > 400 ) 
+    {
+      digitalWrite(5,1);
+    }
+  if (val > 550 ) 
+    {
+      digitalWrite(6,1);
+    }
+  if (val > 700 ) 
+    {
+      digitalWrite(7,1);
+    }
+  if (val > 850 ) 
+    {
+      digitalWrite(8,1);
+    }
+  return val;
 }
-
-
-#define analogRead(p) 500
 
 void buzzd(long freq, long len) {
   long  i ;
@@ -81,19 +111,19 @@ void buzzd(long freq, long len) {
 }
 void buzz(long freq, long len) {
   long  i ;
-
+  static int   ctr=0;
   long myfreq ;
   long tone_delay;
   long cycles;
 
-  pitcher1 = analogRead(2) + 100;
+  pitcher1 = my_analog_read(2) + 100;
   myfreq = freq * pitcher1 / 200;
 
   tone_delay = 1000000/myfreq/2; 
   cycles = freq * len/ 1000;
 
 
-  digitalWrite(13, HIGH);
+  digitalWrite(13, 1);
   for (i=0; i < cycles; i++){
     digitalWrite(12,HIGH); 
 
@@ -110,48 +140,47 @@ void buzz(long freq, long len) {
     delayMicroseconds(tone_delay/2); 
 
   }
-  digitalWrite(13, LOW);
 }
 
 void twinkle()
 {
-  pitcher1 = 1.5*analogRead(2);
+  pitcher1 = 1.5*my_analog_read(2);
 
       #define SYMP_DELAY 150
-      buzz(C,HALF);
+      buzz(toneC,HALF);
       delay(SYMP_DELAY);
-      buzz(C,HALF);
-      delay(SYMP_DELAY);
-
-      buzz(G,HALF);
-      delay(SYMP_DELAY);
-      buzz(G,HALF);
-      delay(SYMP_DELAY);
-      
-      buzz(A*2,HALF);
-      delay(SYMP_DELAY);
-      buzz(A*2,HALF);
-      delay(SYMP_DELAY);
-      
-      buzz(G,WHOLE);
+      buzz(toneC,HALF);
       delay(SYMP_DELAY);
 
-      buzz(F,HALF);
+      buzz(toneG,HALF);
       delay(SYMP_DELAY);
-      buzz(F,HALF);
-      delay(SYMP_DELAY);
-      
-      buzz(E,HALF);
-      delay(SYMP_DELAY);
-      buzz(E,HALF);
+      buzz(toneG,HALF);
       delay(SYMP_DELAY);
       
-      buzz(D,HALF);
+      buzz(toneA*2,HALF);
       delay(SYMP_DELAY);
-      buzz(D,HALF);
+      buzz(toneA*2,HALF);
       delay(SYMP_DELAY);
       
-      buzz(C,WHOLE);
+      buzz(toneG,WHOLE);
+      delay(SYMP_DELAY);
+
+      buzz(toneF,HALF);
+      delay(SYMP_DELAY);
+      buzz(toneF,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(toneE,HALF);
+      delay(SYMP_DELAY);
+      buzz(toneE,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(toneD,HALF);
+      delay(SYMP_DELAY);
+      buzz(toneD,HALF);
+      delay(SYMP_DELAY);
+      
+      buzz(toneC,WHOLE);
       delay(SYMP_DELAY);
       
       delay(1000);
@@ -159,13 +188,12 @@ void twinkle()
 }
 
 
-
 void anabuzz(void)
 {
-  pitcher1 = 1.5*analogRead(2);
-
-  buzz(pitcher1/2, 10);
+  pitcher1 = my_analog_read(2);
+  buzz(pitcher1/2, 5);
 }
+
 
 int main(void)
 {
@@ -173,13 +201,10 @@ int main(void)
   
   init();  
   setup();
-  
   for (;;)
     {
       
-      twinkle();
-      //anabuzz();
-
+      //twinkle();
+      anabuzz();
     }
-  
 }
