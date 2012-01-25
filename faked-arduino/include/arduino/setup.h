@@ -53,4 +53,4 @@ uint8_t searduino_is_paused(void);
 
 uint8_t searduino_is_halted(void);
 
-
+void init(void);

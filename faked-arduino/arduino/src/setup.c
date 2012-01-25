@@ -71,6 +71,11 @@ void searduino_set_halted(void)
   searduino_exec=SEARDUIONO_SIM_HALTED;
 }
 
+void init(void)
+{
+  searduino_setup();
+}
+
 void searduino_setup(void)
 {
   static int already_setup = 0;
