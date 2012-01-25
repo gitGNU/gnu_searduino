@@ -67,9 +67,12 @@ AC_ARG_ENABLE([python],
 )
 
 
-if test "$python_enabled" = yes; then
-   AX_PYTHON_DEVEL([>= '2.7'])
+if test "$python_enabled" = "yes"; then
+   AX_PYTHON_DEVEL([])
+#   AX_PYTHON_DEVEL([">= '2.7'"])
+#     AX_PYTHON_VERSION_ENSURE( ["2.7"] )
 #   AC_SUBST(PYTHON_LDFLAGS)
+#    AC_CHECK_HEADER(Python.h)
 fi
 
 
