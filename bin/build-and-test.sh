@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 TMP_INST=/tmp/TMP_INSTALL3
 
