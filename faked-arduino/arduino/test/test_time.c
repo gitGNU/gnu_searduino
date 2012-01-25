@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2012 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -21,69 +21,79 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "stdio.h"
-#include "unistd.h"
+#include "time_stuff.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-#include <Arduino.h>
-#include <pthread.h>
+int fail_ctr=0;
+int succ_ctr=0;
+#define DELAY1 10000
+#define DELAY2 100000
 
-#include "communication/comm.h"
-#include "communication/ext_io.h"
-#include "arduino/setup.h"
-
-
-/* 
- * Function to register in the Searduino code
- *
- * This function will be called every time the Arduino program updates a digital output pin (on change only!)
- */
-void 
-my_do_sim_callback(uint8_t pin, uint8_t val)
+void test_micros(void)
 {
-  printf ("%s:%s(%d:%d)\n",__FILE__, __func__, pin, val);
-  printf ("\n");
-}
-
-int sim_setup(void)
-{
-  int ret ; 
-
-  searduino_disable_streamed_output();
+  int i ;
+  unsigned long micros_since_start;
+  unsigned long expected_time;
+  unsigned long prev_rounds_time;
+  int percentage;
+  double diff;
   
-  searduino_setup();
-  
-  ret  = comm_register_digout_sim_cb(my_do_sim_callback);
-  if (ret != SEARD_COMM_OK)
+  init_time();
+
+
+  for (i=1;i<200;i++)
     {
-      fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
-      return ret;
+      usleep (DELAY1);
+      micros_since_start = micros();
+      expected_time +=  DELAY1;
+
+      diff = (double)labs(micros_since_start - expected_time)  /
+	(double)micros_since_start ;
+      percentage = (int)(diff * 100);
+
+      if (percentage < 3)
+	{
+	  succ_ctr++;
+      }
+      else
+	{
+	  printf ("Fail 1....\n");
+	  fail_ctr++;
+	}
     }
- 
 
 
-  return 0;
-}
+  for (i=1;i<20;i++)
+    {
+      usleep (DELAY2);
+      micros_since_start = micros();
 
-void* arduino_code(void *in)
-{
-  searduino_main();
-  return NULL;
+      expected_time +=  DELAY2;
+
+      diff = (double)labs(micros_since_start - expected_time)  /
+	(double)micros_since_start ;
+      percentage = (int)(diff * 100);
+
+      if (percentage < 3)
+	{
+	  succ_ctr++;
+      }
+      else
+	{
+	  printf ("Fail 2....%d \n", percentage);
+	  fail_ctr++;
+	}
+    }
 }
 
 
 int main(void)
 {
-  pthread_t p;
-  int i = 0;
-  sim_setup();
+  test_micros();
 
-  pthread_create(&p, NULL, arduino_code, NULL);
+  printf ("Fails:       %d\n", fail_ctr);
+  printf ("Successes:   %d\n", succ_ctr);
 
-  while(1)
-    {
-      i++;
-      usleep (1000*200);
-      printf ("%s:%s() setting dpin:%d:%d\n",__FILE__, __func__, i%6,i%7);
-      ext_set_dig_input(i%6,i%7);
-    }
+  return 0;
 }

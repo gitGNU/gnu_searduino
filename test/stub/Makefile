@@ -36,8 +36,8 @@ USER_LD_FLAGS= -L$(SEARDUINO_PATH)/faked-arduino/ -lpthread
 
 $(PROG):
 
-include $(SEARDUINO_PATH)/mk/searduino.mk
-include $(SEARDUINO_PATH)/mk/searduino_lib.mk
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+#include $(SEARDUINO_PATH)/mk/searduino_lib.mk
 
 check: $(PROG)
 

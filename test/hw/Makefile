@@ -22,25 +22,19 @@
 #
 
 
-ARDUINO_VERSION=100
-
 PROG=test
 SRC_C=
 SRC_CXX=
 MAIN_SRC=test.c
-
+ARDUINO=uno
 
 SEARDUINO_PATH=../../
 
-ifdef INTERVAL
-USER_C_FLAGS=-DINTERVAL=$(INTERVAL)
-endif
+check: $(PROG)
 
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+#include $(SEARDUINO_PATH)/mk/searduino_lib.mk
 
-all: $(PROG)
-
-include $(SEARDUINO_PATH)/mk/searduino.mk
-
-check: 
+check-upload:
 	BOARD=due
 	make upload

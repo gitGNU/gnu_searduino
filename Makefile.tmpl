@@ -1,6 +1,9 @@
 #
 #       Searduino
-#
+#                                                                   
+# Basically a couple of Makefile wrapping the Ardunio
+# C and C++ files
+#                                                                   
 #  Copyright (C) 2011, 2012 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
@@ -21,35 +24,26 @@
 #
 #
 
+all: uno mega due
 
-BUILD_FROM_VCS=true
-ARDUINO=stub
-SRC_C=wrapper_py.c
-SHLIB=pardon.so
-USER_C_FLAGS=-I/usr/include/python2.7/ -lpython2.7 -fPIC
-SHLIB_LIBS=   -lsearduino-stub -L../faked-arduino   -L../test/shared -ltest
-#-L../example/python-digcounter/ -ldigcounter
+uno:
+	make -f Makefile.uno
 
-#lib:
-#	gcc -shared wrapper_py.c -o $(SHLIB) 
+due:
+	make -f Makefile.due
 
+mega:
+	make -f Makefile.mega
 
-SEARDUINO_PATH=..
-SEARDUINO_MK=../mk/searduino.mk
-SEARDUINO_LIB_MK=../mk/searduino_lib.mk
-SRC_HEADERS=
-
-shlib: $(SHLIB)
-lib: $(LIB)
+clean:
+	make -f Makefile.uno clean
 
 
+install: due uno mega
+	@echo "installing to __INSTALL_DIR__"
+	@cp -r libs/ __INSTALL_DIR__/searduino/
+	@mkdir -p __INSTALL_DIR__/searduino/include/arduino
+	@mkdir -p __INSTALL_DIR__/searduino/include/arduino/core
+	@cp -r core/*.h     __INSTALL_DIR__/searduino/include/arduino/core
+	@cp -r variants __INSTALL_DIR__/searduino/include/arduino/
 
-include $(SEARDUINO_MK)
-include $(SEARDUINO_LIB_MK)
-
-
-check:
-	export LD_LIBRARY_PATH=../faked-arduino:../test/shared/ && ./pardon.py
-
-install:
-	@cp $(SHLIB) $(INSTALL_DIR)/searduino/libs/

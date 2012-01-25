@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 #
 #       Searduino
 #
@@ -23,7 +21,20 @@
 #
 #
 
-from pardon import *
-import time
+AUTOMAKE_OPTIONS = gnu
 
-print "PYTHON 0:" + str(py_digitalRead(1)) + ""
+LIB_ARDUINOCODE_H_FILES=
+LIB_ARDUINOCODE_C_FILES=arduino_code.c $(LIB_ARDUINOCODE_H_FILES)
+
+libarduino_code_la_SOURCES = $(LIB_ARDUINOCODE_C_FILES)
+lib_LTLIBRARIES = libarduino-code.la
+
+
+AM_CFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../faked-arduino/ -Dmain=searduino_main
+AM_LDFLAGS=
+
+
+
+
+
+

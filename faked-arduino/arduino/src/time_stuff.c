@@ -23,12 +23,26 @@
 
 #include "utils/print.h"
 #include <unistd.h>
+#include <sys/time.h>
+
+static struct timeval arduino_exec_start_time;
 
 
-void init(void)
+void init_time(void)
 {
   PRINT_FUNCTION_NAME_NOARGS();
+  gettimeofday( &arduino_exec_start_time, NULL);
   return ;
+}
+
+unsigned long 
+micros(void)
+{
+   struct timeval current_time;
+   gettimeofday( &current_time, NULL);
+
+   return ((current_time.tv_sec-arduino_exec_start_time.tv_sec) * 1000000 +
+	   (current_time.tv_usec-arduino_exec_start_time.tv_usec));
 }
 
 void 
@@ -36,4 +50,11 @@ delay(unsigned long del)
 {
   PRINT_FUNCTION_NAME(("%lu",del));
   usleep(del*1000);
+}
+
+void 
+delayMicroseconds(unsigned long del)
+{
+  PRINT_FUNCTION_NAME(("%lu",del));
+  usleep(del);
 }

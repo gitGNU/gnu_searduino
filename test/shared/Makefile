@@ -26,7 +26,7 @@
 ARDUINO=stub
 BUILD_FROM_VCS=true
 SHLIB=libtest.so
-SHLIB_LIBS= -L../../faked-arduino/ -lsearduino-stub -lpthread
+SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
 SRC_C=test.c
 
 
@@ -37,8 +37,7 @@ USER_LD_FLAGS=-lpthread -fPIC -Wl,-G -Wl,-dy $(SHLIB_LIBS)
 
 $(SHLIB):
 
-include $(SEARDUINO_PATH)/mk/searduino.mk
-include $(SEARDUINO_PATH)/mk/searduino_lib.mk
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
 check: $(SHLIB)
 

@@ -27,7 +27,11 @@
 #include "communication/comm.h"
 #include "communication/error.h"
 
-static int   stub_output_enabled = 1;
+/*
+ * integere to store enable/disable for stream output
+ * 
+ */
+static uint8_t stub_output_enabled = 1;
 
 
 void
@@ -46,21 +50,24 @@ searduino_disable_streamed_output(void)
 int 
 comm_digital_write_outpin(uint8_t pin, uint8_t val)
 {
+  /* Make sure all is set up before continuing*/
   init_comm();
 
+  /* If output enabled, print info on pin/val to stream*/
   if ( stub_output_enabled ) 
     {
-      fprintf(stderr, "pin:%d:%d\n", pin, val); 
+      fprintf(proto_stream, "pin:%d:%d  (in stub)\n", pin, val); 
       fflush(proto_stream);
     }
 
   /*
-   *
-   * Call listeneer
+   * Call registered listener
    *
    */
   if ( do_sim_callback != NULL )
     {
+      /* Ok, the function pointer is not NULL, 
+	 so let's call it */
       do_sim_callback(pin, val);
     }
 

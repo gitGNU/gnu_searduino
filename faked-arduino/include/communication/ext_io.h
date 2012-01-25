@@ -21,12 +21,47 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#ifndef COMMUNICATION_EXT_IO_H
+#define COMMUNICATION_EXT_IO_H
 
+/*
+ *
+ * Description:   
+ *  
+ *    Get the value on the Arduino board's output pin
+ * 
+ * Function name: ext_get_dig_output
+ *
+ * Arguments:     uint8_t pin
+ *
+ *    pin - the to get output value for
+ *
+ *
+ */
 uint8_t ext_get_dig_output(uint8_t pin);
 
-int ext_set_dig_input(uint8_t pin, uint8_t val);
 
-int ext__dig_input(uint8_t pin, uint8_t val);
+
+/*
+ *
+ * Description:   
+ *  
+ *    Set the value on the Arduino board's input pin
+ * 
+ * Function name: ext_set_dig_output
+ *
+ * Arguments:     uint8_t pin, uint8_t val
+ *
+ *    pin - input put to set
+ *    val - value to set
+ *
+ *
+ */
+uint8_t ext_set_dig_input(uint8_t pin, uint8_t val);
+
+
+
+
 
 /*
  * 
@@ -35,3 +70,15 @@ int ext__dig_input(uint8_t pin, uint8_t val);
  * 
  */
 int searduino_main(void);
+
+/*
+ *  TODO: Document this function
+ *
+ *    ask registered callback for mode of pin
+ *
+ */
+uint8_t ext_get_dig_mode(uint8_t pin);
+
+
+
+#endif /* COMMUNICATION_EXT_IO_H */

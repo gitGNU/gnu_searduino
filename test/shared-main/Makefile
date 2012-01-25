@@ -33,13 +33,11 @@ LIBTEST=-ltest
 
 SEARDUINO_PATH=../..
 
-USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) -L../../faked-arduino -lsearduino-stub
+USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
 
 $(PROG): 
 
-include $(SEARDUINO_PATH)/mk/searduino.mk
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
 check: $(PROG)
-
-check2: $(PROG)
-	export LD_LIBRARY_PATH=$(LIBTEST_PATH):../../faked-arduino/ && ./$(PROG)
+	export LD_LIBRARY_PATH=$(LIBTEST_PATH):../../faked-arduino/.libs/ && ./$(PROG)

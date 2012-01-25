@@ -1,9 +1,6 @@
 #
 #       Searduino
-#                                                                   
-# Basically a couple of Makefile wrapping the Ardunio
-# C and C++ files
-#                                                                   
+#
 #  Copyright (C) 2011, 2012 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
@@ -23,47 +20,46 @@
 # MA  02110-1301, USA.                                              
 #
 #
+
+MODULE_C_FLAGS   = -fPIC -Wl,-G -Wl,-dy \
+                   -I$(SEARDUINO_PATH)/faked-arduino/arduino/include \
+                   -I$(SEARDUINO_PATH)/faked-arduino/communication/include
+
+MODULE_CXX_FLAGS = fPIC -Wl,-G -Wl,-dy \
+                   -I$(SEARDUINO_PATH)/faked-arduino/arduino/include \
+                   -I$(SEARDUINO_PATH)/faked-arduino/communication/include
+
+SRC_C= ./communication/src/comm.c      \
+       ./communication/src/ext_io.c \
+       ./communication/src/digio.c \
+       ./communication/src/read_command.c \
+       ./utils/src/print.c             \
+       ./arduino/src/wiring_digital.c  \
+       ./arduino/src/setup.c  \
+       ./arduino/src/time_stuff.c
+
+LIB=$(SEARDUINO_PATH)/faked-arduino/libsearduino-stub.a
+SHLIB=$(SEARDUINO_PATH)/faked-arduino/libsearduino-stub.so
+
+ARDUINO=stub
+BOARD=stub
+
 SEARDUINO_PATH=..
-
-SRC_C=core/WInterrupts.c  core/wiring_analog.c  core/wiring.c  core/wiring_digital.c  core/wiring_pulse.c  core/wiring_shift.c
-SRC_CXX=core/CDC.cpp core/HID.cpp        core/main.cpp  core/Print.cpp   core/Tone.cpp     core/WMath.cpp core/HardwareSerial.cpp  core/IPAddress.cpp  core/new.cpp   core/Stream.cpp  core/USBCore.cpp  core/WString.cpp
-
-LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD)/
-LIB=$(LIB_PATH)/libsearduino.a
-
-
 SEARDUINO_MK=../mk/searduino.mk
 SEARDUINO_LIB_MK=../mk/searduino_lib.mk
+SRC_HEADERS=
 
 lib: $(LIB)
-$(LIB): $(OBJ_C)  $(OBJ_CXX) 
+shlib: $(SHLIB)
 
-include $(SEARDUINO_LIB_MK)
 include $(SEARDUINO_MK)
+include $(SEARDUINO_LIB_MK)
 
-
-objs: $(OBJ_C) $(OBJ_CXX)
-	-ls -al $(OBJ_C)
-	-ls -al $(OBJ_CXX)
-
-due: ARDUINO=due
-due: 
-	make lib
-
-uno: ARDUINO=uno
-uno: 
-	make lib
-
-mega: ARDUINO=mega
-mega: 
-	make lib
-
-
-install: due uno mega
+install: 
+#$(LIB) $(SHLIB)
 	@echo "installing to $(INSTALL_DIR)"
-	@cp -r libs/ $(INSTALL_DIR)/searduino/
-	@mkdir -p $(INSTALL_DIR)/searduino/include/arduino
-	@mkdir -p $(INSTALL_DIR)/searduino/include/arduino/core
-	@cp -r core/*.h     $(INSTALL_DIR)/searduino/include/arduino/core
-	@cp -r variants $(INSTALL_DIR)/searduino/include/arduino/
-
+	@cp $(LIB) $(SHLIB) $(INSTALL_DIR)/searduino/libs/
+	@mkdir -p $(INSTALL_DIR)/searduino/include/faked-arduino/communication/
+	@mkdir -p $(INSTALL_DIR)/searduino/include/faked-arduino/arduino/
+	@mkdir -p $(INSTALL_DIR)/searduino/include/faked-arduino/utils/
+	@cp -r include/* $(INSTALL_DIR)/searduino/include/faked-arduino/

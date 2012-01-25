@@ -1,11 +1,5 @@
 #!/bin/sh
 
-if [ -d arduino-sources ]
-then
-    echo "Already setup... "
-    exit 0 
-fi
-
 MY_OS=$(uname -s)
 
 if [ "$MY_OS" = "Linux" ]
@@ -76,11 +70,23 @@ setup_sources()
 
     exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/cores/arduino/* arduino-sources/core
     exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/variants/* arduino-sources/variants/
-
-    exec_comm cp misc/Makefile-arduino-sources  arduino-sources/Makefile
 }
 
-get_sources
-unpack_sources
-setup_sources
 
+create_mk()
+{
+    exec_comm cp mk/arduino-sources/Makefile.*                arduino-sources/
+##    exec_comm cp mk/arduino-sources/Makefile                  arduino-sources/
+    exec_comm cp mk/arduino-sources/arduino-sources.mk        arduino-sources/
+}
+
+if [ -d arduino-sources ]
+then
+    echo "Already downloaded, skipping download and unpack"
+else
+    get_sources
+    unpack_sources
+    setup_sources
+fi
+
+create_mk

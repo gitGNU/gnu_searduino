@@ -21,40 +21,54 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#include "stdio.h"
+#include "unistd.h"
+
+#include <Arduino.h>
 #include <pthread.h>
-#include <stdio.h>
-#include <string.h>
-#include <unistd.h>
 
-#include "utils/types.h"
 #include "communication/comm.h"
-#include "communication/read_command.h"
+#include "communication/ext_io.h"
+#include "arduino/setup.h"
 
-static int   enable_command_reader;
 
+/* 
+ * Function to register in the Searduino code
+ *
+ * This function will be called every time the Arduino program updates a digital output pin (on change only!)
+ */
 void 
-searduino_enable_command_reader(void)
+my_do_sim_callback(uint8_t pin, uint8_t val)
 {
-  enable_command_reader=1;
+  printf ("%s:%s(%d:%d)\n",__FILE__, __func__, pin, val);
+  printf ("\n");
 }
 
-void 
-searduino_disable_command_reader(void)
+int sim_setup(void)
 {
-  enable_command_reader=0;
-}
+  int ret ; 
 
-
-void init_command_reader(void)
-{
-  pthread_t p;
-  if (enable_command_reader)
+  searduino_disable_streamed_output();
+  
+  searduino_setup();
+  
+  ret  = comm_register_digout_sim_cb(my_do_sim_callback);
+  if (ret != SEARD_COMM_OK)
     {
-      pthread_create(&p, NULL, command_reader, NULL);
+      fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
+      return ret;
     }
-  return;
+ 
+
+
+  return 0;
 }
 
+void* arduino_code(void *in)
+{
+  searduino_main();
+  return NULL;
+}
 
 void* command_reader(void* in)
 {
@@ -77,11 +91,49 @@ void* command_reader(void* in)
 /* 	  printf (": '%s'\n", buf);  */
 /*  	  printf ("will parse: '%s'\n", tmp);  */
 	  sscanf(tmp, "%d:%d", &pin, &val);
-  	  printf ("SET pin:%d val:%d  \n", pin, val);  
+  	  printf ("SIM WILL SET pin:%d val:%d  \n", pin, val);  
 	  di_callback(pin,val);
 	}
-
-      usleep (1000);
+      else if (strncmp(buf,"quit",4)==0)
+	{
+	  searduino_set_halted();
+	  return ;
+	}
+      else if (strncmp(buf,"pause",5)==0)
+	{
+	  printf ("Will pause sim\n");
+	  searduino_set_paused();
+	}
+      else if (strncmp(buf,"resume",5)==0)
+	{
+	  printf ("Will resume sim\n");
+	  searduino_set_running();
+	}
+      usleep (100);
     }
 }
 
+
+
+int main(void)
+{
+  pthread_t arduino_thread;
+  pthread_t command_thread;
+
+  int i = 0;
+  sim_setup();
+
+  pthread_create(&arduino_thread, NULL, arduino_code, NULL);
+
+  command_reader(NULL);
+
+  printf ("Waiting for simulator thread to return\n");
+  pthread_join(arduino_thread, NULL);
+
+  usleep(1000*100);
+  fflush(stdout);
+  printf ("\n *** Simulator will now be closed ***\n");
+  fflush(stdout);
+  
+  return 0;
+}

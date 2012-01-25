@@ -21,13 +21,53 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-void init_command_reader(void);
+/*
+ *
+ * This code is just a dummy lib to make the linker happy when building
+ * the python extension. When using the Python extension you should provide
+ * a dynamic library called "arduino_code" to the dynamic linker.
+ * 
+ *
+ */
 
-void* command_reader(void* in);
+#include <Arduino.h>
+#include "arduino/setup.h"
 
-void 
-searduino_enable_command_reader(void);
 
-void 
-searduino_disable_command_reader(void);
+void setup() {
+  pinMode(13,1);
+  pinMode(6,1);
+  pinMode(7,1);
+  pinMode(8,1);
+}
 
+int main(void)
+{
+  init();   
+
+  setup();
+  
+  SEARDUINO_LOOP()
+    {
+      digitalWrite(3,digitalRead(2));
+      printf ("===================================-------------------------------               %d %d %d | %d %d %d\n",
+	      digitalRead(2) , digitalRead(3) , digitalRead(4),
+	      digitalRead(2) ,
+	      digitalRead(2) && digitalRead(3) ,
+	      digitalRead(2) && digitalRead(3) && digitalRead(4));
+      digitalWrite(6,
+		   digitalRead(2)  );
+      digitalWrite(7,
+		   digitalRead(2) && digitalRead(3)  );
+      digitalWrite(8,
+		   digitalRead(2) && digitalRead(3) && digitalRead(4) );
+      digitalWrite(13,0);
+      delay(200);
+      /* Simulator should not get this extra write, 
+       * we should only send on change */
+      digitalWrite(13,0);
+      digitalWrite(13,1);
+      delay(200);
+    }
+  return 0;
+}

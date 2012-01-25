@@ -21,27 +21,20 @@
 #
 #
 
-
-BUILD_FROM_VCS=true
-ARDUINO=stub
-SRC_C=simulator.c
+SEARDUINO_PATH=__INSTALL_DIR__/
+PROG=blinker
+SRC_C=blink.c 
 SRC_CXX=
-MAIN_SRC=
-PROG=cim_sim
-#SHLIB=pardon.so
-USER_C_FLAGS=
-USER_LD_FLAGS=  -L../test/shared -L../faked-arduino -ltest -lsearduino-stub
-#lib:
-#	gcc -shared wrapper_py.c -o $(SHLIB) 
+MAIN_SRC=main.c
+ARDUINO=due
 
 
-SEARDUINO_PATH=..
-SEARDUINO_MK=../mk/searduino.mk
-SEARDUINO_LIB_MK=../mk/searduino_lib.mk
-SRC_HEADERS=
+$(PROG): ARDUINO=stub
 
-$(PROG):
+upload: ARDUINO=due
+
+include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
 
 
-include $(SEARDUINO_MK)
-include $(SEARDUINO_LIB_MK)
+check-sw: 
+	./$(PROG)

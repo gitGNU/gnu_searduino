@@ -48,3 +48,16 @@ uint8_t ext_get_dig_output(uint8_t pin)
 
 
 
+uint8_t ext_get_dig_mode(uint8_t pin)
+{
+  uint8_t mode ;
+  PRINT_FUNCTION_NAME(("%d",pin));
+/*   printf ("Will return using cb at %d\n", do_callback); */
+  mode = d_mode_callback(pin);
+/*   printf ("GUI Will return using cb at %d    pin:%d val=%d\n", do_callback, pin, val); */
+  DEBUG_INFO(("%d => %d",pin,mode));
+  return mode;
+}
+
+
+

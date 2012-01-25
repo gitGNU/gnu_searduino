@@ -22,10 +22,3 @@
  ****/
 
 
-
-#if defined STUB_BOARD == due
-#include "boards/pins_due.h"
-#else
-#define NR_OF_OUT_PINS 20
-#define NR_OF_IN_PINS 20
-#endif

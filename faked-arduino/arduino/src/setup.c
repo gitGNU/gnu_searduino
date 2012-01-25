@@ -31,10 +31,45 @@
 #include "utils/error.h"
 #include "communication/comm.h"
 
-void digin_callback(uint8_t pin, uint8_t val); 
+void     digin_callback (uint8_t pin, uint8_t val); 
 uint8_t  digout_callback(uint8_t pin);
+uint8_t  dig_mode_callback(uint8_t pin);
 
+static int searduino_exec ;
 
+#define SEARDUIONO_SIM_PAUSE   0
+#define SEARDUIONO_SIM_RUNNING 1
+#define SEARDUIONO_SIM_HALTED  2
+
+uint8_t searduino_is_paused(void)
+{
+  return (searduino_exec==SEARDUIONO_SIM_PAUSE);
+}
+
+uint8_t searduino_is_halted(void)
+{
+  return (searduino_exec==SEARDUIONO_SIM_HALTED);
+}
+
+uint8_t searduino_is_running(void)
+{
+  return (searduino_exec==SEARDUIONO_SIM_RUNNING);
+}
+
+void searduino_set_paused(void)
+{
+  searduino_exec=SEARDUIONO_SIM_PAUSE;
+}
+
+void searduino_set_running(void)
+{
+  searduino_exec=SEARDUIONO_SIM_RUNNING;
+}
+
+void searduino_set_halted(void)
+{
+  searduino_exec=SEARDUIONO_SIM_HALTED;
+}
 
 void searduino_setup(void)
 {
@@ -47,9 +82,10 @@ void searduino_setup(void)
     }
   PRINT_FUNCTION_NAME_NOARGS();
 
-  printf ("Registering callbacks....\n");
-
   init_comm();
+
+  init_time();
+
   ret = comm_register_digin_cb(digin_callback);
   if (ret != SEARD_COMM_OK)
     {
@@ -61,6 +97,15 @@ void searduino_setup(void)
     {
       fprintf(stderr, "Failed to register do callback");
     }
+
+  ret = comm_register_dig_mode_sim_cb(dig_mode_callback);
+  if (ret != SEARD_COMM_OK)
+    {
+      fprintf(stderr, "Failed to register do callback");
+    }
+
+
+  searduino_set_running();
 
   already_setup=1;
 }
