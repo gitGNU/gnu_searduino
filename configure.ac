@@ -30,7 +30,7 @@ AM_SILENT_RULES([yes])
 AC_PROG_CC
 AC_LANG_C
 AC_PROG_LIBTOOL
-
+AM_PROG_CC_C_O
 # Check for program
 AM_MISSING_PROG(PYTHON, python, $missing_dir)
 
@@ -76,11 +76,11 @@ if test "$python_enabled" = "yes"; then
 fi
 
 
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 
 AC_SUBST(PYTHON_CPPFLAGS)
 
 AC_MSG_NOTICE([summary of build options:
-
   version:          ${VERSION} shared
   Host type:        ${host}
   Install prefix:   ${prefix}
@@ -88,6 +88,7 @@ AC_MSG_NOTICE([summary of build options:
   Warning flags:    ${WARN_CFLAGS}
   Library types:    Shared=${enable_shared}, Static=${enable_static}
   Python:           $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+  Check C / LD:     '$CHECK_CFLAGS' / '$CHECK_LIBS'
 ])
 
 ./bin/get-arduino-src.sh
@@ -112,7 +113,7 @@ prepare_searduino_mk
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > simulators/pardon/searduino-pardon.sh
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/arduino/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/board-makefiles/Makefile  ])
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/arduino/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/board-makefiles/Makefile  ])
 
 AC_OUTPUT
 
