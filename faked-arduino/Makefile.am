@@ -23,7 +23,7 @@
 
 AUTOMAKE_OPTIONS = gnu
 
-SUBDIRS=include
+SUBDIRS=include arduino
 
 LIB_SEARDUINO_H_FILES=\
        ./include/communication/error.h \
