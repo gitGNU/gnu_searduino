@@ -21,76 +21,80 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#include <check.h>
 #include "time_stuff.h"
 #include <stdlib.h>
 #include <stdio.h>
+
 
 int fail_ctr=0;
 int succ_ctr=0;
 #define DELAY1 10000
 #define DELAY2 100000
 
-void test_micros(void)
+START_TEST (test_micros)
 {
   int i ;
   unsigned long micros_since_start;
-  unsigned long expected_time;
+  unsigned long expected_time = 0;
   unsigned long prev_rounds_time;
-  int percentage;
-  double diff;
+  unsigned long diff;
   
   init_time();
 
 
-  for (i=1;i<200;i++)
+  for (i=1;i<5;i++)
     {
       usleep (DELAY1);
       micros_since_start = micros();
       expected_time +=  DELAY1;
-
-      diff = (double)labs(micros_since_start - expected_time)  /
-	(double)micros_since_start ;
-      percentage = (int)(diff * 100);
-
-      if (percentage < 3)
-	{
-	  succ_ctr++;
-      }
-      else
-	{
-	  printf ("Fail 1....\n");
-	  fail_ctr++;
-	}
+      
+      diff = labs(micros_since_start - expected_time)  ;
+      
+      printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", i, diff, micros(), expected_time);
+      fail_if(diff > 5000, "sleeping DELAY1 failed");
     }
-
-
-  for (i=1;i<20;i++)
+  
+  
+  for (i=1;i<5;i++)
     {
       usleep (DELAY2);
       micros_since_start = micros();
-
+      
       expected_time +=  DELAY2;
-
-      diff = (double)labs(micros_since_start - expected_time)  /
-	(double)micros_since_start ;
-      percentage = (int)(diff * 100);
-
-      if (percentage < 3)
-	{
-	  succ_ctr++;
-      }
-      else
-	{
-	  printf ("Fail 2....%d \n", percentage);
-	  fail_ctr++;
-	}
+      
+      diff = labs(micros_since_start - expected_time) ;
+      
+      printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", i, diff, micros(), expected_time);
+      fail_if(diff  > 15000, "Sleeping DELAY2 failed");
     }
 }
+END_TEST
 
+
+
+Suite *
+buffer_suite(void) {
+  Suite *s = suite_create("Buffer");
+  TCase *tc_core = tcase_create("Core");
+  suite_add_tcase (s, tc_core);
+
+  tcase_add_test(tc_core, test_micros);
+
+  return s;
+}
 
 int main(void)
 {
-  test_micros();
+  int num_failed;
+  //  test_micros();
+
+  Suite *s = buffer_suite();
+  SRunner *sr = srunner_create(s);
+  srunner_run_all(sr, CK_NORMAL);
+  num_failed = srunner_ntests_failed(sr);
+  srunner_free(sr);
+  return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 
   printf ("Fails:       %d\n", fail_ctr);
   printf ("Successes:   %d\n", succ_ctr);
