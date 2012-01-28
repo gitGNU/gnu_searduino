@@ -51,7 +51,8 @@ START_TEST (test_micros)
       
       diff = labs(micros_since_start - expected_time)  ;
       
-      printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", i, diff, micros(), expected_time);
+      printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", 
+	      i, diff, micros(), expected_time);
       fail_if(diff > 5000, "sleeping DELAY1 failed");
     }
   
@@ -65,7 +66,8 @@ START_TEST (test_micros)
       
       diff = labs(micros_since_start - expected_time) ;
       
-      printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", i, diff, micros(), expected_time);
+      printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", 
+	      i, diff, micros(), expected_time);
       fail_if(diff  > 15000, "Sleeping DELAY2 failed");
     }
 }
