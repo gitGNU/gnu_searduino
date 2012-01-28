@@ -55,20 +55,6 @@ START_TEST (test_micros)
       micros_since_start = micros();
       expected_time +=  DELAY1;
 
-      diff = labs(micros_since_start - expected_time);
-
-      if (percentage<)
-	{
-	  succ_ctr++;
-      }
-      else
-	{
-	  printf ("Fail 1.... %d\n", percentage);
-	  fail_ctr++;
-	}
-    }
-
-
       diff = labs(micros_since_start - expected_time)  ;
       
       printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", 
@@ -85,18 +71,8 @@ START_TEST (test_micros)
       expected_time +=  DELAY2;
 
       diff = micros_since_start - expected_time ;
+      fail_if(diff > 10000, "sleeping DELAY2 failed");
 
-      percentage = ( diff ) / DELAY2;
-
-      if (percentage < 50)
-	{
-	  succ_ctr++;
-      }
-      else
-	{
-	  printf ("Fail 2....%d %d  %f  \n", i, percentage, diff);
-	  fail_ctr++;
-	}
     }
 }
 END_TEST
@@ -110,7 +86,7 @@ START_TEST (test_delay)
   struct timeval start_time;
   struct timeval current_time;
 
-  for (i=1;i<200;i++)
+  for (i=1;i<10;i++)
     {
       gettimeofday( &start_time, NULL);
       delay (MS_DELAY1);
@@ -119,23 +95,8 @@ START_TEST (test_delay)
       diff = ((current_time.tv_sec  - start_time.tv_sec) * 1000000 +
 	      (current_time.tv_usec - start_time.tv_usec));
       
-      percentage = (diff / (MS_DELAY1*1000) - 1)*100; 
-
-/*       printf ("perc: %d \n", percentage); */
-
-      if (percentage>4)
-	{
-	  fail_ctr++;
-	}
-      else
-	{
-	  succ_ctr++;
-	}
-
-      diff = labs(micros_since_start - expected_time) ;
-      
-      printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", 
-	      i, diff, micros(), expected_time);
+      printf ("Loop: %d  diff: %.6ld     \n", 
+	      i, diff);
       fail_if(diff  > 15000, "Sleeping DELAY2 failed");
     }
 }
@@ -150,6 +111,7 @@ buffer_suite(void) {
   suite_add_tcase (s, tc_core);
 
   tcase_add_test(tc_core, test_micros);
+  tcase_add_test(tc_core, test_delay);
 
   return s;
 }
