@@ -5,7 +5,7 @@ TMP_INST=/tmp/TMP_INSTALL3
 #cd searduino
 rm -fr /tmp/TMP_INSTALL3/ && \
 make -f Makefile.git      && \
-./configure --prefix=${TMP_INST} && \
+./configure --prefix=${TMP_INST}  --enable-unittest && \
 make clean && make && \
 cd mk/ && make clean && make && make install && cd .. && \
 cd arduino-sources/ && make clean && make && make install && cd .. && \
