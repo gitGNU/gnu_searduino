@@ -21,6 +21,8 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+
+#include "time_stuff.h"
 #include <check.h>
 #include "time_stuff.h"
 #include <stdlib.h>
@@ -29,8 +31,11 @@
 
 int fail_ctr=0;
 int succ_ctr=0;
-#define DELAY1 10000
-#define DELAY2 100000
+#define DELAY1 1000*10
+#define DELAY2 1000*100
+
+#define MS_DELAY1 10
+#define MS_DELAY2 100
 
 START_TEST (test_micros)
 {
@@ -46,9 +51,24 @@ START_TEST (test_micros)
   for (i=1;i<5;i++)
     {
       usleep (DELAY1);
+
       micros_since_start = micros();
       expected_time +=  DELAY1;
-      
+
+      diff = labs(micros_since_start - expected_time);
+
+      if (percentage<)
+	{
+	  succ_ctr++;
+      }
+      else
+	{
+	  printf ("Fail 1.... %d\n", percentage);
+	  fail_ctr++;
+	}
+    }
+
+
       diff = labs(micros_since_start - expected_time)  ;
       
       printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", 
@@ -63,7 +83,55 @@ START_TEST (test_micros)
       micros_since_start = micros();
       
       expected_time +=  DELAY2;
+
+      diff = micros_since_start - expected_time ;
+
+      percentage = ( diff ) / DELAY2;
+
+      if (percentage < 50)
+	{
+	  succ_ctr++;
+      }
+      else
+	{
+	  printf ("Fail 2....%d %d  %f  \n", i, percentage, diff);
+	  fail_ctr++;
+	}
+    }
+}
+END_TEST
+
+START_TEST (test_delay)
+{
+  int i ;
+  int percentage;
+  double diff;
+
+  struct timeval start_time;
+  struct timeval current_time;
+
+  for (i=1;i<200;i++)
+    {
+      gettimeofday( &start_time, NULL);
+      delay (MS_DELAY1);
+      gettimeofday( &current_time, NULL);
+
+      diff = ((current_time.tv_sec  - start_time.tv_sec) * 1000000 +
+	      (current_time.tv_usec - start_time.tv_usec));
       
+      percentage = (diff / (MS_DELAY1*1000) - 1)*100; 
+
+/*       printf ("perc: %d \n", percentage); */
+
+      if (percentage>4)
+	{
+	  fail_ctr++;
+	}
+      else
+	{
+	  succ_ctr++;
+	}
+
       diff = labs(micros_since_start - expected_time) ;
       
       printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", 
@@ -97,6 +165,8 @@ int main(void)
   num_failed = srunner_ntests_failed(sr);
   srunner_free(sr);
   return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+  /*   test_delay(); */
 
   printf ("Fails:       %d\n", fail_ctr);
   printf ("Successes:   %d\n", succ_ctr);

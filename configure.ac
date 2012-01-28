@@ -67,6 +67,18 @@ AC_ARG_ENABLE([python],
 )
 
 
+AC_ARG_ENABLE([unittest],
+  [AS_HELP_STRING([--enable-unittest],
+	  [Enable unit test code (UT framework: check)])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for enable-pedantic option]) ;;
+   esac
+   ut_enabled=$enableval],
+  [ut_enabled=no]
+)
+
+
 if test "$python_enabled" = "yes"; then
    AX_PYTHON_DEVEL([])
 #   AX_PYTHON_DEVEL([">= '2.7'"])
@@ -75,9 +87,9 @@ if test "$python_enabled" = "yes"; then
 #    AC_CHECK_HEADER(Python.h)
 fi
 
-
-PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
-
+if test "$ut_enabled" = "yes"; then
+    PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+fi
 AC_SUBST(PYTHON_CPPFLAGS)
 
 AC_MSG_NOTICE([summary of build options:
@@ -87,8 +99,10 @@ AC_MSG_NOTICE([summary of build options:
   Compiler:         ${CC}
   Warning flags:    ${WARN_CFLAGS}
   Library types:    Shared=${enable_shared}, Static=${enable_static}
-  Python:           $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
-  Check C / LD:     '$CHECK_CFLAGS' / '$CHECK_LIBS'
+  Python:           $python_enabled
+  Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+  Unit test:        $ut_enabled
+  Unit test flags:  C: '$CHECK_CFLAGS   LD: '$CHECK_LIBS'
 ])
 
 ./bin/get-arduino-src.sh
