@@ -80,7 +80,6 @@ END_TEST
 START_TEST (test_delay)
 {
   int i ;
-  int percentage;
   double diff;
 
   struct timeval start_time;
@@ -104,6 +103,33 @@ END_TEST
 
 
 
+START_TEST (test_delayMicroseconds)
+{
+  int i ;
+  double diff;
+
+  struct timeval start_time;
+  struct timeval current_time;
+
+  for (i=1;i<10;i++)
+    {
+      gettimeofday( &start_time, NULL);
+      delayMicroseconds (DELAY1);
+      gettimeofday( &current_time, NULL);
+
+      diff = ((current_time.tv_sec  - start_time.tv_sec) * 1000000 +
+	      (current_time.tv_usec - start_time.tv_usec));
+      
+      printf ("Loop: %d  diff: %.6ld     \n", 
+	      i, diff);
+      fail_if(diff  > 15000, "Sleeping DELAY1 failed");
+    }
+}
+END_TEST
+
+
+
+
 Suite *
 buffer_suite(void) {
   Suite *s = suite_create("Buffer");
@@ -112,6 +138,7 @@ buffer_suite(void) {
 
   tcase_add_test(tc_core, test_micros);
   tcase_add_test(tc_core, test_delay);
+  tcase_add_test(tc_core, test_delayMicroseconds);
 
   return s;
 }
@@ -129,9 +156,6 @@ int main(void)
   return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 
   /*   test_delay(); */
-
-  printf ("Fails:       %d\n", fail_ctr);
-  printf ("Successes:   %d\n", succ_ctr);
 
   return 0;
 }
