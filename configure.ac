@@ -30,7 +30,7 @@ AM_SILENT_RULES([yes])
 AC_PROG_CC
 AC_LANG_C
 AC_PROG_LIBTOOL
-
+AM_PROG_CC_C_O
 # Check for program
 AM_MISSING_PROG(PYTHON, python, $missing_dir)
 
@@ -67,6 +67,18 @@ AC_ARG_ENABLE([python],
 )
 
 
+AC_ARG_ENABLE([unittest],
+  [AS_HELP_STRING([--enable-unittest],
+	  [Enable unit test code (UT framework: check)])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for enable-pedantic option]) ;;
+   esac
+   ut_enabled=$enableval],
+  [ut_enabled=no]
+)
+
+
 if test "$python_enabled" = "yes"; then
    AX_PYTHON_DEVEL([])
 #   AX_PYTHON_DEVEL([">= '2.7'"])
@@ -75,19 +87,22 @@ if test "$python_enabled" = "yes"; then
 #    AC_CHECK_HEADER(Python.h)
 fi
 
-
-
+if test "$ut_enabled" = "yes"; then
+    PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+fi
 AC_SUBST(PYTHON_CPPFLAGS)
 
 AC_MSG_NOTICE([summary of build options:
-
   version:          ${VERSION} shared
   Host type:        ${host}
   Install prefix:   ${prefix}
   Compiler:         ${CC}
   Warning flags:    ${WARN_CFLAGS}
   Library types:    Shared=${enable_shared}, Static=${enable_static}
-  Python:           $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+  Python:           $python_enabled
+  Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+  Unit test:        $ut_enabled
+  Unit test flags:  C: '$CHECK_CFLAGS   LD: '$CHECK_LIBS'
 ])
 
 ./bin/get-arduino-src.sh
@@ -112,7 +127,7 @@ prepare_searduino_mk
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > simulators/pardon/searduino-pardon.sh
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/arduino/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/board-makefiles/Makefile  ])
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/arduino/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/board-makefiles/Makefile  ])
 
 AC_OUTPUT
 
