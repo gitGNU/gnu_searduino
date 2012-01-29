@@ -78,6 +78,24 @@ AC_ARG_ENABLE([unittest],
   [ut_enabled=no]
 )
 
+AC_ARG_ENABLE(gcov,
+    [  --enable-gcov           build xnee with support for gcov],
+    [case "${enableval}" in
+	yes) gcov=true ;;
+	no)  gcov=false ;;
+	*) AC_MSG_ERROR(bad value ${enableval} for --enable-gcov) ;;
+	    esac],[gcov=false])
+
+AC_ARG_ENABLE(gprof,
+    [  --enable-gprof          build xnee with support for gprof],
+    [case "${enableval}" in
+	yes) gprof=true ;;
+	no)  gprof=false ;;
+	*) AC_MSG_ERROR(bad value ${enableval} for --enable-gprof) ;;
+	    esac],[gprof=false])
+
+AM_CONDITIONAL(GCOV, test x$gcov = xtrue)
+AM_CONDITIONAL(GPROF, test x$gprof = xtrue)
 
 if test "$python_enabled" = "yes"; then
    AX_PYTHON_DEVEL([])
@@ -103,6 +121,8 @@ AC_MSG_NOTICE([summary of build options:
   Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
   Unit test:        $ut_enabled
   Unit test flags:  C: '$CHECK_CFLAGS   LD: '$CHECK_LIBS'
+  gcov:             $gcov
+  gprof:            $gprof
 ])
 
 ./bin/get-arduino-src.sh
