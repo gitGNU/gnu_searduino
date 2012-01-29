@@ -24,13 +24,10 @@
 
 #include "time_stuff.h"
 #include <check.h>
-#include "time_stuff.h"
 #include <stdlib.h>
 #include <stdio.h>
 
 
-int fail_ctr=0;
-int succ_ctr=0;
 #define DELAY1 1000*10
 #define DELAY2 1000*100
 
@@ -80,7 +77,7 @@ END_TEST
 START_TEST (test_delay)
 {
   int i ;
-  double diff;
+  long diff;
 
   struct timeval start_time;
   struct timeval current_time;
@@ -106,7 +103,7 @@ END_TEST
 START_TEST (test_delayMicroseconds)
 {
   int i ;
-  double diff;
+  long diff;
 
   struct timeval start_time;
   struct timeval current_time;
@@ -132,7 +129,7 @@ END_TEST
 
 Suite *
 buffer_suite(void) {
-  Suite *s = suite_create("Buffer");
+  Suite *s = suite_create("Time_Fuctions");
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
 
