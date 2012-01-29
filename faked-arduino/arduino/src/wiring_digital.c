@@ -64,7 +64,7 @@ static arduino_pin arduino_digital_pins[NR_OF_DIGITAL_PINS];
 /*
  *
  * Callback used to update in_pins
- *   used in comm layer
+ * This fun is use (callbacked by) comm layer
  *
  */
 void 
@@ -247,7 +247,7 @@ int digitalRead(uint8_t pin)
 	      "Can't read from a pin (%d) with mode (%d) NOT set INPUT\n",
 	      pin, get_digital_pin_mode(pin));
       SEARD_ERROR(SEARD_ARDUINO_WRONG_PIN_MODE);
-      return;
+      return 0;
     }
   
 
