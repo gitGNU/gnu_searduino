@@ -34,7 +34,7 @@ LIB=$(LIB_PATH)/libsearduino.a
 
 
 SEARDUINO_MK=../mk/searduino-vcs.mk
-SEARDUINO_FUNC=../mk/searduino-functions.mk
+#SEARDUINO_FUNC=../mk/searduino-functions.mk
 
 lib: $(LIB)
 $(LIB): $(OBJ_C)  $(OBJ_CXX) 

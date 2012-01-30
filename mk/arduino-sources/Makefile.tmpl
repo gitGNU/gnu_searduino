@@ -38,6 +38,9 @@ mega:
 clean:
 	make -f Makefile.uno clean
 
+check:
+	@echo "Nothing to do in arduino-sources"
+
 install: due uno mega
 	 @echo "installing to __INSTALL_DIR__"
 	 mkdir -p  __INSTALL_DIR__/libs/searduino/arduino-libs 
