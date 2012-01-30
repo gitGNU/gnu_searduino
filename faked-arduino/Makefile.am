@@ -60,17 +60,6 @@ libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 lib_LTLIBRARIES = libsearduinostub.la
 
 
-if GCOV
-GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
-else
-GCOV_FLAG = 
-endif
-
-if GPROF
-GPROF_FLAG = -pg -g
-else
-GPROF_FLAG = 
-endif
 
 
 AM_CFLAGS= -I../arduino-sources/core          \
@@ -78,25 +67,3 @@ AM_CFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/        
 
 AM_LDFLAGS=
-
-init-cov:
-	make clean
-	lcov --directory . --zerocounters
-
-COVERAGE_OUT ?= reports/coverage
-PROFILE_OUT ?= reports/profile
-
-
-build-cov:
-	make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
-	make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  check
-	mkdir -p $(COVERAGE_OUT)
-	lcov --directory . --output-file $(COVERAGE_OUT)/$(PACKAGE).info \
-		--capture
-gen-coverage:
-	genhtml --output-directory $(COVERAGE_OUT) \
-		$(COVERAGE_OUT)/$(PACKAGE).info \
-		--highlight --frames --legend \
-		--title "$(PACKAGE_NAME)"
-
-coverage: init-cov build-cov gen-coverage
