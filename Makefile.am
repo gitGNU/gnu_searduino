@@ -1,1 +1,30 @@
-SUBDIRS=faked-arduino extensions simulators
+SUBDIRS = faked-arduino extensions simulators mk arduino-sources 
+
+
+TOPDIR=./
+COVERAGE_OUT ?= $(TOPDIR)/reports/coverage
+PROFILE_OUT ?= $(TOPDIR)/reports/profile
+GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
+GPROF_FLAG = "-pg -g"
+
+
+init-cov:
+	make clean
+	lcov --directory . --zerocounters
+
+build-cov:
+	cd faked-arduino && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
+	cd faked-arduino && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  check
+	mkdir -p $(COVERAGE_OUT)
+	lcov --directory ./ --output-file $(COVERAGE_OUT)/$(PACKAGE).info \
+		--capture
+
+gen-coverage:
+	genhtml --output-directory $(COVERAGE_OUT) \
+		$(COVERAGE_OUT)/$(PACKAGE).info \
+		--highlight --frames --legend \
+		--title "$(PACKAGE_NAME)"
+
+
+
+coverage: init-cov build-cov gen-coverage 
