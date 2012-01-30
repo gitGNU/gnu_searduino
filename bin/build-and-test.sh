@@ -6,7 +6,11 @@ TMP_INST=/tmp/TMP_INSTALL3
 rm -fr /tmp/TMP_INSTALL3/ && \
 make -f Makefile.git      && \
 ./configure --prefix=${TMP_INST}  --enable-unittest && \
-make clean && make && \
+make clean && make 
+
+exit
+
+#&& \
 cd mk/ && make clean && make && make install && cd .. && \
 cd arduino-sources/ && make clean && make && make install && cd .. && \
 cd faked-arduino/ && make clean && make && make install && cd .. && \
