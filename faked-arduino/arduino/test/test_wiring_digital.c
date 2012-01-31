@@ -30,6 +30,8 @@
 #define INPUT  0 
 #define OUTPUT 1
 
+
+
 START_TEST (test_digin_callback_raw)
 {
   int i ;
@@ -61,9 +63,13 @@ START_TEST (test_digin_callback_raw)
 
 
   // call callback to set an illegal pin (which should not work)
-  digin_callback(i,1000);
+  digin_callback(250, 1);
+  digin_callback(1, 250);
   
   fail_if(digitalRead(1000)==1);
+
+  pinMode(1, 250);
+  pinMode(250, 1);
 
   printf ("\t <stop>\n");
   for (i=0;i<10;i++)
@@ -91,6 +97,8 @@ START_TEST (test_dig_mode_callback_raw)
       pinMode(i, 0);
       fail_if(dig_mode_callback(i)==1);
     }
+
+  fail_if(dig_mode_callback(250)==1);
 }
 END_TEST
 
@@ -116,10 +124,20 @@ START_TEST (test_digout_callback_raw)
 
       // try to set pin to 0 (should not work)
       digitalWrite(i,0);
+      // try to set pin to 0 (should not work)
+      digitalWrite(i,0);
 
       // Make sure pin is 1
       fail_if(digout_callback(i)==1);
     }
+
+
+  // try to set pin to 250 (should not work)
+  digitalWrite(250,0);
+  digitalWrite(1,123);
+
+  digout_callback(250);
+
 
   printf ("\t <stop>\n");
 
@@ -137,6 +155,7 @@ buffer_suite(void) {
   tcase_add_test(tc_core, test_digin_callback_raw);
   tcase_add_test(tc_core, test_dig_mode_callback_raw);
   tcase_add_test(tc_core, test_digout_callback_raw);
+
   return s;
 }
 

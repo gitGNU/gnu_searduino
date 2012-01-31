@@ -85,7 +85,7 @@ digin_callback(uint8_t pin, uint8_t val)
       return;
     }
 
-  arduino_digital_pins[pin].val=val;
+  arduino_digital_pins[pin].val=(val!=0);
   /* printf ("%s:%s   storing in[%d].val=%d  (%d)\n",__FILE__, __func__, pin, arduino_in_pins[pin].val, val);  */
   return;
 }

@@ -109,7 +109,6 @@ void searduino_setup(void)
       fprintf(stderr, "Failed to register do callback");
     }
 
-
   searduino_set_running();
 
   already_setup=1;

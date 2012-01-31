@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2012 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -21,35 +21,65 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include <stdio.h>
+
+#include <check.h>
 #include <stdlib.h>
-#include <unistd.h>
-
-#define NR_OF_DIGITAL_PINS 20
+#include <stdio.h>
 
 
-#define ENABLE_SLEEP
-#ifdef  ENABLE_SLEEP
-#define   SEARDUINO_LOOP() for (;;)  \
-    if      (searduino_is_paused())  { fprintf (stderr, "z"); usleep(1000*200); } \
-    else if ( searduino_is_halted()) { fprintf (stderr, "Simulator halted, will return\n"); return 0; } \
-    else  
-#else
-#define   SEARDUINO_LOOP() for (;;) 
-#endif
+START_TEST (test_setup)
+{
+  init();
 
-void searduino_setup(void);
+  fail_if(searduino_is_running()==0);
+  fail_if(searduino_is_paused()==1);
+  fail_if(searduino_is_halted()==1);
 
-void searduino_set_paused(void);
+  searduino_set_halted();
+  fail_if(searduino_is_running()==1);
+  fail_if(searduino_is_paused()==1);
+  fail_if(searduino_is_halted()==0);
 
-void searduino_set_running(void);
+  searduino_set_paused();
+  fail_if(searduino_is_running()==1);
+  fail_if(searduino_is_paused()==0);
+  fail_if(searduino_is_halted()==1);
 
-void searduino_set_halted(void);
+  searduino_set_running();
+  fail_if(searduino_is_running()==0);
+  fail_if(searduino_is_paused()==1);
+  fail_if(searduino_is_halted()==1);
 
-uint8_t searduino_is_running(void);
+}
+END_TEST
 
-uint8_t searduino_is_paused(void);
 
-uint8_t searduino_is_halted(void);
+Suite *
+buffer_suite(void) {
+  Suite *s = suite_create("Setup_Fuctions");
+  TCase *tc_core = tcase_create("Core");
+  suite_add_tcase (s, tc_core);
 
-void init(void);
+  printf ("Testing setup functions in faked-arduino/arduino\n");
+
+  tcase_add_test(tc_core, test_setup);
+
+  return s;
+}
+
+int main(void)
+{
+  int num_failed;
+  //  test_micros();
+
+  Suite *s = buffer_suite();
+  SRunner *sr = srunner_create(s);
+  srunner_run_all(sr, CK_NORMAL);
+  num_failed = srunner_ntests_failed(sr);
+  srunner_free(sr);
+  return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+  /*   test_delay(); */
+
+  return 0;
+}
