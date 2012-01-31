@@ -204,7 +204,7 @@ int main(void)
   for (;;)
     {
       
-      //twinkle();
-      anabuzz();
+      twinkle();
+      //anabuzz();
     }
 }
