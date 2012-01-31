@@ -67,7 +67,7 @@ d_mode_callback_ptr    d_mode_callback;
 void 
 init_comm(void)
 {
-  static int   init;
+  static int init;
   if (!init)
     {
       set_proto_stream(COMM_STREAM_DEFAULT); 

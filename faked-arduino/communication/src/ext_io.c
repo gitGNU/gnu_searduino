@@ -30,7 +30,15 @@
 int ext_set_dig_input(uint8_t pin, uint8_t val)
 {
   PRINT_FUNCTION_NAME(("%d,%d",pin,val));
-  di_callback(pin,val);
+  if (di_callback!=NULL)
+    {
+      di_callback(pin,val);
+    }
+  else
+    {
+      return 1;
+    }
+
   DEBUG_INFO(("%d,%d",pin,val));
   return SEARD_COMM_OK;
 }
@@ -39,9 +47,15 @@ uint8_t ext_get_dig_output(uint8_t pin)
 {
   uint8_t val ;
   PRINT_FUNCTION_NAME(("%d",pin));
-/*   printf ("Will return using cb at %d\n", do_callback); */
-  val = do_callback(pin);
-/*   printf ("GUI Will return using cb at %d    pin:%d val=%d\n", do_callback, pin, val); */
+
+  if (do_callback!=NULL)
+    {
+      val = do_callback(pin);
+    }
+  else
+    {
+      return 1;
+    }
   DEBUG_INFO(("%d => %d",pin,val));
   return val;
 }
