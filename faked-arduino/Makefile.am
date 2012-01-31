@@ -60,10 +60,10 @@ libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 lib_LTLIBRARIES = libsearduinostub.la
 
 
-AM_CFLAGS= -I../arduino-sources/core  -I../faked-arduino/include/arduino -I../faked-arduino/include/
+
+
+AM_CFLAGS= -I../arduino-sources/core          \
+           -I../faked-arduino/include/arduino \
+           -I../faked-arduino/include/        
+
 AM_LDFLAGS=
-
-
-
-
-

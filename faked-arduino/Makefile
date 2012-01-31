@@ -283,7 +283,7 @@ mandir = ${datarootdir}/man
 mkdir_p = /bin/mkdir -p
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /usr/local
+prefix = /tmp/TMP_INSTALL3
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -329,7 +329,14 @@ libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 #libsearduino-stub_SOURCES=$(LIB_SEARDUINO_SOURCES_FILES)
 #EXTRA_LTLIBRARIES = libsearduino-stub.la
 lib_LTLIBRARIES = libsearduinostub.la
-AM_CFLAGS = -I../arduino-sources/core  -I../faked-arduino/include/arduino -I../faked-arduino/include/
+#GCOV_FLAG = 
+GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
+GPROF_FLAG = 
+#GPROF_FLAG = -pg -g
+AM_CFLAGS = -I../arduino-sources/core          \
+           -I../faked-arduino/include/arduino \
+           -I../faked-arduino/include/        
+
 AM_LDFLAGS = 
 all: all-recursive
 
@@ -824,6 +831,27 @@ uninstall-am: uninstall-libLTLIBRARIES
 	pdf pdf-am ps ps-am tags tags-recursive uninstall uninstall-am \
 	uninstall-libLTLIBRARIES
 
+
+init-cov:
+	make clean
+	lcov --directory . --zerocounters
+
+COVERAGE_OUT ?= reports/coverage
+PROFILE_OUT ?= reports/profile
+
+build-cov:
+	make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
+	make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  check
+	mkdir -p $(COVERAGE_OUT)
+	lcov --directory . --output-file $(COVERAGE_OUT)/$(PACKAGE).info \
+		--capture
+gen-coverage:
+	genhtml --output-directory $(COVERAGE_OUT) \
+		$(COVERAGE_OUT)/$(PACKAGE).info \
+		--highlight --frames --legend \
+		--title "$(PACKAGE_NAME)"
+
+coverage: init-cov build-cov gen-coverage
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

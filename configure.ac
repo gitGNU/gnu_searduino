@@ -78,7 +78,6 @@ AC_ARG_ENABLE([unittest],
   [ut_enabled=no]
 )
 
-
 if test "$python_enabled" = "yes"; then
    AX_PYTHON_DEVEL([])
 #   AX_PYTHON_DEVEL([">= '2.7'"])
@@ -113,7 +112,6 @@ prepare_examples()
 {
     cat example/digpins/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digpins/Makefile.digpins
     cat example/python-digcounter/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/Makefile.digcounter
-
 }
 
 prepare_searduino_mk()
