@@ -64,7 +64,7 @@ unpack_sources()
 
 setup_sources()
 {
-    exec_comm mkdir arduino-sources
+#    exec_comm mkdir arduino-sources
     exec_comm mkdir arduino-sources/core
     exec_comm mkdir arduino-sources/variants
 
@@ -80,7 +80,7 @@ create_mk()
     exec_comm cp mk/arduino-sources/arduino-sources.mk        arduino-sources/
 }
 
-if [ -d arduino-sources ]
+if [ -d arduino-sources/core ]
 then
     echo "Already downloaded, skipping download and unpack"
 else
