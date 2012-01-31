@@ -1,4 +1,4 @@
-SUBDIRS = faked-arduino extensions simulators mk arduino-sources  example
+SUBDIRS = faked-arduino extensions simulators mk arduino-sources  example test
 
 
 TOPDIR=./
@@ -30,7 +30,7 @@ gen-coverage:
 coverage: init-cov build-cov gen-coverage 
 
 
-check:
+old-check:
 	cd test/ && cd hw && make clean && make && make check
 	cd test/ && cd shared && make clean && make && make check 
 	cd test/ && cd shared-main && make clean && make && make check
