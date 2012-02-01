@@ -38,3 +38,6 @@ include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 check-upload:
 	BOARD=due
 	make upload
+
+install:
+	echo nothing to do in install

@@ -45,3 +45,5 @@ check: $(SHLIB)
 check2: check
 	./$(PROG)
 
+install:
+	echo nothing to do in install
