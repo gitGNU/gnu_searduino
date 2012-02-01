@@ -43,3 +43,6 @@ check: $(PROG)
 
 check2: $(PROG)
 	export LD_LIBRARY_PATH=../../faked-arduino  && ./$(PROG)
+
+install:
+	echo nothing to do in install

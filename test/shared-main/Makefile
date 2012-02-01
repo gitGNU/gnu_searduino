@@ -41,3 +41,6 @@ include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
 check: $(PROG)
 	export LD_LIBRARY_PATH=$(LIBTEST_PATH):../../faked-arduino/.libs/ && ./$(PROG)
+
+install:
+	echo nothing to do in install
