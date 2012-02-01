@@ -41,3 +41,9 @@ check-upload:
 
 install:
 	echo nothing to do in install
+
+distdir:
+	echo nothing to do in dist
+
+all:
+	echo nothing to do for all
