@@ -29,6 +29,7 @@ SHLIB=libtest.so
 SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
 SRC_C=test.c
 
+all: $(SHLIB) 
 
 SEARDUINO_PATH=../..
 
