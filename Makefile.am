@@ -14,7 +14,8 @@ init-cov:
 
 build-cov:
 	cd faked-arduino && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
-	cd faked-arduino && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  check
+	cd faked-arduino && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
+	make check
 	mkdir -p $(COVERAGE_OUT)
 	lcov --directory ./ --output-file $(COVERAGE_OUT)/$(PACKAGE).info \
 		--capture
@@ -24,8 +25,6 @@ gen-coverage:
 		$(COVERAGE_OUT)/$(PACKAGE).info \
 		--highlight --frames --legend \
 		--title "$(PACKAGE_NAME)"
-
-
 
 coverage: init-cov build-cov gen-coverage 
 
