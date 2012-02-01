@@ -31,5 +31,6 @@ AM_CFLAGS=@PYTHON_CPPFLAGS@ -I../../arduino-sources/core  -I../../faked-arduino/
 AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/  -L../arduino-lib/ -lsearduinostub   -larduino-code 
 
 install-exec-hook:
+	-rm $(DESTDIR)$(libdir)/pearduino.so
 	ln -s $(DESTDIR)$(libdir)/libpearduino.so \
               $(DESTDIR)$(libdir)/pearduino.so
