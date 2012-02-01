@@ -1,1 +1,1 @@
-SUBDIRS= hw shared shared-main stub
+SUBDIRS= hw stub shared shared-main 
