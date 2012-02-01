@@ -47,3 +47,6 @@ check2: check
 
 install:
 	echo nothing to do in install
+
+distdir:
+	echo nothing to do in dist

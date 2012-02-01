@@ -44,3 +44,6 @@ check: $(PROG)
 
 install:
 	echo nothing to do in install
+
+distdir:
+	echo nothing to do in dist
