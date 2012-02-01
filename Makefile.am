@@ -1,4 +1,4 @@
-SUBDIRS = faked-arduino extensions simulators mk arduino-sources  example test
+SUBDIRS = faked-arduino extensions simulators mk arduino-sources example test
 
 
 TOPDIR=./
