@@ -94,8 +94,8 @@ AWK = gawk
 CC = gcc
 CCDEPMODE = depmode=gcc3
 CFLAGS = -g -O2
-CHECK_CFLAGS = 
-CHECK_LIBS = 
+CHECK_CFLAGS =  
+CHECK_LIBS = -lcheck_pic  
 CPP = gcc -E
 CPPFLAGS = 
 CYGPATH_W = echo
@@ -141,7 +141,7 @@ PACKAGE_TARNAME = searduino
 PACKAGE_URL = 
 PACKAGE_VERSION = 0.45
 PATH_SEPARATOR = :
-PKG_CONFIG = 
+PKG_CONFIG = /usr/bin/pkg-config
 PKG_CONFIG_LIBDIR = 
 PKG_CONFIG_PATH = 
 PYTHON = /usr/bin/python
@@ -198,7 +198,7 @@ mandir = ${datarootdir}/man
 mkdir_p = /bin/mkdir -p
 oldincludedir = /usr/include
 pdfdir = ${docdir}
-prefix = /usr/local
+prefix = /tmp/TMP_INSTALL3
 program_transform_name = s,x,x,
 psdir = ${docdir}
 sbindir = ${exec_prefix}/sbin
@@ -213,6 +213,7 @@ pkgdataexampledir = $(pkgdatadir)/example/python-digcounter/
 dist_pkgdataexample_DATA = \
   ard_code.c \
   Makefile.digcounter \
+  Makefile.tmpl \
   simple-hw.py
 
 all: all-am

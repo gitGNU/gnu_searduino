@@ -3,6 +3,7 @@ dist_pkgdataexample_DATA = \
   blink.c \
   blink.h \
   main.c  \
-  Makefile.digpins
+  Makefile.digpins \
+  Makefile.tmpl
 
 
