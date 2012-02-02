@@ -41,7 +41,9 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/setup.h \
        ./include/utils/types.h \
        ./include/utils/error.h \
-       ./include/utils/print.h
+       ./include/utils/print.h \
+       ./include/arduino/time_stuff.h
+
 
 LIB_SEARDUINO_SOURCES_FILES= \
        ./communication/src/ext_io.c \
