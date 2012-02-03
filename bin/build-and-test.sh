@@ -98,14 +98,12 @@ test_dist()
     cd /tmp/TMP-SEARD-INSTALL/share/searduino/example/python-digcounter/ && make -f Makefile.digcounter clean all
     exit_on_failure $? "make digcounter in installed dir (testing dist)  (in $(pwd))"
 
-
-
 }
 
-#prepare
-#build
-#check
-#dist
+prepare
+build
+check
+dist
 
 test_dist
 
