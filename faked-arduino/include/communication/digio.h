@@ -74,4 +74,7 @@ void searduino_enable_streamed_output(void);
  */
 void searduino_disable_streamed_output(void);
 
+uint8_t searduino_is_enable_streamed_output(void);
+
+
 #endif  /* COMMUNICATION_DIGIO_H */

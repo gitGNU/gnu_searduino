@@ -28,11 +28,15 @@
 #include "communication/error.h"
 
 /*
- * integere to store enable/disable for stream output
+ * integer to store enable/disable for stream output
  * 
  */
 static uint8_t stub_output_enabled = 1;
 
+uint8_t searduino_is_enable_streamed_output(void)
+{
+  return (stub_output_enabled!=0);
+}
 
 void
 searduino_enable_streamed_output(void)
