@@ -35,6 +35,27 @@ build()
     exit_on_failure $? "make install"
 }
 
+
+cov_prepare()
+{
+    rm -fr ${TMP_INSTALL}
+    make -f Makefile.git 
+    exit_on_failure $? "make -f Makefile.git"
+
+    ./configure --prefix=${TMP_INST}  --enable-unittest
+    exit_on_failure $? "configure"
+}
+
+cov()
+{
+    make clean
+    exit_on_failure $? "make clean"
+
+    make coverage
+    exit_on_failure $? "make coverage"
+
+}
+
 check()
 {
     make check
@@ -57,8 +78,6 @@ dist()
 
     make dist
     exit_on_failure $? "make dist"
-
-
 }
 
 
@@ -100,11 +119,12 @@ test_dist()
 
 }
 
-prepare
-build
-check
-dist
+#prepare
+#build
+#check
+#dist
+#test_dist
 
-test_dist
 
-
+cov_prepare
+cov
