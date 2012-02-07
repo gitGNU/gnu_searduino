@@ -49,6 +49,18 @@ uint8_t test_do_callback(uint8_t pin)
   return callbacked_val;
 }
 
+void test_do_to_sim_callback(uint8_t pin, uint8_t val)
+{
+  printf ("test_do_to_sim__callback(%d, %d)\n", 
+	  pin, val);
+  callbacked_pin = pin;
+  callbacked_val = val;
+
+
+  return ;
+}
+
+
 START_TEST (test_comm)
 {
   init_comm();
@@ -69,10 +81,14 @@ START_TEST (test_di)
   fail_if (comm_register_digin_cb(test_di_callback)!=
 	   SEARD_COMM_OK);
 
-  callbacked_pin = -1;
-  callbacked_pin = -1;
+  fail_if (comm_register_digout_sim_cb(NULL)!=
+	   SEARD_COMM_NULL_CALLBACK);	   
 
-  printf ("lsdflkjdfs \n");
+  fail_if (comm_register_digout_sim_cb(test_do_to_sim_callback)!=
+	   SEARD_COMM_OK);	   
+
+  callbacked_pin = -1;
+  callbacked_val = -1;
 
   ext_set_dig_input(2, 1);
   fail_if(callbacked_pin!=2);
@@ -81,7 +97,13 @@ START_TEST (test_di)
   ext_set_dig_input(3, 10);
   fail_if(callbacked_pin!=3);
   fail_if(callbacked_val!=1);
+  
+  callbacked_pin = -1;
+  callbacked_val = -1;
 
+  comm_digital_write_outpin(3, 1);
+  fail_if(callbacked_pin!=3);
+  fail_if(callbacked_val!=1);
 
 }
 END_TEST
