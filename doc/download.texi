@@ -1,27 +1,19 @@
-@chapter Installing Searduino
+@chapter Getting and installing Searduino
 
-@section Source code releases
+@section Released version of the source code 
 @*
 Download from 
 @*
 @url{http://download.savannah.gnu.org/releases/searduino/}
-@section Latest Source code
-@*
 
-Download from 
-@*
-@url{http://git.savannah.gnu.org/gitweb/?p=searduino.git;a=snapshot;h=HEAD;sf=tgz}
-
-@section From git repository
-@*
-Download from 
-@*
-@code{git clone git://git.savannah.nongnu.org/searduino.git}
-@*
-@*
-You must now configure the makefile etc by typing:
+@subsection Installing a released version
+You must first configure the makefile etc by typing:
 @*
 @code{./configure}
+@*
+@*
+The configure script accepts several option. Type @code{./configure
+--help} to see them.
 @*
 @*
 and then continue with building 
@@ -34,6 +26,40 @@ and then continue with installating
 @*
 @*
 @code{make install}
+
+
+
+@section Getting the latest source code
+
+We try to keep the latest version in the repository working but
+there's no guarantee. If you want to play safe use the released
+versions (see above).
+
+@subsection Getting a tgz/tar.gz file from the git repository
+@*
+Download from 
+@*
+@url{http://git.savannah.gnu.org/gitweb/?p=searduino.git;a=snapshot;h=HEAD;sf=tgz}
+@*
+@*
+Info on how to install below
+
+@subsection Cloning git repository
+@*
+Download from 
+@*
+@code{git clone git://git.savannah.nongnu.org/searduino.git}
+@*
+@*
+Info on how to install below
+
+@subsection Installing the latest version
+First, create tke configure script to set up the Makefiles
+@*
+@code{make -f Makefile.git}
+@*
+@*
+After this, you should follow the procedures for Installing a released version
 
 @section Binary releases
 
