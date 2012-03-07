@@ -141,7 +141,7 @@ build (see @b{Build types} below)
 @*
 @b{Include the searduino makefile}
 @*
-You need to include somce settings, targets and rules from
+You need to include some settings, targets and rules from
 Searduino. This is done by adding the following line to your Makefile.
 @*
 @*
