@@ -339,10 +339,10 @@ SIM HAPPEN}
 @subsection Scripting over the network
 
 @section Pardon simulator
-With Searduino you can write test code for your Arduino program in
-Python, for example with the Python simulator (written in Python using
-Gtk). Searduino comes with a Python library for this. It doesn't take
-much to set things up, but for now it's somewhat tricky.
+With Searduino you test your Arduino program in the Python simulator
+(written in Python using Gtk). Searduino comes with a Python library
+for this. It doesn't take much to set things up, but for now it's
+somewhat tricky.
 
 First of all you must build your Arduino code as a shared library. To
 do this you must set the following variables in your @code{Makefile}
@@ -416,6 +416,9 @@ If this went ok, we're finally ready to proceed. Invoke pardon:
 
 
 @section Python scripts
+With Searduino you can write test code for your Arduino program in
+Python. Searduino comes with a Python library for this. It doesn't take
+much to set things up, but for now it's somewhat tricky.
 
 @section xxx simulator
 
