@@ -25,13 +25,20 @@
 ARDUINO_VERSION=100
 ARDUINO=stub
 
-SHLIB=libdigcounter.so
+#
+# Set the variable below if you want to run together with simple-hw.py
+SHLIB=libarduino-code.so.0
+
+#
+# Set the variable below if you want to run your program stand alone
+#PROG=ard_code
+
 SHLIB_LIBS=  -lpthread 
 SRC_C=ard_code.c
 SRC_CXX=
 
-USER_C_FLAGS=-fPIC -Wl,-G -Wl,-dy 
-USER_LD_FLAGS=-lpthread -fPIC -Wl,-G -Wl,-dy $(SHLIB_LIBS)
+USER_C_FLAGS=-fPIC 
+USER_LD_FLAGS=$(SHLIB_LIBS)
 
 
 SEARDUINO_PATH=__INSTALL_DIR__
@@ -41,6 +48,4 @@ all: $(SHLIB)
 include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
 
 check: 
-	export LD_LIBRARY_PATH=$(SEARDUINO_PATH)/libs && \
-	export PYTHONPATH=$(SEARDUINO_PATH)/libs && \
-	./simple-hw.py
+	./simple-hw.sh
