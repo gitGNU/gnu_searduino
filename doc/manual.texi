@@ -353,24 +353,25 @@ do this you must set the following variables in your @code{Makefile}
 @*
 @code{SHLIB=libarduino-code.so.0} 
 @*
+@*
 @i{Note #1: The library must be called: libarduino-code.so.0}
 @*
 @i{Note #2: You must NOT have the variable PROG set}
 
 After this you must do a clean build:
 
-@*
 @code{make -f Makefile.digcounter clean}
 @*
 @code{make -f Makefile.digcounter}
 @*
-Now, the shared library is ready for use by python. It's time to start
-the simulator. But there's some few more things to do before we're
-there.
+@*
 
-Tell the Python where to look for the Searduino Python library called
-Pearduino. Using bash, as most do on GNU/Linux, BSD, cygwin systems,
-you type:
+Now, the shared library is ready for use by python. It's almost time
+to start the simulator. But there's some few more things to do before
+we're there. First, we must tell Python where to look for the
+Searduino Python library called Pearduino. Using bash, as most do on
+GNU/Linux, BSD, cygwin systems, you type:
+
 @*
 @code{export PYTHONPATH=/opt/searduino/lib}
 @*
@@ -384,8 +385,8 @@ shared libraries. Type:
 @*
 @code{export LD_LIBRARY_PATH=.:/opt/searduino/lib}
 @*
-@i{Note: there's a dot before the first semi colone}
 @*
+@i{Note: there's a dot before the first semi colon}
 By doing this we tell the system to look for libraries in the current
 directory (@code{.}) and in @code{/opt/searduino/lib}, which is where
 we assume you've installed searduino in.
@@ -407,6 +408,7 @@ this by saying ``not found''). Also make sure that the
 @code{libarduino.so.0} file ldd reports is the one you want to use.
 @*
 If this went ok, we're finally ready to proceed. Invoke pardon:
+@*
 @*
 @code{/opt/searduino/bin/pardon}
 @*
