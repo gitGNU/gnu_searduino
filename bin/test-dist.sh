@@ -15,6 +15,19 @@ fi
 
 echo "Working with: $DIST_FILE"
 
+TMP_INST=/tmp/TMP_INSTALL3
+
+exit_on_failure()
+{
+    if [ $1 -ne 0 ]
+    then
+	echo "ERROR:  $2"
+	exit $1
+    else
+	echo "$2:  OK"
+    fi
+}
+
 
 test_dist()
 {
@@ -51,3 +64,4 @@ test_dist()
 }
 
 test_dist 
+exit 0
