@@ -219,30 +219,65 @@ variable in the Makefile. The following values of that variable are implemented.
 @end itemize
 
 @chapter Various Searduino functions/macros
+Searduino provides a small set of macros for you. When building for
+your local computer they are enabled, and when building for the
+Arduino hw they are diabled.
 
 @section print functions/macros
+@*
+coming soon
+@section pause/resume macros 
+@*
+coming soon
 
 @chapter Simulators
 
-With Searduino you can easily build your code with the following stubs/simulators:
+With Searduino you can easily build your code for use with:
 
 @itemize @bullet
-@item stub - the Arduino fuctions print whne they are being called
+@item stubed program - the Arduino fuctions print when they are being called
 (stdout by default)
 @item stream - same as with stub, but now also with a listening
 (stdin) thread to which you can send commands (such as settig digital input
 pin 2 to 1).
 @item pardon - a Simulator, written in Python, using the Python
-simulator interface
+simulator interface (pearduino)
+@item python scripts - your own Python scripts, using the Python
+simulator interface (pearduino)
 @item xxxx - a simulator, written in C++/Qt/Qml.
-simulator interface
+simulator interface - more info soon
 @end itemize
+How to use each of the above is explained below in separate sections.
 
 @section Stub 
+Use this way if you want to run your program stand alone, with no way
+of giving input to it. As soon as your program sets a pin you will see
+a printout on stdout.
+
+To build a stand alone stubed program set the following variables in
+your @code{Makefile} (before you include @code{searduino.mk}):
+@*
+@code{ARDUINO=stub}
+@*
+@code{PROG=somename}
+@*
+
+Check out the example as found in
+@code{example/python-digcounter}. Edit the Makefile
+(@code{Makefile.digcounter}) and make sure to set the variables as
+described above. After you're done, type:
+@*
+@code{make -f Makefile.digcounter clean}
+@*
+@code{make -f Makefile.digcounter}
+@*
+and possibly also
+@*
+@code{make -f Makefile.digcounter check}
 
 
 
-@section Stub output syntax
+@subsection Stub output syntax
 
 With this mode set Searduino print messages to a stream (default to
 stdout) for the function calls where some hardware is set. 
@@ -273,9 +308,11 @@ You switch on and off this mode as many times you want during execution using th
 @end multitable
 
 
-
 @section Streamed simulator
 With this mode you can enter commands to the Arduino code. To enable this code you have to call the function @code{void searduino_enable_command_reader(void)} before you call @code{void init_comm(void)}.
+
+@b{THIS SECTION NEEDS TO BE UPDATED WITH INFO ON HOW TO MAKE STREAMED
+SIM HAPPEN}
 
 @subsection Streamed simulator input syntax
 
@@ -300,10 +337,85 @@ With this mode you can enter commands to the Arduino code. To enable this code y
 
 @subsection Scripting with bash
 @subsection Scripting over the network
-@section Pardon simulator
-@section xxx simulator
 
-@chapter Using the Python scripting interface
+@section Pardon simulator
+With Searduino you can write test code for your Arduino program in
+Python, for example with the Python simulator (written in Python using
+Gtk). Searduino comes with a Python library for this. It doesn't take
+much to set things up, but for now it's somewhat tricky.
+
+First of all you must build your Arduino code as a shared library. To
+do this you must set the following variables in your @code{Makefile}
+(before you include @code{searduino.mk}):
+
+@* 
+@code{ARDUINO=stub} 
+@*
+@code{SHLIB=libarduino-code.so.0} 
+@*
+@i{Note #1: The library must be called: libarduino-code.so.0}
+@*
+@i{Note #2: You must NOT have the variable PROG set}
+
+After this you must do a clean build:
+
+@*
+@code{make -f Makefile.digcounter clean}
+@*
+@code{make -f Makefile.digcounter}
+@*
+Now, the shared library is ready for use by python. It's time to start
+the simulator. But there's some few more things to do before we're
+there.
+
+Tell the Python where to look for the Searduino Python library called
+Pearduino. Using bash, as most do on GNU/Linux, BSD, cygwin systems,
+you type:
+@*
+@code{export PYTHONPATH=/opt/searduino/lib}
+@*
+assuming you've installed Searduino in @i{/opt/searduino/}. 
+
+@* 
+
+Next thing to do is to make sure that your system can find all the
+shared libraries. Type:
+
+@*
+@code{export LD_LIBRARY_PATH=.:/opt/searduino/lib}
+@*
+@i{Note: there's a dot before the first semi colone}
+@*
+By doing this we tell the system to look for libraries in the current
+directory (@code{.}) and in @code{/opt/searduino/lib}, which is where
+we assume you've installed searduino in.
+@*
+
+We're now ready to launch the simulator, but let's do a quick check
+before we proceed. Let's verify that the dynamic loader will find all
+the libraries needed by pearduino (Searduino's Python library). On
+GNU/Linux and similar system do:
+@*
+@code{ldd /opt/searduino/lib/pearduino.so}
+@*
+
+We are, as before, assuming you've installed Searduino in
+/opt/searduino. Ldd (a tool to print out dynamic link dependencies)
+will print out a list of the libraries pearduino depends on. Make sure
+that you see no printouts waring you of missing libraries (ldd reports
+this by saying ``not found''). Also make sure that the
+@code{libarduino.so.0} file ldd reports is the one you want to use.
+@*
+If this went ok, we're finally ready to proceed. Invoke pardon:
+@*
+@code{/opt/searduino/bin/pardon}
+@*
+
+
+
+@section Python scripts
+
+@section xxx simulator
 
 @chapter Debugging Arduino code
 
@@ -358,12 +470,13 @@ With this mode you can enter commands to the Arduino code. To enable this code y
 @*
 @}
 @*
+
 @chapter Write your own simulator
 @subsection Writing a simulator in C/C++ 
 
 
 
-@subsection Writing a simulator in Python
+@subsection Writing local tests in Python
 For now, we would like to refer to pardon in the Searduino source
 treee for en example on how to write a simulator in Python.
 @bye
