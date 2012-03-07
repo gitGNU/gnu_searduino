@@ -23,6 +23,19 @@ prepare()
     exit_on_failure $? "configure"
 }
 
+doc()
+{
+    cd doc
+
+    make clean
+    exit_on_failure $? "make clean in doc"
+
+    make all
+    exit_on_failure $? "make in doc"
+    
+    cd ..
+}
+
 build()
 {
     make clean
@@ -119,12 +132,11 @@ test_dist()
 
 }
 
-#prepare
-#build
-#check
-#dist
-#test_dist
-
-
+prepare
+build
+doc
+check
+dist
+test_dist
 cov_prepare
 cov
