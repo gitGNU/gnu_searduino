@@ -36,7 +36,8 @@ void setup() {
 }
 
 
-int main(void)
+int 
+main(void)
 {
   char ctr ;
   unsigned int interval = 200;
@@ -49,12 +50,12 @@ int main(void)
   while (ctr++<10)
     {
       if (tmp) tmp=0 ; else tmp=1;
-
+      
       digitalWrite(1,tmp);
-      digitalWrite(2,digitalRead(2));
-      digitalWrite(3,digitalRead(3));
+      digitalWrite(2,digitalRead(4)+tmp);
+      digitalWrite(3,digitalRead(5)+tmp);
 /*       digitalWrite(2,digitalRead(2)); */
-      printf("\n");
+/*       printf("\n"); */
       delay(interval*5);
     }
   return 0;
