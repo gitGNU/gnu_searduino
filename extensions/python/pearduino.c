@@ -34,6 +34,10 @@
 pthread_t   searduino_thread_impl;
 pthread_t  *searduino_thread = &searduino_thread_impl;
 
+
+
+#define PEARDUINO_DEBUG_FUNCATION_CALLS
+
 #ifdef PEARDUINO_DEBUG_FUNCATION_CALLS
 #define PEARDUINO_PRINT_IN()            printf ("--->  %s() \n", __func__); fflush(stdout); 
 #define PEARDUINO_PRINT_INSIDE()        printf ("--- INSIDE  %s()\n", __func__); fflush(stdout);
@@ -115,6 +119,58 @@ static PyObject* c_py_get_pin_mode(PyObject* self, PyObject* args)
   PyObject* o = Py_BuildValue("i", mode);
 
   PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+static PyObject* c_searduino_set_arduino_code(PyObject* self, PyObject* args)
+{
+  uint8_t ret;
+  char *ard_lib;
+  PEARDUINO_PRINT_IN();
+  
+  PyArg_ParseTuple(args, "s", &ard_lib);
+
+  ret = searduino_set_arduino_code_name(ard_lib);
+  PyObject* o = Py_BuildValue("i", ret);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
+{
+  uint8_t ret;
+  PEARDUINO_PRINT_IN();
+  
+  PEARDUINO_PRINT_INSIDE_STR("Setting up searduino\n");
+
+
+  /*  searduino_set_arduino_code_name("libarduino-code.so"); */
+  ret = searduino_setup();
+  if (ret!=0)
+    {
+      return;
+    }
+  PEARDUINO_PRINT_INSIDE_STR("Register callback for dig out"
+			"(in communication module)\n");
+  comm_register_digout_sim_cb(new_dig_out);
+  
+  PEARDUINO_PRINT_OUT();
+  PyObject* o = Py_BuildValue("i", 0);
+  return o;
+}
+
+
+static PyObject* c_searduino_start(PyObject* self, PyObject* args)
+{
+  uint8_t ret;
+  PEARDUINO_PRINT_IN();
+  
+  PEARDUINO_PRINT_INSIDE_STR("Starting thread for arduino code\n");
+  pthread_create(searduino_thread, NULL, arduino_code, NULL);
+
+  PEARDUINO_PRINT_OUT();
+  PyObject* o = Py_BuildValue("i", 0);
   return o;
 }
 
@@ -218,6 +274,9 @@ static PyMethodDef myModule_methods[] = {
   {"searduino_resume", (PyCFunction)c_searduino_resume, METH_VARARGS, NULL},
   {"searduino_quit", (PyCFunction)c_searduino_quit, METH_VARARGS, NULL},
   {"py_get_pin_mode", (PyCFunction)c_py_get_pin_mode, METH_VARARGS, NULL},
+  {"searduino_set_arduino_code", (PyCFunction)c_searduino_set_arduino_code, METH_VARARGS, NULL},
+  {"searduino_initialise", (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
+  {"searduino_start", (PyCFunction)c_searduino_start, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
 
@@ -281,20 +340,5 @@ void initpearduino()
   (void) Py_InitModule("pearduino", myModule_methods);
 
   
-  PEARDUINO_PRINT_INSIDE_STR("Setting up searduino\n");
-  searduino_set_arduino_code_name("libschneben.so");
-  ret = searduino_setup();
-  if (ret!=0)
-    {
-      return;
-    }
-
-  PEARDUINO_PRINT_INSIDE_STR("Register callback for dig out"
-			"(in communication module)\n");
-  comm_register_digout_sim_cb(new_dig_out);
-  
-  PEARDUINO_PRINT_INSIDE_STR("Starting thread for arduino code\n");
-  pthread_create(searduino_thread, NULL, arduino_code, NULL);
-
   PEARDUINO_PRINT_INSIDE_STR("*** All set up ***  in wrapper\n");
 }
