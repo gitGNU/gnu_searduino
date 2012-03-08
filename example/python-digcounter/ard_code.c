@@ -80,15 +80,17 @@ int main(void)
       
       for (j=FIRST_LED;j<=LAST_LED;j++)
 	{
-	  DEBUG_IN_PIN(digitalRead(j));
-	  digitalWrite(j,digitalRead(j));
+	  //	  DEBUG_IN_PIN(digitalRead(j));
+	  //	  digitalWrite(j,digitalRead(j));
+	  digitalWrite(j,(i+j)%2);
+	  usleep(1000*100); 
 	}
       DEBUG_MSG("");
       
       i++;
       if (i==8) i=0;
 
-      usleep(1000*50); 
+      usleep(1000*1000*2); 
     }
   DEBUG_MSG("");
 }
