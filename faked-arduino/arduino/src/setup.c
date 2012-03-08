@@ -41,6 +41,11 @@ uint8_t  dig_mode_callback(uint8_t pin);
 
 static int searduino_exec ;
 
+/* global */
+searduino_main_ptr_ptr searduino_main_entry = NULL;
+
+static char arduino_code[1024];
+
 #define SEARDUIONO_SIM_PAUSE   0
 #define SEARDUIONO_SIM_RUNNING 1
 #define SEARDUIONO_SIM_HALTED  2
@@ -129,19 +134,16 @@ int searduino_setup(void)
 }
 
 
-searduino_main_ptr_ptr searduino_main_entry;
-static char arduino_code[1024];
-static const char *default_arduino_code = "libarduino-code.so";
 
 static const char * 
 get_arduino_code_name(void)
 {
-  char *ret;
+  char *ret = NULL;
   printf ("Getting arduino lib name\n");
   if ((arduino_code==NULL) || 
       (arduino_code[0]=='\0'))
     {
-      ret = default_arduino_code;
+      printf ("Could not set arduino library to use\n");
     }
   else
     {
@@ -190,7 +192,8 @@ load_arduino_code(void)
       return 1;
     }
   printf ("setup.c:  code at %p\n", arduino_lib);
-  searduino_main_entry = (searduino_main_ptr *)dlsym(arduino_lib, "searduino_main");
+
+  searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
   if ( searduino_main_entry == NULL)
     {
       printf ("Couldn't find searduino_main_ptr in arduino code\n");
