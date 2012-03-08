@@ -26,6 +26,7 @@
 from pearduino import *
 from threading import Thread
 from threading import BoundedSemaphore
+import argparse
 import time
 import sys
 from gi.repository import Gtk
@@ -274,6 +275,57 @@ class MyWindow(Gtk.Window):
 
 
 
+class FileChooserWindow(Gtk.Window):
+
+    def __init__(self):
+        dialog = Gtk.FileChooserDialog("Please choose a file", self,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+
+        self.add_filters(dialog)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            print "Open clicked"
+            print "File selected: " + dialog.get_filename()
+        elif response == Gtk.ResponseType.CANCEL:
+            print "Cancel clicked"
+
+        dialog.destroy()
+
+    def add_filters(self, dialog):
+        filter_text = Gtk.FileFilter()
+        filter_text.set_name("Text files")
+        filter_text.add_mime_type("text/plain")
+        dialog.add_filter(filter_text)
+
+        filter_py = Gtk.FileFilter()
+        filter_py.set_name("Python files")
+        filter_py.add_mime_type("text/x-python")
+        dialog.add_filter(filter_py)
+
+        filter_any = Gtk.FileFilter()
+        filter_any.set_name("Any files")
+        filter_any.add_pattern("*")
+        dialog.add_filter(filter_any)
+
+    def on_folder_clicked(self, widget):
+        dialog = Gtk.FileChooserDialog("Please choose a folder", self,
+            Gtk.FileChooserAction.SELECT_FOLDER,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             "Select", Gtk.ResponseType.OK))
+        dialog.set_default_size(800, 400)
+
+        response = dialog.run()
+        if response == Gtk.ResponseType.OK:
+            print "Select clicked"
+            print "Folder selected: " + dialog.get_filename()
+        elif response == Gtk.ResponseType.CANCEL:
+            print "Cancel clicked"
+
+        dialog.destroy()
+
 
 def newDigOutCallback(pin, val):
     print ""
@@ -284,9 +336,55 @@ def newDigOutCallback(pin, val):
 
 
 
+#file_win = FileChooserWindow()
+#file_win.show_all()
+def getArduinocodeLibrary():
 
+    dialog = Gtk.FileChooserDialog("Please choose a file", None,
+                                   Gtk.FileChooserAction.OPEN,
+                                   (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+                                    Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+    
+#self.add_filters(dialog)
+    
+    response = dialog.run()
+    if response == Gtk.ResponseType.OK:
+        print "Open clicked"
+        print "File selected: " + dialog.get_filename()
+    elif response == Gtk.ResponseType.CANCEL:
+        print "Cancel clicked"
+    
+    file = dialog.get_filename()
+    dialog.destroy()
+    return file
+    
+
+
+parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator)')
+parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac", help='Arduino code to test')
+args = parser.parse_args()
+
+ard_code=""
+if args.ac != None:
+    ard_code=args.ac[0]
+else:
+    print "Reading via fc"
+    ard_code=getArduinocodeLibrary()
+
+print "ard_code: " + ard_code
+
+searduino_set_arduino_code(ard_code)
+searduino_initialise();
+searduino_start();
+
+print "want to exit"
+
+#parser.print_help()
+
+       
 my_set_callback(newDigOutCallback)
 
+#sys.exit(1)
 
 win = MyWindow()
 win.connect("delete-event", Gtk.main_quit)
@@ -296,7 +394,8 @@ GObject.idle_add(newDigOutCallback)
 GObject.threads_init()
 
 
-#GObject.threads_init()
-#mainloop = GObject.MainLoop()
-#mainloop.run()
+  #GObject.threads_init()
+  #mainloop = GObject.MainLoop()
+  #mainloop.run()
+
 Gtk.main()
