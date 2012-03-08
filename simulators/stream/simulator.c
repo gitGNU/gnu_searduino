@@ -21,8 +21,9 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "stdio.h"
-#include "unistd.h"
+#include <stdio.h>
+#include <unistd.h>
+#include <signal.h>
 
 #include <Arduino.h>
 #include <pthread.h>
@@ -31,6 +32,11 @@
 #include "communication/ext_io.h"
 #include "arduino/setup.h"
 
+
+void sim_sighandler(int sig);
+
+
+pthread_t arduino_thread;
 
 /* 
  * Function to register in the Searduino code
@@ -75,7 +81,20 @@ extern searduino_main_ptr_ptr searduino_main_entry;
 
 void* arduino_code(void *in)
 {
-  searduino_main_entry(NULL);
+  if (searduino_main_entry!=NULL)
+    {
+      searduino_main_entry(NULL);
+    }
+  else
+    {
+      fprintf (stderr, "Couldn't find an entry point for the Arduino code.\n");
+      fprintf (stderr, "This probably means you haven't provided searduino with a shared library containing Arduino code\n");
+      fflush (stderr);
+      printf ("\n");
+      printf ("*** Searduino will now try to close the simulator\n");
+      printf ("*** If this fails, type 'quit' followed by enter (or press Ctrl-c) ***\n");
+      kill(getpid(), SIGUSR1);
+    }
   return NULL;
 }
 
@@ -118,6 +137,10 @@ void* command_reader(void* in)
 	  printf ("Will resume sim\n");
 	  searduino_set_running();
 	}
+      else if (strncmp(buf,"quit",4)==0)
+	{
+	  return ;
+	}
       usleep (100);
     }
 }
@@ -144,15 +167,31 @@ static usage(void)
       ||								\
       ( strncmp(arg, ashort, strlen(ashort))==0))
 
+
+static void 
+close_simulator(pthread_t *t)
+{
+  static int already_closed = 0;
+
+  if (!already_closed)
+    {
+      printf ("Waiting for simulator thread to return\n");
+      pthread_join(*t, NULL);
+      
+      usleep(1000*100);
+      fflush(stdout);
+      printf ("\n *** Simulator will now be closed ***\n");
+      fflush(stdout);
+      already_closed = 1 ;
+    }
+}
+
 int 
 main(int argc, char **argv)
 {
-  pthread_t arduino_thread;
   pthread_t command_thread;
-  char *ard_code;
+  char *ard_code = "" ;
   int i = 0;
-
-  ard_code = "libarduino-code.so";
 
   for (i=1;i<argc;i++)
     {
@@ -186,6 +225,9 @@ main(int argc, char **argv)
 	}
 
     }
+
+  signal(SIGUSR1, sim_sighandler);
+
   
   printf ("Using arduino code from library: %s\n",
 	  ard_code);
@@ -196,13 +238,14 @@ main(int argc, char **argv)
 
   command_reader(NULL);
 
-  printf ("Waiting for simulator thread to return\n");
-  pthread_join(arduino_thread, NULL);
+  close_simulator(&arduino_thread);
 
-  usleep(1000*100);
-  fflush(stdout);
-  printf ("\n *** Simulator will now be closed ***\n");
-  fflush(stdout);
-  
   return 0;
+}
+
+
+void sim_sighandler(int sig)
+{
+  close_simulator(&arduino_thread);
+  exit(0);
 }
