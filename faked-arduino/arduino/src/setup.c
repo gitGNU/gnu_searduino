@@ -90,6 +90,7 @@ int searduino_setup(void)
   static int already_setup = 0;
   int ret;
 
+
   if (already_setup)
     {
       return 0;
@@ -184,21 +185,35 @@ int
 load_arduino_code(void)
 {
   void *arduino_lib;
+  char *ard_lib_name;
 
-  arduino_lib = dlopen ((const char*)get_arduino_code_name(), RTLD_LAZY);
-  if ( arduino_lib == NULL)
-    {
-      printf ("Couldn't open dyn lib\n");
-      return 1;
-    }
-  printf ("setup.c:  code at %p\n", arduino_lib);
+  ard_lib_name = get_arduino_code_name();
+  
 
-  searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
-  if ( searduino_main_entry == NULL)
+  if (ard_lib_name == NULL)
     {
-      printf ("Couldn't find searduino_main_ptr in arduino code\n");
-      return 1;
+      /* If we have NOT been given a library name, we're a static binary */
+      printf ("Statically linked code, not loading\n");
     }
-  printf ("setup.c:  code at %p\n", searduino_main_entry);
+  else
+    {
+      /* If we have been given a library name, load it */
+      printf ("Dynamically linked code\n");
+      arduino_lib = dlopen ((const char*)ard_lib_name, RTLD_LAZY);
+      if ( arduino_lib == NULL)
+	{
+	  printf ("Couldn't open dyn lib\n");
+	  return 1;
+	}
+      printf ("setup.c:  code at %p\n", arduino_lib);
+      
+      searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
+      if ( searduino_main_entry == NULL)
+	{
+	  printf ("Couldn't find searduino_main_ptr in arduino code\n");
+	  return 1;
+	}
+      printf ("setup.c:  code at %p\n", searduino_main_entry);
+    }
   return 0;
 }

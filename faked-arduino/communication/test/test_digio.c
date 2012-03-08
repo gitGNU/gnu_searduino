@@ -62,6 +62,9 @@ int main(void)
 
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
+
+  searduino_set_arduino_code_name("libarduino-code.so.0");
+
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
   srunner_free(sr);

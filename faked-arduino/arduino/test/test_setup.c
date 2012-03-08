@@ -72,6 +72,8 @@ int main(void)
   int num_failed;
   //  test_micros();
 
+  searduino_set_arduino_code_name("libarduino-code.so.0");
+
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
   srunner_run_all(sr, CK_NORMAL);

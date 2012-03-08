@@ -33,33 +33,15 @@ void* (*searduino_setup_ptr)(void);
 void* (*set_dig_input)(int,int);
 int   (*get_dig_output)(int);
 
+extern searduino_main_ptr_ptr searduino_main_entry;
+
 int main(int argc, char **argv)
 {
 
-  void *dlib = dlopen ((const char*)"libtest.so", RTLD_NOW);
-  printf ("dlib:         %d \n", (int)dlib);
-  DLERR(dlib);
-
-  searduino_setup_ptr  = dlsym (dlib, "searduino_setup");
-  printf ("setup      %d \n",  (int)searduino_setup_ptr);
-  DLERR(searduino_setup_ptr); 
+  searduino_set_arduino_code_name("libtest.so");
   
-  main_ptr main_fun  = dlsym (dlib, "searduino_main");
-  printf ("main_fun      %d \n",  (int)main_fun);
-  DLERR(main_fun); 
-
-  searduino_setup_ptr();
-
-
-  set_dig_input = dlsym (dlib, "ext_set_dig_input");
-  printf ("set_dig_input %d \n",  (int)set_dig_input);
-  DLERR(set_dig_input); 
-
-  get_dig_output = dlsym (dlib, "ext_get_dig_output");
-  printf ("get_dig_output %d \n",  (int)get_dig_output);
-  DLERR(get_dig_output); 
-
-  main_fun(); 
+  searduino_setup();
+  searduino_main_entry(NULL);
 
   return 0;
 }

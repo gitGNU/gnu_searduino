@@ -185,10 +185,10 @@ void digitalWrite(uint8_t pin, uint8_t val)
 
 	  /* if (time_diff<20) */
 	  /*   { */
-	      fprintf (stderr,"micro seconds since last update on pin %d : %lu\n", 
-		       pin,
-		       time_diff);
-	    /* } */
+	  fprintf (stderr,"micro seconds since last update on pin %d : %lu\n", 
+		   pin,
+		   time_diff);
+	  /* } */
 	}
       arduino_digital_pins[pin].last_time = cur_time;
     }
@@ -223,7 +223,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
 	  SEARD_ERROR(ret);
 	  return;
 	}
-      printf ("                       discarded calls (not on change) so far: %d\n", discard_ctr);
+      fprintf (stderr, "  discarded calls (not on change) so far: %d\n", discard_ctr);
     }
   else
     {
