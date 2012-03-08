@@ -44,13 +44,20 @@ my_do_sim_callback(uint8_t pin, uint8_t val)
   printf ("\n");
 }
 
-int sim_setup(void)
+int 
+sim_setup(char *ard_lib)
 {
   int ret ; 
 
   searduino_disable_streamed_output();
-  
-  searduino_setup();
+
+  searduino_set_arduino_code_name(ard_lib);
+
+  ret = searduino_setup();
+  if (ret!=0)
+    {
+      return ret;
+    }
   
   ret  = comm_register_digout_sim_cb(my_do_sim_callback);
   if (ret != SEARD_COMM_OK)
@@ -64,9 +71,11 @@ int sim_setup(void)
   return 0;
 }
 
+extern searduino_main_ptr_ptr searduino_main_entry;
+
 void* arduino_code(void *in)
 {
-  searduino_main();
+  searduino_main_entry(NULL);
   return NULL;
 }
 
@@ -114,14 +123,74 @@ void* command_reader(void* in)
 }
 
 
+static const char* ARDUINO_CODE_ARG_LONG  = "--arduino-code";
+static const char* ARDUINO_CODE_ARG_SHORT = "-ac";
+static const char* HELP_ARG_LONG  = "--help";
+static const char* HELP_ARG_SHORT = "-h";
 
-int main(void)
+static usage(void)
+{
+  printf ("searduino-stream-sim\n\n");
+  printf ("OPTIONS\n");
+  printf ("\t%s, %s <library>\n", ARDUINO_CODE_ARG_LONG, ARDUINO_CODE_ARG_SHORT);
+  printf ("\t\tspecify what arduino code (shared library) to load\n");
+  printf ("\t%s, %s <library>\n", HELP_ARG_LONG, HELP_ARG_SHORT);
+  printf ("\t\tprint this text\n");
+  printf ("\n");
+}
+
+#define ARGCMP(arg, along, ashort) 					\
+    ( ( strncmp(arg, along, strlen(along))==0)				\
+      ||								\
+      ( strncmp(arg, ashort, strlen(ashort))==0))
+
+int 
+main(int argc, char **argv)
 {
   pthread_t arduino_thread;
   pthread_t command_thread;
-
+  char *ard_code;
   int i = 0;
-  sim_setup();
+
+  ard_code = "libarduino-code.so";
+
+  for (i=1;i<argc;i++)
+    {
+      if (ARGCMP(argv[i], 
+		 ARDUINO_CODE_ARG_LONG, 
+		 ARDUINO_CODE_ARG_SHORT))
+	{
+	  if (argv[2]==NULL)
+	    {
+	      printf ("Missing argument to %s, %s\n",
+		      ARDUINO_CODE_ARG_LONG, ARDUINO_CODE_ARG_SHORT);
+	      return 1;
+	    }
+	  else
+	    {
+	      ard_code = argv[i+1];
+	      i++;
+	    }
+	}
+      else if (ARGCMP(argv[i], 
+		 HELP_ARG_LONG, 
+		 HELP_ARG_SHORT))
+	{
+	  usage();
+	  return ;
+	}
+      else
+	{
+	  usage();
+	  return ;
+	}
+
+    }
+  
+  printf ("Using arduino code from library: %s\n",
+	  ard_code);
+
+  sim_setup(ard_code);
 
   pthread_create(&arduino_thread, NULL, arduino_code, NULL);
 
