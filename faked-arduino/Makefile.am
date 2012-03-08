@@ -68,4 +68,4 @@ AM_CFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/arduino \
            -I../faked-arduino/include/        
 
-AM_LDFLAGS=
+AM_LDFLAGS= -ldl
