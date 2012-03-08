@@ -27,6 +27,9 @@
 
 #define NR_OF_DIGITAL_PINS 20
 
+typedef void (*searduino_main_ptr)(void* in); 
+typedef searduino_main_ptr searduino_main_ptr_ptr ;
+
 
 #define ENABLE_SLEEP
 #ifdef  ENABLE_SLEEP
@@ -38,7 +41,7 @@
 #define   SEARDUINO_LOOP() for (;;) 
 #endif
 
-void searduino_setup(void);
+int searduino_setup(void);
 
 void searduino_set_paused(void);
 
@@ -53,3 +56,6 @@ uint8_t searduino_is_paused(void);
 uint8_t searduino_is_halted(void);
 
 void init(void);
+
+int 
+searduino_set_arduino_code_name(const char* libname);

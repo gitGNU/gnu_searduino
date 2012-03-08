@@ -47,10 +47,10 @@ pthread_t  *searduino_thread = &searduino_thread_impl;
 #endif
 
 
-
 static PyObject *my_callback = NULL;
 static PyObject *py_my_set_callback(PyObject *dummy, PyObject *args);
 
+extern searduino_main_ptr_ptr searduino_main_entry;
 
 void* arduino_code(void *in);
 
@@ -228,7 +228,8 @@ void* arduino_code(void *in)
 
   usleep(1000*1000);
   fprintf (stderr, "Starting Arduino code\n");
-  searduino_main();
+  printf ("Calling()\n"); fflush(stdout);usleep(1000000);
+  searduino_main_entry(NULL);
 
   return NULL;
 }
@@ -270,6 +271,7 @@ py_my_set_callback(PyObject *dummy, PyObject *args)
  */
 void initpearduino()
 {
+  int ret;
 
   PyEval_InitThreads();
   //PyEval_ReleaseLock();
@@ -278,8 +280,14 @@ void initpearduino()
   PEARDUINO_PRINT_INSIDE_STR("Init pearduino module\n");
   (void) Py_InitModule("pearduino", myModule_methods);
 
+  
   PEARDUINO_PRINT_INSIDE_STR("Setting up searduino\n");
-  searduino_setup();
+  searduino_set_arduino_code_name("libschneben.so");
+  ret = searduino_setup();
+  if (ret!=0)
+    {
+      return;
+    }
 
   PEARDUINO_PRINT_INSIDE_STR("Register callback for dig out"
 			"(in communication module)\n");

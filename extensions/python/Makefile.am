@@ -28,7 +28,9 @@ libpearduino_la_SOURCES = pearduino.c
 lib_LTLIBRARIES = libpearduino.la
 
 AM_CFLAGS=@PYTHON_CPPFLAGS@ -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/
-AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/  -L../arduino-lib/ -lsearduinostub   -larduino-code 
+AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/   -lsearduinostub   
+#-L../arduino-lib/
+#-larduino-code 
 
 install-exec-hook:
 	-rm $(DESTDIR)$(libdir)/pearduino.so

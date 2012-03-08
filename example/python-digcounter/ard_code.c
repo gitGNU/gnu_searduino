@@ -34,7 +34,7 @@
 int searduino_exec = 1 ;
 
 
-void setup() {
+void setup(void) {
   int i ; 
 
   pinMode(1, OUTPUT);      
@@ -66,7 +66,8 @@ int main(void)
 {
   int i =0;
   int j ;
-  init();   
+
+  //  init();   
 
   setup();
 

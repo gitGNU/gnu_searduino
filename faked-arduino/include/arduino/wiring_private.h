@@ -23,8 +23,6 @@
 
 #include "utils/types.h"
 
-void searduino_setup(void);
-
 void pinMode(uint8_t pin, uint8_t mode);
 
 void digitalWrite(uint8_t pin, uint8_t val);

@@ -20,10 +20,14 @@
  * Foundation, Inc., 51 Franklin Street, Boston,            
  * MA  02110-1301, USA.                                              
  ****/
+#include <dlfcn.h>
+#include <stdlib.h>
+#include <string.h>
 
 
 #include "arduino/wiring_private.h"
 #include "arduino/pins_arduino.h"
+#include "arduino/setup.h"
 #include "../include/error.h"
 #include "utils/print.h"
 #include "utils/types.h"
@@ -76,16 +80,24 @@ void init(void)
   searduino_setup();
 }
 
-void searduino_setup(void)
+int searduino_setup(void)
 {
   static int already_setup = 0;
   int ret;
 
   if (already_setup)
     {
-      return;
+      return 0;
     }
   PRINT_FUNCTION_NAME_NOARGS();
+
+  ret = load_arduino_code();
+  if (ret!=0)
+    {
+      printf ("Setting up arduino code: %d\n", 
+	      ret);
+      return 1;
+    }
 
   init_comm();
 
@@ -112,5 +124,78 @@ void searduino_setup(void)
   searduino_set_running();
 
   already_setup=1;
+
+  return 0;
 }
 
+
+searduino_main_ptr_ptr searduino_main_entry;
+static char arduino_code[1024];
+static const char *default_arduino_code = "libarduino-code.so";
+
+static const char * 
+get_arduino_code_name(void)
+{
+  char *ret;
+  printf ("Getting arduino lib name\n");
+  if ((arduino_code==NULL) || 
+      (arduino_code[0]=='\0'))
+    {
+      ret = default_arduino_code;
+    }
+  else
+    {
+      ret = arduino_code;
+    }
+
+  printf ("Returning: %s\n", ret);
+  return ret;
+}
+
+
+
+int 
+searduino_set_arduino_code_name(const char* libname)
+{
+  
+  if (libname==NULL)
+    {
+      printf("Resetting arduino code name");
+      arduino_code[0]='\0';
+      return 1;
+    }
+  else if (strlen(libname)>=1024)
+    {
+      printf ("Too big libname\n");
+      printf ("Replace this with not hard coding ret value\n");
+      return 1;
+    }
+
+  printf("Setting arduino code name: %s\n", libname);
+  strncpy (arduino_code, libname, 1024);
+
+  return 0;
+}
+
+
+int
+load_arduino_code(void)
+{
+  void *arduino_lib;
+
+  arduino_lib = dlopen ((const char*)get_arduino_code_name(), RTLD_LAZY);
+  if ( arduino_lib == NULL)
+    {
+      printf ("Couldn't open dyn lib\n");
+      return 1;
+    }
+  printf ("setup.c:  code at %p\n", arduino_lib);
+  searduino_main_entry = (searduino_main_ptr *)dlsym(arduino_lib, "searduino_main");
+  if ( searduino_main_entry == NULL)
+    {
+      printf ("Couldn't find searduino_main_ptr in arduino code\n");
+      return 1;
+    }
+  printf ("setup.c:  code at %p\n", searduino_main_entry);
+  return 0;
+}
