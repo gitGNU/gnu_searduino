@@ -1,14 +1,12 @@
 Arduino devel tool:
 
-* Stub libraries for Arduino
+* C libraries for Arduino (from the Arduino sources)
 
 * Python scripting interface to test your Arduino programs locally
 
-* Arduino simulator to test your Arduino programs locally
+* GUI simulator (written in Python) to test your Arduino programs locally
 
-* stdin/stdout "simualtor" with which you can talk with your Arduino program (locally)
-
-* C/C++ interfaces for Arduino easier accessible 
+* stdin/stdout "simulator" (written in C) with which you can talk with your Arduino program (locally)
 
 * Makefiles to ease up development and uploading from command line
 
