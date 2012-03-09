@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <dlfcn.h>
+#include "setup.h"
 
 #define DLERR(d)  if(d==0) { printf ("DL Error:  %s\n", dlerror());  exit(1); }
 
@@ -37,11 +38,9 @@ extern searduino_main_ptr_ptr searduino_main_entry;
 
 int main(int argc, char **argv)
 {
-
   searduino_set_arduino_code_name("libtest.so");
   
   searduino_setup();
   searduino_main_entry(NULL);
-
   return 0;
 }
