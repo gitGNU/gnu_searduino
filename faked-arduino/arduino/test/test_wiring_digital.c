@@ -167,7 +167,7 @@ int main(void)
   SRunner *sr = srunner_create(s);
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
-  searduino_set_arduino_code_name("libarduino-code.so.0");
+  searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
 
   //  srunner_print(sr, CK_VERBOSE);
 

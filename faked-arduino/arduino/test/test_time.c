@@ -148,7 +148,7 @@ int main(void)
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
 
-  searduino_set_arduino_code_name("libarduino-code.so.0");
+  searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
 
 
   srunner_run_all(sr, CK_NORMAL);
