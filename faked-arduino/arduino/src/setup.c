@@ -39,7 +39,7 @@ void     digin_callback (uint8_t pin, uint8_t val);
 uint8_t  digout_callback(uint8_t pin);
 uint8_t  dig_mode_callback(uint8_t pin);
 
-static int searduino_exec ;
+int searduino_exec ;
 
 /* global */
 searduino_main_ptr_ptr searduino_main_entry = NULL;
