@@ -28,7 +28,7 @@ log_and_exec()
 {
     LOCAL_START_SEC=$(date '+%s')
     logn "$*"
-    $*  >> $LOG_FILE 2&>1
+    $*   2&>1 >> $LOG_FILE
     exit_on_failure $? ""
 }
 
