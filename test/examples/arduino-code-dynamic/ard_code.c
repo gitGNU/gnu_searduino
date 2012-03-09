@@ -41,7 +41,11 @@ int main(void)
     {
       digitalWrite(13,i++%2);
       i++;
-      delay(1000); 
+      delay(300); 
+
+      printf ("i:%d\n", i);
+      /* We can't test "forever" */
+      if (i>30) { return 0; }
     }
   return 0;
 }
