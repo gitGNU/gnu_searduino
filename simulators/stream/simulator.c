@@ -90,11 +90,12 @@ void* arduino_code(void *in)
       fprintf (stderr, "Couldn't find an entry point for the Arduino code.\n");
       fprintf (stderr, "This probably means you haven't provided searduino with a shared library containing Arduino code\n");
       fflush (stderr);
-      printf ("\n");
-      printf ("*** Searduino will now try to close the simulator\n");
-      printf ("*** If this fails, type 'quit' followed by enter (or press Ctrl-c) ***\n");
-      kill(getpid(), SIGUSR1);
     }
+
+  printf ("\n");
+  printf ("*** Searduino will now try to close the simulator\n");
+  printf ("*** If this fails, type 'quit' followed by enter (or press Ctrl-c) ***\n");
+  kill(getpid(), SIGUSR1);
   return NULL;
 }
 
