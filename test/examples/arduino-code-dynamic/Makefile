@@ -29,7 +29,8 @@ SRC_C=ard_code.c
 
 SEARDUINO_PATH=/tmp/TMP_INSTALL3/
 
-USER_LD_FLAGS= -ldl 
+USER_C_FLAGS=  -fPIC
+USER_LD_FLAGS= -ldl -fPic
 
 $(SHLIB): 
 
