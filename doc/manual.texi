@@ -261,6 +261,7 @@ your @code{Makefile} (before you include @code{searduino.mk}):
 @*
 @code{PROG=somename}
 @*
+@i{Note: You must NOT have the variable SHLIB set in the Makefile}
 
 Check out the example as found in
 @code{example/python-digcounter}. Edit the Makefile
@@ -309,10 +310,69 @@ You switch on and off this mode as many times you want during execution using th
 
 
 @section Streamed simulator
-With this mode you can enter commands to the Arduino code. To enable this code you have to call the function @code{void searduino_enable_command_reader(void)} before you call @code{void init_comm(void)}.
+With the program searduino-stream-sim you can test your Arduino
+program and give input data to it using stdin. 
 
-@b{THIS SECTION NEEDS TO BE UPDATED WITH INFO ON HOW TO MAKE STREAMED
-SIM HAPPEN}
+@subsection Preparing your arduino code for the simulator
+First of all you must build your Arduino code as a shared library. To
+do this you must set the following variables in your @code{Makefile}
+(before you include @code{searduino.mk}):
+
+@* 
+@code{ARDUINO=stub} 
+@*
+@code{SHLIB=libyourcode.so} 
+@*
+@*
+@i{Note: You must NOT have the variable PROG set in the Makefile}
+
+After this you must do a clean build:
+
+@code{make -f Makefile.digcounter clean}
+@*
+@code{make -f Makefile.digcounter}
+@*
+@*
+
+@subsection Preparing the simulator
+Next thing to do is to make sure that your system can find all the
+shared libraries. Type:
+
+@*
+@code{export LD_LIBRARY_PATH=/opt/searduino/lib}
+@*
+@*
+
+By doing this we tell the system to look for libraries in
+@code{/opt/searduino/lib}, which is where we assume you've installed
+searduino in.
+
+@*
+
+We're now ready to launch the simulator, but let's do a quick check
+before we proceed. Let's verify that the dynamic loader will find all
+the libraries needed by pearduino (Searduino's Python library). On
+GNU/Linux and similar system do:
+@*
+@code{ldd /opt/searduino/lib/pearduino.so}
+@*
+
+We are, as before, assuming you've installed Searduino in
+/opt/searduino. ldd (a tool to print out dynamic link dependencies)
+will print out a list of the libraries pearduino depends on. Make sure
+that you see no printouts waring you of missing libraries (ldd reports
+this by saying ``not found''). 
+
+@*
+If this went ok, we're finally ready to proceed by invoking pardon.
+
+@subsection Launching the simulator
+You need to pass the arduino code to load by using command line
+arguments, here how to do it:
+@*
+@code{/opt/searduino/bin/searduino-stream-sim --arduino-code /some/dir/libyourcode.so}
+@*
+
 
 @subsection Streamed simulator input syntax
 
@@ -336,36 +396,19 @@ SIM HAPPEN}
 
 
 @subsection Scripting with bash
+TBD
 @subsection Scripting over the network
+TBD
 
 @section Pardon simulator
-With Searduino you test your Arduino program in the Python simulator
-(written in Python using Gtk). Searduino comes with a Python library
-for this. It doesn't take much to set things up, but for now it's
-somewhat tricky.
+With Searduino you can test your Arduino program in the Python
+simulator (written in Python using Gtk). 
 
-First of all you must build your Arduino code as a shared library. To
-do this you must set the following variables in your @code{Makefile}
-(before you include @code{searduino.mk}):
+@subsection Preparing your arduino code for the simulator
+The procedure for doing this is the same as described in the section
+``Streamed simulator''
 
-@* 
-@code{ARDUINO=stub} 
-@*
-@code{SHLIB=libarduino-code.so.0} 
-@*
-@*
-@i{Note #1: The library must be called: libarduino-code.so.0}
-@*
-@i{Note #2: You must NOT have the variable PROG set}
-
-After this you must do a clean build:
-
-@code{make -f Makefile.digcounter clean}
-@*
-@code{make -f Makefile.digcounter}
-@*
-@*
-
+@subsection Setting up the Python environment
 Now, the shared library is ready for use by python. It's almost time
 to start the simulator. But there's some few more things to do before
 we're there. First, we must tell Python where to look for the
@@ -379,46 +422,35 @@ assuming you've installed Searduino in @i{/opt/searduino/}.
 
 @* 
 
-Next thing to do is to make sure that your system can find all the
-shared libraries. Type:
 
-@*
-@code{export LD_LIBRARY_PATH=.:/opt/searduino/lib}
-@*
-@*
-@i{Note: there's a dot before the first semi colon}
-By doing this we tell the system to look for libraries in the current
-directory (@code{.}) and in @code{/opt/searduino/lib}, which is where
-we assume you've installed searduino in.
-@*
+@subsection Preparing the simulator
+The procedure for doing this is the same as described in the section
+``Streamed simulator''
 
-We're now ready to launch the simulator, but let's do a quick check
-before we proceed. Let's verify that the dynamic loader will find all
-the libraries needed by pearduino (Searduino's Python library). On
-GNU/Linux and similar system do:
-@*
-@code{ldd /opt/searduino/lib/pearduino.so}
-@*
+@subsection Launching the simulator
 
-We are, as before, assuming you've installed Searduino in
-/opt/searduino. Ldd (a tool to print out dynamic link dependencies)
-will print out a list of the libraries pearduino depends on. Make sure
-that you see no printouts waring you of missing libraries (ldd reports
-this by saying ``not found''). Also make sure that the
-@code{libarduino.so.0} file ldd reports is the one you want to use.
-@*
-If this went ok, we're finally ready to proceed. Invoke pardon:
 @*
 @*
 @code{/opt/searduino/bin/pardon}
 @*
 
+Pardon will ask you to point to the shared library containing the
+arduino code you want to execute in the simulator. Browse your way to
+the file and click ok. Now pardon should be executing your binary.
+
+If you want to pass the arduino code to load by using command line
+arguments, here how to do it:
+@*
+@code{/opt/searduino/bin/pardon --arduino-code /some/dir/libyourcode.so}
+@*
 
 
 @section Python scripts
 With Searduino you can write test code for your Arduino program in
-Python. Searduino comes with a Python library for this. It doesn't take
-much to set things up, but for now it's somewhat tricky.
+Python. Searduino comes with a Python library, called pearduino, for
+this. 
+
+Until we've written this section, we refer to the example @code{example/python-digcounter/simple-hw.py}.
 
 @section xxx simulator
 
