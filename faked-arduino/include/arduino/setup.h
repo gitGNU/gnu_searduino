@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "utils/types.h"
 
 #define NR_OF_DIGITAL_PINS 20
 
@@ -59,3 +60,4 @@ void init(void);
 
 int 
 searduino_set_arduino_code_name(const char* libname);
+
