@@ -24,7 +24,7 @@
 
 ARDUINO=stub
 
-SHLIB=arduino-test-code.so
+SHLIB=libarduino-test-code.so
 SRC_C=ard_code.c
 
 SEARDUINO_PATH=/tmp/TMP_INSTALL3/
