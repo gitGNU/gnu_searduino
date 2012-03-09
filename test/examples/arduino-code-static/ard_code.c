@@ -39,9 +39,13 @@ int main(void)
   
   SEARDUINO_LOOP()
     {
-      digitalWrite(13,i++%2);
+      digitalWrite(13,i%2);
+      delay(300); 
+      if (i>20) 
+	{
+	  return 0;
+	}
       i++;
-      delay(1000); 
     }
   return 0;
 }

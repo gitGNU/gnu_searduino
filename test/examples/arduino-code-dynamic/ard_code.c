@@ -39,13 +39,12 @@ int main(void)
   
   SEARDUINO_LOOP()
     {
-      digitalWrite(13,i++%2);
-      i++;
+      digitalWrite(13,i%2);
       delay(300); 
+      i++;
 
-      printf ("i:%d\n", i);
       /* We can't test "forever" */
-      if (i>30) { return 0; }
+      if (i>20) { return 0; }
     }
   return 0;
 }
