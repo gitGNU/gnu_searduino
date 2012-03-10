@@ -72,9 +72,9 @@ log "Building and checking"
 
 init_logging
 
-#log_and_exec prepare
-#log_and_exec build
-#log_and_exec check
+log_and_exec prepare
+log_and_exec build
+log_and_exec check
 log_and_exec packit
 
 close_logging

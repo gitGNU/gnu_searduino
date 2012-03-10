@@ -1,7 +1,9 @@
 #!/bin/sh
 
 LOG_FILE=test-dist.log
-if [ ! -f $FUNC_FILE ]
+
+FUNC_FILE=$(dirname $0)/functions
+if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
 then
     echo "Can't find the file: 'function'"
     echo "... bailing out"

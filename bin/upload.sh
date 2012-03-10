@@ -8,11 +8,13 @@ then
     exit 1
 fi
 
-echo "Signing $DIST_FILE"
+
+
+echo "Signing $DIST_FILE: gpg -b $DIST_FILE"
 gpg -b $DIST_FILE
 
-echo "Verifying"
-gpg --verify $DIST_FILE
+echo "Verifying: gpg --verify $DIST_FILE"
+gpg --verify $DIST_FILE.sig
 
 echo "Changing permissions"
 chmod 644 ${DIST_FILE} 

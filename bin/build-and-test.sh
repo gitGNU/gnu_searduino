@@ -4,7 +4,9 @@ TMP_INST=/tmp/TMP_INSTALL3
 
 LOG_FILE=build-and-test.log
 
-if [ ! -f $FUNC_FILE ]
+
+FUNC_FILE=$(dirname $0)/functions
+if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
 then
     echo "Can't find the file: 'function'"
     echo "... bailing out"
