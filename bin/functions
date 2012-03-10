@@ -1,0 +1,52 @@
+log()
+{
+    echo "$*"
+}
+
+logn()
+{
+    printf "%40s:" "$(echo $* | awk '{ print $1}' )"
+}
+
+exit_on_failure()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -ne 0 ]
+    then
+	echo "ERROR:  $2"
+	exit $1
+    else
+	printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+    fi
+}
+
+log_and_exec()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    logn "$*"
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_failure $? ""
+}
+
+set_vars()
+{
+    SEARD_VERSION=$(grep AC_INIT configure.ac  | awk ' { print $2}' | sed -e 's,\[,,g' -e  's,\],,g' -e 's/,//g')
+    CPU=$(uname -p)
+}
+
+init_logging()
+{
+    mkdir -p $(pwd)/logs
+    REAL_LOG_FILE=$(pwd)/logs/$(basename $0 | sed 's,\.sh,,g').log
+    rm -f $REAL_LOG_FILE
+    START_SEC=$(date '+%s')
+}
+
+close_logging()
+{
+    STOP_SEC=$(date '+%s')
+    
+    log "It all took: $(( $STOP_SEC - $START_SEC )) seconds."
+}
+
+set_vars

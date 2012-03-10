@@ -1,6 +1,14 @@
 #!/bin/sh
 
 LOG_FILE=test-dist.log
+if [ ! -f $FUNC_FILE ]
+then
+    echo "Can't find the file: 'function'"
+    echo "... bailing out"
+    exit 1
+fi
+
+source $FUNC_FILE
 
 DIST_FILE=$1
 if [ "$DIST_FILE" = "" ]
@@ -17,38 +25,6 @@ fi
 echo "Working with: $DIST_FILE"
 
 TMP_INST=/tmp/TMP_INSTALL3
-
-log()
-{
-    echo "$*"
-}
-
-logn()
-{
-    printf "%40s:" "$(echo $* | awk '{ print $1}' )"
-}
-
-exit_on_failure()
-{
-    STOP_SEC=$(date '+%s')
-    if [ $1 -ne 0 ]
-    then
-	echo "ERROR:  $2"
-	exit $1
-    else
-	printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
-    fi
-}
-
-log_and_exec()
-{
-    LOCAL_START_SEC=$(date '+%s')
-    logn "$*"
-    $*   2&>1 >> $LOG_FILE
-    exit_on_failure $? ""
-}
-
-
 
 prepare()
 {
@@ -97,21 +73,15 @@ test_code()
 }
 
 
+init_logging
 log "Testing distribution"
-
-rm -f $LOG_FILE
-
-START_SEC=$(date '+%s')
 
 log_and_exec prepare
 log_and_exec build
 log_and_exec check_sw
 log_and_exec install_sw
 log_and_exec test_code
-STOP_SEC=$(date '+%s')
-
-log "It all took: $(( $STOP_SEC - $START_SEC )) seconds."
-
+close_logging
 
 exit 0
 

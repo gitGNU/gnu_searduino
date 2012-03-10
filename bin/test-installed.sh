@@ -4,39 +4,18 @@ TMP_INST=/tmp/TMP_INSTALL3
 
 LOG_FILE=test-installed.log
 
-log()
-{
-    echo "$*"
-}
+FUNC_FILE=$(dirname $0)/functions
 
-logn()
-{
-    printf "%40s:" "$(echo $* | awk '{ print $1}' )"
-}
+if [ ! -f $FUNC_FILE ]
+then
+    echo "Can't find the file: 'function'"
+    echo "... bailing out"
+    exit 1
+fi
 
-exit_on_failure()
-{
-    STOP_SEC=$(date '+%s')
-    if [ $1 -ne 0 ]
-    then
-	echo "ERROR:  $2"
-	exit $1
-    else
-	printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
-    fi
-}
-
-log_and_exec()
-{
-    LOCAL_START_SEC=$(date '+%s')
-    logn "$*"
-    $*   2&>1 >> $LOG_FILE
-    exit_on_failure $? ""
-}
+source $FUNC_FILE
 
 
-
-#log " * Compile static arduino code for local execution"
 test_static()
 {
     cd test/examples/arduino-code-static/
@@ -80,20 +59,13 @@ test_streamed()
     cd $START_DIR
 }
 
+init_logging
 log "Testing using examples"
 START_DIR=$(pwd)
-
-rm -f $LOG_FILE
-
-START_SEC=$(date '+%s')
-
 
 log_and_exec test_static
 log_and_exec test_static2
 log_and_exec test_dynamic
 log_and_exec test_streamed
 
-STOP_SEC=$(date '+%s')
-
-log "It all took: $(( $STOP_SEC - $START_SEC )) seconds."
-
+close_logging
