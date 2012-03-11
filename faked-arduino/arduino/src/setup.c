@@ -136,7 +136,7 @@ int searduino_setup(void)
 
 
 
-static const char * 
+static char * 
 get_arduino_code_name(void)
 {
   char *ret = NULL;
