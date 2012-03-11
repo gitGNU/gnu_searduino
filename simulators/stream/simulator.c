@@ -138,6 +138,16 @@ void* command_reader(void* in)
 	  printf ("Will resume sim\n");
 	  searduino_set_running();
 	}
+      else if (strncmp(buf,"limit",5)==0)
+	{
+	  printf ("setting limit\n");
+	  set_digitalWrite_timelimit(100000);
+	}
+      else if (strncmp(buf,"ulimit",5)==0)
+	{
+	  printf ("setting limit\n");
+	  set_digitalWrite_timelimit(10);
+	}
       else if (strncmp(buf,"quit",4)==0)
 	{
 	  return ;
