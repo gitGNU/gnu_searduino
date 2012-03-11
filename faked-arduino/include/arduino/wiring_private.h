@@ -36,3 +36,9 @@ uint8_t
 get_nr_of_pins(void);
 
 int ext_set_input(uint8_t pin, uint8_t val);
+
+void 
+set_digitalWrite_timelimit(unsigned int lim);
+
+unsigned int
+get_digitalWrite_timelimit(void);
