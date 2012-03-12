@@ -121,7 +121,7 @@ digin_callback(uint8_t pin, uint8_t val)
       return;
     }
 
-  arduino_digital_pins[pin].val=(val!=0);
+  set_digital_pin_val(pin,val);
   return;
 }
 

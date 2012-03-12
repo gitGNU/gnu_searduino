@@ -57,7 +57,7 @@ static arduino_pin arduino_analog_pins[NR_OF_ANALOG_PINS];
 #define get_analog_pin_mode(pin)      (arduino_analog_pins[pin].mode) 
 #define set_analog_pin_mode(pin,mode)  arduino_analog_pins[pin].mode=mode; 
 #define get_analog_pin_val(pin)       (arduino_analog_pins[pin].val) 
-#define set_analog_pin_val(pin,val)    arduino_analog_pins[pin].val=(val!=0);
+#define set_analog_pin_val(pin,val)    arduino_analog_pins[pin].val=(val%1024);
 
 
 uint8_t analog_reference = 0;
@@ -84,7 +84,8 @@ analogRead(uint8_t pin)
 
 void analogWrite(uint8_t pin, unsigned int val)
 {
-  arduino_analog_pins[pin].val=val;
+  set_analog_pin_val(pin,val)
+
   /* printf ("Ard coded analogWrite (%d,%d) \n", pin, val); */
   comm_analog_write_outpin(pin,val);
 }
@@ -107,7 +108,7 @@ anain_callback(uint8_t pin, unsigned int val)
       return ;
     }
 
-  arduino_analog_pins[pin].val=val;
+  set_analog_pin_val(pin,val);
 
   /* printf ("%s:%s   storing in[%d].val=%d  (%d)\n",__FILE__, __func__, pin, arduino_analog_pins[pin].val, val);  */
   return;
