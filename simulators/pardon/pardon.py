@@ -40,7 +40,7 @@ from gi.repository import GObject
 
 paused = 0 
 
-size = 20 
+size = 12
 
 redColor = Gdk.RGBA()
 redColor.red=1.0
@@ -141,7 +141,7 @@ class digitalPin(Gtk.HBox):
         
 
         # Label 
-        label = Gtk.Label("Digital pin ")
+        label = Gtk.Label("Pin ")
         pinLabel = Gtk.Label(str(nr))
         pinLabel.set_width_chars(2);
 
@@ -176,7 +176,9 @@ class digitalPin(Gtk.HBox):
     def setMode(self, mode):
         if (mode==1):
             self.mode.set_text("OUTPUT")
+            self.input.set_property('visible', False)
         else:
+            self.input.set_property('visible', True)
             self.mode.set_text("INPUT")
             self.output_label.set_text("")
 
@@ -215,7 +217,7 @@ class analogPin(Gtk.HBox):
         
 
         # Label 
-        label = Gtk.Label("Analog pin ")
+        label = Gtk.Label("Pin ")
         pinLabel = Gtk.Label(str(nr))
         pinLabel.set_width_chars(2);
 
