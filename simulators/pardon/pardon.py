@@ -127,9 +127,9 @@ class SpinButtonWindow(Gtk.Box):
     def on_update(self, disc):
         self.setIncrement()
 
-        print "===========================================  " +         str(self.spinbutton.get_value_as_int())
+#        print "===========================================  " +         str(self.spinbutton.get_value_as_int())
         searduino_set_digitalWrite_timelimit(int(self.spinbutton.get_value_as_int()))
-        print "======= set to: " + str(searduino_get_digitalWrite_timelimit())
+#        print "======= set to: " + str(searduino_get_digitalWrite_timelimit())
 
 
 class digitalPin(Gtk.HBox):
@@ -190,8 +190,8 @@ class digitalPin(Gtk.HBox):
             return 0
 
     def setValCond(self):
-        if py_get_pin_mode(self.myNr)==1:
-            self.output_label.set_text(str(py_digitalRead(self.myNr)))
+        if searduino_get_pin_mode(self.myNr)==1:
+            self.output_label.set_text(str(searduino_digitalRead(self.myNr)))
 
     def on_dig_toggled(self, widget, name):
 #        print "GUI 1 toggle"
@@ -254,8 +254,8 @@ class analogPin(Gtk.HBox):
 #        self.input.connect("clicked", self.on_dig_toggled, "1")
 
     def on_update(self,disc):
-        py_ext_set_ana_input(self.myNr,
-                             self.spinbutton.get_value_as_int())
+        searduino_ext_set_ana_input(self.myNr,
+                                    self.spinbutton.get_value_as_int())
 
     def setMode(self, mode):
         if (mode==1):
@@ -275,8 +275,8 @@ class analogPin(Gtk.HBox):
             return 0
 
     def setValCond(self):
-        if py_get_pin_mode(self.myNr)==1:
-            self.output_label.set_text(str(py_digitalRead(self.myNr)))
+        if searduino_get_pin_mode(self.myNr)==1:
+            self.output_label.set_text(str(searduino_digitalRead(self.myNr)))
 
     def on_dig_toggled(self, widget, name):
 #        print "GUI 1 toggle"
@@ -316,7 +316,7 @@ class MyWindow(Gtk.Window):
             print "no GUI update"
         else:
             for i in range(1,size-1):
-                self.pinUpdateMode(i,py_get_pin_mode(i));
+                self.pinUpdateMode(i,searduino_get_pin_mode(i));
                 
         self.sendInputPins()        
         return True
@@ -328,13 +328,13 @@ class MyWindow(Gtk.Window):
  #           print "  --------------------------------------------- SIN"
             for i in range(1,size-1):
   #              print "  --------------------------------------------- SIN " + str(i)
-                if (py_get_pin_mode(i)==0):
+                if (searduino_get_pin_mode(i)==0):
                     self.semaphore.acquire()        
                     value = self.digs[i].getVal()
                     self.semaphore.release()
 #                    print "                                                                         WILL SEND: " + str(value) + "  from " + str(i)
-                    py_ext_set_dig_input(i,
-                                     value)
+                    searduino_ext_set_dig_input(i,
+                                               value)
                 
         return True
         
@@ -425,7 +425,7 @@ class MyWindow(Gtk.Window):
 #        print "CHECK pin set in GUI: "+str(nr)+ ": " + str(val)
         if (val_str=="on"):
             val=1
-        py_ext_set_dig_input(nr,val)            
+        searduino_ext_set_dig_input(nr,val)            
 #        self.updateAllOut()
 
 
@@ -483,16 +483,16 @@ class FileChooserWindow(Gtk.Window):
 
 
 def newDigOutCallback(pin, val):
-    print ""
-    print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
-    print ""
+#    print ""
+#    print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
+#    print ""
     global win
     win.updateDigOutPin(pin,val)
 
 def newAnaOutCallback(pin, val):
-    print ""
-    print "==================== in Py:  new ANALOG out: " + str(pin) + " = " + str(val)
-    print ""
+#    print ""
+#    print "==================== in Py:  new ANALOG out: " + str(pin) + " = " + str(val)
+#    print ""
     global win
     win.updateAnaOutPin(pin,val)
 
@@ -543,8 +543,8 @@ searduino_start();
 #parser.print_help()
 
        
-my_set_dig_callback(newDigOutCallback)
-my_set_ana_callback(newAnaOutCallback)
+searduino_set_dig_callback(newDigOutCallback)
+searduino_set_ana_callback(newAnaOutCallback)
 
 #sys.exit(1)
 
