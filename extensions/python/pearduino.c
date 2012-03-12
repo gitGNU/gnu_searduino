@@ -35,8 +35,7 @@ pthread_t   searduino_thread_impl;
 pthread_t  *searduino_thread = &searduino_thread_impl;
 
 
-
-#define PEARDUINO_DEBUG_FUNCATION_CALLS
+//#define PEARDUINO_DEBUG_FUNCATION_CALLS
 
 #ifdef PEARDUINO_DEBUG_FUNCATION_CALLS
 #define PEARDUINO_PRINT_IN()            printf ("--->  %s() \n", __func__); fflush(stdout); 
@@ -53,8 +52,8 @@ pthread_t  *searduino_thread = &searduino_thread_impl;
 
 static PyObject *my_dig_callback = NULL;
 static PyObject *my_ana_callback = NULL;
-static PyObject *py_my_set_dig_callback(PyObject *dummy, PyObject *args);
-static PyObject *py_my_set_ana_callback(PyObject *dummy, PyObject *args);
+static PyObject *c_my_set_dig_callback(PyObject *dummy, PyObject *args);
+static PyObject *c_my_set_ana_callback(PyObject *dummy, PyObject *args);
 
 extern searduino_main_ptr_ptr searduino_main_entry;
 
@@ -87,7 +86,6 @@ void new_dig_out(uint8_t pin, uint8_t val)
       /* printf(" Arguments to callback:  ");      fflush(stdout); */
       //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
-      PEARDUINO_PRINT_INSIDE_STR("    Will call digital callback\n");
       result = PyEval_CallObject(my_dig_callback, arglist);
 
       Py_DECREF(arglist);
@@ -134,8 +132,6 @@ void new_ana_out(uint8_t pin, unsigned int val)
       /* printf(" Arguments to callback:  ");      fflush(stdout); */
       //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
-      PEARDUINO_PRINT_INSIDE_STR("    Will call ana callback\n");
-      printf("    Will call ana callback: %p\n", my_ana_callback);
       result = PyEval_CallObject(my_ana_callback, arglist);
 
       Py_DECREF(arglist);
@@ -157,7 +153,7 @@ void new_ana_out(uint8_t pin, unsigned int val)
 
 
 
-static PyObject* c_py_get_pin_mode(PyObject* self, PyObject* args)
+static PyObject* c_get_pin_mode(PyObject* self, PyObject* args)
 {
   uint8_t pin;
   uint8_t mode ;
@@ -172,7 +168,7 @@ static PyObject* c_py_get_pin_mode(PyObject* self, PyObject* args)
   return o;
 }
 
-static PyObject* c_searduino_set_arduino_code(PyObject* self, PyObject* args)
+static PyObject* c_set_arduino_code(PyObject* self, PyObject* args)
 {
   uint8_t ret;
   char *ard_lib;
@@ -187,7 +183,7 @@ static PyObject* c_searduino_set_arduino_code(PyObject* self, PyObject* args)
   return o;
 }
 
-static PyObject* c_searduino_set_digitalWrite_timelimit(PyObject* self, PyObject* args)
+static PyObject* c_set_digitalWrite_timelimit(PyObject* self, PyObject* args)
 {
   unsigned int ret;
   unsigned int val;
@@ -204,7 +200,7 @@ static PyObject* c_searduino_set_digitalWrite_timelimit(PyObject* self, PyObject
   return o;
 }
 
-static PyObject* c_searduino_get_digitalWrite_timelimit(PyObject* self, PyObject* args)
+static PyObject* c_get_digitalWrite_timelimit(PyObject* self, PyObject* args)
 {
   unsigned int ret;
   PEARDUINO_PRINT_IN();
@@ -241,7 +237,7 @@ static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
 }
 
 
-static PyObject* c_searduino_start(PyObject* self, PyObject* args)
+static PyObject* c_start(PyObject* self, PyObject* args)
 {
   uint8_t ret;
   PEARDUINO_PRINT_IN();
@@ -258,7 +254,7 @@ static PyObject* c_searduino_start(PyObject* self, PyObject* args)
 /*
  * Function to be called from Python
  */
-static PyObject* py_c_digitalRead(PyObject* self, PyObject* args)
+static PyObject* c_digitalRead(PyObject* self, PyObject* args)
 {
   int pin;
   uint8_t val ;
@@ -277,7 +273,7 @@ static PyObject* py_c_digitalRead(PyObject* self, PyObject* args)
 /*
  * Function to be called from Python
  */
-static PyObject* py_c_analogRead(PyObject* self, PyObject* args)
+static PyObject* c_analogRead(PyObject* self, PyObject* args)
 {
   int pin;
   unsigned int val ;
@@ -297,7 +293,7 @@ static PyObject* py_c_analogRead(PyObject* self, PyObject* args)
 /*
  * Function to be called from Python
  */
-static PyObject* py_c_ext_set_ana_input(PyObject* self, PyObject* args)
+static PyObject* c_ext_set_ana_input(PyObject* self, PyObject* args)
 {
   unsigned int pin;
   unsigned int val;
@@ -321,7 +317,7 @@ static PyObject* py_c_ext_set_ana_input(PyObject* self, PyObject* args)
 /*
  * Function to be called from Python
  */
-static PyObject* py_c_ext_set_dig_input(PyObject* self, PyObject* args)
+static PyObject* c_ext_set_dig_input(PyObject* self, PyObject* args)
 {
   int pin;
   int val;
@@ -344,7 +340,7 @@ static PyObject* py_c_ext_set_dig_input(PyObject* self, PyObject* args)
 
 
 
-PyObject * c_searduino_pause(void)
+PyObject * c_pause(void)
 {
   PEARDUINO_PRINT_INSIDE_STR("in C wrapper: want to pause\n");
 
@@ -356,7 +352,7 @@ PyObject * c_searduino_pause(void)
   return res;
 }
 
-PyObject * c_searduino_resume(void)
+PyObject * c_resume(void)
 {
   PyObject* res = Py_BuildValue("i", 0);
   Py_INCREF(Py_None);
@@ -369,7 +365,7 @@ PyObject * c_searduino_resume(void)
 }
 
 
-PyObject * c_searduino_quit(void)
+PyObject * c_quit(void)
 {
   PyObject* res = Py_BuildValue("i", 0);
   Py_INCREF(Py_None);
@@ -390,22 +386,22 @@ PyObject * c_searduino_quit(void)
  * Bind Python function names to our C functions
  */
 static PyMethodDef myModule_methods[] = {
-  {"py_analogRead", (PyCFunction)py_c_analogRead, METH_VARARGS, NULL},
-  {"py_ext_set_ana_input", (PyCFunction)py_c_ext_set_ana_input, METH_VARARGS, NULL},
-  {"py_digitalRead", (PyCFunction)py_c_digitalRead, METH_VARARGS, NULL},
-  {"py_ext_set_dig_input", (PyCFunction)py_c_ext_set_dig_input, METH_VARARGS, NULL},
-  {"my_set_dig_callback", (PyCFunction)py_my_set_dig_callback, METH_VARARGS, NULL},
-  {"my_set_ana_callback", (PyCFunction)py_my_set_ana_callback, METH_VARARGS, NULL},
+  {"searduino_analogRead", (PyCFunction)c_analogRead, METH_VARARGS, NULL},
+  {"searduino_ext_set_ana_input", (PyCFunction)c_ext_set_ana_input, METH_VARARGS, NULL},
+  {"searduino_digitalRead", (PyCFunction)c_digitalRead, METH_VARARGS, NULL},
+  {"searduino_ext_set_dig_input", (PyCFunction)c_ext_set_dig_input, METH_VARARGS, NULL},
+  {"searduino_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
+  {"searduino_set_ana_callback", (PyCFunction)c_my_set_ana_callback, METH_VARARGS, NULL},
   {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
-  {"searduino_pause", (PyCFunction)c_searduino_pause, METH_VARARGS, NULL},
-  {"searduino_resume", (PyCFunction)c_searduino_resume, METH_VARARGS, NULL},
-  {"searduino_quit", (PyCFunction)c_searduino_quit, METH_VARARGS, NULL},
-  {"py_get_pin_mode", (PyCFunction)c_py_get_pin_mode, METH_VARARGS, NULL},
-  {"searduino_set_arduino_code", (PyCFunction)c_searduino_set_arduino_code, METH_VARARGS, NULL},
+  {"searduino_pause", (PyCFunction)c_pause, METH_VARARGS, NULL},
+  {"searduino_resume", (PyCFunction)c_resume, METH_VARARGS, NULL},
+  {"searduino_quit", (PyCFunction)c_quit, METH_VARARGS, NULL},
+  {"searduino_get_pin_mode", (PyCFunction)c_get_pin_mode, METH_VARARGS, NULL},
+  {"searduino_set_arduino_code", (PyCFunction)c_set_arduino_code, METH_VARARGS, NULL},
   {"searduino_initialise", (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
-  {"searduino_start", (PyCFunction)c_searduino_start, METH_VARARGS, NULL},
-  {"searduino_set_digitalWrite_timelimit", (PyCFunction)c_searduino_set_digitalWrite_timelimit, METH_VARARGS, NULL},
-  {"searduino_get_digitalWrite_timelimit", (PyCFunction)c_searduino_get_digitalWrite_timelimit, METH_VARARGS, NULL},
+  {"searduino_start", (PyCFunction)c_start, METH_VARARGS, NULL},
+  {"searduino_set_digitalWrite_timelimit", (PyCFunction)c_set_digitalWrite_timelimit, METH_VARARGS, NULL},
+  {"searduino_get_digitalWrite_timelimit", (PyCFunction)c_get_digitalWrite_timelimit, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
 
@@ -424,7 +420,7 @@ void* arduino_code(void *in)
 
 
 static PyObject *
-py_my_set_dig_callback(PyObject *dummy, PyObject *args)
+c_my_set_dig_callback(PyObject *dummy, PyObject *args)
 {
   PyObject *result = NULL;
   PyObject *temp;
@@ -456,7 +452,7 @@ py_my_set_dig_callback(PyObject *dummy, PyObject *args)
 
 
 static PyObject *
-py_my_set_ana_callback(PyObject *dummy, PyObject *args)
+c_my_set_ana_callback(PyObject *dummy, PyObject *args)
 {
   PyObject *result = NULL;
   PyObject *temp;
