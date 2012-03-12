@@ -104,7 +104,7 @@ comm_register_digin_cb(di_callback_ptr cb)
     }
 
   di_callback = cb;
-  printf ("di cb done .... at %p\n", di_callback); 
+  /* printf ("di cb done .... at %p\n", di_callback);  */
   return SEARD_COMM_OK;
 }
 
@@ -120,7 +120,7 @@ comm_register_anain_cb(ai_callback_ptr cb)
     }
 
   ai_callback = cb;
-  printf ("ai cb done .... at %p\n", ai_callback); 
+  /* printf ("ai cb done .... at %p\n", ai_callback);  */
   return SEARD_COMM_OK;
 }
 
@@ -151,7 +151,7 @@ comm_register_anaout_cb(do_callback_ptr cb)
       return SEARD_COMM_NULL_CALLBACK;
     }
 
-  printf ("ao cb done: %p\n", cb); 
+  /* printf ("ao cb done: %p\n", cb);  */
   ao_callback = cb;
   return SEARD_COMM_OK;
 }

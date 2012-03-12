@@ -84,7 +84,7 @@ comm_analog_write_outpin(uint8_t pin, unsigned int val)
   /* Make sure all is set up before continuing*/
   init_comm();
 
-  printf ("comm_analog_write_outpin()\n");
+  /* printf ("comm_analog_write_outpin()\n"); */
 
   /* If output enabled, print info on pin/val to stream*/
   if ( stub_output_enabled ) 
@@ -97,8 +97,6 @@ comm_analog_write_outpin(uint8_t pin, unsigned int val)
    * Call registered listener
    *
    */
-  printf ("comm_analog_write_outpin(%d,%d):  %p\n", 
-	  pin, val, ao_sim_callback);
   if ( ao_sim_callback != NULL )
     {
       /* Ok, the function pointer is not NULL, 

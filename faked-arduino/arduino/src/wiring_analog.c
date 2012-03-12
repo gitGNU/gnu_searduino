@@ -77,15 +77,15 @@ analogRead(uint8_t pin)
       return 0;
     }
 
-  printf ("wiring: analogRead(%d) => %d\n", 
-	  pin, get_analog_pin_val(pin));
+  /* printf ("wiring: analogRead(%d) => %d\n",  */
+  /* 	  pin, get_analog_pin_val(pin)); */
   return get_analog_pin_val(pin);
 }
 
 void analogWrite(uint8_t pin, unsigned int val)
 {
   arduino_analog_pins[pin].val=val;
-  printf ("Ard coded analogWrite (%d,%d) \n", pin, val);
+  /* printf ("Ard coded analogWrite (%d,%d) \n", pin, val); */
   comm_analog_write_outpin(pin,val);
 }
 
@@ -109,7 +109,7 @@ anain_callback(uint8_t pin, unsigned int val)
 
   arduino_analog_pins[pin].val=val;
 
-  printf ("%s:%s   storing in[%d].val=%d  (%d)\n",__FILE__, __func__, pin, arduino_analog_pins[pin].val, val); 
+  /* printf ("%s:%s   storing in[%d].val=%d  (%d)\n",__FILE__, __func__, pin, arduino_analog_pins[pin].val, val);  */
   return;
 }
 
@@ -125,8 +125,6 @@ anaout_callback(uint8_t pin)
 {
   searduino_setup();
   PRINT_FUNCTION_NAME(("%d",pin));
-
-  printf ("anaout\n");
 
   if (PIN_OUT_OF_RANGE(pin))
     {
