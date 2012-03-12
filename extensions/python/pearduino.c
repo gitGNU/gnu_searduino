@@ -51,8 +51,10 @@ pthread_t  *searduino_thread = &searduino_thread_impl;
 #endif
 
 
-static PyObject *my_callback = NULL;
-static PyObject *py_my_set_callback(PyObject *dummy, PyObject *args);
+static PyObject *my_dig_callback = NULL;
+static PyObject *my_ana_callback = NULL;
+static PyObject *py_my_set_dig_callback(PyObject *dummy, PyObject *args);
+static PyObject *py_my_set_ana_callback(PyObject *dummy, PyObject *args);
 
 extern searduino_main_ptr_ptr searduino_main_entry;
 
@@ -71,7 +73,7 @@ void new_dig_out(uint8_t pin, uint8_t val)
 
   PEARDUINO_PRINT_INSIDE();
 
-  if (my_callback!=NULL)
+  if (my_dig_callback!=NULL)
     {
 
        arglist = Py_BuildValue("(ii)", pin, val);
@@ -85,8 +87,56 @@ void new_dig_out(uint8_t pin, uint8_t val)
       /* printf(" Arguments to callback:  ");      fflush(stdout); */
       //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
-      PEARDUINO_PRINT_INSIDE_STR("    Will call callback\n");
-      result = PyEval_CallObject(my_callback, arglist);
+      PEARDUINO_PRINT_INSIDE_STR("    Will call digital callback\n");
+      result = PyEval_CallObject(my_dig_callback, arglist);
+
+      Py_DECREF(arglist);
+      
+      if (result)
+	{
+	  Py_DECREF(result);
+	}      
+    }
+  else
+    {
+      fprintf (stderr, "*** ERRROR ***\n");
+      fprintf (stderr, "*** Could not call callback since no callback ***\n");
+    }
+
+  PyGILState_Release(gstate);
+  PEARDUINO_PRINT_OUT();
+}
+
+
+void new_ana_out(uint8_t pin, unsigned int val)
+{
+  PyObject *arglist;
+  PyObject *result; 
+
+  PyGILState_STATE gstate;   
+  gstate = PyGILState_Ensure();   
+
+  PEARDUINO_PRINT_IN();
+
+  PEARDUINO_PRINT_INSIDE();
+
+  if (my_ana_callback!=NULL)
+    {
+
+       arglist = Py_BuildValue("(ii)", pin, val);
+
+      if (arglist==NULL)
+	{
+	  printf ("wooops, arglist is no no\n");
+	  exit(1);
+	}
+
+      /* printf(" Arguments to callback:  ");      fflush(stdout); */
+      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
+
+      PEARDUINO_PRINT_INSIDE_STR("    Will call ana callback\n");
+      printf("    Will call ana callback: %p\n", my_ana_callback);
+      result = PyEval_CallObject(my_ana_callback, arglist);
 
       Py_DECREF(arglist);
       
@@ -137,6 +187,35 @@ static PyObject* c_searduino_set_arduino_code(PyObject* self, PyObject* args)
   return o;
 }
 
+static PyObject* c_searduino_set_digitalWrite_timelimit(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  unsigned int val;
+  PEARDUINO_PRINT_IN();
+  
+  PyArg_ParseTuple(args, "i", &val);
+
+  /* printf ("pear: before %d\n", get_digitalWrite_timelimit()); */
+  set_digitalWrite_timelimit(val);
+  /* printf ("pear: after  %d\n", get_digitalWrite_timelimit()); */
+  PyObject* o = Py_BuildValue("i", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+static PyObject* c_searduino_get_digitalWrite_timelimit(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  PEARDUINO_PRINT_IN();
+  
+  ret = get_digitalWrite_timelimit();
+  PyObject* o = Py_BuildValue("i", ret);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
 static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
 {
   uint8_t ret;
@@ -144,16 +223,17 @@ static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
   
   PEARDUINO_PRINT_INSIDE_STR("Setting up searduino\n");
 
-
   /*  searduino_set_arduino_code_name("libarduino-code.so"); */
   ret = searduino_setup();
   if (ret!=0)
     {
+      PEARDUINO_PRINT_INSIDE_STR("Setting up searduino seem to have failed\n");
       return;
     }
   PEARDUINO_PRINT_INSIDE_STR("Register callback for dig out"
 			"(in communication module)\n");
   comm_register_digout_sim_cb(new_dig_out);
+  comm_register_anaout_sim_cb(new_ana_out);
   
   PEARDUINO_PRINT_OUT();
   PyObject* o = Py_BuildValue("i", 0);
@@ -197,7 +277,51 @@ static PyObject* py_c_digitalRead(PyObject* self, PyObject* args)
 /*
  * Function to be called from Python
  */
-static PyObject* py_c_ext_set_input(PyObject* self, PyObject* args)
+static PyObject* py_c_analogRead(PyObject* self, PyObject* args)
+{
+  int pin;
+  unsigned int val ;
+  PEARDUINO_PRINT_IN();
+  
+  PyArg_ParseTuple(args, "i", &pin);
+
+  val = ext_get_ana_output(pin);
+
+  PyObject* o = Py_BuildValue("i", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
+/*
+ * Function to be called from Python
+ */
+static PyObject* py_c_ext_set_ana_input(PyObject* self, PyObject* args)
+{
+  unsigned int pin;
+  unsigned int val;
+  PEARDUINO_PRINT_IN();
+
+  if (!PyArg_ParseTuple(args, "ii", &pin, &val))
+    {
+      return NULL;
+    }
+
+  PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
+
+  val= ext_set_ana_input(pin, val);
+  PyObject* o = Py_BuildValue("i", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
+/*
+ * Function to be called from Python
+ */
+static PyObject* py_c_ext_set_dig_input(PyObject* self, PyObject* args)
 {
   int pin;
   int val;
@@ -266,9 +390,12 @@ PyObject * c_searduino_quit(void)
  * Bind Python function names to our C functions
  */
 static PyMethodDef myModule_methods[] = {
+  {"py_analogRead", (PyCFunction)py_c_analogRead, METH_VARARGS, NULL},
+  {"py_ext_set_ana_input", (PyCFunction)py_c_ext_set_ana_input, METH_VARARGS, NULL},
   {"py_digitalRead", (PyCFunction)py_c_digitalRead, METH_VARARGS, NULL},
-  {"py_ext_set_input", (PyCFunction)py_c_ext_set_input, METH_VARARGS, NULL},
-  {"my_set_callback", (PyCFunction)py_my_set_callback, METH_VARARGS, NULL},
+  {"py_ext_set_dig_input", (PyCFunction)py_c_ext_set_dig_input, METH_VARARGS, NULL},
+  {"my_set_dig_callback", (PyCFunction)py_my_set_dig_callback, METH_VARARGS, NULL},
+  {"my_set_ana_callback", (PyCFunction)py_my_set_ana_callback, METH_VARARGS, NULL},
   {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
   {"searduino_pause", (PyCFunction)c_searduino_pause, METH_VARARGS, NULL},
   {"searduino_resume", (PyCFunction)c_searduino_resume, METH_VARARGS, NULL},
@@ -277,6 +404,8 @@ static PyMethodDef myModule_methods[] = {
   {"searduino_set_arduino_code", (PyCFunction)c_searduino_set_arduino_code, METH_VARARGS, NULL},
   {"searduino_initialise", (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
   {"searduino_start", (PyCFunction)c_searduino_start, METH_VARARGS, NULL},
+  {"searduino_set_digitalWrite_timelimit", (PyCFunction)c_searduino_set_digitalWrite_timelimit, METH_VARARGS, NULL},
+  {"searduino_get_digitalWrite_timelimit", (PyCFunction)c_searduino_get_digitalWrite_timelimit, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
 
@@ -287,7 +416,7 @@ void* arduino_code(void *in)
 
   usleep(1000*1000);
   fprintf (stderr, "Starting Arduino code\n");
-  printf ("Calling()\n"); fflush(stdout);usleep(1000000);
+  usleep(1000000);
   searduino_main_entry(NULL);
 
   return NULL;
@@ -295,7 +424,7 @@ void* arduino_code(void *in)
 
 
 static PyObject *
-py_my_set_callback(PyObject *dummy, PyObject *args)
+py_my_set_dig_callback(PyObject *dummy, PyObject *args)
 {
   PyObject *result = NULL;
   PyObject *temp;
@@ -309,15 +438,47 @@ py_my_set_callback(PyObject *dummy, PyObject *args)
       return NULL;
     }
 
-    Py_XINCREF(temp);         /* Add a reference to new callback */
-    Py_XDECREF(my_callback);  /* Dispose of previous callback */
-    my_callback = temp;       /* Remember new callback */
+    Py_XINCREF(temp);         /* Add a ref to the new callback */
+    Py_XDECREF(my_dig_callback);  /* Dispose possible previous callback */
+    my_dig_callback = temp;       /* Remember new callback */
 
     /* Boilerplate to return "None" */
     Py_INCREF(Py_None);
     result = Py_None;
 
-    PEARDUINO_PRINT_INSIDE_STR("Python callck is registered");
+    PEARDUINO_PRINT_INSIDE_STR("Python callback is registered");
+    usleep (1000);
+  }
+
+  PEARDUINO_PRINT_OUT();
+  return result;
+}
+
+
+static PyObject *
+py_my_set_ana_callback(PyObject *dummy, PyObject *args)
+{
+  PyObject *result = NULL;
+  PyObject *temp;
+  PEARDUINO_PRINT_IN();
+
+  if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
+    if (!PyCallable_Check(temp)) {
+      PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+      PEARDUINO_PRINT_OUT();
+
+      return NULL;
+    }
+
+    Py_XINCREF(temp);         /* Add a ref to the new callback */
+    Py_XDECREF(my_ana_callback);  /* Dispose possible previous callback */
+    my_ana_callback = temp;       /* Remember new callback */
+
+    /* Boilerplate to return "None" */
+    Py_INCREF(Py_None);
+    result = Py_None;
+
+    PEARDUINO_PRINT_INSIDE_STR("Python callback is registered");
     usleep (1000);
   }
 

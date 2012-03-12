@@ -77,8 +77,11 @@ int searduino_main(void);
  *    ask registered callback for mode of pin
  *
  */
-uint8_t ext_get_dig_mode(uint8_t pin);
+uint8_t 
+ext_get_dig_mode(uint8_t pin);
 
+uint8_t 
+ext_set_ana_input(uint8_t pin, unsigned int val);
 
 
 #endif /* COMMUNICATION_EXT_IO_H */

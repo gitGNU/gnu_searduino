@@ -27,12 +27,32 @@
 
 #include "communication/comm.h"
 
-int ext_set_dig_input(uint8_t pin, uint8_t val)
+uint8_t
+ext_set_dig_input(uint8_t pin, uint8_t val)
 {
   PRINT_FUNCTION_NAME(("%d,%d",pin,val));
   if (di_callback!=NULL)
     {
       di_callback(pin,val);
+    }
+  else
+    {
+      return 1;
+    }
+
+  DEBUG_INFO(("%d,%d",pin,val));
+  return SEARD_COMM_OK;
+}
+
+uint8_t
+ext_set_ana_input(uint8_t pin, unsigned int val)
+{
+  PRINT_FUNCTION_NAME(("%d,%d",pin,val));
+
+
+  if (ai_callback!=NULL)
+    {
+      ai_callback(pin,val);
     }
   else
     {
@@ -51,6 +71,26 @@ uint8_t ext_get_dig_output(uint8_t pin)
   if (do_callback!=NULL)
     {
       val = do_callback(pin);
+    }
+  else
+    {
+      return 1;
+    }
+  DEBUG_INFO(("%d => %d",pin,val));
+  return val;
+}
+
+
+
+unsigned int
+ext_get_ana_output(uint8_t pin)
+{
+  unsigned int val ;
+  PRINT_FUNCTION_NAME(("%d",pin));
+
+  if (ao_callback!=NULL)
+    {
+      val = ao_callback(pin);
     }
   else
     {

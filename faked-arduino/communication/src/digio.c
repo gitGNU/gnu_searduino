@@ -74,6 +74,37 @@ comm_digital_write_outpin(uint8_t pin, uint8_t val)
 	 so let's call it */
       do_sim_callback(pin, val);
     }
+  return SEARD_COMM_OK;
+}
+
+
+int 
+comm_analog_write_outpin(uint8_t pin, unsigned int val)
+{
+  /* Make sure all is set up before continuing*/
+  init_comm();
+
+  printf ("comm_analog_write_outpin()\n");
+
+  /* If output enabled, print info on pin/val to stream*/
+  if ( stub_output_enabled ) 
+    {
+      fprintf(proto_stream, "apin:%d:%d  (in stub)\n", pin, val); 
+      fflush(proto_stream);
+    }
+
+  /*
+   * Call registered listener
+   *
+   */
+  printf ("comm_analog_write_outpin(%d,%d):  %p\n", 
+	  pin, val, ao_sim_callback);
+  if ( ao_sim_callback != NULL )
+    {
+      /* Ok, the function pointer is not NULL, 
+	 so let's call it */
+      ao_sim_callback(pin, val);
+    }
 
   return SEARD_COMM_OK;
 }

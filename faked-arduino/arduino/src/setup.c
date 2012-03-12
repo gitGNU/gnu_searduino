@@ -36,7 +36,9 @@
 #include "communication/comm.h"
 
 void     digin_callback (uint8_t pin, uint8_t val); 
+void     anain_callback (uint8_t pin, unsigned val); 
 uint8_t  digout_callback(uint8_t pin);
+uint8_t  anaout_callback(uint8_t pin);
 uint8_t  dig_mode_callback(uint8_t pin);
 
 int searduino_exec ;
@@ -100,14 +102,26 @@ int searduino_setup(void)
   ret = load_arduino_code();
   if (ret!=0)
     {
-      printf ("Setting up arduino code: %d\n", 
-	      ret);
+      /* printf ("Setting up arduino code: %d\n", 	      ret); */
       return 1;
     }
 
   init_comm();
 
   init_time();
+
+  
+  ret = comm_register_anain_cb(anain_callback);
+  if (ret != SEARD_COMM_OK)
+    {
+      fprintf(stderr, "Failed to register ai callback");
+    }
+
+  ret = comm_register_anaout_cb(anaout_callback);
+  if (ret != SEARD_COMM_OK)
+    {
+      fprintf(stderr, "Failed to register ai callback");
+    }
 
   ret = comm_register_digin_cb(digin_callback);
   if (ret != SEARD_COMM_OK)
@@ -140,7 +154,7 @@ static char *
 get_arduino_code_name(void)
 {
   char *ret = NULL;
-  printf ("Getting arduino lib name\n");
+  /* printf ("Getting arduino lib name\n"); */
   if ((arduino_code==NULL) || 
       (arduino_code[0]=='\0'))
     {
@@ -151,7 +165,7 @@ get_arduino_code_name(void)
       ret = arduino_code;
     }
 
-  printf ("Returning: %s\n", ret);
+  /* printf ("Returning: %s\n", ret); */
   return ret;
 }
 
@@ -198,14 +212,14 @@ load_arduino_code(void)
   else
     {
       /* If we have been given a library name, load it */
-      printf ("Dynamically linked code\n");
+      /* printf ("Dynamically linked code\n"); */
       arduino_lib = dlopen ((const char*)ard_lib_name, RTLD_LAZY);
       if ( arduino_lib == NULL)
 	{
-	  printf ("Couldn't open dyn lib\n");
+	  fprintf (stderr, "Couldn't open dyn lib\n");
 	  return 1;
 	}
-      printf ("setup.c:  code at %p\n", arduino_lib);
+      /* printf ("setup.c:  code at %p\n", arduino_lib); */
       
       searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
       if ( searduino_main_entry == NULL)
@@ -213,7 +227,7 @@ load_arduino_code(void)
 	  printf ("Couldn't find searduino_main_ptr in arduino code\n");
 	  return 1;
 	}
-      printf ("setup.c:  code at %p\n", searduino_main_entry);
+      /* printf ("setup.c:  code at %p\n", searduino_main_entry); */
     }
   return 0;
 }

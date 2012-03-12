@@ -38,10 +38,11 @@
 
 typedef struct arduino_pin
 {
-  uint8_t mode;
-  uint8_t val;
+  uint8_t         mode;
+  uint8_t         val;
   struct timeval  last_write;
   struct timeval  last_actual_write;
+  int             discard_ctr;
 } arduino_pin;
 
 /* 
@@ -62,18 +63,37 @@ static arduino_pin arduino_digital_pins[NR_OF_DIGITAL_PINS];
 #define get_digital_pin_val(pin)       (arduino_digital_pins[pin].val) 
 #define set_digital_pin_val(pin,val)    arduino_digital_pins[pin].val=(val!=0);
 
-static unsigned int digitalWrite_timelimit = 500;
 
+
+/*
+ *
+ * Variable used to limit the amount of callbacks,
+ *    assigned to usecs to wait until we allow next callback
+ * micro seconds
+ *
+ */
+static unsigned int digitalWrite_timelimit = 200*1000;
+
+/*
+ *  
+ * milli seconds
+ *
+ */
 void 
 set_digitalWrite_timelimit(unsigned int lim)
 {
-  digitalWrite_timelimit = lim;
+  digitalWrite_timelimit = lim*1000;
 }
 
+/*
+ *  
+ * milli seconds
+ *
+ */
 unsigned int 
 get_digitalWrite_timelimit(void)
 {
-  return digitalWrite_timelimit ;
+  return (digitalWrite_timelimit/1000) ;
 }
 
 
@@ -102,7 +122,6 @@ digin_callback(uint8_t pin, uint8_t val)
     }
 
   arduino_digital_pins[pin].val=(val!=0);
-  /* printf ("%s:%s   storing in[%d].val=%d  (%d)\n",__FILE__, __func__, pin, arduino_in_pins[pin].val, val);  */
   return;
 }
 
@@ -159,7 +178,8 @@ digout_callback(uint8_t pin)
 
 
 
-void pinMode(uint8_t pin, uint8_t mode)
+void 
+pinMode(uint8_t pin, uint8_t mode)
 {
   searduino_setup();
   PRINT_FUNCTION_NAME(("%d,%d",pin,mode));
@@ -182,7 +202,6 @@ static void turnOffPWM(uint8_t timer)
 void digitalWrite(uint8_t pin, uint8_t val)
 {
   int ret;
-  static int discard_ctr;
   struct timeval  cur_time;
   struct timezone zoneData;
   long time_diff;
@@ -255,13 +274,19 @@ void digitalWrite(uint8_t pin, uint8_t val)
 	      return;
 	    }
 	}
-      //      fprintf (stderr, "  discarded calls (not on change) so far: %d\n", discard_ctr);
+      //      fprintf (stderr, "  discarded calls (not on change) so far: %d\n", arduino_digital_pins[pin].discard_ctr);
     }
   else
     {
-      discard_ctr++;
+      arduino_digital_pins[pin].discard_ctr++;
     }
   return;
+}
+
+unsigned int 
+get_discard_ctr(unsigned char pin)
+{
+  return arduino_digital_pins[pin].discard_ctr;
 }
 
 int digitalRead(uint8_t pin)

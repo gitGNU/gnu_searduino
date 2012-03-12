@@ -27,6 +27,7 @@
 #include "utils/types.h"
 
 #define NR_OF_DIGITAL_PINS 20
+#define NR_OF_ANALOG_PINS 20
 
 typedef void (*searduino_main_ptr)(void* in); 
 typedef searduino_main_ptr searduino_main_ptr_ptr ;

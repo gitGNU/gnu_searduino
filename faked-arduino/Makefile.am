@@ -52,6 +52,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/time_stuff.c \
        ./arduino/src/setup.c \
        ./arduino/src/wiring_digital.c \
+       ./arduino/src/wiring_analog.c  \
        ./arduino/src/utils.c \
        ./utils/src/print.c \
         $(LIB_SEARDUINO_H_FILES)
