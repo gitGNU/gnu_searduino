@@ -341,7 +341,7 @@ class MyWindow(Gtk.Window):
         return True
         
     def __init__(self):
-        Gtk.Window.__init__(self, title="Searduino Simulator")
+        Gtk.Window.__init__(self, title="Pardon - a simulator frontend")
 
         topTable = Gtk.Table(2, 2, False)
         topTable.attach(Gtk.Label("Digital"),0,1,0,1)
