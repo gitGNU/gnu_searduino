@@ -50,6 +50,18 @@ my_do_sim_callback(uint8_t pin, uint8_t val)
   printf ("\n");
 }
 
+/* 
+ * Function to register in the Searduino code
+ *
+ * This function will be called every time the Arduino program updates a digital output pin (on change only!)
+ */
+void 
+my_ao_sim_callback(uint8_t pin, unsigned int val)
+{
+  printf ("%s:%s(%d:%d)\n",__FILE__, __func__, pin, val);
+  printf ("\n");
+}
+
 int 
 sim_setup(char *ard_lib)
 {
@@ -69,6 +81,14 @@ sim_setup(char *ard_lib)
   if (ret != SEARD_COMM_OK)
     {
       fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
+      return ret;
+    }
+ 
+
+  ret  = comm_register_anaout_sim_cb(my_ao_sim_callback);
+  if (ret != SEARD_COMM_OK)
+    {
+      fprintf (stderr, "Failed to register callback for Analog output (pin, val)\n");
       return ret;
     }
  
