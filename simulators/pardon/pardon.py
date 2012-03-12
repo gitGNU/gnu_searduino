@@ -375,10 +375,21 @@ class MyWindow(Gtk.Window):
 
         self.box = Gtk.VBox(spacing=6)
         self.add(self.box)
-        self.box.pack_start(topTable, False, True, 0)
-        self.box.pack_start(pause,    False, True, 0)
-        self.box.pack_start(spin,    False, True, 0)
 
+        self.innerbox = Gtk.HBox(spacing=6)
+
+        self.extrasbox=Gtk.VBox(spacing=6)
+        self.extraslabel = Gtk.Label("General")
+        self.extrasbox.pack_start(self.extraslabel,    False, True, 0)
+        self.extrasbox.pack_start(pause,    False, True, 0)
+        self.extrasbox.pack_start(spin,    False, True, 0)
+
+        self.innerbox.pack_start(topTable, False, True, 0)
+        self.innerbox.pack_start(self.extrasbox, False, True, 0)
+        
+        self.bottomlabel = Gtk.Label("Pardon - a simulator frontend. Pardon is part of the Searduino project")
+        self.box.pack_start(self.innerbox,    False, True, 0)
+        self.box.pack_start(self.bottomlabel,    False, True, 0)
 
         for i in range(1,(size-1)):
             self.digs[i] = digitalPin(self,i)
