@@ -1,0 +1,49 @@
+@section Example Makefile
+@*
+@*
+@code{SEARDUINO_PATH=/opt/searduino}
+@*
+@code{PROG=blinker}
+@*
+@code{SRC_C=blink.c}
+@*
+@code{SRC_CXX= stuff.cpp morestuff.cpp}
+@*
+@code{MAIN_SRC=main.c}
+@*
+@code{ARDUINO=stub}
+@*
+@code{$(PROG):}
+@*
+@code{upload:}
+@*
+@code{include $(SEARDUINO_PATH)/mk/searduino.mk}
+@*
+@section Example C code
+@*
+@*
+@code{#include <Arduino.h>}
+@*
+@*
+@code{int main(void)}
+@*
+@{
+@*
+@code{  for(;;)}
+@*
+@code{    }
+@{
+@*
+@code{       digitalWrite(13, 1);}
+@*
+@code{       delay(100);}
+@*
+@code{       digitalWrite(13, 0);}
+@*
+@code{       delay(100);}
+@*
+@code{   }
+@}
+@*
+@}
+@*

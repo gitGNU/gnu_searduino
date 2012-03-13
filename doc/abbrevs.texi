@@ -1,10 +1,13 @@
 @itemize @bullet
-@item Arduino program - a program that is written for the Arduino board. Uses only the Arduio and avr APIs.
+@item Arduino program - a program written for the Arduino board. Uses only the Arduio and avr APIs.
 @item Arduino stub - library implementing the Arduino and avr APIs
 @item Streamed input/output - instead of a fullblown simulator GUI
 Searduino provides you with a stdin/stdout interface. This can be used
 to script (bash, Python..) your test cases. Using programs such as
 netcat you can also run the Arduino program on one PC and the test on
 another PC.
+@item Python interface - all of the simulation features are offered
+by a C API s well as via a Python API
+@item local computer - the computer you're developing your code on
 @end itemize
 

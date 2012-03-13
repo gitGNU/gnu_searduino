@@ -1,0 +1,58 @@
+Searduino is made to ease and speed up development for the Arduino
+boards. In short Searduino gives you
+
+@itemize @bullet
+@item C/C++ interface
+@item Makefiles
+@item Stand alone program
+@item Simulator
+@item Simulation API
+@item Python simulation API - write your tests in Python
+@item Arduino example translation (not ready yet!)
+@end itemize
+
+@section C/C++ interface
+With Searduino you can use your favorite Editor to develop your
+program. Write plain C code and compile it either for any of the
+Arduino boards or for your local computer.
+
+The chapter ``Future ...'' has some notes on other languages than C
+and C++.
+
+@section Makefiles
+Autobuild and test your code with no user interaction. Searduino comes
+with Makefiles that makes it easy, and not much Makefile code from
+you, to use the features of Searduino. Using a Makefile from an
+example, shipped with Searduino, you should get started in just a few
+seconds. 
+
+The Makefiles come with support for: 
+@itemize @bullet
+@item compiling and linking for the Arduino boards
+@item compiling and linking for the Arduino Simulator
+@item compiling and linking for Stand alone programs
+@item cleaning up
+@item uploading code to the board
+@end itemize
+
+@section Stand alone program
+
+Build and run your arduino program to be executed on your local
+computer. Testing code on the Arduino is tricky sometimes and it not
+easy to automate these tests. Running 
+
+@section Simulator
+bladi 
+
+@section Simulation API
+bladi 
+
+@section Python simulation API
+write your tests in Python
+
+@section Arduino example translation (not ready yet!)
+One 
+
+
+
+

@@ -45,6 +45,9 @@
 
 @contents
 
+@chapter Introduction
+@include introduction.texi
+
 @chapter Background
 @include background.texi
 
@@ -457,56 +460,8 @@ Until we've written this section, we refer to the example @code{example/python-d
 @chapter Debugging Arduino code
 
 @chapter Examples
+@include examples.texi
 
-@section Example Makefile
-@*
-@*
-@code{SEARDUINO_PATH=/opt/searduino}
-@*
-@code{PROG=blinker}
-@*
-@code{SRC_C=blink.c}
-@*
-@code{SRC_CXX= stuff.cpp morestuff.cpp}
-@*
-@code{MAIN_SRC=main.c}
-@*
-@code{ARDUINO=stub}
-@*
-@code{$(PROG):}
-@*
-@code{upload:}
-@*
-@code{include $(SEARDUINO_PATH)/mk/searduino.mk}
-@*
-@section Example C code
-@*
-@*
-@code{#include <Arduino.h>}
-@*
-@*
-@code{int main(void)}
-@*
-@{
-@*
-@code{  for(;;)}
-@*
-@code{    }
-@{
-@*
-@code{       digitalWrite(13, 1);}
-@*
-@code{       delay(100);}
-@*
-@code{       digitalWrite(13, 0);}
-@*
-@code{       delay(100);}
-@*
-@code{   }
-@}
-@*
-@}
-@*
 
 @chapter Write your own simulator
 @subsection Writing a simulator in C/C++ 
@@ -516,6 +471,11 @@ Until we've written this section, we refer to the example @code{example/python-d
 @subsection Writing local tests in Python
 For now, we would like to refer to pardon in the Searduino source
 treee for en example on how to write a simulator in Python.
+
+
+@chapter Future and possible enhancements
+@include future.texi
+
 @bye
 
 
