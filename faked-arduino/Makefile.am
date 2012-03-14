@@ -39,6 +39,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/wiring_private.h \
        ./include/arduino/pins_arduino.h \
        ./include/arduino/setup.h \
+       ./include/seasim/seasim.h \
        ./include/utils/types.h \
        ./include/utils/error.h \
        ./include/utils/print.h \
@@ -54,6 +55,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/wiring_digital.c \
        ./arduino/src/wiring_analog.c  \
        ./arduino/src/utils.c \
+       ./seasim/src/seasim.c \
        ./utils/src/print.c \
         $(LIB_SEARDUINO_H_FILES)
 
@@ -68,5 +70,6 @@ lib_LTLIBRARIES = libsearduinostub.la
 AM_CFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/arduino \
            -I../faked-arduino/include/        
+
 
 AM_LDFLAGS= -ldl
