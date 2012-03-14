@@ -256,7 +256,7 @@ class analogPin(Gtk.HBox):
 #        self.input.connect("clicked", self.on_dig_toggled, "1")
 
     def on_update(self,disc):
-        seasim_ext_set_ana_input(self.myNr,
+        seasim_set_ana_input(self.myNr,
                                     self.spinbutton.get_value_as_int())
 
     def setMode(self, mode):
@@ -335,7 +335,7 @@ class MyWindow(Gtk.Window):
                     value = self.digs[i].getVal()
                     self.semaphore.release()
 #                    print "                                                                         WILL SEND: " + str(value) + "  from " + str(i)
-                    seasim_ext_set_dig_input(i,
+                    seasim_set_dig_input(i,
                                                value)
                 
         return True
@@ -438,7 +438,7 @@ class MyWindow(Gtk.Window):
 #        print "CHECK pin set in GUI: "+str(nr)+ ": " + str(val)
         if (val_str=="on"):
             val=1
-        seasim_ext_set_dig_input(nr,val)            
+        seasim_set_dig_input(nr,val)            
 #        self.updateAllOut()
 
 
