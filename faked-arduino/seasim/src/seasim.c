@@ -36,7 +36,7 @@ extern a_mode_callback_ptr    a_mode_callback;
 
 
 unsigned int
-seaesim_get_ana_output(uint8_t pin)
+seasim_get_ana_output(uint8_t pin)
 {
   return ext_get_ana_output(pin);
 }
@@ -54,6 +54,14 @@ seasim_get_dig_output(uint8_t pin)
 {
   return ext_get_dig_output(pin);
 }
+
+uint8_t 
+seasim_set_dig_input(uint8_t pin, uint8_t val)
+{
+  return ext_set_dig_input(pin, val);
+}
+
+
 
 
 uint8_t 
@@ -146,7 +154,7 @@ seasim_is_enable_streamed_output(void)
 
 void seasim_enable_streamed_output(void)
 {
-  return  searduino_enable_streamed_output();
+  searduino_enable_streamed_output();
 }
 
 void 
