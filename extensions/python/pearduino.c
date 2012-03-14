@@ -156,7 +156,7 @@ static PyObject* c_get_pin_mode(PyObject* self, PyObject* args)
   
   PyArg_ParseTuple(args, "i", &pin);
 
-  mode = ext_get_dig_mode(pin);
+  mode = seasim_get_dig_mode(pin);
   PyObject* o = Py_BuildValue("i", mode);
 
   PEARDUINO_PRINT_OUT();
@@ -258,7 +258,7 @@ static PyObject* c_digitalRead(PyObject* self, PyObject* args)
   
   PyArg_ParseTuple(args, "i", &pin);
 
-  val = ext_get_dig_output(pin);
+  val = seasim_get_dig_output(pin);
   PyObject* o = Py_BuildValue("i", val);
 
   PEARDUINO_PRINT_OUT();
@@ -277,7 +277,7 @@ static PyObject* c_analogRead(PyObject* self, PyObject* args)
   
   PyArg_ParseTuple(args, "i", &pin);
 
-  val = ext_get_ana_output(pin);
+  val = seasim_get_ana_output(pin);
 
   PyObject* o = Py_BuildValue("i", val);
 
@@ -302,7 +302,7 @@ static PyObject* c_ext_set_ana_input(PyObject* self, PyObject* args)
 
   PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
 
-  val= ext_set_ana_input(pin, val);
+  val= seasim_set_ana_input(pin, val);
   PyObject* o = Py_BuildValue("i", val);
 
   PEARDUINO_PRINT_OUT();
@@ -326,7 +326,7 @@ static PyObject* c_ext_set_dig_input(PyObject* self, PyObject* args)
 
   PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
 
-  val= ext_set_dig_input(pin, val);
+  val= seasim_set_dig_input(pin, val);
   PyObject* o = Py_BuildValue("i", val);
 
   PEARDUINO_PRINT_OUT();
@@ -383,9 +383,9 @@ PyObject * c_quit(void)
  */
 static PyMethodDef myModule_methods[] = {
   {"seasim_analogRead", (PyCFunction)c_analogRead, METH_VARARGS, NULL},
-  {"seasim_ext_set_ana_input", (PyCFunction)c_ext_set_ana_input, METH_VARARGS, NULL},
+  {"seasim_set_ana_input", (PyCFunction)c_ext_set_ana_input, METH_VARARGS, NULL},
   {"seasim_digitalRead", (PyCFunction)c_digitalRead, METH_VARARGS, NULL},
-  {"seasim_ext_set_dig_input", (PyCFunction)c_ext_set_dig_input, METH_VARARGS, NULL},
+  {"seasim_set_dig_input", (PyCFunction)c_ext_set_dig_input, METH_VARARGS, NULL},
   {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
   {"seasim_set_ana_callback", (PyCFunction)c_my_set_ana_callback, METH_VARARGS, NULL},
   {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
