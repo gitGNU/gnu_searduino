@@ -37,12 +37,15 @@ The Makefiles come with support for:
 
 @section Stand alone program
 
-Build and run your arduino program to be executed on your local
-computer. Testing code on the Arduino is tricky sometimes and it not
-easy to automate these tests. Running 
+Build for and run your arduino program on your local computer. Testing
+code on the Arduino is tricky sometimes and it not easy to automate
+these tests. Executing your program locally and looking the printouts
+(write on the pins) make up a simple test. For more serious testing we
+suggest you use the simulator (C or Python API or the GUI).
 
-@section Simulator
+@section Simulator GUI
 bladi 
+
 
 @section Simulation API
 bladi 
