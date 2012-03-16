@@ -30,7 +30,8 @@ log_and_exec()
 
 set_vars()
 {
-    SEARD_VERSION=$(grep AC_INIT configure.ac  | awk ' { print $2}' | sed -e 's,\[,,g' -e  's,\],,g' -e 's/,//g')
+    AC_FILE=$(dirname $0)/../configure.ac
+    SEARD_VERSION=$(grep AC_INIT $AC_FILE | awk ' { print $2}' | sed -e 's,\[,,g' -e  's,\],,g' -e 's/,//g')
     CPU=$(uname -m)
 }
 
