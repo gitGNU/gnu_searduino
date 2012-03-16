@@ -24,7 +24,7 @@
 #ifndef COMMUNICATION_COMM_H
 #define COMMUNICATION_COMM_H
 
-
+#include <stdio.h>
 
 
 /*

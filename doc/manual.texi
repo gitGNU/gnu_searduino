@@ -224,7 +224,21 @@ variable in the Makefile. The following values of that variable are implemented.
 @chapter Various Searduino functions/macros
 Searduino provides a small set of macros for you. When building for
 your local computer they are enabled, and when building for the
-Arduino hw they are diabled.
+Arduino hw they are disabled.
+
+@multitable  @columnfractions .0 .30 .70
+@item 
+@tab @b{Macro}
+@tab @b{Description}
+@item
+@tab @code{SEARDUINO_LOOP}
+@tab will be secribed....
+@item
+@tab more will come
+@tab and will be secribed....
+@end multitable
+
+
 
 @section print functions/macros
 @*

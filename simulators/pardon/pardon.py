@@ -52,12 +52,12 @@ redColor.alpha=0.7
 #redColor = Gdk.color_parse("red")
 
 def pardonPause():
-    searduino_pause();
+    seasim_pause();
     global pause 
     pause = 1
 
 def pardonResume():
-    searduino_resume();
+    seasim_resume();
     global pause 
     pause = 0
 
@@ -100,7 +100,7 @@ class SpinButtonWindow(Gtk.Box):
         self.spinbutton = Gtk.SpinButton()
         self.spinbutton.set_adjustment(adjustment)
         self.spinbutton.set_numeric(True)
-        self.spinbutton.set_value(searduino_get_digitalWrite_timelimit())
+        self.spinbutton.set_value(seasim_get_digitalWrite_timelimit())
         self.setIncrement()
         self.spinbutton.connect("value-changed", self.on_update)
         
@@ -128,7 +128,7 @@ class SpinButtonWindow(Gtk.Box):
         self.setIncrement()
 
 #        print "===========================================  " +         str(self.spinbutton.get_value_as_int())
-        searduino_set_digitalWrite_timelimit(int(self.spinbutton.get_value_as_int()))
+        seasim_set_digitalWrite_timelimit(int(self.spinbutton.get_value_as_int()))
 #        print "======= set to: " + str(searduino_get_digitalWrite_timelimit())
 
 
@@ -192,8 +192,8 @@ class digitalPin(Gtk.HBox):
             return 0
 
     def setValCond(self):
-        if searduino_get_pin_mode(self.myNr)==1:
-            self.output_label.set_text(str(searduino_digitalRead(self.myNr)))
+        if seasim_get_pin_mode(self.myNr)==1:
+            self.output_label.set_text(str(seasim_digitalRead(self.myNr)))
 
     def on_dig_toggled(self, widget, name):
 #        print "GUI 1 toggle"
@@ -256,7 +256,7 @@ class analogPin(Gtk.HBox):
 #        self.input.connect("clicked", self.on_dig_toggled, "1")
 
     def on_update(self,disc):
-        searduino_ext_set_ana_input(self.myNr,
+        seasim_set_ana_input(self.myNr,
                                     self.spinbutton.get_value_as_int())
 
     def setMode(self, mode):
@@ -277,8 +277,8 @@ class analogPin(Gtk.HBox):
             return 0
 
     def setValCond(self):
-        if searduino_get_pin_mode(self.myNr)==1:
-            self.output_label.set_text(str(searduino_digitalRead(self.myNr)))
+        if seasim_get_pin_mode(self.myNr)==1:
+            self.output_label.set_text(str(seasim_digitalRead(self.myNr)))
 
     def on_dig_toggled(self, widget, name):
 #        print "GUI 1 toggle"
@@ -318,7 +318,7 @@ class MyWindow(Gtk.Window):
             print "no GUI update"
         else:
             for i in range(1,size-1):
-                self.pinUpdateMode(i,searduino_get_pin_mode(i));
+                self.pinUpdateMode(i,seasim_get_pin_mode(i));
                 
         self.sendInputPins()        
         return True
@@ -330,12 +330,12 @@ class MyWindow(Gtk.Window):
  #           print "  --------------------------------------------- SIN"
             for i in range(1,size-1):
   #              print "  --------------------------------------------- SIN " + str(i)
-                if (searduino_get_pin_mode(i)==0):
+                if (seasim_get_pin_mode(i)==0):
                     self.semaphore.acquire()        
                     value = self.digs[i].getVal()
                     self.semaphore.release()
 #                    print "                                                                         WILL SEND: " + str(value) + "  from " + str(i)
-                    searduino_ext_set_dig_input(i,
+                    seasim_set_dig_input(i,
                                                value)
                 
         return True
@@ -438,7 +438,7 @@ class MyWindow(Gtk.Window):
 #        print "CHECK pin set in GUI: "+str(nr)+ ": " + str(val)
         if (val_str=="on"):
             val=1
-        searduino_ext_set_dig_input(nr,val)            
+        seasim_set_dig_input(nr,val)            
 #        self.updateAllOut()
 
 
@@ -549,15 +549,15 @@ else:
 
 print "ard_code: " + ard_code
 
-searduino_set_arduino_code(ard_code)
-searduino_initialise();
-searduino_start();
+seasim_set_arduino_code(ard_code)
+seasim_initialise();
+seasim_start();
 
 #parser.print_help()
 
        
-searduino_set_dig_callback(newDigOutCallback)
-searduino_set_ana_callback(newAnaOutCallback)
+seasim_set_dig_callback(newDigOutCallback)
+seasim_set_ana_callback(newAnaOutCallback)
 
 #sys.exit(1)
 

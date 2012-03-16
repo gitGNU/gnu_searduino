@@ -28,9 +28,7 @@
 #include <Arduino.h>
 #include <pthread.h>
 
-#include "communication/comm.h"
-#include "communication/ext_io.h"
-#include "arduino/setup.h"
+#include "seasim/seasim.h"
 
 
 void sim_sighandler(int sig);
@@ -67,17 +65,17 @@ sim_setup(char *ard_lib)
 {
   int ret ; 
 
-  searduino_disable_streamed_output();
+  seasim_disable_streamed_output();
 
-  searduino_set_arduino_code_name(ard_lib);
+  seasim_set_arduino_code_name(ard_lib);
 
-  ret = searduino_setup();
+  ret = seasim_setup();
   if (ret!=0)
     {
       return ret;
     }
   
-  ret  = comm_register_digout_sim_cb(my_do_sim_callback);
+  ret  = seasim_register_digout_sim_cb(my_do_sim_callback);
   if (ret != SEARD_COMM_OK)
     {
       fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
@@ -85,7 +83,7 @@ sim_setup(char *ard_lib)
     }
  
 
-  ret  = comm_register_anaout_sim_cb(my_ao_sim_callback);
+  ret  = seasim_register_anaout_sim_cb(my_ao_sim_callback);
   if (ret != SEARD_COMM_OK)
     {
       fprintf (stderr, "Failed to register callback for Analog output (pin, val)\n");
@@ -97,7 +95,6 @@ sim_setup(char *ard_lib)
   return 0;
 }
 
-extern searduino_main_ptr_ptr searduino_main_entry;
 
 void* arduino_code(void *in)
 {
@@ -145,18 +142,18 @@ void* command_reader(void* in)
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{
-	  searduino_set_halted();
+	  seasim_set_halted();
 	  return ;
 	}
       else if (strncmp(buf,"pause",5)==0)
 	{
 	  printf ("Will pause sim\n");
-	  searduino_set_paused();
+	  seasim_set_paused();
 	}
       else if (strncmp(buf,"resume",5)==0)
 	{
 	  printf ("Will resume sim\n");
-	  searduino_set_running();
+	  seasim_set_running();
 	}
       else if (strncmp(buf,"limit",5)==0)
 	{
