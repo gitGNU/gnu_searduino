@@ -1,0 +1,8 @@
+
+It should be possible to add more compiled languages to use to program
+the Arduino boards as long as there's a backend compatible with the C
+backend of the avr-gcc. It will not (easily t least) be possible to
+add byte compiled or interpreted lagnuages, so Java, Perl, Python and
+friends are out of the questions. At least for the moment.
+
+Contact us if you want support for your favorite lagnuage.

@@ -13,7 +13,7 @@ then
     exit 1
 fi
 
-source $FUNC_FILE
+. $FUNC_FILE
 
 
 prepare()
