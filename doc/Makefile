@@ -1,7 +1,8 @@
 DATE=$(shell date '+%Y%m%d-%H%M%S')
 DATE_SHORT=$(shell date '+%d %b %Y')
 MONTH=$(shell date '+%b %Y')
-VERSION=$(shell cat ../mk/VERSION)
+VERSION=$(shell ../bin/get-version)
+#| sed -e 's,\[,,g' -e  's,\],,g' -e 's/,//g')
 all: doc
 VIEWER=evince
 TEXI=architecture.texi manual.texi
