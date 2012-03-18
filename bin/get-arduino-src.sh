@@ -65,11 +65,13 @@ unpack_sources()
 setup_sources()
 {
 #    exec_comm mkdir arduino-sources
-    exec_comm mkdir arduino-sources/core
-    exec_comm mkdir arduino-sources/variants
+    exec_comm mkdir -p arduino-sources/core
+    exec_comm mkdir -p arduino-sources/variants
+    exec_comm mkdir ard-ex
 
     exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/cores/arduino/* arduino-sources/core
     exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/variants/* arduino-sources/variants/
+    exec_comm cp -r download-tmp/arduino-1.0/examples/* ard-ex/
 }
 
 
@@ -80,9 +82,9 @@ create_mk()
     exec_comm cp mk/arduino-sources/arduino-sources.mk        arduino-sources/
 }
 
-if [ -d arduino-sources/core ]
+if [ -d arduino-sources/core ] && [ -d ard-ex ] 
 then
-    echo "Already downloaded, skipping download and unpack"
+    echo "Arduino code already downloaded, skipping download and unpack"
 else
     get_sources
     unpack_sources
