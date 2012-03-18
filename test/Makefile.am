@@ -8,4 +8,7 @@ EXTRA_DIST = \
      ./shared-main/Makefile   \
      ./shared-main/test.c   \
      ./hw/Makefile   \
-     ./hw/test.c  
+     ./hw/test.c     \
+     ./ino/test.sh
+
+
