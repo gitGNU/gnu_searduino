@@ -1,2 +1,7 @@
-More will come here
+News in 0.48
+
+  * Arduino examples included
+  * Searduino can translate from Arduino example to C code 
+    that can be built by Searduino
+  * Helper functions (macros) added for the Arduino boards
 
