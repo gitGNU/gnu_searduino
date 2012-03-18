@@ -43,14 +43,16 @@ uint8_t  dig_mode_callback(uint8_t pin);
 
 int searduino_exec ;
 
+
 /* global */
 searduino_main_ptr_ptr searduino_main_entry = NULL;
 
 static char arduino_code[1024];
 
-#define SEARDUIONO_SIM_PAUSE   0
-#define SEARDUIONO_SIM_RUNNING 1
+#define SEARDUIONO_SIM_RUNNING 0
+#define SEARDUIONO_SIM_PAUSE   1
 #define SEARDUIONO_SIM_HALTED  2
+
 
 uint8_t searduino_is_paused(void)
 {
