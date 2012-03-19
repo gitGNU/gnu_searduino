@@ -54,12 +54,12 @@ parse_args()
     then
 	export MYPATH=$1
 	export FIRST_CHAR=${MYPATH:0:1}
-	echo "FIRST_CHAR: $FIRST_CHAR"
+	echo " FIRST_CHAR: \"$FIRST_CHAR\""
 	if [ "$FIRST_CHAR" = "/" ]
 	then
-	    MYPATH=$1
+	    MYPATH=$1/../../../../searduino
 	else
-	    MYPATH=$(pwd)/$1
+	    MYPATH=$(pwd)/$1/../../../../../
 	fi
     fi
 
