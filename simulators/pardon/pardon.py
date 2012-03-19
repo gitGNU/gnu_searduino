@@ -40,7 +40,7 @@ from gi.repository import GObject
 
 paused = 0 
 
-size = 12
+size = 10
 
 redColor = Gdk.RGBA()
 redColor.red=1.0
@@ -499,15 +499,21 @@ def newDigOutCallback(pin, val):
 #    print ""
 #    print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
 #    print ""
-    global win
-    win.updateDigOutPin(pin,val)
+    if (pin>size):
+        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
+    else:
+        global win
+        win.updateDigOutPin(pin,val)
 
 def newAnaOutCallback(pin, val):
 #    print ""
 #    print "==================== in Py:  new ANALOG out: " + str(pin) + " = " + str(val)
 #    print ""
-    global win
-    win.updateAnaOutPin(pin,val)
+    if (pin>size):
+        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
+    else:
+        global win
+        win.updateAnaOutPin(pin,val)
 
 
 

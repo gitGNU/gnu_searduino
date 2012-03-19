@@ -1,0 +1,3 @@
+    write_c_file "/* Auto generated C file from $ARD_FILE"
+    write_c_file "  (C) is to be dealt with later */"
+    write_c_file "#include <Arduino.h>" 

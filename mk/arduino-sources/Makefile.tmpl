@@ -48,9 +48,16 @@ install: due uno mega
 
 	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/core
 	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/variants
+	 @mkdir -p         __INSTALL_DIR__/share/examples/arduino
 
 	 @cp -r core/*.h   __INSTALL_DIR__/include/searduino/arduino-sources/core/
 	 @cp -r variants/* __INSTALL_DIR__/include/searduino/arduino-sources/variants/
+#
+# This is an ugly hack to get around the problem of 99 chars max length in tar
+#	 
+	 @cp -r ../ard-ex/*  __INSTALL_DIR__/share/examples/arduino/
+
+	 
 
 distdir:
 	echo dummy impl

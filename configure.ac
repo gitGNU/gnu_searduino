@@ -18,7 +18,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.63)
-AC_INIT([Searduino], [0.47], [hesa@sandklef.com])
+AC_INIT([Searduino], [0.47.90], [hesa@sandklef.com])
 AC_COPYRIGHT([Copyright (c) 2012 Henrik Sandklef <hesa@sandklef.com>.])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -126,7 +126,7 @@ prepare_searduino_mk
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > simulators/pardon/searduino-pardon.sh
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile faked-arduino/communication/test/Makefile faked-arduino/communication/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/arduino/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/board-makefiles/Makefile test/Makefile ])
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile faked-arduino/communication/test/Makefile faked-arduino/communication/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/arduino/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/board-makefiles/Makefile test/Makefile arduino-extras/Makefile arduino-extras/include/Makefile ])
 
 AC_OUTPUT
 
