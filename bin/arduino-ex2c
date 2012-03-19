@@ -34,6 +34,14 @@ parse_args()
 		BUILD_TYPE=uno
 		shift
 		;;
+	    "--mega")
+		BUILD_TYPE=mega
+		shift
+		;;
+	    "--due")
+		BUILD_TYPE=due
+		shift
+		;;
 	    "--searduino-path")
 		MYPATH=$2
 		shift
@@ -66,7 +74,7 @@ parse_args()
     if [ "$1" = "" ]
     then
 	echo "No args given"
-	exit
+	exit 1
     elif [ -f $1 ]
     then
 	EX_FILE=$1
@@ -75,7 +83,7 @@ parse_args()
 	EX_DIR=$1
     else
 	echo "No dir or file given"
-	exit
+	exit 1
     fi
 }
 
@@ -149,9 +157,9 @@ create_makefile()
 	ARDUINO_VALUE=stub
 	TO_BUILD_TARGET="\$(SHLIB)"
 	TO_BUILD="SHLIB=lib$(echo $ARD_DIR | tr [A-Z] [a-z]).so"
-    elif [ "$BUILD_TYPE" = "uno" ]
+    elif [ "$BUILD_TYPE" = "uno" ] || [ "$BUILD_TYPE" = "due" ] || [ "$BUILD_TYPE" = "mega" ]
     then
-	ARDUINO_VALUE=uno
+	ARDUINO_VALUE=$BUILD_TYPE
 	TO_BUILD_TARGET=""
 	TO_BUILD=""
 	MAIN_FILE=$C_FILES
