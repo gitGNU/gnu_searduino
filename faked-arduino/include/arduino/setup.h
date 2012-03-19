@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include "utils/types.h"
+#include "pins_arduino.h"
 
 #define NR_OF_DIGITAL_PINS 20
 #define NR_OF_ANALOG_PINS 20
