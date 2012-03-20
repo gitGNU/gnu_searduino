@@ -79,6 +79,7 @@ AC_ARG_ENABLE([unittest],
 )
 
 if test "$python_enabled" = "yes"; then
+echo
 #   AX_PYTHON_DEVEL([])
 #   AX_PYTHON_DEVEL([">= '2.7'"])
 #     AX_PYTHON_VERSION_ENSURE( ["2.7"] )
