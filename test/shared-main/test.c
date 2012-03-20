@@ -21,9 +21,8 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <dlfcn.h>
+
+#include "Arduino.h"
 #include "setup.h"
 
 #define DLERR(d)  if(d==0) { printf ("DL Error:  %s\n", dlerror());  exit(1); }

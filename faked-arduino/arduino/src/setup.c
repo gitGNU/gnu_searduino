@@ -112,37 +112,6 @@ int searduino_setup(void)
 
   init_time();
 
-  
-  ret = comm_register_anain_cb(anain_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf(stderr, "Failed to register ai callback");
-    }
-
-  ret = comm_register_anaout_cb(anaout_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf(stderr, "Failed to register ai callback");
-    }
-
-  ret = comm_register_digin_cb(digin_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf(stderr, "Failed to register di callback");
-    }
-
-  ret = comm_register_digout_cb(digout_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf(stderr, "Failed to register do callback");
-    }
-
-  ret = comm_register_dig_mode_sim_cb(dig_mode_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf(stderr, "Failed to register do callback");
-    }
-
   searduino_set_running();
 
   already_setup=1;

@@ -21,13 +21,12 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "utils/types.h"
-#include "communication/comm.h"
-#include "arduino/setup.h"
+#include "arduino/searduino.h"
 
-#include "stdio.h"
-#include "string.h"
-#include "unistd.h"
+#include <stdio.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
 
 
 #ifndef SEASIM_SEASIM_H
@@ -75,10 +74,10 @@ uint8_t
 seasim_register_digout_sim_cb(do_to_sim_callback_ptr cb);
 
 uint8_t
-seasim_register_dig_mode_sim_cb(d_mode_callback_ptr cb);
+seasim_register_anaout_sim_cb(ao_to_sim_callback_ptr cb);
 
 uint8_t
-seasim_register_anaout_sim_cb(ao_to_sim_callback_ptr cb);
+seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb);
 
 int 
 seasim_setup(void);

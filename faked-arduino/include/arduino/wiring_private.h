@@ -23,7 +23,7 @@
 
 #include "utils/types.h"
 
-
+/*
 #define INPUT  0
 #define OUTPUT 1
 
@@ -34,18 +34,5 @@ void digitalWrite(uint8_t pin, uint8_t val);
 int digitalRead(uint8_t pin);
 
 int digitalReadMode(uint8_t pin);
+*/
 
-
-uint8_t 
-get_nr_of_pins(void);
-
-int ext_set_input(uint8_t pin, uint8_t val);
-
-void 
-set_digitalWrite_timelimit(unsigned int lim);
-
-unsigned int
-get_digitalWrite_timelimit(void);
-
-unsigned int 
-get_discard_ctr(unsigned char pin);

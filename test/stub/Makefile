@@ -31,7 +31,7 @@ SRC_C=test.c
 SEARDUINO_PATH=../..
 
 
-USER_C_FLAGS=-DINTERVAL=$(INTERVAL)
+USER_C_FLAGS=-DINTERVAL=$(INTERVAL) -I../../faked-arduino/include
 USER_LD_FLAGS= -L$(SEARDUINO_PATH)/faked-arduino/ -lpthread
 
 $(PROG):

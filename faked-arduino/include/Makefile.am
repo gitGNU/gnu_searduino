@@ -1,1 +1,1 @@
-SUBDIRS =    arduino communication utils
+SUBDIRS =    arduino communication utils avr

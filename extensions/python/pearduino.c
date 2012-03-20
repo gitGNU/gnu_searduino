@@ -49,13 +49,16 @@ pthread_t  *searduino_thread = &searduino_thread_impl;
 
 static PyObject *my_dig_callback = NULL;
 static PyObject *my_ana_callback = NULL;
+static PyObject *my_dig_mode_callback = NULL;
 static PyObject *c_my_set_dig_callback(PyObject *dummy, PyObject *args);
+static PyObject *c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args);
 static PyObject *c_my_set_ana_callback(PyObject *dummy, PyObject *args);
 
 void* arduino_code(void *in);
 
 
-void new_dig_out(uint8_t pin, uint8_t val)
+void 
+new_dig_out(uint8_t pin, uint8_t val)
 {
   PyObject *arglist;
   PyObject *result; 
@@ -82,6 +85,53 @@ void new_dig_out(uint8_t pin, uint8_t val)
       //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
       result = PyEval_CallObject(my_dig_callback, arglist);
+
+      Py_DECREF(arglist);
+      
+      if (result)
+	{
+	  Py_DECREF(result);
+	}      
+    }
+  else
+    {
+      fprintf (stderr, "*** ERRROR ***\n");
+      fprintf (stderr, "*** Could not call callback since no callback ***\n");
+    }
+
+  PyGILState_Release(gstate);
+  PEARDUINO_PRINT_OUT();
+}
+
+
+void 
+new_dig_mode(uint8_t pin, uint8_t mode)
+{
+  PyObject *arglist;
+  PyObject *result; 
+
+  PyGILState_STATE gstate;   
+  gstate = PyGILState_Ensure();   
+
+  PEARDUINO_PRINT_IN();
+
+  PEARDUINO_PRINT_INSIDE();
+
+  if (my_dig_mode_callback!=NULL)
+    {
+
+       arglist = Py_BuildValue("(ii)", pin, mode);
+
+      if (arglist==NULL)
+	{
+	  printf ("wooops, arglist is no no\n");
+	  exit(1);
+	}
+
+      /* printf(" Arguments to callback:  ");      fflush(stdout); */
+      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
+
+      result = PyEval_CallObject(my_dig_mode_callback, arglist);
 
       Py_DECREF(arglist);
       
@@ -157,6 +207,7 @@ static PyObject* c_get_pin_mode(PyObject* self, PyObject* args)
   PyArg_ParseTuple(args, "i", &pin);
 
   mode = seasim_get_dig_mode(pin);
+
   PyObject* o = Py_BuildValue("i", mode);
 
   PEARDUINO_PRINT_OUT();
@@ -224,8 +275,9 @@ static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
   PEARDUINO_PRINT_INSIDE_STR("Register callback for dig out"
 			"(in communication module)\n");
 
-  comm_register_digout_sim_cb(new_dig_out);
-  comm_register_anaout_sim_cb(new_ana_out);
+  seasim_register_digout_sim_cb(new_dig_out);
+  seasim_register_anaout_sim_cb(new_ana_out);
+  seasim_register_dig_mode_sim_cb(new_dig_mode);
   
   PEARDUINO_PRINT_OUT();
   PyObject* o = Py_BuildValue("i", 0);
@@ -387,6 +439,7 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_digitalRead", (PyCFunction)c_digitalRead, METH_VARARGS, NULL},
   {"seasim_set_dig_input", (PyCFunction)c_ext_set_dig_input, METH_VARARGS, NULL},
   {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
+  {"seasim_set_dig_mode_callback", (PyCFunction)c_my_set_dig_mode_callback, METH_VARARGS, NULL},
   {"seasim_set_ana_callback", (PyCFunction)c_my_set_ana_callback, METH_VARARGS, NULL},
   {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
   {"seasim_pause", (PyCFunction)c_pause, METH_VARARGS, NULL},
@@ -433,6 +486,38 @@ c_my_set_dig_callback(PyObject *dummy, PyObject *args)
     Py_XINCREF(temp);         /* Add a ref to the new callback */
     Py_XDECREF(my_dig_callback);  /* Dispose possible previous callback */
     my_dig_callback = temp;       /* Remember new callback */
+
+    /* Boilerplate to return "None" */
+    Py_INCREF(Py_None);
+    result = Py_None;
+
+    PEARDUINO_PRINT_INSIDE_STR("Python callback is registered");
+    usleep (1000);
+  }
+
+  PEARDUINO_PRINT_OUT();
+  return result;
+}
+
+
+static PyObject *
+c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args)
+{
+  PyObject *result = NULL;
+  PyObject *temp;
+  PEARDUINO_PRINT_IN();
+
+  if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
+    if (!PyCallable_Check(temp)) {
+      PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+      PEARDUINO_PRINT_OUT();
+
+      return NULL;
+    }
+
+    Py_XINCREF(temp);         /* Add a ref to the new callback */
+    Py_XDECREF(my_dig_mode_callback);  /* Dispose possible previous callback */
+    my_dig_mode_callback = temp;       /* Remember new callback */
 
     /* Boilerplate to return "None" */
     Py_INCREF(Py_None);

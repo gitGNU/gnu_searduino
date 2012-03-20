@@ -24,3 +24,5 @@
 #include "utils/types.h"
 
 
+#define USBCON  _SFR_MEM8(0XD8)
+

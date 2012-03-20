@@ -34,6 +34,8 @@ from gi.repository import Gdk
 #from gi.repository import Glib
 from gi.repository import GObject
 
+semaphore = BoundedSemaphore(1)
+
 #
 # searduino
 #
@@ -50,6 +52,14 @@ redColor.alpha=0.7
 #gdk_color_parse ("red");
 #redColor = Gdk.Color("red")
 #redColor = Gdk.color_parse("red")
+
+def getSem():
+#    print "Get semaphore"
+    semaphore.acquire()        
+
+def relSem():
+    semaphore.release()        
+#    print "Rel semaphore"
 
 def pardonPause():
     seasim_pause();
@@ -174,13 +184,20 @@ class digitalPin(Gtk.HBox):
         self.input.connect("clicked", self.on_dig_toggled, "1")
 
     def setMode(self, mode):
+        print "===> setMode"
         if (mode==1):
+            print "=== setMode 1"
             self.mode.set_text("OUTPUT")
-            self.input.set_property('visible', False)
+            print "=== setMode 1"
+#            self.input.set_property('visible', False)
         else:
-            self.input.set_property('visible', True)
+            print "=== setMode 0"
+#            self.input.set_property('visible', True)
+            print "=== setMode 0"
             self.mode.set_text("INPUT")
+            print "=== setMode 0"
             self.output_label.set_text("")
+        print "<=== setMode"
 
     def setVal(self, val):
         self.output_label.set_text(str(val))
@@ -297,7 +314,6 @@ class analogPin(Gtk.HBox):
 class MyWindow(Gtk.Window):
 
     
-    semaphore = BoundedSemaphore(1)
     digs = [None]*size
     anas = [None]*size
 
@@ -318,7 +334,9 @@ class MyWindow(Gtk.Window):
             print "no GUI update"
         else:
             for i in range(1,size-1):
-                self.pinUpdateMode(i,seasim_get_pin_mode(i));
+                mode = seasim_get_pin_mode(i)
+                print "updateModes (" + str(i)+ ", " + str(mode) + ")"
+                self.pinUpdateMode(i,mode);
                 
         self.sendInputPins()        
         return True
@@ -331,12 +349,13 @@ class MyWindow(Gtk.Window):
             for i in range(1,size-1):
   #              print "  --------------------------------------------- SIN " + str(i)
                 if (seasim_get_pin_mode(i)==0):
-                    self.semaphore.acquire()        
+                    print "updateModes:"
+                    getSem()        
                     value = self.digs[i].getVal()
-                    self.semaphore.release()
+                    relSem()
 #                    print "                                                                         WILL SEND: " + str(value) + "  from " + str(i)
                     seasim_set_dig_input(i,
-                                               value)
+                                         value)
                 
         return True
         
@@ -399,26 +418,41 @@ class MyWindow(Gtk.Window):
             self.anas[i] = analogPin(self,i)
             adigTable.attach(self.anas[i], 0, 1, i, i+1)
 #            self.pinUpdate(i,"on")
+
             
+        print "init...1"
         self.updateAllOut()
-        self._positiontimeoutid = GObject.timeout_add(2000, self.updateModes)
+        print "init..."
+#        self._positiontimeoutid = GObject.timeout_add(2000, self.updateModes)
+        print "init..."
         self._positiontimeoutid = GObject.timeout_add(5000, self.updateGUI)
+        print "init..."
         self.updateGUI()
+        print "init..."
 
     def updateDigOutPin(self,pin, val):
 #        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
-        self.semaphore.acquire()        
+        print "updateDigOutPin "+ str(pin) + " " + str(val)
+        getSem()
 #        print "self.digs[" + str(pin) + "].set_text(" + str(val)+ ")"
         self.digs[pin].setVal(val)
-        self.semaphore.release()
+        relSem()
+#        print "<--- rel sem #####################################################################"
+
+    def updateDigMode(self, pin, mode):
+        print "updateDigOutMode( " + str(pin) + " , " + str(mode) + ")"
+        getSem()
+        self.digs[pin].setMode(mode)
+        relSem()
 #        print "<--- rel sem #####################################################################"
 
     def updateAnaOutPin(self,pin, val):
-#        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
-        self.semaphore.acquire()        
+        #        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
+        print "updateAnaOutPin"
+        getSem()
 #        print "self.digs[" + str(pin) + "].set_text(" + str(val)+ ")"
         self.anas[pin].setVal(val)
-        self.semaphore.release()
+        relSem()
 #        print "<--- rel sem #####################################################################"
 
     def updateAllOut(self):
@@ -429,9 +463,10 @@ class MyWindow(Gtk.Window):
 
     def pinUpdateMode(self, pin, mode):
 #        print "digs at  " + str(pin) + " : " + str(self.digs[pin])
-        self.semaphore.acquire()        
+        print "pinUpdateMode"
+        getSem()
         self.digs[pin].setMode(mode)
-        self.semaphore.release()
+        relSem()
 
     def pinUpdate(self, nr, val_str):
         val=0
@@ -515,6 +550,16 @@ def newAnaOutCallback(pin, val):
         global win
         win.updateAnaOutPin(pin,val)
 
+def newDigModeCallback(pin, mode):
+#    print ""
+    print "==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
+    if (pin>size):
+        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
+    else:
+        global win
+        win.updateDigMode(pin,mode)
+    print " done with new mode"
+
 
 
 #file_win = FileChooserWindow()
@@ -555,6 +600,7 @@ else:
 
 print "ard_code: " + ard_code
 
+time.sleep(1)
 seasim_set_arduino_code(ard_code)
 seasim_initialise();
 seasim_start();
@@ -564,8 +610,11 @@ seasim_start();
        
 seasim_set_dig_callback(newDigOutCallback)
 seasim_set_ana_callback(newAnaOutCallback)
+seasim_set_dig_mode_callback(newDigModeCallback)
 
 #sys.exit(1)
+
+time.sleep(1)
 
 win = MyWindow()
 win.connect("delete-event", Gtk.main_quit)
@@ -573,6 +622,8 @@ win.show_all()
 
 GObject.idle_add(newDigOutCallback)
 GObject.idle_add(newAnaOutCallback)
+GObject.idle_add(newDigModeCallback)
+
 GObject.threads_init()
 
 

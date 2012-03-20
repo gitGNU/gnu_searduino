@@ -191,6 +191,8 @@ pinMode(uint8_t pin, uint8_t mode)
 
   set_digital_pin_mode(pin,mode);
 
+  comm_digital_set_mode(pin, mode);
+
   return;
 }
 
@@ -247,26 +249,26 @@ void digitalWrite(uint8_t pin, uint8_t val)
   if ( get_digital_pin_val(pin) != val)
     {
       set_digital_pin_val(pin,val);
-      /* printf ("wiring_digital()   (will call comm) pin:%d=%d  \n" ,pin,val);  */
 
       /*
        *
        */
       if (time_diff<digitalWrite_timelimit) 
 	{
-	  	  fprintf (stderr,"**** NO  micro seconds since last update on pin %d : %lu   (%lu)\n", 
-		   pin,
-		   time_diff, digitalWrite_timelimit);
+
+	  DEBUG_INFO(("**** NO  micro seconds since last update on pin %d : %lu   (%lu)\n", 
+		      pin,
+		      time_diff, digitalWrite_timelimit));
 	  
 	} 
       else
 	{
 	  arduino_digital_pins[pin].last_actual_write = cur_time ;     
-	  fprintf (stderr,"**** YES micro seconds since last update on pin %d : %lu  (%lu  %lu %lu)\n", 
-		   pin,
-		   time_diff,digitalWrite_timelimit, 
-		   (arduino_digital_pins[pin].last_write.tv_sec*1000000+arduino_digital_pins[pin].last_write.tv_usec),
-		   (arduino_digital_pins[pin].last_actual_write.tv_sec*1000000+arduino_digital_pins[pin].last_actual_write.tv_usec));
+	  DEBUG_INFO(("**** YES micro seconds since last update on pin %d : %lu  (%lu  %lu %lu)\n", 
+		      pin,
+		      time_diff,digitalWrite_timelimit, 
+		      (arduino_digital_pins[pin].last_write.tv_sec*1000000+arduino_digital_pins[pin].last_write.tv_usec),
+		      (arduino_digital_pins[pin].last_actual_write.tv_sec*1000000+arduino_digital_pins[pin].last_actual_write.tv_usec)));
 	  ret = comm_digital_write_outpin(pin,val);
 	  if (ret != SEARD_ARDUINO_OK)
 	    {

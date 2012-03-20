@@ -1,4 +1,4 @@
-SUBDIRS= avr boards
+SUBDIRS= boards
 
 library_includedir=$(includedir)/searduino/arduino
 library_include_HEADERS =  \

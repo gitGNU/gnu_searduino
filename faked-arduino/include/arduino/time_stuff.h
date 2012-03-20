@@ -21,16 +21,4 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#ifndef ARDUINO_TIME_STUFF_H
-#define ARDUINO_TIME_STUFF_H
-
-
-void init_time(void);
-
-unsigned long micros(void);
-
-void delay(unsigned long del);
-
-void delayMicroseconds(unsigned long del);
-
-#endif /* ARDUINO_TIME_STUFF_H*/
+/* EMPTY */

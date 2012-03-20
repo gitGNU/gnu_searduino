@@ -33,7 +33,8 @@ LIBTEST=-ltest
 
 SEARDUINO_PATH=../..
 
-USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
+USER_C_FLAGS= -I../../faked-arduino/include/arduino -I../../faked-arduino/include/
+SER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
 
 $(PROG): 
 

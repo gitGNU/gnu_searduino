@@ -22,17 +22,17 @@
  ****/
 
 #include "seasim/seasim.h"
-#include "communication/comm.h"
 
-
+/*
 extern ai_callback_ptr ai_callback;
 extern di_callback_ptr di_callback;
 extern ao_callback_ptr ao_callback;
 extern do_callback_ptr do_callback;
-extern do_to_sim_callback_ptr do_sim_callback;
-extern d_mode_callback_ptr    d_mode_callback;
-extern ao_to_sim_callback_ptr ao_sim_callback;
-extern a_mode_callback_ptr    a_mode_callback;
+*/
+//extern do_to_sim_callback_ptr do_sim_callback;
+//extern d_mode_callback_ptr    d_mode_callback;
+//extern ao_to_sim_callback_ptr ao_sim_callback;
+//extern a_mode_callback_ptr    a_mode_callback;
 
 
 unsigned int
@@ -123,7 +123,7 @@ seasim_register_digout_sim_cb(do_to_sim_callback_ptr cb)
 
 
 uint8_t
-seasim_register_dig_mode_sim_cb(d_mode_callback_ptr cb)
+seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)
 {
   return comm_register_dig_mode_sim_cb(cb);
 }

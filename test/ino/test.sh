@@ -1,10 +1,10 @@
 #!/bin/sh
 
-TMP_INST=/tmp/TMP_INSTALL3/
-
+TMP_INST=/tmp/TMP/
 SEARDUINO_PATH=$TMP_INST
+
 INO_EX=/tmp/ino-example
-EX_PATH=/tmp/TMP_INSTALL3/share/examples/arduino
+EX_PATH=$TMP_INST/share/examples/arduino
 
 mkdir -p $INO_EX
 cd       $INO_EX
@@ -27,13 +27,15 @@ test_ex()
     EXA=$2
 
     echo "Test: type:$TYPE $EXA"
+    
 
     $SEARDUINO_PATH/bin/arduino-ex2c    \
        --searduino-path $SEARDUINO_PATH \
        --$TYPE                          \
        --yes                            \
        $EX_PATH/$EXA
-    exit_on_failure $? "Failed creating C code for $EXA with type $TYPE"
+    exit_on_failure $? "Failed creating C code for $EXA with type $TYPE  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA
+)"
 
     cd $(basename $EXA)
 
@@ -68,7 +70,7 @@ then
     export UPLOAD="true"
 fi
 
-test_types ./1.Basics/AnalogReadSerial
+#test_types ./1.Basics/AnalogReadSerial
 test_types ./1.Basics/BareMinimum
 test_types ./1.Basics/Blink
 #test_types ./1.Basics/DigitalReadSerial
@@ -84,9 +86,10 @@ test_types ./2.Digital/Button
 #test_types ./3.Analog/AnalogInOutSerial
 test_types ./3.Analog/AnalogInput
 test_types ./3.Analog/AnalogWriteMega
-test_types ./3.Analog/Calibration
+#test_types ./3.Analog/Calibration
 test_types ./3.Analog/Fading
-test_types ./3.Analog/Smoothing
+#test_types ./3.Analog/Smoothing
+exit 0
 test_types ./4.Communication/ASCIITable
 test_types ./4.Communication/Dimmer
 test_types ./4.Communication/Graph

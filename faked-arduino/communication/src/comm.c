@@ -56,15 +56,19 @@ FILE* proto_stream ;
  *     used to callback listener when an Arduino output pin is set
  *
  */
-ai_callback_ptr ai_callback;
-di_callback_ptr di_callback;
-ao_callback_ptr ao_callback;
-do_callback_ptr do_callback;
-do_to_sim_callback_ptr do_sim_callback;
-d_mode_callback_ptr    d_mode_callback;
-ao_to_sim_callback_ptr ao_sim_callback;
-a_mode_callback_ptr    a_mode_callback;
 
+/*
+di_callback_ptr di_callback;
+do_callback_ptr do_callback;
+*/
+
+do_to_sim_callback_ptr do_sim_callback;
+dm_to_sim_callback_ptr dm_sim_callback;
+ao_to_sim_callback_ptr ao_sim_callback;
+
+/*
+a_mode_callback_ptr    a_mode_callback;
+*/
 
 
 
@@ -93,68 +97,7 @@ set_proto_stream(FILE *f)
 }
 
 
-uint8_t
-comm_register_digin_cb(di_callback_ptr cb)
-{
-  PRINT_FUNCTION_NAME(("%d",(int)cb));
 
-  if (cb==NULL)
-    {
-      return SEARD_COMM_NULL_CALLBACK;
-    }
-
-  di_callback = cb;
-  /* printf ("di cb done .... at %p\n", di_callback);  */
-  return SEARD_COMM_OK;
-}
-
-
-uint8_t
-comm_register_anain_cb(ai_callback_ptr cb)
-{
-  PRINT_FUNCTION_NAME(("%d",(int)cb));
-
-  if (cb==NULL)
-    {
-      return SEARD_COMM_NULL_CALLBACK;
-    }
-
-  ai_callback = cb;
-  /* printf ("ai cb done .... at %p\n", ai_callback);  */
-  return SEARD_COMM_OK;
-}
-
-
-
-uint8_t
-comm_register_digout_cb(do_callback_ptr cb)
-{
-  PRINT_FUNCTION_NAME(("%d",(int)cb));
-
-  if (cb==NULL)
-    {
-      return SEARD_COMM_NULL_CALLBACK;
-    }
-
-/*   printf ("do cb done\n"); */
-  do_callback = cb;
-  return SEARD_COMM_OK;
-}
-
-uint8_t
-comm_register_anaout_cb(do_callback_ptr cb)
-{
-  PRINT_FUNCTION_NAME(("%d",(int)cb));
-
-  if (cb==NULL)
-    {
-      return SEARD_COMM_NULL_CALLBACK;
-    }
-
-  /* printf ("ao cb done: %p\n", cb);  */
-  ao_callback = cb;
-  return SEARD_COMM_OK;
-}
 
 uint8_t
 comm_register_digout_sim_cb(do_to_sim_callback_ptr cb)
@@ -186,7 +129,7 @@ comm_register_anaout_sim_cb(ao_to_sim_callback_ptr cb)
 }
 
 uint8_t
-comm_register_dig_mode_sim_cb(d_mode_callback_ptr cb)
+comm_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)
 {
   PRINT_FUNCTION_NAME(("%d",(int)cb));
 
@@ -194,8 +137,7 @@ comm_register_dig_mode_sim_cb(d_mode_callback_ptr cb)
     {
       return SEARD_COMM_NULL_CALLBACK;
     }
-
-  d_mode_callback = cb;
+  dm_sim_callback = cb;
 
   return SEARD_COMM_OK;
 }

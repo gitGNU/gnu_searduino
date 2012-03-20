@@ -21,14 +21,10 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include <stdio.h>
-#include <unistd.h>
-#include <signal.h>
-
-#include <Arduino.h>
 #include <pthread.h>
-
+#include <Arduino.h>
 #include "seasim/seasim.h"
+
 
 
 void sim_sighandler(int sig);
@@ -44,9 +40,20 @@ pthread_t arduino_thread;
 void 
 my_do_sim_callback(uint8_t pin, uint8_t val)
 {
-  printf ("%s:%s(%d:%d)\n",__FILE__, __func__, pin, val);
-  printf ("\n");
+  fprintf (stdout,"digout:%d:%d\n",pin, val);
 }
+
+/* 
+ * Function to register in the Searduino code
+ *
+ * This function will be called every time the Arduino program updates a digital mode on a digital pin (on change only!)
+ */
+void 
+my_dm_sim_callback(uint8_t pin, uint8_t mode)
+{
+  fprintf (stdout,"digmod:%d:%d\n",pin, mode);
+}
+
 
 /* 
  * Function to register in the Searduino code
@@ -56,8 +63,7 @@ my_do_sim_callback(uint8_t pin, uint8_t val)
 void 
 my_ao_sim_callback(uint8_t pin, unsigned int val)
 {
-  printf ("%s:%s(%d:%d)\n",__FILE__, __func__, pin, val);
-  printf ("\n");
+  fprintf (stdout,"anaout:%d:%d\n",pin, val);
 }
 
 int 
@@ -79,6 +85,14 @@ sim_setup(char *ard_lib)
   if (ret != SEARD_COMM_OK)
     {
       fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
+      return ret;
+    }
+ 
+
+  ret  = seasim_register_dig_mode_sim_cb(my_dm_sim_callback);
+  if (ret != SEARD_COMM_OK)
+    {
+      fprintf (stderr, "Failed to register callback for Digital mode (pin, mode)\n");
       return ret;
     }
  
@@ -138,7 +152,7 @@ void* command_reader(void* in)
 /*  	  printf ("will parse: '%s'\n", tmp);  */
 	  sscanf(tmp, "%d:%d", &pin, &val);
   	  printf ("SIM WILL SET pin:%d val:%d  \n", pin, val);  
-	  di_callback(pin,val);
+	  seasim_set_dig_input(pin,val);
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{

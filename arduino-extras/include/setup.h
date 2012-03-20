@@ -21,4 +21,8 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#define   SEARDUINO_LOOP() for (;;) 
+/* #define   SEARDUINO_LOOP() for (;;) 
+
+
+EMPTY 
+*/

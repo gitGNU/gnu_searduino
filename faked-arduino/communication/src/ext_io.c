@@ -30,15 +30,7 @@
 uint8_t
 ext_set_dig_input(uint8_t pin, uint8_t val)
 {
-  PRINT_FUNCTION_NAME(("%d,%d",pin,val));
-  if (di_callback!=NULL)
-    {
-      di_callback(pin,val);
-    }
-  else
-    {
-      return 1;
-    }
+  digin_callback(pin,val);
 
   DEBUG_INFO(("%d,%d",pin,val));
   return SEARD_COMM_OK;
@@ -49,33 +41,20 @@ ext_set_ana_input(uint8_t pin, unsigned int val)
 {
   PRINT_FUNCTION_NAME(("%d,%d",pin,val));
 
-
-  if (ai_callback!=NULL)
-    {
-      ai_callback(pin,val);
-    }
-  else
-    {
-      return 1;
-    }
+  anain_callback(pin,val);
 
   DEBUG_INFO(("%d,%d",pin,val));
   return SEARD_COMM_OK;
 }
 
-uint8_t ext_get_dig_output(uint8_t pin)
+uint8_t 
+ext_get_dig_output(uint8_t pin)
 {
   uint8_t val ;
   PRINT_FUNCTION_NAME(("%d",pin));
 
-  if (do_callback!=NULL)
-    {
-      val = do_callback(pin);
-    }
-  else
-    {
-      return 1;
-    }
+  val = digout_callback(pin);
+
   DEBUG_INFO(("%d => %d",pin,val));
   return val;
 }
@@ -88,30 +67,24 @@ ext_get_ana_output(uint8_t pin)
   unsigned int val ;
   PRINT_FUNCTION_NAME(("%d",pin));
 
-  if (ao_callback!=NULL)
-    {
-      val = ao_callback(pin);
-    }
-  else
-    {
-      return 1;
-    }
+  anaout_callback(pin);
+
   DEBUG_INFO(("%d => %d",pin,val));
   return val;
 }
 
 
 
-uint8_t ext_get_dig_mode(uint8_t pin)
+uint8_t 
+ext_get_dig_mode(uint8_t pin)
 {
   uint8_t mode ;
   PRINT_FUNCTION_NAME(("%d",pin));
-/*   printf ("Will return using cb at %d\n", do_callback); */
-  mode = d_mode_callback(pin);
-/*   printf ("GUI Will return using cb at %d    pin:%d val=%d\n", do_callback, pin, val); */
+
+  mode = dig_mode_callback(pin);
+
   DEBUG_INFO(("%d => %d",pin,mode));
   return mode;
 }
-
 
 

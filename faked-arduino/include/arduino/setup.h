@@ -44,6 +44,11 @@ typedef searduino_main_ptr searduino_main_ptr_ptr ;
 #define   SEARDUINO_LOOP() for (;;) 
 #endif
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+
 int searduino_setup(void);
 
 void searduino_set_paused(void);
@@ -63,3 +68,21 @@ void init(void);
 int 
 searduino_set_arduino_code_name(const char* libname);
 
+uint8_t 
+get_nr_of_pins(void);
+
+int ext_set_input(uint8_t pin, uint8_t val);
+
+void 
+set_digitalWrite_timelimit(unsigned int lim);
+
+unsigned int
+get_digitalWrite_timelimit(void);
+
+unsigned int 
+get_discard_ctr(unsigned char pin);
+
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
