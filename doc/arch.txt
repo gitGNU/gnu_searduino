@@ -3,7 +3,7 @@ It's about time to begin documenting the mess called architecture
 
 
   +--------+  +------------+   +------------+    +-----------+
-  | Pardon |  | Py scripts |   | Stream sim |    | A Program |
+  | Pardon |  | Py scripts |   | Stream sim |    | C Program |
   +--------+  +------------+   +------------+    +-----------+
 
   +------------------------+  
@@ -22,4 +22,12 @@ It's about time to begin documenting the mess called architecture
      |     AVR / Arduino      |     |        Host HW      |
      +------------------------+     +---------------------+
 
+
+
+===============
+
+
   
+  +----------------------------------------------------------+
+  |                       Searduino API                      |
+  +----------------------------------------------------------+
