@@ -15,6 +15,7 @@ then
 	ARD_URL=$ARD_BASE/$ARD_FILE
     fi
 elif [ "${MY_OS:0:5}" = "CYGWIN" ]
+then
 	ARD_BASE=http://arduino.googlecode.com/files/
 	ARD_FILE=arduino-1.0-windows.zip
 	ARD_URL=$ARD_BASE/$ARD_FILE
