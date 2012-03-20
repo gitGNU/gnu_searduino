@@ -1,7 +1,7 @@
 generate:
 
 	@echo "*** Creating autotools dir"
-	-mkdir autotools/
+	-mkdir -p autotools/
 	libtoolize --automake  --copy --force
 
 	@echo "*** Retrieving configure tests needed by configure.in"
