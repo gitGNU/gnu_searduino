@@ -1,6 +1,6 @@
 #!/bin/sh
 
-MY_OS=$(uname -s)
+MY_OS=$(uname -s )
 
 if [ "$MY_OS" = "Linux" ]
 then
@@ -14,6 +14,10 @@ then
 	ARD_FILE=arduino-1.0-linux.tgz
 	ARD_URL=$ARD_BASE/$ARD_FILE
     fi
+elif [ "${MY_OS:0:5}" = "CYGWIN" ]
+	ARD_BASE=http://arduino.googlecode.com/files/
+	ARD_FILE=arduino-1.0-windows.zip
+	ARD_URL=$ARD_BASE/$ARD_FILE
 else
     echo "Currently no support for non GNU/Linux platforms"
     echo "Contact the searduino team"
