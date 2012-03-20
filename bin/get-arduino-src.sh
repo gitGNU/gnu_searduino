@@ -68,7 +68,20 @@ get_sources()
 unpack_sources()
 {
     exec_comm cd download-tmp
-    exec_comm tar zxvf $ARD_FILE
+    if [ "$MY_OS" = "Linux" ]
+    then
+	exec_comm tar zxvf $ARD_FILE
+    elif [ "${MY_OS:0:5}" = "CYGWI" ]
+    then
+	exec_comm unzip $ARD_FILE
+    elif [ "${MY_OS:0:3}" = "Mac" ]
+    then
+	exec_comm unzip $ARD_FILE
+    else
+	echo "Currently no support for non GNU/Linux platforms"
+	echo "Contact the searduino team"
+	exit 1
+    fi
     exec_comm cd ..
 }
 
