@@ -19,7 +19,7 @@ then
 	ARD_BASE=http://arduino.googlecode.com/files/
 	ARD_FILE=arduino-1.0-windows.zip
 	ARD_URL=$ARD_BASE/$ARD_FILE
-elif [ "${MY_OS:0:3}" = "Mac" ]
+elif [ "${MY_OS:0:6}" = "Darwin" ]
 then
 	ARD_BASE=http://arduino.googlecode.com/files/
 	ARD_FILE=arduino-1.0-macosx.zip
