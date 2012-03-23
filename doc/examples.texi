@@ -17,7 +17,7 @@
 @*
 @code{upload:}
 @*
-@code{include $(SEARDUINO_PATH)/mk/searduino.mk}
+@code{include $(SEARDUINO_PATH)/share/searduino/mk/searduino.mk}
 @*
 @section Example C code
 @*
