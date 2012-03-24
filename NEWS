@@ -10,10 +10,18 @@ News in 0.48
    #35973 	exit on failure in configure.ac
    #35871 	Example has file faulty include statement	
    #35965 	Run time path into binaries 	
- #35982: Don't fetch Arduino sources if already there
- #35873: Searduino can not create SHLIBs propoerly on x86_64
- #35964: Code for Arduino HW can not use SEARDUINO_LOOP
- #35980: Add option to set the number of pins
+   #35982       Don't fetch Arduino sources if already there
+   #35873       Searduino can not create SHLIBs propoerly on x86_64
+   #35964 	Code for Arduino HW can not use SEARDUINO_LOOP
+   #35980 	Add option to set the number of pins
+   #35963       Generated examples (arduino-ex2c) miss init();
+   #35979       Fixes for manual
+
+
+  Fixed Savannah tasks: 
+  ---------------------
+   #11900       Move "sleep" code from examples to stubs
+
 
   Other news
   --------------------------
