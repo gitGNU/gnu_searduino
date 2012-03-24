@@ -32,10 +32,10 @@ LIB_SEARDUINO_H_FILES=\
        ./include/communication/ext_io.h \
        ./include/arduino/boards/pins_due.h \
        ./include/arduino/error.h \
-       ./include/arduino/avr/interrupt.h \
-       ./include/arduino/avr/io.h \
-       ./include/arduino/avr/pgmspace.h \
-       ./include/arduino/avr/delay.h \
+       ./include/avr/interrupt.h \
+       ./include/avr/io.h \
+       ./include/avr/pgmspace.h \
+       ./include/avr/delay.h \
        ./include/arduino/wiring_private.h \
        ./include/arduino/pins_arduino.h \
        ./include/arduino/setup.h \
@@ -43,8 +43,10 @@ LIB_SEARDUINO_H_FILES=\
        ./include/utils/types.h \
        ./include/utils/error.h \
        ./include/utils/print.h \
-       ./include/arduino/time_stuff.h
-
+       ./include/arduino/time_stuff.h \
+       ./include/arduino/setup.h 
+#\
+#       ./include/arduino/searduino.h
 
 LIB_SEARDUINO_SOURCES_FILES= \
        ./communication/src/ext_io.c \
@@ -69,7 +71,8 @@ lib_LTLIBRARIES = libsearduinostub.la
 
 AM_CFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/arduino \
-           -I../faked-arduino/include/        
+           -I../faked-arduino/include/        \
+           -I../arduino-extras/include/ 
 
 
 AM_LDFLAGS= -ldl
