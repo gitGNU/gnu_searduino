@@ -21,8 +21,20 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-/* #define   SEARDUINO_LOOP() for (;;) 
+#ifndef ARDUINO_EXTRAS_SETUP_H
+#define ARDUINO_EXTRAS_SETUP_H
 
 
-EMPTY 
-*/
+#define ENABLE_SLEEP
+#ifdef  ENABLE_SLEEP
+#define   SEARDUINO_LOOP() for (;;)  \
+    if      (searduino_is_paused())  { fprintf (stderr, "z"); usleep(1000*200); } \
+    else if ( searduino_is_halted()) { fprintf (stderr, "Simulator halted, will return\n"); return 0; } \
+    else  
+#else
+#define   SEARDUINO_LOOP() for (;;) 
+#endif
+
+
+
+#endif /* ARDUINO_EXTRAS_SETUP_H*/

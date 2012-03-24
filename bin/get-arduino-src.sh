@@ -107,7 +107,7 @@ create_mk()
     exec_comm cp mk/arduino-sources/arduino-sources.mk        arduino-sources/
 }
 
-if [ -d arduino-sources/core/WMath.cpp ] && [ -d ard-ex ] 
+if [ -f arduino-sources/core/WMath.cpp ]
 then
     echo "Arduino code already downloaded, skipping download and unpack"
 else
@@ -117,3 +117,6 @@ else
 fi
 
 create_mk
+
+
+exit 0

@@ -105,27 +105,47 @@ AC_MSG_NOTICE([summary of build options:
   Unit test flags:  C: '$CHECK_CFLAGS   LD: '$CHECK_LIBS'
 ])
 
-./bin/get-arduino-src.sh
+exit_on_failure()
+{
+  if test "$1" != "0"; 
+  then
+    echo "$2 failed (return value: $1)"
+    exit
+  else	
+    echo "$2 OK"
+  fi
+}
 
+./bin/get-arduino-src.sh
+exit_on_failure $? ./bin/get-arduino-src.sh
 
 
 prepare_examples()
 {
     cat example/digpins/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digpins/Makefile.digpins
+    exit_on_failure $? "Prepared  digpins"
+
     cat example/python-digcounter/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/Makefile.digcounter
+    exit_on_failure $? "Prepared  python-digcounter"
+
     cat example/python-digcounter/simple-hw.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/simple-hw.sh
+    exit_on_failure $? "Prepared  python-digcounter"
 }
 
 prepare_searduino_mk()
 {
     cat mk/searduino.mk.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > mk/searduino.mk
+    exit_on_failure $? "Prepared searduino.mk "
+
     cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > arduino-sources/Makefile
+    exit_on_failure $? "Prepared Makefile"
 }
 
 prepare_examples
 prepare_searduino_mk
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > simulators/pardon/searduino-pardon.sh
+exit_on_failure $? "Prepared python simulator wrapper script"
 
 AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile faked-arduino/communication/test/Makefile faked-arduino/communication/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile faked-arduino/include/communication/Makefile faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/board-makefiles/Makefile test/Makefile arduino-extras/include/Makefile arduino-extras/Makefile ])
 

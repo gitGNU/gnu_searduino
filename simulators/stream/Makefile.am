@@ -27,7 +27,7 @@ bin_PROGRAMS= $(SIMULATOR)
 searduino_stream_sim_SOURCES=simulator.c
 
 AM_CFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../arduino-extras/include/ 
-AM_LDFLAGS= -L../../faked-arduino/.libs  -L../../extensions/arduino-lib -lsearduinostub -larduino-code -lpthread
+AM_LDFLAGS= -L../../faked-arduino/.libs  -lsearduinostub  -lpthread
 
 
 
