@@ -1,6 +1,7 @@
 #!/bin/sh
 
 MY_OS=$(uname -s )
+OS_EXTRA_DIR="arduino-1.0"
 
 if [ "$MY_OS" = "Linux" ]
 then
@@ -24,6 +25,7 @@ then
 	ARD_BASE=http://arduino.googlecode.com/files/
 	ARD_FILE=arduino-1.0-macosx.zip
 	ARD_URL=$ARD_BASE/$ARD_FILE
+	OS_EXTRA_DIR="Arduino.app/Contents/Resources/Java"
 else
     echo "Currently no support for non GNU/Linux platforms"
     echo "Contact the searduino team"
@@ -74,7 +76,7 @@ unpack_sources()
     elif [ "${MY_OS:0:5}" = "CYGWI" ]
     then
 	exec_comm unzip $ARD_FILE
-    elif [ "${MY_OS:0:3}" = "Mac" ]
+    elif [ "${MY_OS:0:6}" = "Darwin" ]
     then
 	exec_comm unzip $ARD_FILE
     else
@@ -87,14 +89,14 @@ unpack_sources()
 
 setup_sources()
 {
-#    exec_comm mkdir arduino-sources
-    exec_comm mkdir -p arduino-sources/core
-    exec_comm mkdir -p arduino-sources/variants
-    exec_comm mkdir ard-ex
+    mkdir arduino-sources
+    mkdir -p arduino-sources/core
+    mkdir -p arduino-sources/variants
+    mkdir ard-ex
 
-    exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/cores/arduino/* arduino-sources/core
-    exec_comm cp -r download-tmp/arduino-1.0/hardware/arduino/variants/* arduino-sources/variants/
-    exec_comm cp -r download-tmp/arduino-1.0/examples/* ard-ex/
+    exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/cores/arduino/* arduino-sources/core
+    exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/variants/* arduino-sources/variants/
+    exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/examples/* ard-ex/
 }
 
 
@@ -105,7 +107,7 @@ create_mk()
     exec_comm cp mk/arduino-sources/arduino-sources.mk        arduino-sources/
 }
 
-if [ -d arduino-sources/core ] && [ -d ard-ex ] 
+if [ -d arduino-sources/core/WMath.cpp ] && [ -d ard-ex ] 
 then
     echo "Arduino code already downloaded, skipping download and unpack"
 else
