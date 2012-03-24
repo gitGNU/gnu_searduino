@@ -24,10 +24,10 @@
 AUTOMAKE_OPTIONS = gnu
 
 
-libpearduino_la_SOURCES = pearduino.c
 lib_LTLIBRARIES = libpearduino.la
+libpearduino_la_SOURCES = pearduino.c
 
-AM_CFLAGS=@PYTHON_CPPFLAGS@ -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/
+AM_CFLAGS=@PYTHON_CPPFLAGS@ -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ 
 AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/   -lsearduinostub   
 #-L../arduino-lib/
 #-larduino-code 
