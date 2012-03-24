@@ -39,4 +39,4 @@ _LDFLAGS = $(USER_LD_FLAGS) -lpthread
 
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN)
 	echo "OBJ_C  $(OBJ_C)"
-	$(CC) $(LIB) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS) $(OBJ_MAIN)
+	$(CC) $(LIB) ) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS
