@@ -21,7 +21,9 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include "arduino/searduino.h"
+#include "searduino.h"
+#include "setup.h"
+#include "communication/comm.h"
 
 #include <stdio.h>
 #include <string.h>

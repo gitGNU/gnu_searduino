@@ -75,12 +75,6 @@ END_TEST
 START_TEST (test_di)
 {
 
-  fail_if (comm_register_digin_cb(NULL)!=
-	   SEARD_COMM_NULL_CALLBACK);
-
-  fail_if (comm_register_digin_cb(test_di_callback)!=
-	   SEARD_COMM_OK);
-
   fail_if (comm_register_digout_sim_cb(NULL)!=
 	   SEARD_COMM_NULL_CALLBACK);	   
 
@@ -90,37 +84,12 @@ START_TEST (test_di)
   callbacked_pin = -1;
   callbacked_val = -1;
 
-  ext_set_dig_input(2, 1);
-  fail_if(callbacked_pin!=2);
-  fail_if(callbacked_val!=1);
-
-  ext_set_dig_input(3, 10);
-  fail_if(callbacked_pin!=3);
-  fail_if(callbacked_val!=1);
-  
   callbacked_pin = -1;
   callbacked_val = -1;
 
   comm_digital_write_outpin(3, 1);
   fail_if(callbacked_pin!=3);
   fail_if(callbacked_val!=1);
-
-}
-END_TEST
-
-START_TEST (test_do)
-{
-
-  fail_if (comm_register_digout_cb(NULL)!=
-	   SEARD_COMM_NULL_CALLBACK);
-
-  fail_if (comm_register_digout_cb(test_do_callback)!=
-	   SEARD_COMM_OK);
-
-  callbacked_val = 1;
-  fail_if (ext_get_dig_output(3)!=1);
-  callbacked_val = 0;
-  fail_if (ext_get_dig_output(3)!=0);
 
 }
 END_TEST
@@ -136,7 +105,6 @@ buffer_suite(void) {
 
   tcase_add_test(tc_core, test_comm);
   tcase_add_test(tc_core, test_di);
-  tcase_add_test(tc_core, test_do);
 
   return s;
 }

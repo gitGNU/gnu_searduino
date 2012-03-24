@@ -26,3 +26,13 @@
 
 #define USBCON  _SFR_MEM8(0XD8)
 
+/* Darwin or all platforms ?
+
+__AVR_LIBC_VERSION__   10800UL
+
+
+if darwin and libc (above):
+
+   
+
+*/
