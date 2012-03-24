@@ -26,7 +26,7 @@ PROG=test
 SRC_C=
 SRC_CXX=
 MAIN_SRC=test.c
-ARDUINO=uno
+ARDUINO=stub
 
 SEARDUINO_PATH=../../
 

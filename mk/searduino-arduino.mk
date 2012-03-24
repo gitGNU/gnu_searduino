@@ -49,21 +49,32 @@ LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
 SEARDUINO_LIB=searduino
 
 
+#$(OBJ_O): $(OBJ_C)
+#	
+
+#$(PROG).elf:   $(OBJ_C) $(OBJ_CXX)
+#	echo "HEX HEX"
+#	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX) 
+
 $(MAIN_SRC).elf: $(MAIN_SRC).o  $(OBJ_C) $(OBJ_CXX)
 	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(MAIN_SRC).elf $(MAIN_SRC).o $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX) 
 
 $(MAIN_SRC).o: $(MAIN_SRC) 
 	$(CC) -c $(CFLAGS)  $(MAIN_SRC) -o  $(MAIN_SRC).o
 
-hex: $(MAIN_SRC).hex
+#hex: $(PROG).hex
+#$(PROG).hex:  $(LIB) $(PROG).elf
 $(MAIN_SRC).hex:   $(MAIN_SRC).o $(LIB) $(MAIN_SRC).elf
 	$(OBJ_CP)   -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(MAIN_SRC).elf $(MAIN_SRC).eep 
 	$(OBJ_CP)  -O ihex -R .eeprom $(MAIN_SRC).elf $(MAIN_SRC).hex  
 
+#$(PROG): $(PROG).hex 
 $(PROG): $(MAIN_SRC).hex 
 	@echo "--- Program '$(PROG).hex' ready for upload ---"
 
+
+#upload: $(PROG).hex
 upload: $(MAIN_SRC).hex
-	echo "$(ARDUINO)   $(BOARD)"
+	echo "Will upload to: $(ARDUINO)   $(BOARD)"
 	$(AVRDUDE) -q -q -p$(CPU) -carduino -P$(USB_DEV) -b$(board_upload.speed) -D -Uflash:w:${MAIN_SRC}.hex:i
 

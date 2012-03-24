@@ -1,6 +1,6 @@
 #!/bin/sh
 
-TMP_INST=/tmp/TMP/
+TMP_INST=/opt/searduino
 SEARDUINO_PATH=$TMP_INST
 
 INO_EX=/tmp/ino-example
@@ -84,10 +84,10 @@ test_types ./2.Digital/Button
 #test_types ./2.Digital/toneMultiple
 #test_types ./2.Digital/tonePitchFollower
 #test_types ./3.Analog/AnalogInOutSerial
-test_types ./3.Analog/AnalogInput
-test_types ./3.Analog/AnalogWriteMega
+#test_types ./3.Analog/AnalogInput
+#test_types ./3.Analog/AnalogWriteMega
 #test_types ./3.Analog/Calibration
-test_types ./3.Analog/Fading
+#test_types ./3.Analog/Fading
 #test_types ./3.Analog/Smoothing
 exit 0
 test_types ./4.Communication/ASCIITable
