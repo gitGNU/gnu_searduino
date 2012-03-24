@@ -16,7 +16,7 @@ News in 0.48
    #35980 	Add option to set the number of pins
    #35963       Generated examples (arduino-ex2c) miss init();
    #35979       Fixes for manual
-
+   #35983       Inclue Arduino examples in dists
 
   Fixed Savannah tasks: 
   ---------------------
