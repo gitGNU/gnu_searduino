@@ -23,6 +23,7 @@
 
 AUTOMAKE_OPTIONS = gnu
 
+if PYTHON_SUPPORT
 
 lib_LTLIBRARIES = libpearduino.la
 libpearduino_la_SOURCES = pearduino.c
@@ -36,3 +37,5 @@ install-exec-hook:
 	-rm $(DESTDIR)$(libdir)/pearduino.so
 	ln -s $(DESTDIR)$(libdir)/libpearduino.so \
               $(DESTDIR)$(libdir)/pearduino.so
+
+endif

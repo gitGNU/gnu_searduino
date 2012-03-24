@@ -61,7 +61,7 @@ exec_comm()
 
 get_sources()
 {
-    exec_comm mkdir -p download-tmp
+    mkdir -p download-tmp
     exec_comm rm -f $ARD_FILE
     wget $ARD_URL
     exec_comm mv   $ARD_FILE download-tmp
@@ -89,10 +89,10 @@ unpack_sources()
 
 setup_sources()
 {
-    mkdir arduino-sources
+    mkdir -p arduino-sources
     mkdir -p arduino-sources/core
     mkdir -p arduino-sources/variants
-    mkdir ard-ex
+    mkdir -p ard-ex
 
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/cores/arduino/* arduino-sources/core
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/variants/* arduino-sources/variants/

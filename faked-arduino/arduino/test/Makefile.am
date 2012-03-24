@@ -1,3 +1,6 @@
+
+if UNITTEST
+
 TESTS = testtime testwiring testsetup
 check_PROGRAMS = testtime testwiring testsetup testlimit
 
@@ -16,3 +19,6 @@ testsetup_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 testlimit_SOURCES = test_limit.c 
 testlimit_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
 testlimit_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
+
+
+endif

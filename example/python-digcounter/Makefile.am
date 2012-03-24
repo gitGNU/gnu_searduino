@@ -1,5 +1,7 @@
 pkgdataexampledir = $(pkgdatadir)/example/python-digcounter/
 
+EXTRA_DIST= simple-hw.sh.tmpl
+
 dist_pkgdataexample_DATA = \
   ard_code.c \
   Makefile.digcounter \

@@ -31,8 +31,6 @@ AC_PROG_CC
 AC_LANG_C
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
-# Check for program
-AM_MISSING_PROG(PYTHON, python, $missing_dir)
 
 # Checks for header files.
 AC_HEADER_STDC
@@ -79,18 +77,24 @@ AC_ARG_ENABLE([unittest],
 )
 
 if test "$python_enabled" = "yes"; then
+# Check for program
+  AM_MISSING_PROG(PYTHON, python, $missing_dir)
 #   AX_PYTHON_DEVEL([])
 #   AX_PYTHON_DEVEL([">= '2.7'"])
    AC_PYTHON_DEVEL([">= '2.7'"])
 #     AX_PYTHON_VERSION_ENSURE( ["2.7"] )
 #   AC_SUBST(PYTHON_LDFLAGS)
 #    AC_CHECK_HEADER(Python.h)
+   AC_SUBST(PYTHON_CPPFLAGS)
 fi
 
 if test "$ut_enabled" = "yes"; then
     PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 fi
-AC_SUBST(PYTHON_CPPFLAGS)
+
+AM_CONDITIONAL(PYTHON_SUPPORT, test "x$python_enabled" = "xyes")
+AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
+
 
 AC_MSG_NOTICE([summary of build options:
   version:          ${VERSION} shared

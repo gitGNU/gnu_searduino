@@ -18,7 +18,7 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/arduino-extras/      \
            -I$(SEARDUINO_INC_PATH)/                      \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/standard  \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/standard  
 #           -I$(SEARDUINO_INC_PATH)/boards  \
 #\
 #           -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino \
@@ -38,5 +38,4 @@ _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
 _LDFLAGS = $(USER_LD_FLAGS) -lpthread 
 
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN)
-	echo "OBJ_C  $(OBJ_C)"
-	$(CC) $(LIB) ) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS
+	$(CC) $(LIB) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS)

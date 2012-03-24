@@ -1,6 +1,6 @@
 SUBDIRS = arduino-sources arduino-extras faked-arduino extensions simulators mk example test 
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh 
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions
 
 ARD_SRC= \
     arduino-sources/core/WCharacter.h \
@@ -138,7 +138,6 @@ gen-coverage:
 		--title "$(PACKAGE_NAME)"
 
 coverage: init-cov build-cov gen-coverage 
-
 
 old-check:
 	cd test/ && cd hw && make clean && make && make check
