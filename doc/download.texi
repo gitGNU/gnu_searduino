@@ -1,5 +1,9 @@
 @chapter Getting and installing Searduino
 
+@section Required software
+
+More info will come.
+
 @section Released version of the source code 
 @*
 Download from 
@@ -27,7 +31,8 @@ and then continue with installating
 @*
 @code{make install}
 
-
+@i{Note: You can configure Searduino in several ways (e.g with or
+without Python). See Configuring Searduino for more information}
 
 @section Getting the latest source code
 
@@ -112,3 +117,23 @@ Searduino installation dir.
 The blinker program should run and print out (the printouts comes from
 the stub libraries). Interrupt the program by sending a signal, e g by
 pressing Ctrl-C.
+
+@section Configuring Searduino
+
+@subsection Python support
+By default Searduino builds a Python extension and a
+Simulator GUI. To disable this support, configure with the option
+@code{--disable-python}:
+@*
+@code{./configure --disable-python}:
+
+@*
+@*
+More info will come.
+
+@subsection Enable unit tests with check
+Configure with the option @code{--enable-unittest}
+@*
+@code{./configure --enable-unittest}:
+@*
+More info will come.

@@ -6,7 +6,7 @@ VERSION=$(shell ../bin/get-version)
 all: doc
 VIEWER=evince
 TEXI=architecture.texi manual.texi
-TEXI_INC=abbrevs.texi  background.texi  supported.texi download.texi
+TEXI_INC=abbrevs.texi  background.texi  supported.texi download.texi examples.texi
 PDF := $(TEXI:.texi=.pdf)
 HTML := $(TEXI:.texi=.html)
 TXT := $(TEXI:.texi=.txt)
@@ -50,10 +50,7 @@ html: $(HTML)
 txt:  $(TXT)
 doc:  $(DOC)
 
-$(PDF): $(SRC) Makefile version.texi
-
-li:
-	echo "PDF $(PDF)"
+$(PDF): $(SRC) Makefile version.texi $(TEXI_INC) $(TEXI)
 
 dist: $(DOC) version.texi
 	tar cvfz $(DOC_DIST) $(SRC) 

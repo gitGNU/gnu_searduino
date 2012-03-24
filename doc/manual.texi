@@ -107,6 +107,9 @@ So a very simple main function looks like this
 @code{    }
 @{
 @*
+@code{init();}
+@*
+@*
 @code{       digitalWrite(13, 1);}
 @*
 @code{       delay(100);}
@@ -135,8 +138,7 @@ Searduino installation
 @item PROG - name of the program to build
 @item SRC_C - a list (separated with space) of C files to compile
 @item SRC_CXX - a list (separated with space) of C++ files to compile
-@item MAIN_SRC - the C (not C++) file containing the main
-fuction. Should not be included in the SRC_C variable
+@item MAIN_SRC - the C (not C++) file containing the main fuction. Should not be included in the SRC_C variable
 @item ARDUINO - should be set to the type of software you want to
 build (see @b{Build types} below)
 @end itemize
@@ -148,7 +150,7 @@ You need to include some settings, targets and rules from
 Searduino. This is done by adding the following line to your Makefile.
 @*
 @*
-@code{include $(SEARDUINO_PATH)/mk/searduino.mk}
+@code{include $(SEARDUINO_PATH)/share/searduino/mk/searduino.mk}
 @*
 @*
 @*
@@ -232,7 +234,8 @@ Arduino hw they are disabled.
 @tab @b{Description}
 @item
 @tab @code{SEARDUINO_LOOP}
-@tab will be secribed....
+@tab On the Arduino boards this is the same as a for loop
+(@code{for(;;)}). When using this macro your code can be paused in the simulator.
 @item
 @tab more will come
 @tab and will be secribed....
@@ -470,6 +473,46 @@ this.
 Until we've written this section, we refer to the example @code{example/python-digcounter/simple-hw.py}.
 
 @section xxx simulator
+
+@chapter Using Arduino examples
+
+Searduino comes with a program, called arduino-ex2c, the can convert
+an Arduino example (.ino) to a C file that you compile with
+Searduino. Searduino also comes with all the Arduino examples.
+@* 
+Let's assume you want to work with the Arduino example called Blink
+and that you want to create a shared library (for use in the
+simulators). Do the the following:
+@*
+@*
+@code{/opt/searduino/bin/arduino-ex2c --shlib --searduino-path /opt/searduino/ \}
+@*
+@code{  /opt/searduino/share/examples/arduino/1.Basics/Blink/}
+@*
+@*
+If you want a stand alone program instead, do:
+@*
+@code{/opt/searduino/bin/arduino-ex2c --prog --searduino-path /opt/searduino/ \}
+@*
+@code{  /opt/searduino/share/examples/arduino/1.Basics/Blink/}
+@*
+@*
+If you want to build for Uno instead, do:
+@*
+@code{/opt/searduino/bin/arduino-ex2c --uno --searduino-path /opt/searduino/ \}
+@*
+@code{  /opt/searduino/share/examples/arduino/1.Basics/Blink/}
+@*
+
+You should now have a directory called Blink. Go to this dorectory and
+type:
+@*
+@code{make}
+@*
+
+
+@i{Note: If you only want to create the C file, simply pass the ino file insetad the directoy.}
+
 
 @chapter Debugging Arduino code
 

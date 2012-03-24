@@ -1,21 +1,19 @@
-        @section Example Makefile
+@section Example Makefile
 @*
 @*
 @code{SEARDUINO_PATH=/opt/searduino}
 @*
 @code{PROG=blinker}
 @*
-@code{SRC_C=blink.c}
+@code{SRC_C=main.c}
 @*
-@code{SRC_CXX= stuff.cpp morestuff.cpp}
+@code{SRC_CXX=}
 @*
-@code{MAIN_SRC=main.c}
+@code{MAIN_SRC=}
 @*
 @code{ARDUINO=stub}
 @*
 @code{$(PROG):}
-@*
-@code{upload:}
 @*
 @code{include $(SEARDUINO_PATH)/share/searduino/mk/searduino.mk}
 @*
@@ -29,21 +27,86 @@
 @*
 @{
 @*
+@code{init();}
+@*
+@*
 @code{  for(;;)}
 @*
 @code{    }
-@{
+   @{
 @*
 @code{       digitalWrite(13, 1);}
 @*
-@code{       delay(100);}
+@code{       delay(400);}
 @*
 @code{       digitalWrite(13, 0);}
 @*
-@code{       delay(100);}
+@code{       delay(400);}
 @*
 @code{   }
-@}
+    @}
 @*
 @}
+@*
+
+@section Building the example
+
+@subsection Building a stand alone program for host system
+
+To build and execute the code above for your host system, all you have
+to do is type:
+@*
+@code{make}
+@*
+And to run the program, you simply have to invoke it. 
+@*
+@code{./blinker}
+@*
+When the program is executing you can see printouts from the Arduino
+functions as implemented by Searduino. 
+
+
+@subsection Building the code for use in the simulators
+
+To build and execute the code above for your host system you have to
+twek the makefile a bit.
+
+@itemize @bullet
+@item The first Makefile target should be @code{@{SHLIB@}:} instead of, as in the
+original example, @code{@{PROG@}:} 
+@item Set the @code{SHLIB} variable to something, e g like this: @code{@{SHLIB=arduino-code.so@}}
+@end itemize
+@*
+The next thing to do is to type:
+@*
+@code{make}
+@*
+And to run the program in the stream simulator, you type
+@*
+@code{/opt/searduino/bin/searduino-stream-sim --arduino-code ./arduino-code.so}
+@*
+When the program is executing you can see printouts from the Arduino
+functions as implemented by Searduino. You can also set input values
+for your arduino code to read. Read more about the syntax in a
+separate chapter.
+@*
+If you want to run your code in the GUI simulator, type:
+@*
+@code{/opt/searduino/bin/searduino-pardon.sh --arduino-code ./arduino-code.so}
+@*
+
+@subsection Building the code for the Arduino boards
+
+To build and execute the code above for the Arduino hosts, UNO in this
+example, you have to adjust the makefile a bit.
+@*
+Set the @code{ARDUINO} variable to @code{uno}, assuming you want to
+build for the Arduino UNO board. The next thing to do is to type:
+@*
+@code{make clean}
+@code{make}
+@*
+And to run the upload the program to the board, type
+@*
+@code{make upload}
 @*
