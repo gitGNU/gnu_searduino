@@ -35,7 +35,7 @@ _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
              $(MODULE_CXX_FLAGS) \
              $(INC_FLAGS)
 
-_LDFLAGS = $(USER_LD_FLAGS) -lpthread 
+_LDFLAGS = $(USER_LD_FLAGS) -lpthread -Wl,-rpath,$(SEARDUINO_PATH)/lib
 
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN)
 	$(CC) $(LIB) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS)
