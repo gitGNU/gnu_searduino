@@ -313,10 +313,6 @@ class analogPin(Gtk.HBox):
 
 class MyWindow(Gtk.Window):
 
-    
-    digs = [None]*size
-    anas = [None]*size
-
     def updateGUI(self):
 #        print "updateGUI()  <-- " + str(paused)
         if (paused):
@@ -359,7 +355,12 @@ class MyWindow(Gtk.Window):
                 
         return True
         
-    def __init__(self):
+    def __init__(self, size):
+#        global size
+        
+        self.digs = [None]*size
+        self.anas = [None]*size
+
         Gtk.Window.__init__(self, title="Pardon - a simulator frontend for the Searduino project")
 
         topTable = Gtk.Table(2, 2, False)
@@ -411,6 +412,7 @@ class MyWindow(Gtk.Window):
         self.box.pack_start(self.bottomlabel,    False, True, 0)
 
         for i in range(1,(size-1)):
+            print "Update on pin: " + str(i)
             self.digs[i] = digitalPin(self,i)
             digTable.attach(self.digs[i], 0, 1, i, i+1)
             self.pinUpdate(i,"on")
@@ -585,10 +587,11 @@ def getArduinocodeLibrary():
     return file
     
 
-
+print "Main - will parse"
 
 parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator)')
 parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac", help='Arduino code to test')
+parser.add_argument('--pins', nargs=1, action="store", dest="pins", help='Number of pins in GUI')
 args = parser.parse_args()
 
 ard_code=""
@@ -600,7 +603,15 @@ else:
 
 print "ard_code: " + ard_code
 
+if args.pins != None:
+    print "Setting pins to: " + args.pins[0]
+    global size
+    size = int(args.pins[0])+2
+
+
+
 time.sleep(1)
+#time.sleep(10)
 seasim_set_arduino_code(ard_code)
 seasim_initialise();
 seasim_start();
@@ -616,7 +627,8 @@ seasim_set_dig_mode_callback(newDigModeCallback)
 
 time.sleep(1)
 
-win = MyWindow()
+
+win = MyWindow(size)
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
 

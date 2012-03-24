@@ -13,7 +13,7 @@ News in 0.48
  #35982: Don't fetch Arduino sources if already there
  #35873: Searduino can not create SHLIBs propoerly on x86_64
  #35964: Code for Arduino HW can not use SEARDUINO_LOOP
-
+ #35980: Add option to set the number of pins
 
   Other news
   --------------------------

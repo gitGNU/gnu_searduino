@@ -37,7 +37,7 @@ AVRDUDE=avrdude
 F_CPU=$(board_build.f_cpu)
 
 INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
-            -I$(SEARDUINO_INC_PATH)/arduino-extras       \
+            -I$(SEARDUINO_INC_PATH)/arduino-extras/    \
             -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/$(VARIANT) 
 
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \

@@ -24,8 +24,12 @@
 #ifndef ARDUINO_EXTRAS_SETUP_H
 #define ARDUINO_EXTRAS_SETUP_H
 
+#include "setup.h"
+
+
 #if defined ARDUINO == stub
 #define ENABLE_SLEEP
+#include <stdio.h>
 #else
 #undef ENABLE_SLEEP
 #endif
