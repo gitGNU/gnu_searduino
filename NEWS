@@ -1,5 +1,22 @@
 News in 0.48
 
+  Fixed Savannah bugs: 
+  ---------------------
+   #35978	MAIN_SRC SRC_C confusion	
+   #35977 	Translate Arduino examples script minor bugs
+   #35976 	Find a better way to look for Python stuff in configure
+   #35975 	Error/warning msg when configuring
+   #35974 	Problems with script to translate Arduino examples
+   #35973 	exit on failure in configure.ac
+   #35871 	Example has file faulty include statement	
+   #35965 	Run time path into binaries 	
+ #35982: Don't fetch Arduino sources if already there
+ #35873: Searduino can not create SHLIBs propoerly on x86_64
+ #35964: Code for Arduino HW can not use SEARDUINO_LOOP
+
+
+  Other news
+  --------------------------
   * Arduino examples included
   * Searduino can translate from Arduino example to C code 
     that can be built by Searduino

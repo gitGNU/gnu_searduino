@@ -24,8 +24,12 @@
 #ifndef ARDUINO_EXTRAS_SETUP_H
 #define ARDUINO_EXTRAS_SETUP_H
 
-
+#if defined ARDUINO == stub
 #define ENABLE_SLEEP
+#else
+#undef ENABLE_SLEEP
+#endif
+
 #ifdef  ENABLE_SLEEP
 #define   SEARDUINO_LOOP() for (;;)  \
     if      (searduino_is_paused())  { fprintf (stderr, "z"); usleep(1000*200); } \

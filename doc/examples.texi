@@ -1,4 +1,4 @@
-@section Example Makefile
+        @section Example Makefile
 @*
 @*
 @code{SEARDUINO_PATH=/opt/searduino}
