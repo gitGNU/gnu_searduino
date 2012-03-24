@@ -14,6 +14,7 @@ JAVAC=gcj
 
 INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/arduino/             \
+           -I$(SEARDUINO_INC_PATH)/arduino-extras/include   \
            -I$(SEARDUINO_INC_PATH)/                     \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/standard  \
 #           -I$(SEARDUINO_INC_PATH)/boards  \
