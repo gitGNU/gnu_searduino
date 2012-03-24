@@ -27,8 +27,9 @@
 
 #include "arduino/wiring_private.h"
 #include "arduino/pins_arduino.h"
-#include "arduino/setup.h"
-#include "../include/error.h"
+#include "searduino.h"
+#include "../include/arduino/error.h"
+#include "../include/arduino/setup.h"
 #include "utils/print.h"
 #include "utils/types.h"
 #include "arduino/error.h"

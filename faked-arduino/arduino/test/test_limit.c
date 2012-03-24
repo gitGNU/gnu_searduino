@@ -22,8 +22,9 @@
  ****/
 
 
-#include "time_stuff.h"
-#include "wiring_private.h"
+#include "Arduino.h"
+#include "time_stuff.h" 
+#include "wiring_private.h" 
 #include <check.h>
 #include <stdlib.h>
 #include <stdio.h>

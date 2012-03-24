@@ -24,7 +24,7 @@
 #include "Arduino.h"
 #include "arduino/wiring_private.h"
 #include "arduino/pins_arduino.h"
-#include "../include/error.h"
+#include "../include/arduino/error.h"
 #include "utils/print.h"
 #include "utils/types.h"
 #include "arduino/error.h"
