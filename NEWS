@@ -17,13 +17,13 @@ News in 0.48
    #35963       Generated examples (arduino-ex2c) miss init();
    #35979       Fixes for manual
    #35983       Inclue Arduino examples in dists
+   #35976       Find a better way to look for Python stuff in configure
 
   Fixed Savannah tasks: 
   ---------------------
    #11900       Move "sleep" code from examples to stubs
 
-
-  Other news
+  Misc
   --------------------------
   * Arduino examples included
   * Searduino can translate from Arduino example to C code 
