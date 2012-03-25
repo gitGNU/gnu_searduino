@@ -1,6 +1,7 @@
 SUBDIRS = arduino-sources arduino-extras faked-arduino extensions simulators mk example test 
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh 
+
 
 ARD_SRC= \
     arduino-sources/core/WCharacter.h \
@@ -93,7 +94,7 @@ ARD_EXAMPLES = \
     ard-ex/1.Basics/Blink/Blink.ino 
 
 
-bin_SCRIPTS = bin/arduino-ex2c bin/functions
+bin_SCRIPTS = bin/arduino-ex2c bin/functions bin/verify-install.sh 
 
 
 pkgdataexampledir = $(pkgdatadir)/tmpl
