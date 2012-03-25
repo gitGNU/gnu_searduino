@@ -90,7 +90,7 @@ $(SHLIB): LIB_FLAGS:=-Dmain=searduino_main
 $(SHLIB): $(OBJ_C)  $(OBJ_CXX) 
 	@echo "Creating directory: $(LIB_PATH)/"
 	mkdir -p $(LIB_PATH)/
-	$(CC) -shared  $(OBJ_C)  $(OBJ_CXX)   -o $(SHLIB) $(LDFLAGS)
+	$(CC)  -shared  $(OBJ_C)  $(OBJ_CXX)   -o $(SHLIB) $(LDFLAGS)
 	@echo "Created lib: $(SHLIB)"
 
 

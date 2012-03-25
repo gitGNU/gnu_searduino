@@ -26,7 +26,7 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
 
 SEARDUINO_LIB=searduinostub
 
-_CFLAGS=   -g $(USER_C_FLAGS) -Wall \
+_CFLAGS=   -g $(USER_C_FLAGS) -Wall -fPIC \
             $(LIB_FLAGS) \
             $(MODULE_C_FLAGS) \
             $(INC_FLAGS)

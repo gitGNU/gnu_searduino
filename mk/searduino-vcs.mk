@@ -27,7 +27,7 @@ endif
 
 SEARDUINO_MK_PATH=$(SEARDUINO_PATH)/
 SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
-SEARDUINO_LIB_PATH=-L$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD) -L$(SEARDUINO_PATH)/faked-arduino/.libs
+SEARDUINO_LIB_PATH=-L$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD) -L$(SEARDUINO_PATH)/faked-arduino/.libs 
 
 ifeq (${ARDUINO},stub)
 include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
