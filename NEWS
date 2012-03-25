@@ -25,7 +25,9 @@ News in 0.48
 
   Fixed Savannah tasks: 
   ---------------------
-   #11900       Move "sleep" code from examples to stubs
+   #11900  Move "sleep" code from examples to stubs
+   #11948  Test code to test bin releases
+   #11921  Add examples on how to check (and use) binary dist
 
   Misc
   --------------------------
