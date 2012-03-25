@@ -7,7 +7,7 @@ SEARDUINO_PATH=/opt/searduino
 export LD_LIBRARY_PATH=/opt/searduino/lib
 
 
-#TMPL_DIR=$(dirname $0)/../share/searduino/tmpl
+TMPL_DIR=$(dirname $0)/../share/searduino/tmpl
 
 exit_on_failure()
 {
