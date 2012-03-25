@@ -164,8 +164,8 @@ create_makefile()
     elif [ "$BUILD_TYPE" = "uno" ] || [ "$BUILD_TYPE" = "due" ] || [ "$BUILD_TYPE" = "mega" ]
     then
 	ARDUINO_VALUE=$BUILD_TYPE
-	TO_BUILD_TARGET=""
-	TO_BUILD=""
+	TO_BUILD_TARGET="\$(PROG)"
+	TO_BUILD="PROG=ard-code"
 	MAIN_FILE=$C_FILES
 	C_FILES=""
     fi
