@@ -51,6 +51,12 @@ test_ex()
 	exit_on_failure $? "Make in $(pwd)"
     fi
   
+    if [ "$TYPE" = "shlib" ] && [ "$SIMULATE" = "true" ] 
+    then
+	make simulate
+	exit_on_failure $? "Make in $(pwd)"
+    fi
+  
     cd ..
 }
 
@@ -65,10 +71,17 @@ test_types()
     
 }
 
-if [ "$1" = "--upload" ]
-then
-    export UPLOAD="true"
-fi
+while [ "$1" != "" ]
+do
+    if [ "$1" = "--upload" ]
+    then
+	export UPLOAD="true"
+    elif [ "$1" = "--simulate" ]
+    then
+	export SIMULATE="true"
+    fi
+    shift
+done
 
 #test_types ./1.Basics/AnalogReadSerial
 test_types ./1.Basics/BareMinimum
