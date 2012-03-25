@@ -18,7 +18,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 AC_PREREQ(2.63)
-AC_INIT([Searduino], [0.47.92], [hesa@sandklef.com])
+AC_INIT([Searduino], [0.47.93], [hesa@sandklef.com])
 AC_COPYRIGHT([Copyright (c) 2012 Henrik Sandklef <hesa@sandklef.com>.])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIR([m4])
@@ -150,6 +150,9 @@ prepare_searduino_mk
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > simulators/pardon/searduino-pardon.sh
 exit_on_failure $? "Prepared python simulator wrapper script"
+
+cat bin/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > bin/verify-install.sh
+exit_on_failure $? "Prepared installation verification script"
 
 cat bin/arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > bin/arduino-ex2c
 exit_on_failure $? "Prepared Arduino examples to C translator"
