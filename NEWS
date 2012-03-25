@@ -2,22 +2,26 @@ News in 0.48
 
   Fixed Savannah bugs: 
   ---------------------
-   #35978	MAIN_SRC SRC_C confusion	
-   #35977 	Translate Arduino examples script minor bugs
-   #35976 	Find a better way to look for Python stuff in configure
-   #35975 	Error/warning msg when configuring
-   #35974 	Problems with script to translate Arduino examples
-   #35973 	exit on failure in configure.ac
-   #35871 	Example has file faulty include statement	
-   #35965 	Run time path into binaries 	
-   #35982       Don't fetch Arduino sources if already there
-   #35873       Searduino can not create SHLIBs propoerly on x86_64
-   #35964 	Code for Arduino HW can not use SEARDUINO_LOOP
-   #35980 	Add option to set the number of pins
-   #35963       Generated examples (arduino-ex2c) miss init();
-   #35979       Fixes for manual
-   #35983       Inclue Arduino examples in dists
-   #35976       Find a better way to look for Python stuff in configure
+   #35978  MAIN_SRC SRC_C confusion	
+   #35977  Translate Arduino examples script minor bugs
+   #35976  Find a better way to look for Python stuff in configure
+   #35975  Error/warning msg when configuring
+   #35974  Problems with script to translate Arduino examples
+   #35973  exit on failure in configure.ac
+   #35871  Example has file faulty include statement	
+   #35965  Run time path into binaries 	
+   #35982  Don't fetch Arduino sources if already there
+   #35873  Searduino can not create SHLIBs propoerly on x86_64
+   #35964  Code for Arduino HW can not use SEARDUINO_LOOP
+   #35980  Add option to set the number of pins
+   #35963  Generated examples (arduino-ex2c) miss init();
+   #35979  Fixes for manual
+   #35983  Inclue Arduino examples in dists
+   #35976  Find a better way to look for Python stuff in configure
+   #35870  Built in example code fails to load in Pardon
+   #35872  Example misses info on how to execute program
+   #35991  Converted example includes setup instead of searduno.h
+   #35990  PROG not set when converting arduino ex to C code
 
   Fixed Savannah tasks: 
   ---------------------
