@@ -27,6 +27,7 @@ include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
 
 OBJ_C = $(SRC_C:.c=.o) 
 OBJ_CXX = $(SRC_CXX:.cpp=.o) 
+OBJ_MAIN = $(MAIN_SRC:.c=.o) 
 
 
 CC=avr-gcc
@@ -56,25 +57,29 @@ SEARDUINO_LIB=searduino
 #	echo "HEX HEX"
 #	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX) 
 
-$(MAIN_SRC).elf: $(MAIN_SRC).o  $(OBJ_C) $(OBJ_CXX)
-	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(MAIN_SRC).elf $(MAIN_SRC).o $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX) 
+helo:
+	echo "$(OBJ_MAIN)"
 
-$(MAIN_SRC).o: $(MAIN_SRC) 
-	$(CC) -c $(CFLAGS)  $(MAIN_SRC) -o  $(MAIN_SRC).o
+$(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
+	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) $(LIB) -lm $(LDFLAGS) 
 
-#hex: $(PROG).hex
-#$(PROG).hex:  $(LIB) $(PROG).elf
-$(MAIN_SRC).hex:   $(MAIN_SRC).o $(LIB) $(MAIN_SRC).elf
-	$(OBJ_CP)   -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(MAIN_SRC).elf $(MAIN_SRC).eep 
-	$(OBJ_CP)  -O ihex -R .eeprom $(MAIN_SRC).elf $(MAIN_SRC).hex  
+#$(PROG).o: $(PROG) 
+#	$(CC) -c $(CFLAGS)  $(MAIN_OBJS) -o  $(MAIN_SRC).o
 
-#$(PROG): $(PROG).hex 
-$(PROG): $(MAIN_SRC).hex 
+#$(MAIN_SRC).hex:   $(MAIN_SRC).o $(LIB) $(MAIN_SRC).elf
+$(PROG).hex:   $(OBJ_MAIN) $(LIB) $(PROG).elf
+	echo HEX
+	$(OBJ_CP)   -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(PROG).elf $(PROG).eep 
+	$(OBJ_CP)  -O ihex -R .eeprom $(PROG).elf $(PROG).hex  
+
+#$(PROG): $(MAIN_SRC).hex 
+$(PROG): $(PROG).hex 
 	@echo "--- Program '$(PROG).hex' ready for upload ---"
 
+prog: $(PROG).hex
 
 #upload: $(PROG).hex
-upload: $(MAIN_SRC).hex
+upload: $(PROG).hex
 	echo "Will upload to: $(ARDUINO)   $(BOARD)"
-	$(AVRDUDE) -q -q -p$(CPU) -carduino -P$(USB_DEV) -b$(board_upload.speed) -D -Uflash:w:${MAIN_SRC}.hex:i
+	$(AVRDUDE) -q -q -p$(CPU) -carduino -P$(USB_DEV) -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
 
