@@ -2,7 +2,15 @@
 
 @section Required software
 
-More info will come.
+For Debian based GNU/Linux distributions:
+@itemize @bullet
+@item gcc-avr
+@item binutils-avr
+@item avrdude
+@item avrprog
+@item avr-libc
+@end itemize
+
 
 @section Released version of the source code 
 @*
