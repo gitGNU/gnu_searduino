@@ -19,22 +19,66 @@
 # Foundation, Inc., 51 Franklin Street, Boston,            
 # MA  02110-1301, USA.                                              
 #
+####################################################################
+
+#
+# Instructions on how to use this Makefile can be found at the end 
+# of this file
 #
 
+#
+# Path to your Searduino installation
+#
 SEARDUINO_PATH=__INSTALL_DIR__/
-PROG=blinker
-SRC_C=blink.c 
+
+#
+# Source code
+#
+SRC_C=blink.c main.c
 SRC_CXX=
-MAIN_SRC=main.c
-ARDUINO=due
 
+#
+# Build type should be any of the following
+#
+# ARDUINO=due
+# ARDUINO=uno
+# ARDUINO=mega
+# ARDUINO=stub
+#
+# By default, we're building for local execution (not Arduino boards)
+#   you can change this value at wish
+#
+ARDUINO=stub
 
-$(PROG): ARDUINO=stub
-
-upload: ARDUINO=due
+PROG=digpin
+SHLIB=digpins.so
 
 include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
 
 
-check-sw: 
-	./$(PROG)
+########## Build instructions ################
+#
+#
+#
+# Build shared library (for use in simulators):
+#
+#    Set the ARDUNIO variable in this Makefile to stub and then execute
+#
+#        make clean shlib
+#
+#
+# Build stand alone binary
+#
+#     Set the ARDUNIO variable in this Makefile to stub and then execute
+#
+#        make clean prog
+#
+#
+# Build binary for uno
+#
+#     Set the ARDUNIO variable in this Makefile to uno and then execute
+#
+#        make clean prog
+#
+#
+#

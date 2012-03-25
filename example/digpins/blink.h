@@ -23,7 +23,4 @@
 
 #include <Arduino.h>
 
-#define FIRST_LED 5
-#define LAST_LED  13
-
-uint8_t blink_stupidly(uint8_t pin);
+uint8_t blinker(uint8_t pin);

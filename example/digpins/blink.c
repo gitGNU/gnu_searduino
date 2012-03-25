@@ -22,28 +22,25 @@
  ****/
 
 #include <Arduino.h>
+#include "blink.h"
 
-
-void blink_helper(uint8_t pin, unsigned long indelay)
+uint8_t 
+blinker(uint8_t pin)
 {
-  digitalWrite(pin, HIGH);
-  delay(indelay);
-  digitalWrite(pin, LOW);
-  delay(indelay);
-}
+  uint8_t i;
 
-void 
-blink_stupidly(uint8_t pin)
-{
-  int i ;
-  unsigned long mydelay = 5000;
-
-  for (i=0;i<20;i++)
+  /* Start by blinking fast. 
+     Blink slower and slower and then return */
+  for (i=5;i<100;)
     {
-      blink_helper(pin, mydelay);
-      mydelay = mydelay / 2;
+      digitalWrite(pin, HIGH);
+      delay(i*10);
+      digitalWrite(pin, LOW);
+      delay(i*10);
+
+      i=i*140/100;
     }
-  digitalWrite(13, LOW);
-  delay(2000);
-  
+  return 0;
 }
+
+
