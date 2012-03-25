@@ -9,11 +9,9 @@
 @*
 @code{SRC_CXX=}
 @*
-@code{MAIN_SRC=}
+@code{SHLIB=blinker.so}
 @*
 @code{ARDUINO=stub}
-@*
-@code{$(PROG):}
 @*
 @code{include $(SEARDUINO_PATH)/share/searduino/mk/searduino.mk}
 @*
@@ -21,6 +19,9 @@
 @*
 @*
 @code{#include <Arduino.h>}
+@*
+@code{#include <searduino.h>}
+@*
 @*
 @*
 @code{int main(void)}
@@ -68,18 +69,10 @@ functions as implemented by Searduino.
 
 @subsection Building the code for use in the simulators
 
-To build and execute the code above for your host system you have to
-twek the makefile a bit.
-
-@itemize @bullet
-@item The first Makefile target should be @code{@{SHLIB@}:} instead of, as in the
-original example, @code{@{PROG@}:} 
-@item Set the @code{SHLIB} variable to something, e g like this: @code{@{SHLIB=arduino-code.so@}}
-@end itemize
+To build and execute the code above for your host system and to be run
+in a simulator you should type:
 @*
-The next thing to do is to type:
-@*
-@code{make}
+@code{make shlib}
 @*
 And to run the program in the stream simulator, you type
 @*
@@ -104,7 +97,7 @@ Set the @code{ARDUINO} variable to @code{uno}, assuming you want to
 build for the Arduino UNO board. The next thing to do is to type:
 @*
 @code{make clean}
-@code{make}
+@code{make prog}
 @*
 And to run the upload the program to the board, type
 @*

@@ -73,11 +73,14 @@ now proceed by writing our first Arduino program using Searduino.
 Open up your favorite editor (emacs?) and begin....
 @*
 @*
-To use the Arduino functionality you need to icnlude Arduino.h, so
+To use the Arduino functionality you need to include Arduino.h and searduino.h, so
 we need to add this to our file:
 @*
 @*
 @code{#include <Arduino.h>}
+@*
+@code{#include <searduino.h>}
+@*
 @*
 @*
 When using Arduino IDE you've seen the @code{loop} function as the
@@ -96,6 +99,12 @@ loop (see @uref{http://en.wikipedia.org/wiki/Embedded_system#Simple_control_loop
 @*
 @*
 So a very simple main function looks like this
+@*
+@*
+@code{#include <Arduino.h>}
+@*
+@code{#include <searduino.h>}
+@*
 @*
 @*
 @code{int main(void)}
@@ -136,9 +145,9 @@ pin 13 already has a built in led on the board.}
 @item SEARDUINO_PATH - should be set to the directory of your
 Searduino installation
 @item PROG - name of the program to build
+@item SHLIB - name of the shared library to build
 @item SRC_C - a list (separated with space) of C files to compile
 @item SRC_CXX - a list (separated with space) of C++ files to compile
-@item MAIN_SRC - the C (not C++) file containing the main fuction. Should not be included in the SRC_C variable
 @item ARDUINO - should be set to the type of software you want to
 build (see @b{Build types} below)
 @end itemize
@@ -154,9 +163,29 @@ Searduino. This is done by adding the following line to your Makefile.
 @*
 @*
 @*
+A Makefile to build the code above can look like this:
+@*
+@*
+@code{SEARDUINO_PATH=/opt/searduino/}
+@*
+@code{SRC_C=seardex.c}
+@*
+@code{SRC_CXX=}
+@*
+@code{ARDUINO=stub}
+@*
+@code{PROG=seardex}
+@*
+@code{SHLIB=seardex.so}
+@*
+@code{include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk}
+@*
+@*
 
-Note: You don't have to use the makefiles provided by Searduino. The
-makefiles do however provide a lot of help (board settings etc).
+
+
+@i{Note: You don't have to use the makefiles provided by Searduino. The
+makefiles do however provide a lot of help (board settings etc).}
 
 
 
@@ -172,13 +201,38 @@ make sure the the variable @b{ARDUINO} in the Makefile is set to
 @*
 @code{make clean}
 @*
-@code{make}
+@code{make prog}
 @*
 
 To run the program
 @*
 @*
-@code{./blinker}
+@code{./seardex}
+
+
+@subsection Building a shared library for use in the simulators
+To build your software to be executed on your PC:
+make sure the the variable @b{ARDUINO} in the Makefile is set to
+@b{stub}.
+
+ and type:
+@*
+@*
+@code{make clean}
+@*
+@code{make shlib}
+@*
+@*
+To run the code in the stream simulator
+@*
+@*
+@code{/opt/searduino/bin/searduino-stream-sim --arduino-code ./seardex.so}
+@*
+@*
+To run the code in the Pardon simulator
+@*
+@*
+@code{/opt/searduino/bin/searduino-pardon.sh --arduino-code ./seardex.so}
 
 
 @subsection Building the program for UNO
@@ -196,7 +250,7 @@ To build the program, all we have to do now is to type:
 @*
 @code{make clean}
 @*
-@code{make}
+@code{make prog}
 @*
 @*
 @*

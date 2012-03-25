@@ -92,31 +92,101 @@ E.g http://download.savannah.gnu.org/releases/searduino/bin/searduino-bin-0.4-x8
 @code{tar zxvf searduino-bin-0.4-x86.tar.gz}
 @*
 @*
-@b{Verify installation - with the digpins example}
+
+
+@section Verify installation
+
+@subsection With Arduino examples
+
+To verify the Searduino installation we have developed a script that:
+@itemize @bullet
+@item Converts Arduino examples (.ino files) to C files
+@item Builds a stand alone program
+@item Builds a shared library (for use in simulator)
+@item Builds for all supported Arduino boards
+@end itemize
 @*
-@code{cd example/digpins/}
+To use it, type:
+@*
+@*
+@code{cd /opt/searduino}
+@*
+@*
+@code{./bin/verify-install.sh}
+@*
+@*
+You can upload all built program to the uno boards by adding the option @code{--upload}
+@*
+@*
+@code{bin/verify-install.sh --upload}
+@*
+@*
+@i{Note: this only uploads to the Uno boards, not to the other
+supported boards}
+@*
+@*
+@b{Experimental feature!!}
+You can also execute each shared library in the stream simulator, by
+using the option @code{--simulate}
+@*
+@*
+@code{bin/verify-install.sh --simulate}
+@*
+@*
+@i{Note: Since the Arduino code will execute for ever, you must stop
+the simulator each time it is loaded with a shread library. You stop
+the simulator by pressing pressing Ctrl-c}
+@*
+@*
+
+@subsection With the digpins example
+
+Go the the digpins example directory.
+@*
+@*
+@code{cd /opt/searduino/share/searduino/example/digpins}
+@*
 @*
 Make sure that the SEARDUINO_PATH in the Makefile points to your
 Searduino installation dir. 
 @*
 @*
+@*
 @b{Build blinker program for PC}
 @*
-@code{make}
 @*
-@*
-@b{Set up environment to find the Searduino shared libs}
-@*
-@code{export LD_LIBRARY_PATH=/opt/searduino/libs}
+@code{make prog}
 @*
 @*
 @b{Execute blinker}
 @*
-@code{make check-sw}
+@*
+@code{./blinker}
+@*
 @*
 The blinker program should run and print out (the printouts comes from
 the stub libraries). Interrupt the program by sending a signal, e g by
 pressing Ctrl-C.
+@*
+@*
+@b{Build blinker lib for use in simulator}
+@*
+@*
+@code{make shlib}
+@*
+@*
+There should be a shared library file called @code{digpins.so} in the
+current directory. You can load this shared library (think of it as a
+plugin) in any of the simulators. We will load it in the stream
+simulator.
+@*
+@*
+@code{/opt/searduino/bin/searduino-stream-sim  --arduino-code ./digpins.so }
+@*
+@*
+You should now see printouts from the Searduino simulator. You can
+stop the program by pressing Ctrl-C ('Control key' and 'c key' at the
+same time). 
 
 @section Configuring Searduino
 
