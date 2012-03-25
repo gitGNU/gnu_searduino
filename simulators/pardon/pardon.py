@@ -42,7 +42,7 @@ semaphore = BoundedSemaphore(1)
 
 paused = 0 
 
-size = 10
+size = 16
 
 redColor = Gdk.RGBA()
 redColor.red=1.0
