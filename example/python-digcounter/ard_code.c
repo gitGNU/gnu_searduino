@@ -22,16 +22,13 @@
  ****/
 
 #include <Arduino.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "setup.h"
+#include "searduino.h"
 
 void setup(void) {
   int i ; 
 
   pinMode(1, OUTPUT);      
   pinMode(3, OUTPUT);      
-
 }
 
 
@@ -43,17 +40,15 @@ int main(void)
 
   setup();
 
-  
   SEARDUINO_LOOP()
     {
       digitalWrite(1,i%2);
       digitalWrite(3,digitalRead(2));
 
-      analogWrite(1,i);
-      analogWrite(3,analogRead(2));
-
+      analogWrite(3,analogRead(4));
+      
       i++;
-      usleep(1000*200); 
+      delay(11); 
     }
 }
 

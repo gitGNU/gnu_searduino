@@ -28,96 +28,148 @@ from threading import Thread
 import time
 import sys
 
-#from gi.repository import Gtk
-#from gi.repository import Gdk
-#from gi.repository import GObject
-
-
 #
-# Input pin on Ardunio that the ard-code reads
-ardInputPin=1
-
-#
-# Output pin on Ardunio where Ack is set
-ardAckPin=5
-
+# Digital pins (as seen by the Arduino)
+# 
+arduinoDigOutPinA = 1
+arduinoDigOutPinB = 3
+arduinoDigInPin   = 2
 
 sim_pause=0
 
-receivedAck=0
+arduinoDigOutPinAValue = 0 
+arduinoDigOutPinBValue = 0 
+
+expectedArduinoDigOutPinAValue = 0 
+expectedArduinoDigOutPinBValue = 0 
+
+arduinoAnaOutPin              = 3
+arduinoAnaInPin               = 4 
+arduinoAnaOutPinValue         = 0 
+expectedArduinoAnaOutPinValue = 0 
+
+
+checkCounter = 0 
+
+def newDigModeCallback(pin, mode):
+    print "py:dmode" + str(pin) + ":" + str(mode) + "   callbacked Arduino dig mode   "
+
+def newAnaOutCallback(pin, val):
+    global arduinoAnaOutPin
+    global arduinoAnaOutPinValue
+    global expectedArduinoAnaOutPinValue
+
+#    print "py:apin" + str(pin) + ":" + str(val) + "   callbacked Arduino ana pin   "
+
+    if (pin==arduinoAnaOutPin):
+        arduinoAnaOutPinValue = val
+    else:
+        print "py:apin" + str(pin) + ":" + str(val) + "   callbacked Arduino ana pin   "
 
 def newDigOutCallback(pin, val):
-    print "pyc:" + str(pin) + ":" + str(val) + "   callbacked Arduino dig out"
+    global arduinoDigOutPinBValue
+    global arduinoDigOutPinA
+    global arduinoDigOutPinB
+#    print "pyc:" + str(pin) + ":" + str(val) + "   callbacked Arduino dig out   "
+    if (pin==arduinoDigOutPinA):
+        arduinoDigOutPinAValue = val
+    elif (pin==arduinoDigOutPinB):
+        arduinoDigOutPinBValue = val
     
+    
+def setValues(value):
+    global expectedArduinoDigOutPinBValue
+    global expectedArduinoAnaOutPinValue
+    expectedArduinoDigOutPinBValue = value%2
+    expectedArduinoAnaOutPinValue  = value
+#    print "Write Analog value(" + str(arduinoAnaInPin) + ", " + str(expectedArduinoAnaOutPinValue) + ")"
+    seasim_set_dig_input(arduinoDigInPin,expectedArduinoDigOutPinBValue)
+    seasim_set_ana_input(arduinoAnaInPin,expectedArduinoAnaOutPinValue)
+    time.sleep(0.2)
 
-def tickOneTime():
 
-    global sim_pause
-
-    tmp=0
-    tmp2=0
-    while True:
-        if (sim_pause):
-            time.sleep(1)
-        else:
-            limit = 10
-            
-            tmp = tmp + 1
-            
-            py_ext_set_input(ardInputPin,(tmp%2))
-            
-        #        print "setting dig in: " + str(tmp) + " to: " +  str((tmp+tmp2)%2)
-            print "pys:" + str(tmp) + ":" + str((tmp+tmp2)%2) + "   setting Arduino dig in from sim"
-            py_ext_set_input(tmp,(tmp+tmp2)%2)
-            time.sleep(0.2)
-
-            if (tmp==8):
-                tmp=0
-                tmp2=tmp2+1
 
 def pause():
+    print "Pausing...."
     global sim_pause
     sim_pause=1;
-    searduino_pause();
+    seasim_pause();
+#    setValues(1)
       
 def resume():
+    print "Resuming...."
     global sim_pause
+    seasim_resume();
+#    setValues(1)
     sim_pause=0;
-    searduino_resume();
-      
+
+def check_values():
+    global checkCounter 
+    global expectedArduinoDigOutPinBValue
+    global arduinoDigOutPinBValue
+    global sim_pause
+    global expectedArduinoAnaOutPinValue
+    global arduinoAnaOutPinValue
+
+    if (sim_pause==0):
+        checkCounter = checkCounter + 1
+        checkEq1 = (expectedArduinoDigOutPinBValue==arduinoDigOutPinBValue)
+        checkEq2 = (expectedArduinoAnaOutPinValue==arduinoAnaOutPinValue)
+        if (checkEq1==False):
+            print "CHECK 1 Failed:     " + str(expectedArduinoDigOutPinBValue) + "==" + \
+                str(arduinoDigOutPinBValue) + " => " + \
+                str(checkEq1)
+            sys.exit(1)
+        if (checkEq2==False):
+            print "CHECK 2 Failed:     " + str(expectedArduinoAnaOutPinValue) + "==" + \
+                str(arduinoAnaOutPinValue) + " => " + \
+                str(checkEq2)
+            sys.exit(1)
+        print "check " + str(checkCounter) + ": OK   [" + \
+                str(arduinoDigOutPinBValue) + "," + \
+                str(arduinoAnaOutPinValue) + "]" 
+
+            
 def main():
-
+        
     print "Starting????"
+    
+    
+    seasim_set_arduino_code("./libarduino-code.so")
+    seasim_initialise();
+    seasim_disable_streamed_output()
+    print "Register callback for digital "
 
-    global receivedAck
-    receivedAck=0 
+    seasim_set_dig_callback(newDigOutCallback)
+    seasim_set_dig_mode_callback(newDigModeCallback)
+    seasim_set_ana_callback(newAnaOutCallback)
 
-    print "Register callback"
-    my_set_callback(newDigOutCallback)
-    time.sleep(1)
-
-
-    print "Start thread"
-    tt = Thread(target=tickOneTime, args=())
-    tt.start()
+    seasim_start();
 
     tmp = 2 
+    setValues(tmp)
+    time.sleep(2)
     while True:
-        time.sleep (1)
 
-        if (tmp==0):
-            resume();
-            time.sleep(10)
-            tmp=1
-        elif (tmp==10):
-            pause();
-            time.sleep(10)
-            tmp=0
-        else:
-            tmp = tmp + 1
+        setValues(tmp)
+        check_values()
+
+        setValues(tmp+1)
+        check_values()
         
+        remainder = tmp%10
+        if (remainder==0):
+            resume();
+            time.sleep(1)
+        elif (remainder==9):
+            pause();
+            time.sleep(3)
+        tmp = tmp + 1
 
-
+        # start from 0 at 1023, since we're using tmp+1 above
+        if (tmp>=1023):
+            tmp=0;
+        
 
 if __name__ == "__main__":
     main()
