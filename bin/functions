@@ -54,3 +54,8 @@ close_logging()
 }
 
 set_vars
+
+if [ "$1" = "--version" ]
+then
+   echo "$SEARD_VERSION"
+fi
