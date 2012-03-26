@@ -60,7 +60,7 @@ comm_digital_set_mode(uint8_t pin, uint8_t mode)
   /* If output enabled, print info on pin/val to stream*/
   if ( stub_output_enabled ) 
     {
-      fprintf(proto_stream, "pin:%d:%d  (in stub)\n", pin, mode); 
+      fprintf(proto_stream, "dmode:%d:%d  (in stub)\n", pin, mode); 
       fflush(proto_stream);
     }
 
@@ -87,7 +87,7 @@ comm_digital_write_outpin(uint8_t pin, uint8_t val)
   /* If output enabled, print info on pin/val to stream*/
   if ( stub_output_enabled ) 
     {
-      fprintf(proto_stream, "pin:%d:%d  (in stub)\n", pin, val); 
+      fprintf(proto_stream, "dpin:%d:%d  (in stub)\n", pin, val); 
       fflush(proto_stream);
     }
 
