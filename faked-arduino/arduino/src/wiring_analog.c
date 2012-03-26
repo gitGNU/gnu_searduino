@@ -86,7 +86,6 @@ void analogWrite(uint8_t pin, unsigned int val)
 {
   set_analog_pin_val(pin,val)
 
-  /* printf ("Ard coded analogWrite (%d,%d) \n", pin, val); */
   comm_analog_write_outpin(pin,val);
 }
 
