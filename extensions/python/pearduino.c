@@ -73,15 +73,15 @@ new_dig_out(uint8_t pin, uint8_t val)
   if (my_dig_callback!=NULL)
     {
 
-       arglist = Py_BuildValue("(ii)", pin, val);
-
+      arglist = Py_BuildValue("(ii)", pin, val);
+      
       if (arglist==NULL)
 	{
 	  printf ("wooops, arglist is no no\n");
 	  exit(1);
 	}
 
-      /* printf(" Arguments to callback:  ");      fflush(stdout); */
+      //  printf(" Arguments to callback: (%d,%d) ", pin, val);      fflush(stdout); 
       //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
       result = PyEval_CallObject(my_dig_callback, arglist);
@@ -96,8 +96,9 @@ new_dig_out(uint8_t pin, uint8_t val)
   else
     {
       fprintf (stderr, "*** ERRROR ***\n");
-      fprintf (stderr, "*** Could not call callback since no callback ***\n");
+      fprintf (stderr, "*** Could not call digital out callback since no callback ***\n");
     }
+
 
   PyGILState_Release(gstate);
   PEARDUINO_PRINT_OUT();
@@ -143,7 +144,7 @@ new_dig_mode(uint8_t pin, uint8_t mode)
   else
     {
       fprintf (stderr, "*** ERRROR ***\n");
-      fprintf (stderr, "*** Could not call callback since no callback ***\n");
+      fprintf (stderr, "*** Could not call digital mode callback since no callback ***\n");
     }
 
   PyGILState_Release(gstate);
@@ -189,7 +190,7 @@ void new_ana_out(uint8_t pin, unsigned int val)
   else
     {
       fprintf (stderr, "*** ERRROR ***\n");
-      fprintf (stderr, "*** Could not call callback since no callback ***\n");
+      fprintf (stderr, "*** Could not call analog out callback since no callback ***\n");
     }
 
   PyGILState_Release(gstate);
@@ -241,6 +242,30 @@ static PyObject* c_set_digitalWrite_timelimit(PyObject* self, PyObject* args)
   seasim_set_digitalWrite_timelimit(val);
   /* printf ("pear: after  %d\n", get_digitalWrite_timelimit()); */
   PyObject* o = Py_BuildValue("i", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+static PyObject* c_disable_streamed_output(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  PEARDUINO_PRINT_IN();
+  
+  seasim_disable_streamed_output();
+  PyObject* o = Py_BuildValue("i", 0);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+static PyObject* c_enable_streamed_output(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  PEARDUINO_PRINT_IN();
+  
+  seasim_enable_streamed_output();
+  PyObject* o = Py_BuildValue("i", 0);
 
   PEARDUINO_PRINT_OUT();
   return o;
@@ -355,6 +380,7 @@ static PyObject* c_ext_set_ana_input(PyObject* self, PyObject* args)
   PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
 
   val= seasim_set_ana_input(pin, val);
+
   PyObject* o = Py_BuildValue("i", val);
 
   PEARDUINO_PRINT_OUT();
@@ -451,6 +477,8 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_start", (PyCFunction)c_start, METH_VARARGS, NULL},
   {"seasim_set_digitalWrite_timelimit", (PyCFunction)c_set_digitalWrite_timelimit, METH_VARARGS, NULL},
   {"seasim_get_digitalWrite_timelimit", (PyCFunction)c_get_digitalWrite_timelimit, METH_VARARGS, NULL},
+  {"seasim_disable_streamed_output", (PyCFunction)c_disable_streamed_output, METH_VARARGS, NULL},
+  {"seasim_enable_streamed_output", (PyCFunction)c_enable_streamed_output, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
 
