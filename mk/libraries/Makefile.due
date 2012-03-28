@@ -1,0 +1,6 @@
+ARDUINO=due
+
+include libraries.mk
+
+all:
+	make due
