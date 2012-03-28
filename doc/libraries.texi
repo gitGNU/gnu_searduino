@@ -1,0 +1,27 @@
+@chapter Turning your code into a library
+
+In bigger projects it might be useful to put some pieces of code
+together and turn it into a library, the obvious case would be to turn
+sub projects into libraries.
+
+@section Preparing the Makefile
+
+Take an existing Searduino Makefile. From this you need to add just a
+few things:
+@*
+@*
+@itemize @bullet
+@item @code{LIB} - set this variable to the name of your library
+@item @code{LIB_H} - header files to install
+@item @code{USER_LIB_INSTALL_PATH} - where to install your library and headers
+@end itemize
+@*
+@*
+After this, the only thing you need to do is to call
+@code{lib-install} and your library and headers will be installed.
+@*
+@i{Note: the library is install under USER_LIB_INSTALL_PATH/lib/board,
+where board is the board as derived from the ARDUINO variable}
+@*
+
+
