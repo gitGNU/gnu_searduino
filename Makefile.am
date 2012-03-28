@@ -32,7 +32,10 @@ ARD_SRC= \
     arduino-sources/variants/mega/pins_arduino.h \
     arduino-sources/variants/eightanaloginputs/pins_arduino.h \
     arduino-sources/variants/leonardo/pins_arduino.h \
-    arduino-sources/variants/standard/pins_arduino.h 
+    arduino-sources/variants/standard/pins_arduino.h \
+arduino-sources/libraries/Ethernet/EthernetUdp.h arduino-sources/libraries/Ethernet/EthernetClient.h arduino-sources/libraries/Ethernet/Ethernet.h arduino-sources/libraries/Ethernet/EthernetServer.h arduino-sources/libraries/Ethernet/Dns.h arduino-sources/libraries/Ethernet/utility/w5100.h arduino-sources/libraries/Ethernet/utility/socket.h arduino-sources/libraries/Ethernet/util.h arduino-sources/libraries/Ethernet/Dhcp.h arduino-sources/libraries/Firmata/Firmata.h arduino-sources/libraries/Firmata/Boards.h arduino-sources/libraries/Wire/Wire.h arduino-sources/libraries/Wire/utility/twi.h arduino-sources/libraries/SPI/SPI.h arduino-sources/libraries/LiquidCrystal/LiquidCrystal.h arduino-sources/libraries/SoftwareSerial/SoftwareSerial.h arduino-sources/libraries/SD/utility/SdFat.h arduino-sources/libraries/SD/utility/Sd2Card.h arduino-sources/libraries/SD/utility/SdFatmainpage.h arduino-sources/libraries/SD/utility/Sd2PinMap.h arduino-sources/libraries/SD/utility/FatStructs.h arduino-sources/libraries/SD/utility/SdFatUtil.h arduino-sources/libraries/SD/utility/SdInfo.h arduino-sources/libraries/SD/SD.h arduino-sources/libraries/Stepper/Stepper.h arduino-sources/libraries/EEPROM/EEPROM.h arduino-sources/libraries/Servo/Servo.h 
+
+
 
 ARD_EXAMPLES = \
     ard-ex/ArduinoISP/ArduinoISP.ino \
