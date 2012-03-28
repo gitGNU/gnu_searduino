@@ -40,7 +40,15 @@ F_CPU=$(board_build.f_cpu)
 INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
             -I$(SEARDUINO_INC_PATH)/arduino-extras/      \
             -I$(SEARDUINO_INC_PATH)/arduino-extras/include    \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/$(VARIANT) 
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/$(VARIANT) \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/utility \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/ \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SPI \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Firmata \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/utility \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/ \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility \
+
 
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -ffunction-sections -fdata-sections \
