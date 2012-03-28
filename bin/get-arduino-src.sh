@@ -96,6 +96,7 @@ setup_sources()
 
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/cores/arduino/* arduino-sources/core
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/variants/* arduino-sources/variants/
+    exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/libraries arduino-sources/
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/examples/* ard-ex/
 }
 
