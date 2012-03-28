@@ -156,6 +156,8 @@ prepare_searduino_mk()
 
     cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > arduino-sources/Makefile
     exit_on_failure $? "Prepared arduino-sources Makefile"
+
+    mkdir -p arduino-sources/libraries/	 
     cat mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > arduino-sources/libraries/Makefile
     exit_on_failure $? "Prepared libraries Makefile"
 }
