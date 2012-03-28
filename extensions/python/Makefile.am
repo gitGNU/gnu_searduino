@@ -34,8 +34,8 @@ AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/   -lsearduinostub
 #-larduino-code 
 
 install-exec-hook:
-	-rm $(DESTDIR)$(libdir)/pearduino.so
-	ln -s $(DESTDIR)$(libdir)/libpearduino.so \
-              $(DESTDIR)$(libdir)/pearduino.so
+	-rm $(DESTDIR)$(libdir)/pearduino$(SHLIB_EXT)
+	ln -s $(DESTDIR)$(libdir)/libpearduino$(SHLIB_EXT) \
+              $(DESTDIR)$(libdir)/pearduino$(SHLIB_EXT)
 
 endif
