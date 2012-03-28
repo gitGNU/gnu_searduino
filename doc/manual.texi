@@ -263,6 +263,9 @@ To upload and run the program on the Arduino UNO board:
 You should now be able to see the built in led (pin 13) flash. If not,
 the author of this document need to his homework.
 
+
+@include testing.texi
+
 @chapter Build for different targets
 
 With Searduino it's (relatively) easy to compile your program for
@@ -374,6 +377,11 @@ You switch on and off this mode as many times you want during execution using th
 @tab @code{dpin:<pin>:<value>}
 @tab @code{dpin:1:0}
 @tab Digital output pin 1 is 0
+
+@item
+@tab @code{dmode:<pin>:<mode>}
+@tab @code{dpin:1:0}
+@tab Mode of digital pin 1 is 0
 
 @item
 @tab @code{apin:<pin>:<value>}
@@ -567,6 +575,8 @@ type:
 
 @i{Note: If you only want to create the C file, simply pass the ino file insetad the directoy.}
 
+
+@include libraries.texi
 
 @chapter Debugging Arduino code
 

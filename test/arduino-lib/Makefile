@@ -28,7 +28,7 @@ BUILD_FROM_VCS=true
 LIB=libfunctions.a
 SRC_C=functions.c
 LIB_H=functions.h
-USER_LIB_INSTALL_PATH=/tmp/einar
+USER_LIB_INSTALL_PATH=/tmp/searduino-lib-install
 
 all: $(SHLIB) 
 
@@ -38,6 +38,8 @@ USER_C_FLAGS=-fPIC
 USER_LD_FLAGS= -fPIC  -lsearduino
 
 $(LIB):
+
+install: lib-install
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 

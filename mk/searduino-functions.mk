@@ -32,6 +32,11 @@ ifndef BOARD
 $(error Variables not set correctly BOARD='$(BOARD)' (ARDUINO='${ARDUINO}'))
 endif		
 
+LIB_INSTALL=.
+ifdef USER_LIB_INSTALL_PATH
+LIB_INSTALL=$(USER_LIB_INSTALL_PATH)
+endif		
+
 
 LIBSEARDUINO_CFLAGS=
 LIBSEARDUINO_CXXFLAGS=
@@ -84,7 +89,7 @@ $(LIB): $(OBJ_C)  $(OBJ_CXX)
 	@echo "Creating directory: $(LIB_PATH)/"
 	mkdir -p $(LIB_PATH)/
 	$(AR) rcs $(LIB)  $(OBJ_C)  $(OBJ_CXX) 
-	@echo "Created lib: $(LIB)   for $(BOARD) $(ARDUINO) ***************"
+	@echo "Created lib: $(LIB)   for $(BOARD) $(ARDUINO)"
 
 $(SHLIB): LIB_FLAGS:=-Dmain=searduino_main
 $(SHLIB): $(OBJ_C)  $(OBJ_CXX) 
@@ -94,8 +99,13 @@ $(SHLIB): $(OBJ_C)  $(OBJ_CXX)
 	@echo "Created lib: $(SHLIB)"
 
 
-lib: $(LIB) $(OBJ_C)  $(OBJ_CXX) 
+lib: $(LIB) $(OBJ_C) $(OBJ_CXX) 
 
+lib-install: $(LIB) $(LIB_H)
+	-mkdir -p $(LIB_INSTALL)/lib/$(BOARD)/
+	-mkdir -p $(LIB_INSTALL)/include
+	-cp $(LIB) $(LIB_INSTALL)/lib/$(BOARD)/
+	-cp $(LIB_H)  $(LIB_INSTALL)/include/
 
 
 libs: lib shlib
