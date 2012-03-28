@@ -25,6 +25,7 @@
 #
 
 all: uno mega due
+	cd libraries && make all
 
 uno:
 	make -f Makefile.uno
@@ -37,6 +38,7 @@ mega:
 
 clean:
 	make -f Makefile.uno clean
+	cd libraries && make clean
 
 check:
 	@echo "Nothing to do in arduino-sources"
@@ -57,7 +59,8 @@ install: due uno mega
 #	 
 	 @cp -r ../ard-ex/*  __INSTALL_DIR__/share/examples/arduino/
 
-	 
+	cd libraries && make install
+
 
 distdir:
 	echo dummy impl
