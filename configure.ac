@@ -120,6 +120,19 @@ exit_on_failure()
   fi
 }
 
+
+#
+# Set up misc stuff:
+#     shared lib extensions, 
+#
+case $host in
+ *linux*) SHLIB_EXT='.so'    ;;
+ *mac*)   SHLIB_EXT='.dylib' ;;
+ *win*)   SHLIB_EXT='.dll'   ;;
+esac
+AC_SUBST([SHLIB_EXT])
+
+
 ./bin/get-arduino-src.sh
 exit_on_failure $? ./bin/get-arduino-src.sh
 
