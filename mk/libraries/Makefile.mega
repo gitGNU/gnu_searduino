@@ -1,0 +1,6 @@
+ARDUINO=mega
+
+include libraries.mk
+
+all:
+	make mega
