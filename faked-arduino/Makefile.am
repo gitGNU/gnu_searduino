@@ -45,6 +45,10 @@ LIB_SEARDUINO_H_FILES=\
        ./include/utils/print.h \
        ./include/arduino/time_stuff.h \
        ./include/arduino/setup.h 
+
+LIB_LIBRARIES_SOURCES_FILES = \
+        ./wire/src/wire.cpp
+
 #\
 #       ./include/arduino/searduino.h
 
@@ -59,7 +63,9 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/utils.c \
        ./seasim/src/seasim.c \
        ./utils/src/print.c \
-        $(LIB_SEARDUINO_H_FILES)
+        $(LIB_SEARDUINO_H_FILES) 
+#\
+#        $(LIB_LIBRARIES_SOURCES_FILES)
 
 libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 #libsearduino-stub_SOURCES=$(LIB_SEARDUINO_SOURCES_FILES)
@@ -70,6 +76,12 @@ lib_LTLIBRARIES = libsearduinostub.la
 
 
 AM_CFLAGS= -I../arduino-sources/core          \
+           -I../faked-arduino/include/arduino \
+           -I../faked-arduino/include/        \
+           -I../arduino-extras/include/ 
+
+AM_CXXFLAGS= -I../arduino-sources/core          \
+           -I../arduino-sources/libraries/Wire  \
            -I../faked-arduino/include/arduino \
            -I../faked-arduino/include/        \
            -I../arduino-extras/include/ 
