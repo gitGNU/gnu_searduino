@@ -1,0 +1,21 @@
+@chapter Testing your Arduino code in Searduino
+
+Apart from making it easier to develop code for the Arduino boards, a
+major goal with Searduino is to be able to test your code (logically)
+on your local host. This chapter introduce you to how to do this.
+
+@section Writing C code to test your application
+
+@section Writing Python code to test your application
+
+@section Test your application as a stand alone binary
+
+@section Test your application in the stream simulator
+
+@section Test your application in the Pardon simulator
+
+
+
+
+
+
