@@ -29,14 +29,21 @@
 #include "utils/types.h"
 
 
-#define INFO_STREM stdout
-#define ERR_STREM  stderr
+#define INFO_STREAM stdout
+#define ERR_STREAM  stderr
 
-void print_function_name (FILE* stream,  const char* fun, char * str,  ...) ;
+void print_function_name (FILE* stream,  const char* fun, char * str) ;
+
+void 
+print_dummy_function_implementation (FILE* stream,  
+				     const char *file, 
+				     int line, 
+				     const char *fun) ;
+
+#define PRINT_DUMMY_FUNCTION_IMPLEMENTATION()  print_dummy_function_implementation(ERR_STREAM, __FILE__, __LINE__, __func__);
 
 
 /* #define ENANLE_DEBUG_PRINTOUTS */
-
 #ifdef ENANLE_DEBUG_PRINTOUTS
 #define PRINT_FUNCTION_NAME_NOARGS() printf( "function: %s (",__func__); printf (")\n");
 #define PRINT_FUNCTION_NAME(a)       printf( "function: %s (",__func__); printf a; printf (")\n");

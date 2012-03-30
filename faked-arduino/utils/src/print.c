@@ -38,3 +38,15 @@ print_function_name (FILE* stream,  const char *fun, char * str,  ...)
 
   return;
 }
+
+
+void 
+print_dummy_function_implementation (FILE* stream,  
+				     const char *file, 
+				     const char *line, 
+				     const char *fun) 
+{
+  fprintf (stderr, "%s:%s %s ()", fun);
+  fprintf (stderr," - stub implementation.  *** WARNING, this function has no real implementation ***\n");
+  return;
+}
