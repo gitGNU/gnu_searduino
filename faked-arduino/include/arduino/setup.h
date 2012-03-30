@@ -27,6 +27,9 @@
 #include "utils/types.h"
 #include "pins_arduino.h"
 
+#ifndef SEARDUINO_ARDUINO_SETUP_H
+#define SEARDUINO_ARDUINO_SETUP_H
+
 #define NR_OF_DIGITAL_PINS 20
 #define NR_OF_ANALOG_PINS 20
 
@@ -86,3 +89,7 @@ get_discard_ctr(unsigned char pin);
 #ifdef __cplusplus
 } // extern "C"
 #endif
+
+
+#endif /* SEARDUINO_ARDUINO_SETUP_H */
+
