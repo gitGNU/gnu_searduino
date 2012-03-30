@@ -26,7 +26,7 @@
 
 INSTALLATION_DIR=__INSTALL_DIR__
 
-all: uno mega due
+all: uno mega due mega2560
 
 uno:
 	make -f Makefile.uno
@@ -37,13 +37,16 @@ due:
 mega:
 	make -f Makefile.mega
 
+mega2560:
+	make -f Makefile.mega2560
+
 clean:
 	make -f Makefile.uno clean
 
 check:
 	@echo "Nothing to do in libraries"
 
-install: due uno mega
+install: due uno mega mega2560
 	 @echo "installing to $(INSTALLATION_DIR)"
 	 mkdir -p  $(INSTALLATION_DIR)/libs/searduino/arduino-libs 
 	 @cp -r libs/*     $(INSTALLATION_DIR)/libs/searduino/arduino-libs/

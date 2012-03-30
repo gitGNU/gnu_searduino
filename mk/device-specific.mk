@@ -38,6 +38,8 @@ ifeq ($(ARDUINO),uno)
 endif
 ifeq ($(ARDUINO),mega)
 endif
+ifeq ($(ARDUINO),mega2560)
+endif
 
 endif
 
@@ -53,6 +55,12 @@ endif
 ifeq ($(ARDUINO),uno)
 	USB_DEV=UNKNOWN-FOR-CYGWIN-UNO
 endif
+ifeq ($(ARDUINO),mega)
+	USB_DEV=UNKNOWN-FOR-CYGWIN-MEGA
+endif
+ifeq ($(ARDUINO),mega2560)
+	USB_DEV=UNKNOWN-FOR-CYGWIN-MEGA2560
+endif
 
 endif
 
@@ -63,11 +71,17 @@ endif
 ifeq ($(uname_S),Darwin)
 
 ifeq ($(ARDUINO),due)
-	USB_DEV=UNKNOWN-FOR-MAC-DUR
-$(error FreeBSD not yet supported, edit the usb-device.mk)
+	USB_DEV=UNKNOWN-FOR-MAC-DUE
+#$(error FreeBSD not yet supported, edit the usb-device.mk)
 endif
 ifeq ($(ARDUINO),uno)
 	USB_DEV=/dev/tty.usbmodemfa141
+endif
+ifeq ($(ARDUINO),mega)
+	USB_DEV=UNKNOWN-FOR-MAC-MEGA
+endif
+ifeq ($(ARDUINO),mega2560)
+	USB_DEV=UNKNOWN-FOR-MAC-MEGA2560
 endif
 
 endif

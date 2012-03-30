@@ -61,3 +61,6 @@ mega: ARDUINO=mega
 mega: 
 	make lib
 
+mega2560: ARDUINO=mega2560
+mega2560:
+	make lib

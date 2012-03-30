@@ -19,6 +19,13 @@ VARIANT=mega
 ARDUINO_CPU=ATmega1280
 USB_DEV=/dev/ttyUSB0
 endif
+ifeq ($(ARDUINO),mega2560)
+BOARD=atmega2560
+CPU=atmega2560
+VARIANT=mega
+ARDUINO_CPU=ATmega2560
+USB_DEV=/dev/ttyACM0
+endif
 
 include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
 

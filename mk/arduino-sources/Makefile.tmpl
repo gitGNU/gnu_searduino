@@ -24,7 +24,7 @@
 #
 #
 
-all: uno mega due
+all: uno mega due mega2560
 	cd libraries && make all
 
 uno:
@@ -36,6 +36,9 @@ due:
 mega:
 	make -f Makefile.mega
 
+mega2560:
+	make -f Makefile.mega2560
+
 clean:
 	make -f Makefile.uno clean
 	cd libraries && make clean
@@ -43,7 +46,7 @@ clean:
 check:
 	@echo "Nothing to do in arduino-sources"
 
-install: due uno mega
+install: due uno mega mega2560
 	 @echo "installing to __INSTALL_DIR__"
 	 mkdir -p  __INSTALL_DIR__/libs/searduino/arduino-libs 
 	 @cp -r libs/*     __INSTALL_DIR__/libs/searduino/arduino-libs/
