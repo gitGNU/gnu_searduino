@@ -27,7 +27,7 @@ copy_file()
 
     if [ "$(echo $FILE | grep bin)" != "" ]
 	then
-	DEST=$DEST_BASE/bin
+	DEST=$DEST_BASE/bin/gnu-linux/
     elif [ "$(echo $FILE | grep doc)" != "" ]
 	then
 	DEST=$DEST_BASE/doc
