@@ -76,6 +76,17 @@ AC_ARG_ENABLE([unittest],
   [ut_enabled=no]
 )
 
+AC_ARG_ENABLE([shared-test],
+  [AS_HELP_STRING([--enable-shared-test],
+	  [Disable tests using sharead version of Searduino libs)])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for enable-pedantic option]) ;;
+   esac
+   st_enabled=$enableval],
+  [st_enabled=yes]
+)
+
 if test "$python_enabled" = "yes"; then
 # Check for program
   AM_MISSING_PROG(PYTHON, python, $missing_dir)
@@ -94,7 +105,7 @@ fi
 
 AM_CONDITIONAL(PYTHON_SUPPORT, test "x$python_enabled" = "xyes")
 AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
-
+AM_CONDITIONAL(SHAREDTEST,     test "x$st_enabled"     = "xyes")
 
 AC_MSG_NOTICE([summary of build options:
   version:          ${VERSION} shared
@@ -107,6 +118,7 @@ AC_MSG_NOTICE([summary of build options:
   Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
   Unit test:        $ut_enabled
   Unit test flags:  C: '$CHECK_CFLAGS   LD: '$CHECK_LIBS'
+  Shared lib test:  $st_enabled
 ])
 
 exit_on_failure()
