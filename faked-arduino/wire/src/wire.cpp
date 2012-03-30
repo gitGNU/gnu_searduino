@@ -52,11 +52,6 @@ void TwoWire::begin(int address)
   PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
 }
 
-uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
-{
-  PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
-}
-
 uint8_t TwoWire::requestFrom(int address, int quantity)
 {
   PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
@@ -132,6 +127,10 @@ void TwoWire::onRequest( void (*function)(void) )
   PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
 }
 
+uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
+{
+  return 42;
+}
 
 /* 
  *   pre instantiate object, just as Arduino does it 
