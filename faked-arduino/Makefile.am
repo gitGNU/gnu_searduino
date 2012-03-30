@@ -23,7 +23,8 @@
 
 AUTOMAKE_OPTIONS = gnu
 
-SUBDIRS=include arduino communication
+SUBDIRS=include arduino communication wire EEPROM Ethernet Firmata LiquidCrystal SD Servo SoftwareSerial SPI Stepper 
+
 
 LIB_SEARDUINO_H_FILES=\
        ./include/communication/error.h \
@@ -47,7 +48,16 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/setup.h 
 
 LIB_LIBRARIES_SOURCES_FILES = \
-        ./wire/src/wire.cpp
+      wire/src/wire.cpp \
+      EEPROM/src/eeprom.cpp  \
+      Ethernet/src/ethernet.cpp  \
+      Firmata/src/firmata.cpp  \
+      LiquidCrystal/src/liquidcrystal.cpp  \
+      SD/src/sd.cpp  \
+      Servo/src/servo.cpp  \
+      SoftwareSerial/src/softwareserial.cpp  \
+      SPI/src/spi.cpp  \
+      Stepper/src/stepper.cpp  
 
 #\
 #       ./include/arduino/searduino.h
