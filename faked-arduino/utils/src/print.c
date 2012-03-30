@@ -43,10 +43,10 @@ print_function_name (FILE* stream,  const char *fun, char * str,  ...)
 void 
 print_dummy_function_implementation (FILE* stream,  
 				     const char *file, 
-				     const char *line, 
+				     int line, 
 				     const char *fun) 
 {
-  fprintf (stderr, "%s:%s %s ()", fun);
-  fprintf (stderr," - stub implementation.  *** WARNING, this function has no real implementation ***\n");
+  fprintf (stream, "%s:%d %s ()", file, line, fun);
+  fprintf (stream," - stub implementation.  *** WARNING, this function has no real implementation ***\n");
   return;
 }
