@@ -6,5 +6,6 @@ dist_pkgdataexample_DATA = \
   Makefile.am \
   Makefile.due \
   Makefile.mega \
+  Makefile.mega2560 \
   Makefile.tmpl \
   Makefile.uno 
