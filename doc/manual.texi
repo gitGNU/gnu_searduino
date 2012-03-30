@@ -184,8 +184,8 @@ A Makefile to build the code above can look like this:
 
 
 
-@i{Note: You don't have to use the makefiles provided by Searduino. The
-makefiles do however provide a lot of help (board settings etc).}
+@i{Note: You don't have to use the makefiles provided by
+Searduino. The makefiles do however provide a lot of help (board settings etc).}
 
 
 
@@ -293,37 +293,30 @@ Arduino hw they are disabled.
 @tab @code{SEARDUINO_LOOP}
 @tab On the Arduino boards this is the same as a for loop
 (@code{for(;;)}). When using this macro your code can be paused in the simulator.
-@item
-@tab more will come
-@tab and will be secribed....
 @end multitable
 
 
 
 @section print functions/macros
 @*
-If you want to print out strings when build your code for local use (not
+If you want to print out strings when building your code for local use (not
 on an Arduino board) and have the printouts disabled when building for
 Arduino you can use the following macro:
 @*
 @*
-@code{SEARDUINO_DEBUG((msg))}
-@*
-@*
-The macro (if not building for Arduino boards) takes what is inside
+@multitable  @columnfractions .0 .40 .60
+@item 
+@tab @b{Macro}
+@tab @b{Description}
+@item 
+@tab @code{SEARDUINO_DEBUG((msg))}
+@tab The macro (if not building for Arduino boards) takes what is inside
 the parenthesies and passes that to printf. It does a bit more than
-that, put put simply, that's what it does.
+that, put put simply, that's what it does. 
+Example use: @code{SEARDUINO_DEBUG(("The variable x is:%d",x));}
 @*
-Example use:
-@*
-@code{SEARDUINO_DEBUG(("The variable x is:%d",x));}
-@*
- 
-@*
-@*
-@i{Note #1: You must use double paranthesises.} 
-@*
-@i{Note #2: The macro is defined in print.h}
+@i{Note: @b{You must use double paranthesises!}}
+@end multitable
 @*
 @*
 
