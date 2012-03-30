@@ -1,4 +1,8 @@
+if SHAREDTEST
 SUBDIRS= hw stub shared shared-main 
+else
+SUBDIRS= hw stub 
+endif
 
 EXTRA_DIST = \
      ./stub/Makefile \
