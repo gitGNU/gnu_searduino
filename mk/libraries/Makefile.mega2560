@@ -1,0 +1,6 @@
+ARDUINO=mega2560
+
+include libraries.mk
+
+all:
+	make mega2560

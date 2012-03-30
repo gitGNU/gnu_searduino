@@ -1,0 +1,4 @@
+ARDUINO=mega2560
+include arduino-sources.mk
+all:
+	make mega2560
