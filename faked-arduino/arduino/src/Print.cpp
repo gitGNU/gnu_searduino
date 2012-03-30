@@ -28,6 +28,7 @@
 #include "Arduino.h"
 //#include "serduino.h"
 #include "Print.h"
+#include "utils/print.h"
 
 // Default impl, feel free to override this 
 size_t Print::write(const uint8_t *buffer, size_t size)
@@ -92,8 +93,8 @@ size_t Print::print(long n, int base)
 size_t Print::print(unsigned long n, int base)
 {
   if (base == 0) return printf("%ul",n);
-  else return   PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
-
+  PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
+  return 0;
 }
 
 size_t Print::print(double n, int digits)
