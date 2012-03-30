@@ -73,7 +73,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/wiring_analog.c  \
        ./arduino/src/utils.c \
        ./seasim/src/seasim.c \
-       ./utils/src/print.c \
+       ./utils/src/print-funs.c \
        ./arduino/src/Print.cpp \
         $(LIB_SEARDUINO_H_FILES) \
         $(LIB_LIBRARIES_SOURCES_FILES)
