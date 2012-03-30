@@ -26,6 +26,11 @@
 #define SEARDUINO_PRINT_H
 
 #include <stdio.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "utils/types.h"
 
 
@@ -33,6 +38,13 @@
 #define ERR_STREAM  stderr
 
 void print_function_name (FILE* stream,  const char* fun, char * str) ;
+
+
+#ifdef  SEARDUINO_STUB
+#define SEARDUINO_DEBUG(a)  printf( "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
+#else
+#define SEARDUINO_DEBUG(a)
+#endif
 
 void 
 print_dummy_function_implementation (FILE* stream,  
@@ -55,5 +67,8 @@ print_dummy_function_implementation (FILE* stream,
 #endif /* ENANLE_FUNCTION_PRINT_NAME */
 
 
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* SEARDUINO_PRINT_H */
