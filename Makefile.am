@@ -126,11 +126,11 @@ init-cov:
 
 build-cov:
 	cd arduino-sources && make
-	cd faked-arduino && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
-	cd example && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
-	cd extensions && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
-	cd simulators && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
-	make check
+	cd faked-arduino   && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
+	cd example         && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
+	cd extensions      && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
+	cd simulators      && make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  
+	make CFLAGS=$(GCOV_FLAG)   CXXFLAGS=$(GCOV_FLAG)  check
 	mkdir -p $(COVERAGE_OUT)
 	lcov --directory ./ --output-file $(COVERAGE_OUT)/$(PACKAGE).info \
 		--capture
