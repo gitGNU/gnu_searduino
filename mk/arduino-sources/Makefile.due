@@ -3,4 +3,4 @@ ARDUINO=due
 include arduino-sources.mk
 
 all:
-	make uno
+	make due

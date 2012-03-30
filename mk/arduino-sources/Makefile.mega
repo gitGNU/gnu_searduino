@@ -1,4 +1,4 @@
 ARDUINO=mega
 include arduino-sources.mk
 all:
-	make uno
+	make mega
