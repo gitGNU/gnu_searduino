@@ -1,0 +1,90 @@
+@chapter Implementing missing references in Searduino
+
+Before we go on talking about missing references or functions it is
+important to point out that all functionality offered by Arduino is
+available in Searduino when you're building for the Arduino boards. 
+@*
+We are working hard on implementing the missing references (not yet
+implemeneted functions) but chances are you will get a message like
+this:
+@*
+
+@section Guidance by example
+
+In the following sections we will take you through how we added one
+of the wire functions, @code{begin}
+
+@subsection Preparing your work
+
+The first thing we need to do is to create a directory where we will
+put the code. 
+
+@*
+@code{cd faked-arduino}
+@*
+@code{mkdir wire}
+@*
+@*
+@code{mkdir include/wire}
+@*
+
+
+@subsection Creating test code
+
+We start by creating some tests.
+@*
+@code{cd faked-arduino/wire}
+@*
+@code{mkdir test}
+@*
+@code{cd faked-arduino/wire/test}
+@*
+@*
+Open your favorite editor and write some test code and a
+Makefile.am file. 
+@*
+@i{Note: Makefile.am is a Makefile template used by automake}.
+@*
+@*
+@code{emacs testwire.c Makefile.am}
+@*
+The Makefile.am should look something like this:
+@*
+@*
+@code{if UNITTEST}
+@code{}
+@code{TESTS = testbegin }
+@code{check_PROGRAMS = testbegin}
+@code{}
+@code{testbegin_SOURCES = test_begin.c }
+@code{testbegin_CFLAGS = @CHECK_CFLAGS@ -I../../include/wire/
+-I../../include/utils -I../../include}
+@code{testbegin_LDADD = ../../libsearduinostub.la @CHECK_LIBS@}
+@code{}
+@code{endif}
+The C file can look something like this:
+@*
+@*
+TBD
+
+@subsection Creating C file implementing begin
+
+We start by creating some tests.
+@*
+@code{cd faked-arduino/wire}
+@*
+@*
+@code{mkdir faked-arduino/wire/src}
+@*
+@*
+@code{cd faked-arduino/wire/src}
+@*
+@*
+Open your favorite editor and create a file called wire.cpp
+@*
+@*
+@code{emacs wire.cpp}
+@*
+@*
+TDB
+
