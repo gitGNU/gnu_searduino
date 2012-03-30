@@ -54,22 +54,23 @@ build()
 
 cov_prepare()
 {
+    make clean
+
     rm -fr ${TMP_INSTALL}
     make -f Makefile.git 
     exit_on_failure $? "make -f Makefile.git"
 
-    ./configure --prefix=${TMP_INST}  --enable-unittest
+    ./configure --disable-shared-test  --disable-shared --enable-unittest  --prefix=${TMP_INST} 
     exit_on_failure $? "configure"
 }
 
 cov()
 {
-    make clean
+    make CFLAGS=" -fprofile-arcs -ftest-coverage -g"  LDFLAGS=" -fprofile-arcs -ftest-coverage -g -ldl " clean
     exit_on_failure $? "make clean"
 
-    make coverage
+    make CFLAGS=" -fprofile-arcs -ftest-coverage -g " LDFLAGS=" -fprofile-arcs -ftest-coverage -g -ldl " coverage
     exit_on_failure $? "make coverage"
-
 }
 
 check()
