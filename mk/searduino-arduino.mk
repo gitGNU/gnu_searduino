@@ -70,8 +70,8 @@ SEARDUINO_LIB=searduino
 #	echo "HEX HEX"
 #	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(LIB) -lm $(LDFLAGS) $(OBJ_C) $(OBJ_CXX) 
 
-helo:
-	echo "$(OBJ_MAIN)"
+#helo:
+#	echo "$(OBJ_MAIN)"
 
 $(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
 	$(CC) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) $(LIB) -lm $(LDFLAGS) 
