@@ -19,12 +19,26 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/                      \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/standard  
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/utility \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/ \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SPI        \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Firmata     \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/utility \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/           \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility     \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM       \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal    \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo             \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial     \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper
 #           -I$(SEARDUINO_INC_PATH)/boards  \
 #\
 #           -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino \
 #           -I$(SEARDUINO_INC_PATH)/faked-arduino/include \
 
 SEARDUINO_LIB=searduinostub
+
+SEARDUINO_STUB=dummyvalue
 
 _CFLAGS=   -g $(USER_C_FLAGS) -Wall -fPIC \
             $(LIB_FLAGS) \
