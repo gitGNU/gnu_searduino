@@ -21,9 +21,12 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include <pthread.h>
 #include <Arduino.h>
+
+#include <stdio.h>
 #include "seasim/seasim.h"
+#include <pthread.h>
+
 
 
 
