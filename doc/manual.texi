@@ -302,7 +302,34 @@ Arduino hw they are disabled.
 
 @section print functions/macros
 @*
-coming soon
+If you want to print out strings when build your code for local use (not
+on an Arduino board) and have the printouts disabled when building for
+Arduino you can use the following macro:
+@*
+@*
+@code{SEARDUINO_DEBUG((msg))}
+@*
+@*
+The macro (if not building for Arduino boards) takes what is inside
+the parenthesies and passes that to printf. It does a bit more than
+that, put put simply, that's what it does.
+@*
+Example use:
+@*
+@code{SEARDUINO_DEBUG(("The variable x is:%d",x));}
+@*
+ 
+@*
+@*
+@i{Note #1: You must use double paranthesises.} 
+@*
+@i{Note #2: The macro is defined in print.h}
+@*
+@*
+
+
+
+
 @section pause/resume macros 
 @*
 coming soon
