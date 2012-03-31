@@ -98,4 +98,4 @@ AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-extras/include/ 
 
 
-AM_LDFLAGS= -ldl
+AM_LDFLAGS= -ldl 
