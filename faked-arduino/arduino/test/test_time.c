@@ -56,7 +56,7 @@ START_TEST (test_micros)
       
       printf ("Loop: %d  diff: %.6ld     micros:%.8ld    expected_time:%ld\n", 
 	      i, diff, micros(), expected_time);
-      fail_if(diff > 5000, "sleeping DELAY1 failed");
+      fail_if(diff > 8000, "sleeping DELAY1 failed");
     }
   
   
