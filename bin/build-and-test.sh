@@ -66,11 +66,19 @@ cov_prepare()
 
 cov()
 {
-    make CFLAGS=" -fprofile-arcs -ftest-coverage -g"  LDFLAGS=" -fprofile-arcs -ftest-coverage -g -ldl " clean
+    export COV_FLAGS=" -fprofile-arcs -ftest-coverage -g "
+    make clean
     exit_on_failure $? "make clean"
 
-    make CFLAGS=" -fprofile-arcs -ftest-coverage -g " LDFLAGS=" -fprofile-arcs -ftest-coverage -g -ldl " coverage
+    export CFLAGS="$COV_FLAGS" 
+    export CXXFLAGS="$COV_FLAGS" 
+    export CFLAGS="$COV_FLAGS -ldl" 
+#    make CFLAGS="$COV_FLAGS" CXXFLAGS="$COV_FLAGS" CFLAGS="$COV_FLAGS -ldl"  coverage
+    make LDFLAGS=" -fprofile-arcs -ftest-coverage -g"   CFLAGS=" -fprofile-arcs -ftest-coverage -g"   V=1   LDFLAGS=" -fprofile-arcs -ftest-coverage -g"   CXXFLAGS=" -fprofile-arcs -ftest-coverage -g"   coverage
     exit_on_failure $? "make coverage"
+    export CFLAGS="" 
+    export CXXFLAGS="" 
+    export CFLAGS="" 
 }
 
 check()
