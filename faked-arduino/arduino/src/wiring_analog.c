@@ -82,13 +82,6 @@ analogRead(uint8_t pin)
   return get_analog_pin_val(pin);
 }
 
-void analogWrite(uint8_t pin, unsigned int val)
-{
-  set_analog_pin_val(pin,val)
-
-  comm_analog_write_outpin(pin,val);
-}
-
 /*
  *
  * Callback used to update in_pins
