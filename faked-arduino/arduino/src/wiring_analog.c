@@ -56,8 +56,6 @@ static arduino_pin arduino_analog_pins[NR_OF_ANALOG_PINS];
 #define PIN_OUT_OF_RANGE(pin)          (pin<0 || pin> NR_OF_ANALOG_PINS)
 #define get_analog_pin_mode(pin)      (arduino_analog_pins[pin].mode) 
 #define set_analog_pin_mode(pin,mode)  arduino_analog_pins[pin].mode=mode; 
-#define get_analog_pin_val(pin)       (arduino_analog_pins[pin].val) 
-#define set_analog_pin_val(pin,val)    arduino_analog_pins[pin].val=(val%1024);
 
 
 uint8_t analog_reference = 0;

@@ -63,6 +63,8 @@ static arduino_pin arduino_digital_pins[NR_OF_DIGITAL_PINS];
 #define get_digital_pin_val(pin)       (arduino_digital_pins[pin].val) 
 #define set_digital_pin_val(pin,val)    arduino_digital_pins[pin].val=(val!=0);
 
+#define get_analog_pin_val(pin)       (arduino_analog_pins[pin].val) 
+#define set_analog_pin_val(pin,val)    arduino_analog_pins[pin].val=(val%1024);
 
 
 /*
