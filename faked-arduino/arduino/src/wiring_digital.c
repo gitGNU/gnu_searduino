@@ -312,3 +312,11 @@ int digitalRead(uint8_t pin)
 
   return get_digital_pin_val(pin);
 }
+
+void analogWrite(uint8_t pin, int val)
+{
+  set_analog_pin_val(pin,val);
+
+  comm_analog_write_outpin(pin,val);
+}
+
