@@ -35,6 +35,7 @@
 #include "arduino/error.h"
 #include "utils/error.h"
 #include "communication/comm.h"
+#include "searduino_pin.h"
 
 void     digin_callback (uint8_t pin, uint8_t val); 
 void     anain_callback (uint8_t pin, unsigned val); 
@@ -112,6 +113,8 @@ int searduino_setup(void)
   init_comm();
 
   init_time();
+
+  init_arduino_pins();
 
   searduino_set_running();
 

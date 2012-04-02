@@ -23,17 +23,39 @@
 
 #include "seasim/seasim.h"
 
-/*
-extern ai_callback_ptr ai_callback;
-extern di_callback_ptr di_callback;
-extern ao_callback_ptr ao_callback;
-extern do_callback_ptr do_callback;
-*/
-//extern do_to_sim_callback_ptr do_sim_callback;
-//extern d_mode_callback_ptr    d_mode_callback;
-//extern ao_to_sim_callback_ptr ao_sim_callback;
-//extern a_mode_callback_ptr    a_mode_callback;
+unsigned int
+seasim_get_generic_output(uint8_t pin, uint8_t pin_type)
+{
+  return ext_get_generic_output(pin, pin_type );
+}
 
+uint8_t 
+seasim_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type)
+{
+  return ext_set_generic_input(pin, val);
+}
+
+uint8_t 
+seasim_register_out_sim_cb(out_to_sim_callback_ptr cb)
+{
+  return comm_register_pinout_sim_cb(cb);
+}
+
+
+uint8_t
+seasim_set_input(uint8_t pin, unsigned int val, uint8_t pin_type)
+{
+  return ext_set_generic_input(pin, val, pin_type);
+}
+
+
+int
+seasim_get_output(uint8_t pin)
+{
+  return ext_get_generic_output(pin);
+}
+
+/*
 
 unsigned int
 seasim_get_ana_output(uint8_t pin)
@@ -61,7 +83,7 @@ seasim_set_dig_input(uint8_t pin, uint8_t val)
   return ext_set_dig_input(pin, val);
 }
 
-
+*/
 
 
 uint8_t 
@@ -113,7 +135,7 @@ seasim_set_arduino_code_name(const char* libname)
   return searduino_set_arduino_code_name(libname);
 }
 
-
+/*
 
 uint8_t 
 seasim_register_digout_sim_cb(do_to_sim_callback_ptr cb)
@@ -123,16 +145,18 @@ seasim_register_digout_sim_cb(do_to_sim_callback_ptr cb)
 
 
 uint8_t
+seasim_register_anaout_sim_cb(ao_to_sim_callback_ptr cb)
+{
+  return comm_register_anaout_sim_cb(cb);
+}
+*/
+
+uint8_t
 seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)
 {
   return comm_register_dig_mode_sim_cb(cb);
 }
 
-uint8_t
-seasim_register_anaout_sim_cb(ao_to_sim_callback_ptr cb)
-{
-  return comm_register_anaout_sim_cb(cb);
-}
 
 int 
 seasim_setup(void)
@@ -158,13 +182,13 @@ void seasim_enable_streamed_output(void)
 }
 
 void 
-seasim_set_digitalWrite_timelimit(unsigned int lim)
+seasim_set_Write_timelimit(unsigned int lim)
 {
-  set_digitalWrite_timelimit(lim);
+  set_Write_timelimit(lim);
 }
 
 unsigned int
-seasim_get_digitalWrite_timelimit(void)
+seasim_get_Write_timelimit(void)
 {
-  return get_digitalWrite_timelimit();
+  return get_Write_timelimit();
 }

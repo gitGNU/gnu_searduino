@@ -28,6 +28,24 @@
 #include "communication/comm.h"
 
 uint8_t
+ext_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type)
+{
+  input_callback(pin, val, pin_type);
+
+  DEBUG_INFO(("ext_set_generic_input  %d,%d,%d",pin,val, pin_type));
+  return SEARD_COMM_OK;
+}
+
+
+int
+ext_get_generic_output(uint8_t pin, uint8_t pin_type)
+{
+  DEBUG_INFO(("%d,%d",pin, pin_type));
+  return output_callback(pin, pin_type);
+}
+
+/*
+uint8_t
 ext_set_dig_input(uint8_t pin, uint8_t val)
 {
   digin_callback(pin,val);
@@ -35,6 +53,7 @@ ext_set_dig_input(uint8_t pin, uint8_t val)
   DEBUG_INFO(("%d,%d",pin,val));
   return SEARD_COMM_OK;
 }
+
 
 uint8_t
 ext_set_ana_input(uint8_t pin, unsigned int val)
@@ -44,6 +63,18 @@ ext_set_ana_input(uint8_t pin, unsigned int val)
   anain_callback(pin,val);
 
   DEBUG_INFO(("%d,%d",pin,val));
+  return SEARD_COMM_OK;
+}
+*/
+
+uint8_t
+ext_set_input(uint8_t pin, unsigned int val, uint8_t pin_type)
+{
+  PRINT_FUNCTION_NAME(("%d,%d,%d",pin,val, pin_type));
+
+  input_callback(pin,val, pin_type);
+
+  DEBUG_INFO(("%d,%d,%d",pin,val, pin_type));
   return SEARD_COMM_OK;
 }
 
