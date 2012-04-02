@@ -23,6 +23,7 @@
 
 
 #include "wiring_private.h"
+#include "searduino_pin.h"
 #include <check.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -72,15 +73,15 @@ START_TEST (test_digin_callback_raw)
   pinMode(250, 1);
 
   printf ("\t <stop>\n");
-  for (i=0;i<10;i++)
+  for (i=1;i<10;i++)
     {
       // set pin mode INPUT
-      pinMode(i, 0);
+      pinMode(i, INPUT);
 
       // call callback to set pin (which should not work)
-      digin_callback(i,1);
+      sim_set_digital_pin_val(i,1);
      
-      fail_if(digitalRead(i)!=1, "");
+      fail_if(digitalRead(i)==1, "");
     }
 }
 END_TEST
