@@ -52,9 +52,6 @@ seasim_get_dig_output(uint8_t pin);
 int
 seasim_get_output(uint8_t pin);
 
-uint8_t
-seasim_set_ana_input(uint8_t pin, unsigned int val, uint8_t pin_type);
-
 uint8_t 
 seasim_is_paused(void);
 
