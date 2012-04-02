@@ -33,8 +33,8 @@ all: $(SHLIB)
 
 SEARDUINO_PATH=../..
 
-USER_C_FLAGS=-fPIC   -I../../faked-arduino/include
-USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS)
+USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
+USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS) -ldl
 
 $(SHLIB):
 
