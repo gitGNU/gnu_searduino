@@ -93,6 +93,7 @@ AM_CFLAGS= -I../arduino-sources/core          \
 
 AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-sources/libraries/Wire  \
+           -I../arduino-sources/libraries/Servo  \
            -I../faked-arduino/include/arduino \
            -I../faked-arduino/include/        \
            -I../arduino-extras/include/ 
