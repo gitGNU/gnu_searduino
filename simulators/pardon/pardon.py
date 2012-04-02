@@ -6,8 +6,7 @@
 #  Copyright (C) 2011, 2012 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
-# modify it under the terms of the GNU General Public License       
-# as published by the Free Software Foundation; either version 3    
+# modify it under the terms of the GNU General Public License       # as published by the Free Software Foundation; either version 3    
 # of the License, or any later version.                             
 #                                                                   
 #                                                                   
@@ -35,6 +34,24 @@ from gi.repository import Gdk
 from gi.repository import GObject
 
 semaphore = BoundedSemaphore(1)
+
+SEARDUINO_PIN_TYPE_NONE    = 0
+SEARDUINO_PIN_TYPE_DIGITAL = 1
+SEARDUINO_PIN_TYPE_ANALOG  = 2
+SEARDUINO_PIN_TYPE_PWM     = 3
+SEARDUINO_PIN_TYPE_END     = 4
+
+
+
+
+typeLabels = [None]*(SEARDUINO_PIN_TYPE_END+1)
+
+typeLabels[SEARDUINO_PIN_TYPE_NONE]    = "None"
+typeLabels[SEARDUINO_PIN_TYPE_DIGITAL] = "Digital"
+typeLabels[SEARDUINO_PIN_TYPE_ANALOG]  = "Analog"
+typeLabels[SEARDUINO_PIN_TYPE_PWM]     = "PWM"
+typeLabels[SEARDUINO_PIN_TYPE_END]     = "Unknown"
+
 
 #
 # searduino
@@ -110,7 +127,8 @@ class SpinButtonWindow(Gtk.Box):
         self.spinbutton = Gtk.SpinButton()
         self.spinbutton.set_adjustment(adjustment)
         self.spinbutton.set_numeric(True)
-        self.spinbutton.set_value(seasim_get_digitalWrite_timelimit())
+        self.spinbutton.set_value(seasim_get_Write_timelimit())
+        self.increment=0
         self.setIncrement()
         self.spinbutton.connect("value-changed", self.on_update)
         
@@ -138,175 +156,100 @@ class SpinButtonWindow(Gtk.Box):
         self.setIncrement()
 
 #        print "===========================================  " +         str(self.spinbutton.get_value_as_int())
-        seasim_set_digitalWrite_timelimit(int(self.spinbutton.get_value_as_int()))
+        seasim_set_Write_timelimit(int(self.spinbutton.get_value_as_int()))
 #        print "======= set to: " + str(searduino_get_digitalWrite_timelimit())
 
 
-class digitalPin(Gtk.HBox):
+class Pin(Gtk.Widget):
 
-    def __init__(self, parent, nr):
-        Gtk.HBox.__init__(self)
+    def __init__(self, parent, pin_type, pin_nr, pin_mode):
+        Gtk.Widget.__init__(self)
         self.par = parent
-        self.myNr = nr
+        self.pin_type = pin_type
+        self.pin_nr   = pin_nr
+        self.pin_mode = pin_mode
+        self.prev_pin_type = SEARDUINO_PIN_TYPE_NONE;
         
-
         # Label 
-        label = Gtk.Label("Pin ")
-        pinLabel = Gtk.Label(str(nr))
-        pinLabel.set_width_chars(2);
+        self.pinLabel = Gtk.Label(str(pin_nr))
+        self.pinLabel.set_width_chars(2);
+
+        # Type
+        self.type_text = Gtk.Label("")
+        if (pin_type==SEARDUINO_PIN_TYPE_NONE):
+            self.type_text.set_text("   None  ")
+        elif (pin_type==SEARDUINO_PIN_TYPE_DIGITAL):
+            self.type_text.set_text(" Digital ")
+        elif (pin_type==SEARDUINO_PIN_TYPE_ANALOG):
+            self.type_text.set_text("  Analog ")
+        elif (pin_type==SEARDUINO_PIN_TYPE_PWM):
+            self.type_text.set_text("   PWM   ")
+        elif (pin_type==SEARDUINO_PIN_TYPE_END):
+            self.type_text.set_text("   LAST  ")
 
         # Mode 
-        self.mode_box=Gtk.HBox()
-        self.mode_label = Gtk.Label(" Mode ")
         self.mode = Gtk.Label("Undef")
         self.mode.set_width_chars(7);
 
-        self.mode_box.pack_start(self.mode_label, False, True,0)
-        self.mode_box.pack_start(self.mode, False, True,0)
-
-        # Input 
-        self.input_box=Gtk.HBox()
+        # Input  
+        #   digital
         self.input = Gtk.ToggleButton()
-        self.input.set_active(False)
-        self.input_box.pack_start(self.input, False, True,0)
-        
-        # Output
-        self.output_box=Gtk.HBox()
-        self.output_label = Gtk.Label("NaN")
-        self.output_box.pack_start(self.output_label, False, True, 0)
-        
-        self.pack_start(label, False, True, 0)
-        self.pack_start(pinLabel, False, True, 0)
-        self.pack_start(self.mode_box, False, True, 0)
-        self.pack_start(self.input_box, False, True, 0)
-        self.pack_start(self.output_box, False, True, 0)
-
         self.input.connect("clicked", self.on_dig_toggled, "1")
-
-    def setMode(self, mode):
-        print "===> setMode"
-        if (mode==1):
-            print "=== setMode 1"
-            self.mode.set_text("OUTPUT")
-            print "=== setMode 1"
-#            self.input.set_property('visible', False)
-        else:
-            print "=== setMode 0"
-#            self.input.set_property('visible', True)
-            print "=== setMode 0"
-            self.mode.set_text("INPUT")
-            print "=== setMode 0"
-            self.output_label.set_text("")
-        print "<=== setMode"
-
-    def setVal(self, val):
-        self.output_label.set_text(str(val))
-
-    def getVal(self):
-        if self.input.get_active():
-            return 1
-        else:
-            return 0
-
-    def setValCond(self):
-        if seasim_get_pin_mode(self.myNr)==1:
-            self.output_label.set_text(str(seasim_digitalRead(self.myNr)))
-
-    def on_dig_toggled(self, widget, name):
-#        print "GUI 1 toggle"
-        if self.input.get_active():
-#            py_ext_set_input(1,1)
-            state = "on"
-        else:
-            state = "off"
-#            py_ext_set_input(1,0)
-#        print "state " + state
-        self.par.pinUpdate(self.myNr,state)
-
-
-
-class analogPin(Gtk.HBox):
-
-    def __init__(self, parent, nr):
-        Gtk.HBox.__init__(self)
-        self.par = parent
-        self.myNr = nr
-        
-
-        # Label 
-        label = Gtk.Label("Pin ")
-        pinLabel = Gtk.Label(str(nr))
-        pinLabel.set_width_chars(2);
-
-        # Mode 
-        self.mode_box=Gtk.HBox()
-        self.mode_label = Gtk.Label(" Mode ")
-        self.mode = Gtk.Label("Undef")
-        self.mode.set_width_chars(7);
-
-        self.mode_box.pack_start(self.mode_label, False, True,0)
-        self.mode_box.pack_start(self.mode, False, True,0)
-
-        # Input 
-        self.input_box=Gtk.HBox()
-        adjustment = Gtk.Adjustment(0, 0, 1023, 1, 100, 0)
+        #   analog
+        self.adjustment = Gtk.Adjustment(0, 0, 1023, 1, 100, 0)
         self.spinbutton = Gtk.SpinButton()
-        self.spinbutton.set_adjustment(adjustment)
-
+        self.spinbutton.set_adjustment(self.adjustment)
         self.spinbutton.set_numeric(True)
         self.spinbutton.connect("value-changed", self.on_update)
-#        self.input = Gtk.ToggleButton()
-#        self.input.set_active(False)
-        self.input_box.pack_start(self.spinbutton, False, True,0)
+
         
         # Output
-        self.output_box=Gtk.HBox()
         self.output_label = Gtk.Label("NaN")
-        self.output_box.pack_start(self.output_label, False, True, 0)
-        
-        self.pack_start(label, False, True, 0)
-        self.pack_start(pinLabel, False, True, 0)
-        self.pack_start(self.mode_box, False, True, 0)
-        self.pack_start(self.input_box, False, True, 0)
-        self.pack_start(self.output_box, False, True, 0)
 
-#        self.input.connect("clicked", self.on_dig_toggled, "1")
+    def updateGenericPin(self, val, pin_type):
 
-    def on_update(self,disc):
-        seasim_set_ana_input(self.myNr,
-                                    self.spinbutton.get_value_as_int())
+        getSem()
+        # Handle first update (set prev_pin_typ)
+        if (self.pin_type==SEARDUINO_PIN_TYPE_NONE):
+            self.prev_pin_type = pin_type
 
-    def setMode(self, mode):
+        if (pin_type==self.prev_pin_type):
+            self.output_label.set_text(str(val))
+        else:
+            self.type_text.set_text(typeLabels[pin_type])
+            self.prev_pin_type = pin_type
+            self.output_label.set_text(str(val))
+
+        self.prev_pin_type = pin_type
+        relSem()
+
+    def updateGenericMode(self, pin, mode):
+        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
+        getSem()
+        print "===> setMode"
         if (mode==1):
             self.mode.set_text("OUTPUT")
         else:
-            self.mode.set_text("INPUT ")
+            self.mode.set_text("INPUT")
             self.output_label.set_text("")
+        print "<=== setMode"
+        relSem()
 
-    def setVal(self, val):
-        self.output_label.set_text(str(val))
-#        self.spinbutton.set_value(val)
-
-    def getVal(self):
-        if self.input.get_active():
-            return 1
-        else:
-            return 0
-
-    def setValCond(self):
-        if seasim_get_pin_mode(self.myNr)==1:
-            self.output_label.set_text(str(seasim_digitalRead(self.myNr)))
 
     def on_dig_toggled(self, widget, name):
-#        print "GUI 1 toggle"
+        val = 0
         if self.input.get_active():
-#            py_ext_set_input(1,1)
-            state = "on"
-        else:
-            state = "off"
-#            py_ext_set_input(1,0)
-#        print "state " + state
-        self.par.pinUpdate(self.myNr,state)
+            val = 1
+            
+        print "Pin toggle " + str(self.pin_nr) + ", " + str(val) + ", " + str(self.pin_type)
+        seasim_set_input(self.pin_nr, 
+                         val, 
+                         self.pin_type )
+        
+    def on_update(self,disc):
+        seasim_set_input(self.pin_nr,
+                         self.spinbutton.get_value_as_int(), 
+                         self.pin_type)
 
 
 
@@ -318,8 +261,8 @@ class MyWindow(Gtk.Window):
         if (paused):
             print "no GUI update"
         else:
-            print "Updating GUI manually"
-            self.updateAllOut()
+            print "Updating GUI manually (not anymore)"
+#            self.updateAllOut()
                 
         return True
 
@@ -350,8 +293,8 @@ class MyWindow(Gtk.Window):
                     value = self.digs[i].getVal()
                     relSem()
 #                    print "                                                                         WILL SEND: " + str(value) + "  from " + str(i)
-                    seasim_set_dig_input(i,
-                                         value)
+                    seasim_set_input(i,
+                                     value, 0)
                 
         return True
         
@@ -363,31 +306,9 @@ class MyWindow(Gtk.Window):
 
         Gtk.Window.__init__(self, title="Pardon - a simulator frontend for the Searduino project")
 
-        topTable = Gtk.Table(2, 2, False)
-        topTable.attach(Gtk.Label("Digital"),0,1,0,1)
-        topTable.attach(Gtk.Label("Analogue"),1,2,0,1)
-        
-        ioTable = Gtk.Table(1, 2, True)
-        topTable.attach(ioTable, 0,1,1,2)
-        aioTable = Gtk.Table(1, 2, True)
-        topTable.attach(aioTable, 1,2,1,2)
+        self.innerbox = Gtk.HBox(spacing=6)
 
-        outTable = Gtk.Table(10, 2, True)
-        digTable = Gtk.Table(10, 1, True)
-
-        aoutTable = Gtk.Table(10, 2, True)
-        adigTable = Gtk.Table(10, 1, True)
-
-        ioTable.attach(outTable, 0, 1, 0, 1)
-        ioTable.attach(digTable, 1, 2, 0, 1)
-        topTable.attach(outTable, 0, 1, 0, 1)
-        topTable.attach(digTable, 1, 2, 0, 1)
-
-        aioTable.attach(aoutTable, 0, 1, 0, 1)
-        aioTable.attach(adigTable, 1, 2, 0, 1)
-        topTable.attach(outTable, 1, 2, 0, 1)
-        topTable.attach(digTable, 3, 3, 0, 1)
-
+        pinTable = Gtk.Table(10, 10, False)
 
         pause = pauseButton(self)
         pause2 = pauseButton(self)
@@ -396,30 +317,47 @@ class MyWindow(Gtk.Window):
         self.box = Gtk.VBox(spacing=6)
         self.add(self.box)
 
-        self.innerbox = Gtk.HBox(spacing=6)
 
         self.extrasbox=Gtk.VBox(spacing=6)
+
         self.extraslabel = Gtk.Label("General")
         self.extrasbox.pack_start(self.extraslabel,    False, True, 0)
         self.extrasbox.pack_start(pause,    False, True, 0)
         self.extrasbox.pack_start(spin,    False, True, 0)
+        self.log = Gtk.TextView()
+        self.extrasbox.pack_start(self.log,    False, True, 0)
 
-        self.innerbox.pack_start(topTable, False, True, 0)
+
+        self.innerbox.pack_start(pinTable, False, True, 0)
         self.innerbox.pack_start(self.extrasbox, False, True, 0)
         
         self.bottomlabel = Gtk.Label("Pardon - a simulator frontend. Pardon is part of the Searduino project")
         self.box.pack_start(self.innerbox,    False, True, 0)
         self.box.pack_start(self.bottomlabel,    False, True, 0)
 
-        for i in range(1,(size-1)):
-            print "Update on pin: " + str(i)
-            self.digs[i] = digitalPin(self,i)
-            digTable.attach(self.digs[i], 0, 1, i, i+1)
-            self.pinUpdate(i,"on")
 
-            self.anas[i] = analogPin(self,i)
-            adigTable.attach(self.anas[i], 0, 1, i, i+1)
+        pinTable.attach(Gtk.Label("Type"),    1, 2, 1, 2)
+        pinTable.attach(Gtk.Label("Pin"),     2, 3, 1, 2)
+        pinTable.attach(Gtk.Label("Mode"),    3, 4, 1, 2)
+        pinTable.attach(Gtk.Label("Dig in"),  4, 5, 1, 2)
+        pinTable.attach(Gtk.Label("Ana in"),  5, 6, 1, 2)
+        pinTable.attach(Gtk.Label("Output"),  6, 7, 1, 2)
+
+        for i in range(1,(size-1)):
+#            print "Update on pin: " + str(i)
+#            self.digs[i] = digitalPin(self,i)
+#            digTable.attach(self.digs[i], 0, 1, i, i+1)
 #            self.pinUpdate(i,"on")
+
+            wid = Pin(self,i%5, i, i)
+            self.anas[i] = wid
+
+            pinTable.attach(wid.type_text,    1, 2, i+1, i+2)
+            pinTable.attach(wid.pinLabel,     2, 3, i+1, i+2)
+            pinTable.attach(wid.mode,         3, 4, i+1, i+2)
+            pinTable.attach(wid.input,        4, 5, i+1, i+2)
+            pinTable.attach(wid.spinbutton,   5, 6, i+1, i+2)
+            pinTable.attach(wid.output_label, 6, 7, i+1, i+2)
 
             
         print "init...1"
@@ -457,10 +395,22 @@ class MyWindow(Gtk.Window):
         relSem()
 #        print "<--- rel sem #####################################################################"
 
+    def updatePin(self, pin, val, pin_type):
+#        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
+        print "updatePin(...)"
+        getSem()
+        print "updatePin(...) 2"
+        print "updatePin(...) 3 : " + str(pin) + " " + str(val) + "  type:" + str(pin_type)
+        self.anas[pin].updateGenericPin(val, pin_type)
+        print "updatePin(...) 4"
+        relSem()
+        print "updatePin(...) 5"
+#        print "<--- rel sem #####################################################################"
+
     def updateAllOut(self):
-#        print "will update late"
-        for i in range(1,(size-1)):
-            self.digs[i].setValCond()
+        print "will update late"
+#        for i in range(1,(size-1)):
+#            self.digs[i].setValCond()
 
 
     def pinUpdateMode(self, pin, mode):
@@ -475,7 +425,7 @@ class MyWindow(Gtk.Window):
 #        print "CHECK pin set in GUI: "+str(nr)+ ": " + str(val)
         if (val_str=="on"):
             val=1
-        seasim_set_dig_input(nr,val)            
+        seasim_set_input(nr,val, 0)            
 #        self.updateAllOut()
 
 
@@ -533,14 +483,18 @@ class FileChooserWindow(Gtk.Window):
 
 
 def newDigOutCallback(pin, val):
-#    print ""
-#    print "==================== in Py:  new dig out: " + str(pin) + " = " + str(val)
-#    print ""
     if (pin>size):
-        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
+        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring pin mode update"
     else:
         global win
         win.updateDigOutPin(pin,val)
+
+def newOutCallback(pin, val, pin_type):
+    if (pin>size):
+        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring pin update"
+    else:
+        global win
+        win.anas[pin].updateGenericPin(val, pin_type)
 
 def newAnaOutCallback(pin, val):
 #    print ""
@@ -550,17 +504,18 @@ def newAnaOutCallback(pin, val):
         print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
     else:
         global win
-        win.updateAnaOutPin(pin,val)
+        self.anas[pin].setVal(val)
 
 def newDigModeCallback(pin, mode):
 #    print ""
-    print "==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
+    print ">==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
     if (pin>size):
         print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
     else:
         global win
-        win.updateDigMode(pin,mode)
+        win.anas[pin].updateGenericMode(pin,mode)
     print " done with new mode"
+    print "<==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
 
 
 
@@ -619,8 +574,11 @@ seasim_start();
 #parser.print_help()
 
        
-seasim_set_dig_callback(newDigOutCallback)
-seasim_set_ana_callback(newAnaOutCallback)
+#/*
+#seasim_set_dig_callback(newDigOutCallback)
+#seasim_set_ana_callback(newAnaOutCallback)
+#*/
+seasim_set_callback(newOutCallback)
 seasim_set_dig_mode_callback(newDigModeCallback)
 
 #sys.exit(1)
@@ -632,8 +590,9 @@ win = MyWindow(size)
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
 
-GObject.idle_add(newDigOutCallback)
-GObject.idle_add(newAnaOutCallback)
+#GObject.idle_add(newDigOutCallback)
+#GObject.idle_add(newAnaOutCallback)
+GObject.idle_add(newOutCallback)
 GObject.idle_add(newDigModeCallback)
 
 GObject.threads_init()

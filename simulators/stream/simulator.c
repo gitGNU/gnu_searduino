@@ -41,9 +41,9 @@ pthread_t arduino_thread;
  * This function will be called every time the Arduino program updates a digital output pin (on change only!)
  */
 void 
-my_do_sim_callback(uint8_t pin, uint8_t val)
+my_out_sim_callback(uint8_t pin, uint8_t val, uint8_t pin_type)
 {
-  fprintf (stdout,"digout:%d:%d\n",pin, val);
+  fprintf (stdout,"SIM:%d:%d:%d\n",pin_type, pin, val);
 }
 
 /* 
@@ -57,17 +57,6 @@ my_dm_sim_callback(uint8_t pin, uint8_t mode)
   fprintf (stdout,"digmod:%d:%d\n",pin, mode);
 }
 
-
-/* 
- * Function to register in the Searduino code
- *
- * This function will be called every time the Arduino program updates a digital output pin (on change only!)
- */
-void 
-my_ao_sim_callback(uint8_t pin, unsigned int val)
-{
-  fprintf (stdout,"anaout:%d:%d\n",pin, val);
-}
 
 int 
 sim_setup(char *ard_lib)
@@ -84,7 +73,7 @@ sim_setup(char *ard_lib)
       return ret;
     }
   
-  ret  = seasim_register_digout_sim_cb(my_do_sim_callback);
+  ret  = seasim_register_out_sim_cb(my_out_sim_callback);
   if (ret != SEARD_COMM_OK)
     {
       fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
@@ -99,15 +88,6 @@ sim_setup(char *ard_lib)
       return ret;
     }
  
-
-  ret  = seasim_register_anaout_sim_cb(my_ao_sim_callback);
-  if (ret != SEARD_COMM_OK)
-    {
-      fprintf (stderr, "Failed to register callback for Analog output (pin, val)\n");
-      return ret;
-    }
- 
-
 
   return 0;
 }
@@ -139,6 +119,7 @@ void* command_reader(void* in)
   char *tmp;
   int  pin;
   int  val;
+  int  type;
 
   printf ("COMMAND READER begins\n");
     
@@ -153,9 +134,9 @@ void* command_reader(void* in)
 	  tmp=&buf[4];
 /* 	  printf (": '%s'\n", buf);  */
 /*  	  printf ("will parse: '%s'\n", tmp);  */
-	  sscanf(tmp, "%d:%d", &pin, &val);
-  	  printf ("SIM WILL SET pin:%d val:%d  \n", pin, val);  
-	  seasim_set_dig_input(pin,val);
+	  sscanf(tmp, "%d:%d:%d", &type, &pin, &val);
+  	  printf ("SIM WILL SET pin:%d val:%d type:%d  \n", pin, val, type);  
+	  seasim_set_generic_input(pin,val, type);
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{
@@ -175,12 +156,12 @@ void* command_reader(void* in)
       else if (strncmp(buf,"limit",5)==0)
 	{
 	  printf ("setting limit\n");
-	  set_digitalWrite_timelimit(100000);
+	  set_Write_timelimit(100000);
 	}
       else if (strncmp(buf,"ulimit",5)==0)
 	{
 	  printf ("setting limit\n");
-	  set_digitalWrite_timelimit(10);
+	  set_Write_timelimit(10);
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{
