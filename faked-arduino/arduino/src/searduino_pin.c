@@ -204,13 +204,11 @@ set_generic_pin_val_impl(uint8_t pin,
 			 uint8_t pin_type, 
 			 uint8_t exp_inout)
 {
-
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
     {
       arduino_pins[pin].type=pin_type;
     }
     
-  
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL)
     {
       if (get_digital_pin_mode(pin) != exp_inout)
@@ -220,15 +218,9 @@ set_generic_pin_val_impl(uint8_t pin,
 	}
     }
 
-  printf ("set_generic_pin_val_impl %d %d    type: %d %d\n", 
-	  pin, val,
-	  arduino_pins[pin].type, pin_type);
-
   if (arduino_pins[pin].type==pin_type)
     {
-      printf ("set_generic_pin_val_impl %d %d \n", pin, val);
       arduino_pins[pin].val=val; 
-      printf ("set_generic_pin_val_impl %d ==============================>  %d \n", pin, arduino_pins[pin].val);
       return 0;
     }
   return  -1;
@@ -238,8 +230,6 @@ set_generic_pin_val_impl(uint8_t pin,
 int 
 get_generic_pin_val(uint8_t pin, uint8_t pin_type)
 {
-  fprintf (stderr, " ---------------- gen: %d => %d\n",
-	   pin, arduino_pins[pin].val);
   return arduino_pins[pin].val; 
 }
 
