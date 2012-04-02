@@ -57,6 +57,9 @@ static arduino_pin arduino_analog_pins[NR_OF_ANALOG_PINS];
 #define get_analog_pin_mode(pin)      (arduino_analog_pins[pin].mode) 
 #define set_analog_pin_mode(pin,mode)  arduino_analog_pins[pin].mode=mode; 
 
+#define get_analog_pin_val(pin)       (arduino_analog_pins[pin].val) 
+#define set_analog_pin_val(pin,val)    arduino_analog_pins[pin].val=(val%1024);
+
 
 uint8_t analog_reference = 0;
 
@@ -125,3 +128,11 @@ anaout_callback(uint8_t pin)
 
   return get_analog_pin_val(pin);
 }
+
+void analogWrite(uint8_t pin, int val)
+{
+  set_analog_pin_val(pin,val);
+
+  comm_analog_write_outpin(pin,val);
+}
+

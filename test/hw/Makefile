@@ -30,6 +30,8 @@ ARDUINO=stub
 
 SEARDUINO_PATH=../../
 
+USER_LD_FLAGS=-ldl
+
 check: $(PROG)
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk

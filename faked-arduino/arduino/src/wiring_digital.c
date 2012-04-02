@@ -63,9 +63,6 @@ static arduino_pin arduino_digital_pins[NR_OF_DIGITAL_PINS];
 #define get_digital_pin_val(pin)       (arduino_digital_pins[pin].val) 
 #define set_digital_pin_val(pin,val)    arduino_digital_pins[pin].val=(val!=0);
 
-#define get_analog_pin_val(pin)       (arduino_analog_pins[pin].val) 
-#define set_analog_pin_val(pin,val)    arduino_analog_pins[pin].val=(val%1024);
-
 
 /*
  *
@@ -313,12 +310,5 @@ int digitalRead(uint8_t pin)
   
 
   return get_digital_pin_val(pin);
-}
-
-void analogWrite(uint8_t pin, int val)
-{
-  set_analog_pin_val(pin,val);
-
-  comm_analog_write_outpin(pin,val);
 }
 
