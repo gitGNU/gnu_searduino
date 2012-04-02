@@ -75,10 +75,10 @@ END_TEST
 START_TEST (test_di)
 {
 
-  fail_if (comm_register_digout_sim_cb(NULL)!=
+  fail_if (seasim_register_out_sim_cb(NULL)!=
 	   SEARD_COMM_NULL_CALLBACK);	   
 
-  fail_if (comm_register_digout_sim_cb(test_do_to_sim_callback)!=
+  fail_if (seasim_register_out_sim_cb(test_do_to_sim_callback)!=
 	   SEARD_COMM_OK);	   
 
   callbacked_pin = -1;
@@ -86,10 +86,6 @@ START_TEST (test_di)
 
   callbacked_pin = -1;
   callbacked_val = -1;
-
-  comm_digital_write_outpin(3, 1);
-  fail_if(callbacked_pin!=3);
-  fail_if(callbacked_val!=1);
 
 }
 END_TEST
