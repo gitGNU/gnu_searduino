@@ -36,7 +36,7 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
 #           -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino \
 #           -I$(SEARDUINO_INC_PATH)/faked-arduino/include \
 
-SEARDUINO_LIB=searduinostub
+SEARDUINO_LIB=-lsearduinostub
 LIBRARIES_LIB=
 
 SEARDUINO_STUB=dummyvalue
