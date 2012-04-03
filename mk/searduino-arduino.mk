@@ -101,5 +101,5 @@ prog: $(PROG).hex
 #upload: $(PROG).hex
 upload: $(PROG).hex
 	echo "Will upload to: $(ARDUINO)   $(BOARD)"
-	$(AVRDUDE) -q -q -p$(CPU) -carduino -P$(USB_DEV) -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
+	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
 
