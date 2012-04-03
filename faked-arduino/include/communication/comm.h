@@ -48,9 +48,12 @@
 typedef void    (*ai_callback_ptr)(uint8_t pin, unsigned int val); 
 typedef void    (*di_callback_ptr)(uint8_t pin, uint8_t val); 
 */
+/*
 typedef void    (*ao_to_sim_callback_ptr)(uint8_t pin, unsigned int val); 
 typedef void    (*do_to_sim_callback_ptr)(uint8_t pin, uint8_t val); 
+*/
 typedef void    (*dm_to_sim_callback_ptr)(uint8_t pin, uint8_t mode); 
+typedef void    (*out_to_sim_callback_ptr)(uint8_t pin, uint8_t mode, uint8_t pin_type); 
 
 /*
 typedef uint8_t (*ao_callback_ptr)(uint8_t pin); 
@@ -74,9 +77,12 @@ extern di_callback_ptr di_callback;
 extern ao_callback_ptr ao_callback;
 extern do_callback_ptr do_callback;
 */
+/*
 extern ao_to_sim_callback_ptr ao_sim_callback;
 extern do_to_sim_callback_ptr do_sim_callback;
+*/
 extern dm_to_sim_callback_ptr dm_sim_callback;
+extern out_to_sim_callback_ptr out_sim_callback;
 /*
 extern d_mode_callback_ptr    d_mode_callback;
 extern a_mode_callback_ptr    a_mode_callback;
@@ -130,8 +136,8 @@ uint8_t set_proto_stream(FILE *f);
  *          calls back on this function when an output
  *          digital pin is set in the Arduino code
  *
- */
 uint8_t comm_register_digout_sim_cb(do_to_sim_callback_ptr cb);
+ */
 
 
 /*

@@ -47,16 +47,70 @@ pthread_t  *searduino_thread = &searduino_thread_impl;
 #endif
 
 
+/*
 static PyObject *my_dig_callback = NULL;
 static PyObject *my_ana_callback = NULL;
+*/
+static PyObject *my_callback = NULL;
 static PyObject *my_dig_mode_callback = NULL;
+/*
 static PyObject *c_my_set_dig_callback(PyObject *dummy, PyObject *args);
-static PyObject *c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args);
 static PyObject *c_my_set_ana_callback(PyObject *dummy, PyObject *args);
+*/
+static PyObject *c_my_set_callback(PyObject *dummy, PyObject *args);
+static PyObject *c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args);
 
 void* arduino_code(void *in);
 
 
+void 
+new_out(uint8_t pin, uint8_t val, uint8_t pin_type)
+{
+  PyObject *arglist;
+  PyObject *result; 
+
+  PyGILState_STATE gstate;   
+  gstate = PyGILState_Ensure();   
+
+  PEARDUINO_PRINT_IN();
+
+  PEARDUINO_PRINT_INSIDE();
+
+  if (my_callback!=NULL)
+    {
+      arglist = Py_BuildValue("(iii)", pin, val, pin_type);
+      
+      if (arglist==NULL)
+	{
+	  printf ("wooops, arglist is no no\n");
+	  exit(1);
+	}
+
+      //  printf(" Arguments to callback: (%d,%d) ", pin, val);      fflush(stdout); 
+      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
+
+      result = PyEval_CallObject(my_callback, arglist);
+
+      Py_DECREF(arglist);
+      
+      if (result)
+	{
+	  Py_DECREF(result);
+	}      
+    }
+  else
+    {
+      fprintf (stderr, "*** ERRROR ***\n");
+      fprintf (stderr, "*** Could not call out callback since no callback ***\n");
+    }
+
+
+  PyGILState_Release(gstate);
+  PEARDUINO_PRINT_OUT();
+}
+
+
+#ifdef OBSO
 void 
 new_dig_out(uint8_t pin, uint8_t val)
 {
@@ -104,6 +158,7 @@ new_dig_out(uint8_t pin, uint8_t val)
   PEARDUINO_PRINT_OUT();
 }
 
+#endif
 
 void 
 new_dig_mode(uint8_t pin, uint8_t mode)
@@ -151,7 +206,7 @@ new_dig_mode(uint8_t pin, uint8_t mode)
   PEARDUINO_PRINT_OUT();
 }
 
-
+#ifdef OBSO
 void new_ana_out(uint8_t pin, unsigned int val)
 {
   PyObject *arglist;
@@ -197,7 +252,7 @@ void new_ana_out(uint8_t pin, unsigned int val)
   PEARDUINO_PRINT_OUT();
 }
 
-
+#endif
 
 static PyObject* c_get_pin_mode(PyObject* self, PyObject* args)
 {
@@ -230,7 +285,7 @@ static PyObject* c_set_arduino_code(PyObject* self, PyObject* args)
   return o;
 }
 
-static PyObject* c_set_digitalWrite_timelimit(PyObject* self, PyObject* args)
+static PyObject* c_set_Write_timelimit(PyObject* self, PyObject* args)
 {
   unsigned int ret;
   unsigned int val;
@@ -239,7 +294,7 @@ static PyObject* c_set_digitalWrite_timelimit(PyObject* self, PyObject* args)
   PyArg_ParseTuple(args, "i", &val);
 
   /* printf ("pear: before %d\n", get_digitalWrite_timelimit()); */
-  seasim_set_digitalWrite_timelimit(val);
+  seasim_set_Write_timelimit(val);
   /* printf ("pear: after  %d\n", get_digitalWrite_timelimit()); */
   PyObject* o = Py_BuildValue("i", val);
 
@@ -271,12 +326,12 @@ static PyObject* c_enable_streamed_output(PyObject* self, PyObject* args)
   return o;
 }
 
-static PyObject* c_get_digitalWrite_timelimit(PyObject* self, PyObject* args)
+static PyObject* c_get_Write_timelimit(PyObject* self, PyObject* args)
 {
   unsigned int ret;
   PEARDUINO_PRINT_IN();
   
-  ret = seasim_get_digitalWrite_timelimit();
+  ret = seasim_get_Write_timelimit();
   PyObject* o = Py_BuildValue("i", ret);
 
   PEARDUINO_PRINT_OUT();
@@ -300,8 +355,11 @@ static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
   PEARDUINO_PRINT_INSIDE_STR("Register callback for dig out"
 			"(in communication module)\n");
 
+  /*
   seasim_register_digout_sim_cb(new_dig_out);
   seasim_register_anaout_sim_cb(new_ana_out);
+  */
+  seasim_register_out_sim_cb(new_out);
   seasim_register_dig_mode_sim_cb(new_dig_mode);
   
   PEARDUINO_PRINT_OUT();
@@ -323,6 +381,8 @@ static PyObject* c_start(PyObject* self, PyObject* args)
   return o;
 }
 
+
+#ifdef OBSO
 
 /*
  * Function to be called from Python
@@ -361,7 +421,54 @@ static PyObject* c_analogRead(PyObject* self, PyObject* args)
   PEARDUINO_PRINT_OUT();
   return o;
 }
+#endif
 
+
+static PyObject* c_Read(PyObject* self, PyObject* args)
+{
+  int pin;
+  unsigned int val ;
+  unsigned int pin_type ;
+  PEARDUINO_PRINT_IN();
+  
+  PyArg_ParseTuple(args, "(ii)", &pin, &pin_type);
+
+  val = seasim_get_output(pin);
+
+  PyObject* o = Py_BuildValue("i", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
+/*
+ * Function to be called from Python
+ */
+static PyObject* c_ext_set_input(PyObject* self, PyObject* args)
+{
+  unsigned int pin;
+  unsigned int val;
+  unsigned int pin_type;
+  PEARDUINO_PRINT_IN();
+
+  if (!PyArg_ParseTuple(args, "iii", &pin, &val, &pin_type))
+    {
+      return NULL;
+    }
+
+  PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
+
+  val= seasim_set_input(pin, val, pin_type);
+
+  PyObject* o = Py_BuildValue("i", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
+#ifdef OBSO
 
 /*
  * Function to be called from Python
@@ -411,7 +518,7 @@ static PyObject* c_ext_set_dig_input(PyObject* self, PyObject* args)
   return o;
 }
 
-
+#endif
 
 
 PyObject * c_pause(void)
@@ -460,13 +567,10 @@ PyObject * c_quit(void)
  * Bind Python function names to our C functions
  */
 static PyMethodDef myModule_methods[] = {
-  {"seasim_analogRead", (PyCFunction)c_analogRead, METH_VARARGS, NULL},
-  {"seasim_set_ana_input", (PyCFunction)c_ext_set_ana_input, METH_VARARGS, NULL},
-  {"seasim_digitalRead", (PyCFunction)c_digitalRead, METH_VARARGS, NULL},
-  {"seasim_set_dig_input", (PyCFunction)c_ext_set_dig_input, METH_VARARGS, NULL},
-  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
+  {"seasim_Read", (PyCFunction)c_Read, METH_VARARGS, NULL},
+  {"seasim_set_input", (PyCFunction)c_ext_set_input, METH_VARARGS, NULL},
   {"seasim_set_dig_mode_callback", (PyCFunction)c_my_set_dig_mode_callback, METH_VARARGS, NULL},
-  {"seasim_set_ana_callback", (PyCFunction)c_my_set_ana_callback, METH_VARARGS, NULL},
+  {"seasim_set_callback", (PyCFunction)c_my_set_callback, METH_VARARGS, NULL},
   {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
   {"seasim_pause", (PyCFunction)c_pause, METH_VARARGS, NULL},
   {"seasim_resume", (PyCFunction)c_resume, METH_VARARGS, NULL},
@@ -475,12 +579,18 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_set_arduino_code", (PyCFunction)c_set_arduino_code, METH_VARARGS, NULL},
   {"seasim_initialise", (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
   {"seasim_start", (PyCFunction)c_start, METH_VARARGS, NULL},
-  {"seasim_set_digitalWrite_timelimit", (PyCFunction)c_set_digitalWrite_timelimit, METH_VARARGS, NULL},
-  {"seasim_get_digitalWrite_timelimit", (PyCFunction)c_get_digitalWrite_timelimit, METH_VARARGS, NULL},
+  {"seasim_set_Write_timelimit", (PyCFunction)c_set_Write_timelimit, METH_VARARGS, NULL},
+  {"seasim_get_Write_timelimit", (PyCFunction)c_get_Write_timelimit, METH_VARARGS, NULL},
   {"seasim_disable_streamed_output", (PyCFunction)c_disable_streamed_output, METH_VARARGS, NULL},
   {"seasim_enable_streamed_output", (PyCFunction)c_enable_streamed_output, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
+  /*  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
+  {"seasim_set_ana_input", (PyCFunction)c_ext_set_ana_input, METH_VARARGS, NULL},
+  {"seasim_set_dig_input", (PyCFunction)c_ext_set_dig_input, METH_VARARGS, NU
+  {"seasim_analogRead", (PyCFunction)c_analogRead, METH_VARARGS, NULL},
+  {"seasim_digitalRead", (PyCFunction)c_digitalRead, METH_VARARGS, NULL},
+*/
 
 
 
@@ -495,7 +605,7 @@ void* arduino_code(void *in)
   return NULL;
 }
 
-
+#ifdef OBSO
 static PyObject *
 c_my_set_dig_callback(PyObject *dummy, PyObject *args)
 {
@@ -527,6 +637,7 @@ c_my_set_dig_callback(PyObject *dummy, PyObject *args)
   return result;
 }
 
+#endif
 
 static PyObject *
 c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args)
@@ -546,7 +657,7 @@ c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args)
     Py_XINCREF(temp);         /* Add a ref to the new callback */
     Py_XDECREF(my_dig_mode_callback);  /* Dispose possible previous callback */
     my_dig_mode_callback = temp;       /* Remember new callback */
-
+    
     /* Boilerplate to return "None" */
     Py_INCREF(Py_None);
     result = Py_None;
@@ -559,7 +670,7 @@ c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args)
   return result;
 }
 
-
+#ifdef OBSO
 static PyObject *
 c_my_set_ana_callback(PyObject *dummy, PyObject *args)
 {
@@ -576,8 +687,41 @@ c_my_set_ana_callback(PyObject *dummy, PyObject *args)
     }
 
     Py_XINCREF(temp);         /* Add a ref to the new callback */
-    Py_XDECREF(my_ana_callback);  /* Dispose possible previous callback */
+Py_XDECREF(my_ana_callback);  /* Dispose possible previous callback */
     my_ana_callback = temp;       /* Remember new callback */
+
+    /* Boilerplate to return "None" */
+    Py_INCREF(Py_None);
+    result = Py_None;
+
+    PEARDUINO_PRINT_INSIDE_STR("Python callback is registered");
+    usleep (1000);
+  }
+
+  PEARDUINO_PRINT_OUT();
+  return result;
+}
+
+#endif
+
+static PyObject *
+c_my_set_callback(PyObject *dummy, PyObject *args)
+{
+  PyObject *result = NULL;
+  PyObject *temp;
+  PEARDUINO_PRINT_IN();
+
+  if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
+    if (!PyCallable_Check(temp)) {
+      PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+      PEARDUINO_PRINT_OUT();
+
+      return NULL;
+    }
+
+    Py_XINCREF(temp);         /* Add a ref to the new callback */
+    Py_XDECREF(my_callback);  /* Dispose possible previous callback */
+    my_callback = temp;       /* Remember new callback */
 
     /* Boilerplate to return "None" */
     Py_INCREF(Py_None);

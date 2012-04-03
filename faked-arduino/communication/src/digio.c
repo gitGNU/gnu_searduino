@@ -78,6 +78,7 @@ comm_digital_set_mode(uint8_t pin, uint8_t mode)
 }
 
 
+#ifdef OBSO
 int 
 comm_digital_write_outpin(uint8_t pin, uint8_t val)
 {
@@ -133,4 +134,32 @@ comm_analog_write_outpin(uint8_t pin, unsigned int val)
 
   return SEARD_COMM_OK;
 }
+#endif
 
+
+int 
+comm_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type)
+{
+  /* Make sure all is set up before continuing*/
+  init_comm();
+
+  /* If output enabled, print info on pin/val to stream*/
+  if ( stub_output_enabled ) 
+    {
+      fprintf(proto_stream, "pin:%d:%d:%d  (in stub)\n", pin_type, pin, val); 
+      fflush(proto_stream);
+    }
+
+  /*
+   * Call registered listener
+   *
+   */
+  if ( out_sim_callback != NULL )
+    {
+      /* Ok, the function pointer is not NULL, 
+	 so let's call it */
+      printf ("Will call callback (%d, %d, %d);\n", pin, val, pin_type);
+      out_sim_callback(pin, val, pin_type);
+    }
+  return SEARD_COMM_OK;
+}

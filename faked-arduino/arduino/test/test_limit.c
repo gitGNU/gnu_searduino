@@ -66,7 +66,7 @@ END_TEST
 
 
 int test_do_to_sim_callback_ctr;
-void test_do_to_sim_callback(uint8_t pin, uint8_t val)
+void test_do_to_sim_callback(uint8_t pin, uint8_t val, int pin_type)
 {
   test_do_to_sim_callback_ctr++;
   return ;
@@ -78,10 +78,10 @@ START_TEST (test_limit)
 {
   int i ;
 
-  fail_if(get_digitalWrite_timelimit()!=500);
+  fail_if(get_Write_timelimit()!=20);
 
   test_do_to_sim_callback_ctr=0;
-  comm_register_digout_sim_cb(test_do_to_sim_callback);
+  seasim_register_out_sim_cb(test_do_to_sim_callback);
 
   pinMode(1,OUTPUT);
   
@@ -92,7 +92,7 @@ START_TEST (test_limit)
   digitalWrite(1,1);  
   fail_if(test_do_to_sim_callback_ctr!=0);
 
-  set_digitalWrite_timelimit(0);
+  set_Write_timelimit(0);
   test_do_to_sim_callback_ctr=0;
   usleep(1000);
   digitalWrite(1,0);
@@ -102,7 +102,7 @@ START_TEST (test_limit)
   digitalWrite(1,0);
   fail_if(test_do_to_sim_callback_ctr!=3);
 
-  set_digitalWrite_timelimit(200000);
+  set_Write_timelimit(200000);
   test_do_to_sim_callback_ctr=0;
   usleep(1000);
   digitalWrite(1,0);

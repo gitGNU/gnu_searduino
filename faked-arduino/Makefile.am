@@ -45,6 +45,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/utils/error.h \
        ./include/utils/print.h \
        ./include/arduino/time_stuff.h \
+       ./include/arduino/searduino_pin.h \
        ./include/arduino/setup.h 
 
 LIB_LIBRARIES_SOURCES_FILES = \
@@ -68,6 +69,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./communication/src/digio.c \
        ./arduino/src/time_stuff.c \
        ./arduino/src/setup.c \
+       ./arduino/src/searduino_pin.c \
        ./arduino/src/WString.cpp \
        ./arduino/src/wiring_digital.c \
        ./arduino/src/wiring_analog.c  \
