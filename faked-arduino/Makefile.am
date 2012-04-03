@@ -71,6 +71,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/setup.c \
        ./arduino/src/searduino_pin.c \
        ./arduino/src/WString.cpp \
+       ./arduino/src/WMath.cpp \
        ./arduino/src/wiring_digital.c \
        ./arduino/src/wiring_analog.c  \
        ./arduino/src/utils.c \
@@ -96,6 +97,7 @@ AM_CFLAGS= -I../arduino-sources/core          \
 
 AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-sources/libraries/Wire  \
+           -I../arduino-sources/libraries/Servo  \
            -I../faked-arduino/include/arduino \
            -I../faked-arduino/include/        \
            -I../arduino-extras/include/ 

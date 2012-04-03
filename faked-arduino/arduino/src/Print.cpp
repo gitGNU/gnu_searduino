@@ -84,7 +84,7 @@ size_t Print::print(long n, int base)
 {
   int t;
   if (base == 0) {
-    return printf("%ul",n);
+    return printf("%ld",n);
   } else if (base == 10) {
     PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
   }
@@ -92,7 +92,7 @@ size_t Print::print(long n, int base)
 
 size_t Print::print(unsigned long n, int base)
 {
-  if (base == 0) return printf("%ul",n);
+  if (base == 0) return printf("%lu",n);
   PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
   return 0;
 }
