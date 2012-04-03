@@ -92,6 +92,7 @@ static void turnOffPWM(uint8_t timer)
 
 void digitalWrite(uint8_t pin, uint8_t val)
 {
+  log_info("From digitalWrite with love\n");
   return genericWrite(pin, val, SEARDUINO_PIN_TYPE_DIGITAL);
 }
 

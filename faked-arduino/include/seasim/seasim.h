@@ -92,6 +92,9 @@ seasim_register_out_sim_cb(out_to_sim_callback_ptr cb);
 uint8_t
 seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb);
 
+uint8_t
+seasim_register_log_cb(log_to_sim_callback_ptr cb);
+
 int 
 seasim_setup(void);
 

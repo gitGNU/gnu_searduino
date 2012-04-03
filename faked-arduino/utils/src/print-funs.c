@@ -23,6 +23,7 @@
 
 #include "stdio.h"
 #include "stdarg.h"
+#include "utils/print.h"
 
 void 
 print_function_name (FILE* stream,  const char *fun, char * str,  ...) 
@@ -50,3 +51,13 @@ print_dummy_function_implementation (FILE* stream,
   fprintf (stream," - stub implementation.  *** WARNING, this function has no real implementation ***\n");
   return;
 }
+
+void 
+log_generic(const char* s, int level)
+{
+  if (log_sim_callback!=NULL)
+    {
+      log_sim_callback(s, level);
+    }
+}
+
