@@ -38,7 +38,7 @@ enum {
   SEARDUINO_PIN_TYPE_ANALOG  = 2,
   SEARDUINO_PIN_TYPE_PWM     = 3,
   SEARDUINO_PIN_TYPE_END     = 4
-} _searduino_pin_types;
+};
 
 
 typedef struct arduino_pin
