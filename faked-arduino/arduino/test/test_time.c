@@ -68,7 +68,7 @@ START_TEST (test_micros)
       expected_time +=  DELAY2;
 
       diff = micros_since_start - expected_time ;
-      fail_if(diff > 10000, "sleeping DELAY2 failed");
+      fail_if(diff > 15000, "sleeping DELAY2 failed");
 
     }
 }
