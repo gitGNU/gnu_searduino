@@ -254,6 +254,7 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
 
   if (PIN_OUT_OF_RANGE(pin))
     {
+      log_error("genericWrite: Pin (%d) out of range\n", pin);
       SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
       return;
     }

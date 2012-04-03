@@ -43,9 +43,9 @@ SEARDUINO_PIN_TYPE_PWM     = 3
 SEARDUINO_PIN_TYPE_END     = 4
 
 SEARDUINO_LOG_LEVEL_NONE    = 0 
-SEARDUINO_LOG_LEVEL_ERROR   = 1
+SEARDUINO_LOG_LEVEL_INFO    = 1
 SEARDUINO_LOG_LEVEL_WARNING = 2
-SEARDUINO_LOG_LEVEL_INFO    = 3
+SEARDUINO_LOG_LEVEL_ERROR   = 3
 
 currentLogLevel = SEARDUINO_LOG_LEVEL_INFO
 
@@ -512,7 +512,7 @@ def newOutCallback(pin, val, pin_type):
         global win
         win.anas[pin].updateGenericPin(val, pin_type)
 
-def newLogCallback(text, level):
+def newLogCallback(level, text):
     print ""
     print ""
     print ""

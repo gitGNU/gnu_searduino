@@ -158,7 +158,6 @@ comm_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type)
     {
       /* Ok, the function pointer is not NULL, 
 	 so let's call it */
-      printf ("Will call callback (%d, %d, %d);\n", pin, val, pin_type);
       out_sim_callback(pin, val, pin_type);
     }
   return SEARD_COMM_OK;

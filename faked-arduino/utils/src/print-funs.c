@@ -53,11 +53,39 @@ print_dummy_function_implementation (FILE* stream,
 }
 
 void 
-log_generic(const char* s, int level)
+log_generic(int level, char* s, ...)
 {
+  va_list ap;
+  char buffer[256];
+
+  va_start(ap, s);
+  vsprintf (buffer, s, ap);
+  va_end(ap);
+
+  printf ("log_generic: %s\n", buffer);
+
   if (log_sim_callback!=NULL)
     {
-      log_sim_callback(s, level);
+      log_sim_callback(level, buffer);
     }
+}
+
+void 
+log_error(char* s, ...)
+{
+  va_list ap;
+  char buffer[256];
+
+  va_start(ap, s);
+  vsprintf (buffer, s, ap);
+  va_end(ap);
+
+  printf ("log_generic: %s\n", buffer);
+
+  if (log_sim_callback!=NULL)
+    {
+      log_sim_callback(SEARDUINO_LOG_LEVEL_ERROR, buffer);
+    }
+
 }
 

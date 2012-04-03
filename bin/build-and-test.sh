@@ -108,6 +108,11 @@ dist()
 
 log "Building and checking"
 
+if [ "$1" = "--coverage" ]
+then
+    COV=true
+fi
+
 init_logging
 
 log_and_exec prepare
@@ -115,9 +120,11 @@ log_and_exec build
 log_and_exec doc
 log_and_exec check
 log_and_exec dist
-log_and_exec cov_prepare
-log_and_exec cov
-
+if [ "$COV" = "true" ]
+then
+    log_and_exec cov_prepare
+    log_and_exec cov
+fi
 close_logging
 
 DIST_FILE=$(ls -1t seard*.tar.gz | head -1)

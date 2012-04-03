@@ -165,7 +165,7 @@ new_dig_out(uint8_t pin, uint8_t val)
 
 
 void 
-log_callback(const char *text , uint8_t level)
+log_callback(uint8_t level, const char *text)
 {
   PyObject *arglist;
   PyObject *result; 
@@ -183,7 +183,7 @@ log_callback(const char *text , uint8_t level)
   if (my_log_callback!=NULL)
     {
 
-       arglist = Py_BuildValue("(si)", text, level);
+      arglist = Py_BuildValue("(is)", level, text);
 
       if (arglist==NULL)
 	{

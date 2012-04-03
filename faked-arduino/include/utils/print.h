@@ -25,10 +25,10 @@
 #ifndef SEARDUINO_PRINT_H
 #define SEARDUINO_PRINT_H
 
-#define SEARDUINO_LOG_LEVEL_NONE   0  
-#define     SEARDUINO_LOG_LEVEL_ERROR    1
-#define     SEARDUINO_LOG_LEVEL_WARNING  2
-#define     SEARDUINO_LOG_LEVEL_INFO     3
+#define SEARDUINO_LOG_LEVEL_NONE     0  
+#define SEARDUINO_LOG_LEVEL_INFO     1
+#define SEARDUINO_LOG_LEVEL_WARNING  2
+#define SEARDUINO_LOG_LEVEL_ERROR    3
 
 
 
@@ -46,11 +46,8 @@ extern "C" {
 
   
 void print_function_name (FILE* stream,  const char* fun, char * str , ...) ;
-void log_generic(const char* s, int level);
-#define log_error(a)   log_generic(a, SEARDUINO_LOG_LEVEL_ERROR)
-#define log_warning(a) log_generic(a, SEARDUINO_LOG_LEVEL_WARNING)
-#define log_info(a)    log_generic(a, SEARDUINO_LOG_LEVEL_INFO)
-
+void log_generic(int level, char* s,  ...);
+void log_error(char* s,  ...);
 
 #ifdef  SEARDUINO_STUB
 #define SEARDUINO_DEBUG(a)  printf( "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");

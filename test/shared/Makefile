@@ -28,6 +28,7 @@ BUILD_FROM_VCS=true
 SHLIB=libtest.so
 SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
 SRC_C=test.c
+PROG=tester
 
 all: $(SHLIB) 
 
