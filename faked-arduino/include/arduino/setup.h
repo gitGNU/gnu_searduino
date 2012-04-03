@@ -33,6 +33,10 @@
 #define NR_OF_DIGITAL_PINS 20
 #define NR_OF_ANALOG_PINS 20
 
+
+uint8_t  dig_mode_callback(uint8_t pin);
+void     input_callback(uint8_t pin, uint8_t val, uint8_t pin_type);
+
 typedef void (*searduino_main_ptr)(void* in); 
 typedef searduino_main_ptr searduino_main_ptr_ptr ;
 
@@ -74,8 +78,6 @@ searduino_set_arduino_code_name(const char* libname);
 uint8_t 
 get_nr_of_pins(void);
 
-int ext_set_input(uint8_t pin, uint8_t val);
-
 void 
 set_digitalWrite_timelimit(unsigned int lim);
 
@@ -86,8 +88,14 @@ unsigned int
 get_discard_ctr(unsigned char pin);
 
 
+int
+load_arduino_code(void);
+
+void init_time(void);
+
+
 #ifdef __cplusplus
-} // extern "C"
+} /* extern "C" */
 #endif
 
 

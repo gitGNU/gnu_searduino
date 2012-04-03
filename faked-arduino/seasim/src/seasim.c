@@ -32,7 +32,7 @@ seasim_get_generic_output(uint8_t pin, uint8_t pin_type)
 uint8_t 
 seasim_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type)
 {
-  return ext_set_generic_input(pin, val);
+  return ext_set_generic_input(pin, val, pin_type);
 }
 
 uint8_t 
@@ -57,9 +57,9 @@ seasim_set_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 
 
 int
-seasim_get_output(uint8_t pin)
+seasim_get_output(uint8_t pin, uint8_t pin_type)
 {
-  return ext_get_generic_output(pin);
+  return ext_get_generic_output(pin, pin_type);
 }
 
 /*
@@ -169,6 +169,7 @@ int
 seasim_setup(void)
 {
   searduino_setup();
+  return 0;
 }
 
 void seasim_disable_streamed_output(void)

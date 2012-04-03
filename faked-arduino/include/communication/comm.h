@@ -82,7 +82,7 @@ extern do_callback_ptr do_callback;
 extern ao_to_sim_callback_ptr ao_sim_callback;
 extern do_to_sim_callback_ptr do_sim_callback;
 */
-extern dm_to_sim_callback_ptr dm_sim_callback;
+extern dm_to_sim_callback_ptr  dm_sim_callback;
 extern out_to_sim_callback_ptr out_sim_callback;
 extern log_to_sim_callback_ptr log_sim_callback;
 
@@ -157,6 +157,18 @@ uint8_t comm_register_digout_sim_cb(do_to_sim_callback_ptr cb);
  *
  */
 void init_comm(void);
+
+
+
+uint8_t
+comm_register_pinout_sim_cb(out_to_sim_callback_ptr cb);
+
+uint8_t
+comm_register_log_cb(log_to_sim_callback_ptr cb);
+
+uint8_t
+comm_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb);
+
 
 
 

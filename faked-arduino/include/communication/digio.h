@@ -76,5 +76,10 @@ void searduino_disable_streamed_output(void);
 
 uint8_t searduino_is_enable_streamed_output(void);
 
+int 
+comm_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type);
+
+int 
+comm_digital_set_mode(uint8_t pin, uint8_t mode);
 
 #endif  /* COMMUNICATION_DIGIO_H */

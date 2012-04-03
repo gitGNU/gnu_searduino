@@ -82,7 +82,6 @@ size_t Print::print(unsigned int n, int base)
 
 size_t Print::print(long n, int base)
 {
-  int t;
   if (base == 0) {
     return printf("%ld",n);
   } else if (base == 10) {

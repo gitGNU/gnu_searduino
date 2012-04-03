@@ -24,6 +24,6 @@
 #ifndef AVR_IO_H
 #define AVR_IO_H
 
-// #include "arduino_stuff.h"
+/* #include "arduino_stuff.h" */
 
 #endif /* AVR_IO_H */

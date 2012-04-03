@@ -37,12 +37,6 @@
 #include "communication/comm.h"
 #include "searduino_pin.h"
 
-void     digin_callback (uint8_t pin, uint8_t val); 
-void     anain_callback (uint8_t pin, unsigned val); 
-uint8_t  digout_callback(uint8_t pin);
-uint8_t  anaout_callback(uint8_t pin);
-uint8_t  dig_mode_callback(uint8_t pin);
-
 int searduino_exec ;
 
 

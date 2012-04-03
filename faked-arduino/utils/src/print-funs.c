@@ -34,7 +34,7 @@ print_function_name (FILE* stream,  const char *fun, char * str,  ...)
   va_start(ap, str);
   fprintf (stderr, "%s (", fun);
   vsprintf (buffer, str, ap);
-  fprintf (stderr,"%s)\n",buffer);
+  fprintf (stream,"%s)\n",buffer);
   va_end(ap);
 
   return;

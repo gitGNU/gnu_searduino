@@ -22,8 +22,11 @@
  ****/
 
 #include "searduino.h"
+#include "searduino_pin.h"
 #include "setup.h"
 #include "communication/comm.h"
+#include "communication/ext_io.h"
+#include "communication/digio.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -50,7 +53,7 @@ seasim_get_dig_output(uint8_t pin);
 */
 
 int
-seasim_get_output(uint8_t pin);
+seasim_get_output(uint8_t pin, uint8_t pin_type);
 
 uint8_t 
 seasim_is_paused(void);

@@ -83,5 +83,20 @@ ext_get_dig_mode(uint8_t pin);
 uint8_t 
 ext_set_ana_input(uint8_t pin, unsigned int val);
 
+int 
+ext_set_input(uint8_t pin, uint8_t val);
+
+int
+ext_get_generic_output(uint8_t pin, uint8_t pin_type);
+
+uint8_t
+ext_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type);
+
+uint8_t 
+ext_get_dig_mode(uint8_t pin);
+
+
+
+
 
 #endif /* COMMUNICATION_EXT_IO_H */

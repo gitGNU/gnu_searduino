@@ -72,7 +72,14 @@ get_generic_pin_val(uint8_t pin, uint8_t pin_type);
 
 
 #define NR_OF_ARDUINO_PINS 20
-#define PIN_OUT_OF_RANGE(pin)            (pin<0 || pin> NR_OF_ARDUINO_PINS)
+
+/*
+ * #define PIN_OUT_OF_RANGE(pin)            (pin<0 || pin> NR_OF_ARDUINO_PINS) 
+ * 
+ * We don't need to check if >0 since it's an unsigned int
+ */
+
+#define PIN_OUT_OF_RANGE(pin)            (pin> NR_OF_ARDUINO_PINS)
 
 #define get_digital_pin_mode(pin)        get_generic_pin_mode(pin, SEARDUINO_PIN_TYPE_DIGITAL)
 #define set_digital_pin_mode(pin, mode)  set_generic_pin_mode(pin, mode, SEARDUINO_PIN_TYPE_DIGITAL)
@@ -98,6 +105,18 @@ set_Write_timelimit(unsigned int lim);
 
 unsigned int 
 get_Write_timelimit(void);
+
+int
+output_callback(uint8_t pin, uint8_t pin_type);
+
+uint8_t
+digout_callback(uint8_t pin);
+
+uint8_t
+anaout_callback(uint8_t pin);
+
+void init_arduino_pins(void);
+
 
 
 #endif /* SEARDUINO_PIN_H */

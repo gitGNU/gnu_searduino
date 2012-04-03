@@ -29,6 +29,8 @@
 #include "utils/types.h"
 #include "arduino/error.h"
 #include "utils/error.h"
+#include "communication/digio.h"
+#include "setup.h"
 
 #include <sys/time.h>
 
@@ -214,7 +216,7 @@ set_generic_pin_val_impl(uint8_t pin,
       if (get_digital_pin_mode(pin) != exp_inout)
 	{
 	  SEARD_ERROR( SEARD_ARDUINO_WRONG_PIN_MODE);
-	  return;
+	  return SEARD_ARDUINO_WRONG_PIN_MODE;
 	}
     }
 
@@ -246,7 +248,7 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
   int ret;
   struct timeval  cur_time;
   struct timezone zoneData;
-  long time_diff;
+  long time_diff = 0 ;
 
   searduino_setup();
 
@@ -265,7 +267,6 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
 	{
 	  time_diff = (cur_time.tv_sec - arduino_pins[pin].last_actual_write.tv_sec) * 1000000 +
 	    cur_time.tv_usec - arduino_pins[pin].last_actual_write.tv_usec ;
-
 	}
     }
   arduino_pins[pin].last_write = cur_time;
@@ -282,7 +283,7 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
       /*
        *
        */
-      if (time_diff<genericWrite_timelimit) 
+      if ((time_diff<genericWrite_timelimit) && (time_diff!=0) )
 	{
 
 	  DEBUG_INFO(("**** NO  micro seconds since last update on pin %d : %lu   (%lu)\n", 
@@ -305,7 +306,7 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
 	      return;
 	    }
 	}
-      //      fprintf (stderr, "  discarded calls (not on change) so far: %d\n", arduino_digital_pins[pin].discard_ctr);
+      /*      fprintf (stderr, "  discarded calls (not on change) so far: %d\n", arduino_digital_pins[pin].discard_ctr); */
     }
   else
     {

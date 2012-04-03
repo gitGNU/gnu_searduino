@@ -85,7 +85,7 @@ pinMode(uint8_t pin, uint8_t mode)
   return;
 }
 
-static void turnOffPWM(uint8_t timer)
+void turnOffPWM(uint8_t timer)
 {
   PRINT_FUNCTION_NAME(("%d",timer));
 }
