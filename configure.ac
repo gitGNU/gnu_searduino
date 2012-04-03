@@ -50,7 +50,8 @@ AC_ARG_ENABLE([pedantic],
 
 
 if test "$pedantic_warnings" = yes; then
-   PEDANTIC_FLAGS='-W -Wall -pedantic -pedantic-errors  -Werror'
+   PEDANTIC_FLAGS='-W -Wall -Wformat'
+#-pedantic -pedantic-errors
    AC_SUBST([PEDANTIC_FLAGS])
 fi
 
