@@ -22,7 +22,6 @@
  ****/
 
 #include <Arduino.h>
-#include <stdio.h>
 
 #define FIRST_OUT 1
 #define LAST_OUT  5
