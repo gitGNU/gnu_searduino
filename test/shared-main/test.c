@@ -23,7 +23,7 @@
 
 
 #include "Arduino.h"
-#include "setup.h"
+#include "searduino.h"
 
 #define DLERR(d)  if(d==0) { printf ("DL Error:  %s\n", dlerror());  exit(1); }
 
@@ -37,7 +37,7 @@ extern searduino_main_ptr_ptr searduino_main_entry;
 
 int main(int argc, char **argv)
 {
-  searduino_set_arduino_code_name("libtest.so");
+  searduino_set_arduino_code_name("../shared/libtest.so");
   
   searduino_setup();
   searduino_main_entry(NULL);

@@ -33,7 +33,7 @@ LIBTEST=-ltest
 
 SEARDUINO_PATH=../..
 
-USER_C_FLAGS= -I../../faked-arduino/include/arduino -I../../faked-arduino/include/
+USER_C_FLAGS= -g -I../../faked-arduino/include/arduino -I../../faked-arduino/include/../../arduino-extras/include/
 SER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
 
 $(PROG): 
@@ -41,7 +41,8 @@ $(PROG):
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
 check: $(PROG)
-	export LD_LIBRARY_PATH=$(LIBTEST_PATH):../../faked-arduino/.libs/ && ./$(PROG)
+	cd ../shared && make clean shlib
+	./$(PROG)
 
 install:
 	echo nothing to do in install
