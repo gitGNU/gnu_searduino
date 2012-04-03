@@ -26,6 +26,8 @@
 #include "utils/print.h"
 
 #include "communication/comm.h"
+#include "searduino_pin.h"
+#include "setup.h"
 
 uint8_t
 ext_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type)
@@ -99,7 +101,7 @@ ext_get_ana_output(uint8_t pin)
   unsigned int val ;
   PRINT_FUNCTION_NAME(("%d",pin));
 
-  anaout_callback(pin);
+  val = anaout_callback(pin);
 
   DEBUG_INFO(("%d => %d",pin,val));
   return val;
