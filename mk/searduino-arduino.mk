@@ -67,7 +67,8 @@ LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -DARDUINO=$(ARDUINO_VERSION) \
                            $(INC_FLAGS)
 
-SEARDUINO_LIB=searduino
+SEARDUINO_LIB=-lsearduino
+LIBRARIES_LIB=-llibraries
 
 
 #$(OBJ_O): $(OBJ_C)

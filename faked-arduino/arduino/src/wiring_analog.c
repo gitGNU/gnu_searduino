@@ -43,7 +43,7 @@ void analogReference(uint8_t mode)
 int 
 analogRead(uint8_t pin)
 {
-  printf ("analogRead(%d)\n", pin);
+    /* printf ("analogRead(%d)\n", pin); */
   searduino_setup();
   if (PIN_OUT_OF_RANGE(pin))
     {
@@ -53,8 +53,8 @@ analogRead(uint8_t pin)
   
   /* printf ("wiring: analogRead(%d) => %d\n",  */
   /* 	  pin, get_analog_pin_val(pin)); */
-  printf ("analogRead(%d)=>%d\n", pin, get_analog_pin_val(pin) );
-  printf ("analogRead(%d)=>%d\n", pin, get_generic_pin_val(pin, SEARDUINO_PIN_TYPE_ANALOG));
+  /* printf ("analogRead(%d)=>%d\n", pin, get_analog_pin_val(pin) ); */
+  /* printf ("analogRead(%d)=>%d\n", pin, get_generic_pin_val(pin, SEARDUINO_PIN_TYPE_ANALOG)); */
   
   return get_analog_pin_val(pin);
 }

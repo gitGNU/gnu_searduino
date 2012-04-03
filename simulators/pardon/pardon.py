@@ -6,7 +6,8 @@
 #  Copyright (C) 2011, 2012 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
-# modify it under the terms of the GNU General Public License       # as published by the Free Software Foundation; either version 3    
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 3    
 # of the License, or any later version.                             
 #                                                                   
 #                                                                   
@@ -41,7 +42,12 @@ SEARDUINO_PIN_TYPE_ANALOG  = 2
 SEARDUINO_PIN_TYPE_PWM     = 3
 SEARDUINO_PIN_TYPE_END     = 4
 
+SEARDUINO_LOG_LEVEL_NONE    = 0 
+SEARDUINO_LOG_LEVEL_INFO    = 1
+SEARDUINO_LOG_LEVEL_WARNING = 2
+SEARDUINO_LOG_LEVEL_ERROR   = 3
 
+currentLogLevel = SEARDUINO_LOG_LEVEL_INFO
 
 
 typeLabels = [None]*(SEARDUINO_PIN_TYPE_END+1)
@@ -324,8 +330,18 @@ class MyWindow(Gtk.Window):
         self.extrasbox.pack_start(self.extraslabel,    False, True, 0)
         self.extrasbox.pack_start(pause,    False, True, 0)
         self.extrasbox.pack_start(spin,    False, True, 0)
+
+        # log window
         self.log = Gtk.TextView()
-        self.extrasbox.pack_start(self.log,    False, True, 0)
+        self.scroll = Gtk.ScrolledWindow()
+        self.scroll.set_hexpand(True)
+        self.scroll.set_vexpand(True)
+        self.textbuffer = self.log.get_buffer()
+        self.textbuffer.set_text("First thing..")
+        self.log.set_cursor_visible(True)
+        self.log.set_editable(True)
+        self.scroll.add(self.log)
+        self.extrasbox.pack_start(self.scroll,    False, True, 0)
 
 
         self.innerbox.pack_start(pinTable, False, True, 0)
@@ -496,6 +512,21 @@ def newOutCallback(pin, val, pin_type):
         global win
         win.anas[pin].updateGenericPin(val, pin_type)
 
+def newLogCallback(level, text):
+    print ""
+    print ""
+    print ""
+    print "  LOG:  " + text
+    print "  LOG:  " + str(level)
+    print "  LOG:  " + str(currentLogLevel)
+    print ""
+    print ""
+    print ""
+    if ( level >= currentLogLevel ):
+        mark = win.textbuffer.get_end_iter()
+        mark = win.textbuffer.insert(mark, text)
+    
+
 def newAnaOutCallback(pin, val):
 #    print ""
 #    print "==================== in Py:  new ANALOG out: " + str(pin) + " = " + str(val)
@@ -580,6 +611,7 @@ seasim_start();
 #*/
 seasim_set_callback(newOutCallback)
 seasim_set_dig_mode_callback(newDigModeCallback)
+seasim_set_log_callback(newLogCallback)
 
 #sys.exit(1)
 
@@ -594,6 +626,7 @@ win.show_all()
 #GObject.idle_add(newAnaOutCallback)
 GObject.idle_add(newOutCallback)
 GObject.idle_add(newDigModeCallback)
+GObject.idle_add(newLogCallback)
 
 GObject.threads_init()
 

@@ -25,26 +25,40 @@
 #ifndef SEARDUINO_PRINT_H
 #define SEARDUINO_PRINT_H
 
-#include <stdio.h>
+#define SEARDUINO_LOG_LEVEL_NONE     0  
+#define SEARDUINO_LOG_LEVEL_INFO     1
+#define SEARDUINO_LOG_LEVEL_WARNING  2
+#define SEARDUINO_LOG_LEVEL_ERROR    3
+
+
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#include <stdio.h>
 #include "utils/types.h"
+#include "communication/comm.h"
 
-
+  
 #define INFO_STREAM stdout
 #define ERR_STREAM  stderr
 
-void print_function_name (FILE* stream,  const char* fun, char * str) ;
-
+  
+void print_function_name (FILE* stream,  const char* fun, char * str , ...) ;
+void log_generic(int level, char* s,  ...);
+void log_error(char* s,  ...);
 
 #ifdef  SEARDUINO_STUB
 #define SEARDUINO_DEBUG(a)  printf( "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
 #else
 #define SEARDUINO_DEBUG(a)
 #endif
+
+
+
+
+
 
 void 
 print_dummy_function_implementation (FILE* stream,  

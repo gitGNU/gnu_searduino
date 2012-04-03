@@ -86,6 +86,7 @@ ext_get_dig_output(uint8_t pin)
 
   val = digout_callback(pin);
 
+
   DEBUG_INFO(("%d => %d",pin,val));
   return val;
 }

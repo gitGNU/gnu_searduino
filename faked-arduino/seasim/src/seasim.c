@@ -41,6 +41,13 @@ seasim_register_out_sim_cb(out_to_sim_callback_ptr cb)
   return comm_register_pinout_sim_cb(cb);
 }
 
+uint8_t
+seasim_register_log_cb(log_to_sim_callback_ptr cb)
+{
+  return comm_register_log_cb(cb);
+}
+
+
 
 uint8_t
 seasim_set_input(uint8_t pin, unsigned int val, uint8_t pin_type)

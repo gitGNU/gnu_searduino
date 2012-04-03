@@ -23,6 +23,7 @@
 
 #include "stdio.h"
 #include "stdarg.h"
+#include "utils/print.h"
 
 void 
 print_function_name (FILE* stream,  const char *fun, char * str,  ...) 
@@ -50,3 +51,41 @@ print_dummy_function_implementation (FILE* stream,
   fprintf (stream," - stub implementation.  *** WARNING, this function has no real implementation ***\n");
   return;
 }
+
+void 
+log_generic(int level, char* s, ...)
+{
+  va_list ap;
+  char buffer[256];
+
+  va_start(ap, s);
+  vsprintf (buffer, s, ap);
+  va_end(ap);
+
+  printf ("log_generic: %s\n", buffer);
+
+  if (log_sim_callback!=NULL)
+    {
+      log_sim_callback(level, buffer);
+    }
+}
+
+void 
+log_error(char* s, ...)
+{
+  va_list ap;
+  char buffer[256];
+
+  va_start(ap, s);
+  vsprintf (buffer, s, ap);
+  va_end(ap);
+
+  printf ("log_generic: %s\n", buffer);
+
+  if (log_sim_callback!=NULL)
+    {
+      log_sim_callback(SEARDUINO_LOG_LEVEL_ERROR, buffer);
+    }
+
+}
+

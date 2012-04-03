@@ -53,6 +53,7 @@ static PyObject *my_ana_callback = NULL;
 */
 static PyObject *my_callback = NULL;
 static PyObject *my_dig_mode_callback = NULL;
+static PyObject *my_log_callback = NULL;
 /*
 static PyObject *c_my_set_dig_callback(PyObject *dummy, PyObject *args);
 static PyObject *c_my_set_ana_callback(PyObject *dummy, PyObject *args);
@@ -110,6 +111,7 @@ new_out(uint8_t pin, uint8_t val, uint8_t pin_type)
 }
 
 
+
 #ifdef OBSO
 void 
 new_dig_out(uint8_t pin, uint8_t val)
@@ -159,6 +161,61 @@ new_dig_out(uint8_t pin, uint8_t val)
 }
 
 #endif
+
+
+
+void 
+log_callback(uint8_t level, const char *text)
+{
+  PyObject *arglist;
+  PyObject *result; 
+
+  PyGILState_STATE gstate;   
+  gstate = PyGILState_Ensure();   
+
+  PEARDUINO_PRINT_IN();
+
+  PEARDUINO_PRINT_INSIDE();
+
+  printf ("PEAR got %d %s\n", level, text);
+  printf ("PEAR will call %p\n", my_log_callback); fflush(stdout);
+
+  if (my_log_callback!=NULL)
+    {
+
+      arglist = Py_BuildValue("(is)", level, text);
+
+      if (arglist==NULL)
+	{
+	  printf ("wooops, arglist is no no\n");
+	  exit(1);
+	}
+
+      /* printf(" Arguments to callback:  ");      fflush(stdout); */
+      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
+
+      printf ("PEAR will call\n"); fflush(stdout);
+
+      result = PyEval_CallObject(my_log_callback, arglist);
+
+      printf ("PEAR just called\n"); fflush(stdout);
+
+      Py_DECREF(arglist);
+      
+      if (result)
+	{
+	  Py_DECREF(result);
+	}      
+    }
+  else
+    {
+      fprintf (stderr, "*** ERRROR ***\n");
+      fprintf (stderr, "*** Could not call log callback since no callback ***\n");
+    }
+
+  PyGILState_Release(gstate);
+  PEARDUINO_PRINT_OUT();
+}
 
 void 
 new_dig_mode(uint8_t pin, uint8_t mode)
@@ -359,8 +416,12 @@ static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
   seasim_register_digout_sim_cb(new_dig_out);
   seasim_register_anaout_sim_cb(new_ana_out);
   */
+
+  my_log_callback = NULL;
+
   seasim_register_out_sim_cb(new_out);
   seasim_register_dig_mode_sim_cb(new_dig_mode);
+  seasim_register_log_cb(log_callback);
   
   PEARDUINO_PRINT_OUT();
   PyObject* o = Py_BuildValue("i", 0);
@@ -558,6 +619,40 @@ PyObject * c_quit(void)
   return res;
 }
 
+static PyObject *
+c_my_set_log_callback(PyObject *dummy, PyObject *args)
+{
+  PyObject *result = NULL;
+  PyObject *temp;
+  PEARDUINO_PRINT_IN();
+
+  printf ("registering cb in PEAR\n");
+  usleep(1000*1000*3);
+
+  if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
+    if (!PyCallable_Check(temp)) {
+      PyErr_SetString(PyExc_TypeError, "parameter must be callable");
+      PEARDUINO_PRINT_OUT();
+
+      return NULL;
+    }
+
+    Py_XINCREF(temp);         /* Add a ref to the new callback */
+    Py_XDECREF(my_log_callback);  /* Dispose possible previous callback */
+    my_log_callback = temp;       /* Remember new callback */
+    
+    /* Boilerplate to return "None" */
+    Py_INCREF(Py_None);
+    result = Py_None;
+
+    PEARDUINO_PRINT_INSIDE_STR("Python log callback is registered");
+    usleep (100);
+  }
+
+  PEARDUINO_PRINT_OUT();
+  return result;
+}
+
 
 
 /*
@@ -571,6 +666,7 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_set_input", (PyCFunction)c_ext_set_input, METH_VARARGS, NULL},
   {"seasim_set_dig_mode_callback", (PyCFunction)c_my_set_dig_mode_callback, METH_VARARGS, NULL},
   {"seasim_set_callback", (PyCFunction)c_my_set_callback, METH_VARARGS, NULL},
+  {"seasim_set_log_callback", (PyCFunction)c_my_set_log_callback, METH_VARARGS, NULL},
   {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
   {"seasim_pause", (PyCFunction)c_pause, METH_VARARGS, NULL},
   {"seasim_resume", (PyCFunction)c_resume, METH_VARARGS, NULL},
