@@ -77,6 +77,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./seasim/src/seasim.c \
        ./utils/src/print-funs.c \
        ./arduino/src/Print.cpp \
+       ./arduino/src/HardwareSerial.cpp \
         $(LIB_SEARDUINO_H_FILES) \
         $(LIB_LIBRARIES_SOURCES_FILES)
 
