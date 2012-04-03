@@ -93,14 +93,16 @@ lib_LTLIBRARIES = libsearduinostub.la
 AM_CFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/arduino \
            -I../faked-arduino/include/        \
-           -I../arduino-extras/include/ 
+           -I../arduino-extras/include/       \
+           $(PEDANTIC_FLAGS)
 
 AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-sources/libraries/Wire  \
-           -I../arduino-sources/libraries/Servo  \
-           -I../faked-arduino/include/arduino \
-           -I../faked-arduino/include/        \
-           -I../arduino-extras/include/ 
+           -I../arduino-sources/libraries/Servo \
+           -I../faked-arduino/include/arduino   \
+           -I../faked-arduino/include/          \
+           -I../arduino-extras/include/         \
+           $(PEDANTIC_FLAGS)
 
 
 AM_LDFLAGS= -ldl 
