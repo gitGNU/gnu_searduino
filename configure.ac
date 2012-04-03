@@ -51,6 +51,7 @@ AC_ARG_ENABLE([pedantic],
 
 if test "$pedantic_warnings" = yes; then
    PEDANTIC_FLAGS='-W -Wall -pedantic -pedantic-errors  -Werror'
+   AC_SUBST([PEDANTIC_FLAGS])
 fi
 
 AC_ARG_ENABLE([python],
@@ -119,6 +120,7 @@ AC_MSG_NOTICE([summary of build options:
   Unit test:        $ut_enabled
   Unit test flags:  C: '$CHECK_CFLAGS   LD: '$CHECK_LIBS'
   Shared lib test:  $st_enabled
+  Pedantic flags:   $PEDANTIC_FLAGS
 ])
 
 exit_on_failure()
