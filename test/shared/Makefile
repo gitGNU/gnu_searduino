@@ -30,8 +30,6 @@ SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
 SRC_C=test.c
 PROG=tester
 
-all: $(SHLIB) 
-
 SEARDUINO_PATH=../..
 
 USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
