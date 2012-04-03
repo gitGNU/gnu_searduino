@@ -1,6 +1,13 @@
 News in 0.6
 
   Added lib-libraries for linker to add
+  Compilation warnings from pedantic mode
+
+  Fixed Savannah bugs: 
+  ---------------------
+  #36061 analogWrite currently writes to analog pins (should be to digital pins)
+  #36049 configure error on i86
+
 
 News in 0.5
 
