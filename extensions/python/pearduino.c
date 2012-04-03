@@ -494,7 +494,7 @@ static PyObject* c_Read(PyObject* self, PyObject* args)
   
   PyArg_ParseTuple(args, "(ii)", &pin, &pin_type);
 
-  val = seasim_get_output(pin);
+  val = seasim_get_output(pin, pin_type);
 
   PyObject* o = Py_BuildValue("i", val);
 
