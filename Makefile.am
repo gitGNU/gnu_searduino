@@ -110,7 +110,7 @@ dist_pkgdataexample_DATA = \
 
 
 
-EXTRA_DIST =  ${ARD_SRC} ${SCRIPT_SRC} ${ARD_EXAMPLES}
+EXTRA_DIST =  ${ARD_SRC} ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl
 
 
 TOPDIR=./
