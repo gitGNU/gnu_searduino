@@ -87,6 +87,7 @@ size_t Print::print(long n, int base)
   } else if (base == 10) {
     PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
   }
+  return 0;
 }
 
 size_t Print::print(unsigned long n, int base)
