@@ -1,7 +1,9 @@
 News in 0.6
 
+  New log window in Python GUI
   Added lib-libraries for linker to add
   Compilation warnings from pedantic mode
+
 
   Fixed Savannah bugs: 
   ---------------------
