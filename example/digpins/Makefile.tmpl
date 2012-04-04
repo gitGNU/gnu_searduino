@@ -55,12 +55,6 @@ SHLIB=digpins.so
 
 include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
 
-check:
-	make -f Makefile.digpins clean
-	make -f Makefile.digpins prog
-	make -f Makefile.digpins clean
-	make -f Makefile.digpins shlib
-
 
 ########## Build instructions ################
 #

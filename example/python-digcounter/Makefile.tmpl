@@ -46,9 +46,3 @@ SEARDUINO_PATH=__INSTALL_DIR__
 all: $(SHLIB)
 
 include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
-
-check:
-	make -f Makefile.digcounter clean
-	make -f Makefile.digcounter prog
-	make -f Makefile.digcounter clean
-	make -f Makefile.digcounter shlib
