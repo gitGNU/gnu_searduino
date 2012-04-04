@@ -7,3 +7,9 @@ dist_pkgdataexample_DATA = \
   Makefile.tmpl
 
 
+
+check:
+	make -f Makefile.digpins clean
+	make -f Makefile.digpins prog
+	make -f Makefile.digpins clean
+	make -f Makefile.digpins shlib
