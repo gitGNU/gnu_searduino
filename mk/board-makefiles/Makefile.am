@@ -1,5 +1,6 @@
 pkgdataexampledir = $(pkgdatadir)/mk/board-makefiles
 dist_pkgdataexample_DATA = \
+  atmega2560.mk \
   atmega1280.mk \
   atmega168.mk \
   atmega328.mk \
