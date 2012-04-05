@@ -1,15 +1,55 @@
-
-
-I2C plugins register in the Searduino framework by calling the
+I2C plugins are registered in the Searduino framework by calling the
 i2c_add_device function provided by searduino-i2c.h
 
+Typically each plugin, in ther own setup function, register read and
+write callbacks, using the I2C functions as provided by the Arduino
+API
+
+A plugin can be loaded either by a unit test case or by a simulator.
 
 
+---
 
-int  i2c_add_device (unsigned int device_nr, 
-                     const char  *setup_fun);
+
+Basic flow
 =================================================================
 
+0. Build I2C code.
+
+Build as a shared library, in this example we will assume the built
+I2C code is called "i2c.so"
+
+
+1. Test code / simulator calls
+
+The test code or simulator calls the function i2c_add_device, e g 
+
+   ret = i2c_add_device (44, "./i2c.so");
+
+2. Invoking the I2C "device" setup code
+
+Searduino will invole the setup function setup funtion (in the I2C
+code) like this:
+      setup(44). 
+
+3.  Registering as an I2C device
+
+It is up to the I2C code to register as needed. This should be done in
+the setup function.
+
+
+
+
+
+
+
+Functions:
+=================================================================
+
+int  i2c_add_device (unsigned int device_nr, 
+                     const char  *i2c_code,
+                     const char  *setup_fun);
+---------------------------------------------------------
     Return value: 
     ---------------------
        0 on success
@@ -18,6 +58,7 @@ int  i2c_add_device (unsigned int device_nr,
     Arguments: 
     ---------------------
     device_nr  - I2C number of the device
+    i2c_code   - path and name to the i2c cod eto load
     setup_fun  - name of the plugin's setup function which 
                  will be called by Searduino
 
@@ -31,6 +72,25 @@ int  i2c_add_device (unsigned int device_nr,
     to set up".
   
 
-Typically each plugin should register read and write callbacks.
-A plugin can be loaded either by a unit test case or by a simulator.
+I2C setup function
+-----------------------------------------------------------
+
+   int my_setup(unsigned int nr)
+
+
+    Return value: 
+    ---------------------
+       0 on success
+ 
+
+    Arguments: 
+    ---------------------
+    nr  - I2C number of the device  <---------- do we need a nr here?
+
+    Description: 
+    --------------------- 
+
+
+
+
 
