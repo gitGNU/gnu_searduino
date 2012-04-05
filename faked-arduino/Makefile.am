@@ -38,6 +38,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/avr/pgmspace.h \
        ./include/avr/delay.h \
        ./include/arduino/wiring_private.h \
+       ./wire/src/twi_mock.h  \
        ./include/arduino/pins_arduino.h \
        ./include/arduino/setup.h \
        ./include/seasim/seasim.h \
@@ -51,6 +52,7 @@ LIB_SEARDUINO_H_FILES=\
 
 LIB_LIBRARIES_SOURCES_FILES = \
       wire/src/wire.cpp \
+      wire/src/twi_mock.c \
       EEPROM/src/eeprom.cpp  \
       Ethernet/src/ethernet.cpp  \
       Firmata/src/firmata.cpp  \
