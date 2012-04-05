@@ -46,6 +46,10 @@ parse_args()
 		BUILD_TYPE=due
 		shift
 		;;
+	    "--build")
+		BUILD=true
+		shift
+		;;
 	    "--searduino-path")
 		SEARDUINO_PATH=$2
 		shift
@@ -108,8 +112,8 @@ create_c_file()
 {
     ARD_FILE=$1
 
-#    echo "From $EX_FILE To $C_FILE"
-    C_FILE=$(basename $ARD_FILE | sed 's,\.ino,\.c,g')
+    C_FILE=$(basename $ARD_FILE | sed 's,\.ino,\.cpp,g')
+    echo "From $ARD_FILE To $C_FILE"
     
     if [ -f $ARD_DIR/$C_FILE ]
     then
@@ -130,10 +134,13 @@ create_c_file()
 
     cat $TMPL_DIR/pre_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  $C_FILE
     exit_on_failure $? "Creating C file 1 ($C_FILE) "
+
     ard2c_file $ARD_FILE
     exit_on_failure $? "Creating C file 2 ($C_FILE) "
-    ard2c_file $TMPL_DIR/main_c.tmpl
-    exit_on_failure $? "Creating C file 3 ($C_FILE) "
+
+#    ard2c_file $TMPL_DIR/main_c.tmpl
+#    exit_on_failure $? "Creating C file 3 ($C_FILE) "
+
     cat $TMPL_DIR/post_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  $C_FILE
     exit_on_failure $? "Creating C file 4 ($C_FILE) "
 
@@ -149,7 +156,7 @@ create_makefile()
     export ARDUINO_VALUE=""
     export TO_BUILD=""
     export TO_BUILD_TARGET=""
-    export MAIN_FILE=""
+#    export MAIN_FILE=""
 
     if [ "$BUILD_TYPE" = "prog" ]
     then
@@ -166,7 +173,7 @@ create_makefile()
 	ARDUINO_VALUE=$BUILD_TYPE
 	TO_BUILD_TARGET="\$(PROG)"
 	TO_BUILD="PROG=ard-code"
-	MAIN_FILE=$C_FILES
+#	MAIN_FILE=$C_FILES
 	C_FILES=""
     fi
 
@@ -174,13 +181,14 @@ create_makefile()
     echo "  * creating Makefile" 
     cat $TMPL_DIR/Makefile.tmpl | \
           sed "s,__C_FILES__,$C_FILES,g" | \
-          sed "s,__MAIN_FILE__,$MAIN_FILE,g" | \
+          sed "s,__CXX_FILES__,$CXX_FILES,g" | \
           sed "s,__TO_BUILD__,$TO_BUILD,g" | \
           sed "s,__ALL_DEP__,$TO_BUILD_TARGET,g" | \
           sed "s,__ARDUINO_VALUE__,$ARDUINO_VALUE,g"   | \
           sed "s,__SEARDUINO_PATH__,$SEARDUINO_PATH,g" \
           > $ARD_DIR/Makefile
     exit_on_failure $? "Creating Makefile "
+#          sed "s,__MAIN_FILE__,$MAIN_FILE,g" | \
 
 }
 
@@ -205,8 +213,27 @@ create_dir()
 	create_c_file $i
 	C_FILES=$C_FILE
     done
+    cat $TMPL_DIR/main_tot_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  $ARD_DIR/main.c
+    exit_on_failure $? "Creating C file 4 ($C_FILE) "
+    CXX_FILES=${C_FILES}
+    C_FILES=main.c
+
+    for i in $(find $ARD_DIR_LONG -type f -name "*.h")
+    do
+	cp $i $ARD_DIR
+    done
 
     create_makefile $ARD_DIR
+}
+
+build_dir()
+{
+    ARD_DIR_LONG=$1
+    ARD_DIR=$(basename $ARD_DIR_LONG)
+    
+    cd $ARD_DIR
+    make
+    cd -
 }
 
 parse_args $*
@@ -216,6 +243,14 @@ then
     create_c_file $EX_FILE
 else
     create_dir $EX_DIR
+    if [ "$BUILD" = "true" ]
+    then
+	build_dir $EX_DIR
+    fi
 fi
+
+
+
+
 
 exit 0
