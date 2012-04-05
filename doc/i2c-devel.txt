@@ -1,0 +1,36 @@
+
+
+I2C plugins register in the Searduino framework by calling the
+i2c_add_device function provided by searduino-i2c.h
+
+
+
+
+int  i2c_add_device (unsigned int device_nr, 
+                     const char  *setup_fun);
+=================================================================
+
+    Return value: 
+    ---------------------
+       0 on success
+ 
+
+    Arguments: 
+    ---------------------
+    device_nr  - I2C number of the device
+    setup_fun  - name of the plugin's setup function which 
+                 will be called by Searduino
+
+    Description: 
+     --------------------- 
+
+    Each plugin is registered by some unit test code or a simulator,
+    using this function. The searduino framework looks for the symbol
+    as specified by setup_fun. If found Searduino invokes the
+    functions. In this functions the I2C device sets up "what it needs
+    to set up".
+  
+
+Typically each plugin should register read and write callbacks.
+A plugin can be loaded either by a unit test case or by a simulator.
+
