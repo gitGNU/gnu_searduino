@@ -49,7 +49,9 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/setup.h 
 
 LIB_LIBRARIES_SOURCES_FILES = \
-      wire/src/wire.cpp \
+      wire/src/Wire.cpp \
+      wire/src/twi_mock.c \
+      wire/src/twi_mock.h \
       EEPROM/src/eeprom.cpp  \
       Ethernet/src/ethernet.cpp  \
       Firmata/src/firmata.cpp  \
@@ -94,10 +96,12 @@ AM_CFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/arduino \
            -I../faked-arduino/include/        \
            -I../arduino-extras/include/       \
+           -I../arduino-sources/libraries/Wire/utility  \
            $(PEDANTIC_FLAGS)
 
 AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-sources/libraries/Wire  \
+           -I../arduino-sources/libraries/Wire/utility  \
            -I../arduino-sources/libraries/Servo \
            -I../faked-arduino/include/arduino   \
            -I../faked-arduino/include/          \
