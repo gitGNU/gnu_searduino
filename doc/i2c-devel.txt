@@ -30,7 +30,10 @@ The test code or simulator calls the function i2c_add_device, e g
 
 Searduino will invole the setup function setup funtion (in the I2C
 code) like this:
-      setup(44). 
+      i2c_setup(44). 
+
+44 will be the number which the device will be connected to (listening
+for) inside Searduino.
 
 3.  Registering as an I2C device
 
@@ -75,7 +78,7 @@ int  i2c_add_device (unsigned int device_nr,
 I2C setup function
 -----------------------------------------------------------
 
-   int my_setup(unsigned int nr)
+   int i2c_setup(unsigned int nr)
 
 
     Return value: 
@@ -85,7 +88,7 @@ I2C setup function
 
     Arguments: 
     ---------------------
-    nr  - I2C number of the device  <---------- do we need a nr here?
+    nr  - I2C number of the device
 
     Description: 
     --------------------- 
