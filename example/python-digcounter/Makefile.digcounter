@@ -41,11 +41,8 @@ USER_C_FLAGS=-fPIC
 USER_LD_FLAGS=$(SHLIB_LIBS)
 
 
-SEARDUINO_PATH=/opt/searduino
+SEARDUINO_PATH=/tmp/TMP_INSTALL3
 
 all: $(SHLIB)
 
 include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
-
-check: 
-	./simple-hw.sh
