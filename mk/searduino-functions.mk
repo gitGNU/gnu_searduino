@@ -41,8 +41,8 @@ endif
 LIBSEARDUINO_CFLAGS=
 LIBSEARDUINO_CXXFLAGS=
 
-override CFLAGS +=  $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CFLAGS) $(USER_C_FLAGS)  $(_CFLAGS)
-override CXXFLAGS += $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CXXFLAGS) $(USER_CXX_FLAGS) $(_CXXFLAGS)
+override CFLAGS +=  $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CFLAGS) $(USER_C_FLAGS)  $(_CFLAGS) -Dmain=searduino_main
+override CXXFLAGS += $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CXXFLAGS) $(USER_CXX_FLAGS) $(_CXXFLAGS) -Dmain=searduino_main
 
 override LDFLAGS += $(_LDFLAGS) $(SEARDUINO_LIB_PATH) $(LIBRARIES_LIB) $(SEARDUINO_LIB)  $(_LDFLAGS) 
 
@@ -93,7 +93,7 @@ $(SHLIB): LIB_FLAGS:=-Dmain=searduino_main
 $(SHLIB): $(OBJ_C)  $(OBJ_CXX) 
 	@echo "Creating directory: $(LIB_PATH)/"
 	mkdir -p $(LIB_PATH)/
-	$(CC)  -shared  $(OBJ_C)  $(OBJ_CXX)   -o $(SHLIB) $(LDFLAGS)
+	$(CXX)  -shared  $(OBJ_C)  $(OBJ_CXX)   -o $(SHLIB) $(LDFLAGS)
 	@echo "Created lib: $(SHLIB)"
 
 
