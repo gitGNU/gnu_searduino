@@ -29,7 +29,7 @@
 #include "utils/types.h"
 #include "arduino/error.h"
 #include "utils/error.h"
-#include "communication/digio.h"
+#include "ext_io.h"
 #include "setup.h"
 
 #include <sys/time.h>

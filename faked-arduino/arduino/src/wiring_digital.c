@@ -30,8 +30,7 @@
 #include "arduino/error.h"
 #include "utils/error.h"
 
-#include "communication/digio.h"
-#include "communication/comm.h"
+#include "ext_io.h"
 #include "setup.h"
 
 
@@ -80,7 +79,7 @@ pinMode(uint8_t pin, uint8_t mode)
 
   set_digital_pin_mode(pin,mode);
 
-  comm_digital_set_mode(pin, mode);
+  ext_digital_set_mode(pin, mode);
 
   return;
 }

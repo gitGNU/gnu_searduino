@@ -24,9 +24,7 @@
 #include "searduino.h"
 #include "searduino_pin.h"
 #include "setup.h"
-#include "communication/comm.h"
-#include "communication/ext_io.h"
-#include "communication/digio.h"
+#include "arduino/ext_io.h"
 
 #include <stdio.h>
 #include <string.h>

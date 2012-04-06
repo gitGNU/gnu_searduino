@@ -34,7 +34,7 @@
 #include "utils/types.h"
 #include "arduino/error.h"
 #include "utils/error.h"
-#include "communication/comm.h"
+#include "ext_io.h"
 #include "searduino_pin.h"
 
 int searduino_exec ;

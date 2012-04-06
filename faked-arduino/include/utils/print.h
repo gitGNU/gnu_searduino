@@ -38,7 +38,6 @@ extern "C" {
 
 #include <stdio.h>
 #include "utils/types.h"
-#include "communication/comm.h"
 
   
 #define INFO_STREAM stdout
