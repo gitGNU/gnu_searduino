@@ -182,6 +182,7 @@ create_makefile()
     cat $TMPL_DIR/Makefile.tmpl | \
           sed "s,__C_FILES__,$C_FILES,g" | \
           sed "s,__CXX_FILES__,$CXX_FILES,g" | \
+          sed "s,__MAIN_FILE__,,g" | \
           sed "s,__TO_BUILD__,$TO_BUILD,g" | \
           sed "s,__ALL_DEP__,$TO_BUILD_TARGET,g" | \
           sed "s,__ARDUINO_VALUE__,$ARDUINO_VALUE,g"   | \
@@ -211,11 +212,12 @@ create_dir()
     do
 #	echo "Create C file from : $i"
 	create_c_file $i
-	C_FILES=$C_FILE
+	C_FILES="$C_FILES $C_FILE"
     done
     cat $TMPL_DIR/main_tot_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  $ARD_DIR/main.c
-    exit_on_failure $? "Creating C file 4 ($C_FILE) "
-    CXX_FILES=${C_FILES}
+    exit_on_failure $? "Creating C file 4 ($C_FILES) "
+
+    export CXX_FILES=${C_FILES}
     C_FILES=main.c
 
     for i in $(find $ARD_DIR_LONG -type f -name "*.h")
