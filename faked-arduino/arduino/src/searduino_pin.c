@@ -60,6 +60,7 @@ void init_arduino_pins(void)
   for (i=0;i<=NR_OF_ARDUINO_PINS;i++)
     {
       arduino_pins[i].mode=INPUT;
+      arduino_pins[i].val=0;
       arduino_pins[i].discard_ctr=0;
     }
   return;
@@ -188,7 +189,6 @@ set_generic_pin_mode(uint8_t pin, uint8_t mode, uint8_t pin_type)
 
   if (arduino_pins[pin].type==pin_type)
     {
-      printf ("Mode of pin %d:   %d\n", pin, mode);
       arduino_pins[pin].mode=mode; 
       return 0;
     }
@@ -208,7 +208,7 @@ set_generic_pin_val_impl(uint8_t pin,
 {
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
     {
-      arduino_pins[pin].type=pin_type;
+w      arduino_pins[pin].type=pin_type;
     }
     
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL)
@@ -224,6 +224,10 @@ set_generic_pin_val_impl(uint8_t pin,
     {
       arduino_pins[pin].val=val; 
       return 0;
+    }
+  else
+    {
+      ;
     }
   return  -1;
 }
@@ -279,7 +283,7 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
   if ( get_pin_val(pin) != val)
     {
       set_generic_pin_val(pin, val, pin_type);
-
+      
       /*
        *
        */

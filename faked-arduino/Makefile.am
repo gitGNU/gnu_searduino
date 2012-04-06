@@ -22,7 +22,7 @@
 #
 
 AUTOMAKE_OPTIONS = gnu
-SUBDIRS=include arduino  wire EEPROM Ethernet Firmata LiquidCrystal SD Servo SoftwareSerial SPI Stepper 
+SUBDIRS=include arduino wire EEPROM Ethernet Firmata LiquidCrystal SD Servo SoftwareSerial SPI Stepper 
 
 
 LIB_SEARDUINO_H_FILES=\
