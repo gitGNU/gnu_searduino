@@ -104,7 +104,7 @@ int searduino_setup(void)
       return 1;
     }
 
-  init_comm();
+  init_ext_io();
 
   init_time();
 

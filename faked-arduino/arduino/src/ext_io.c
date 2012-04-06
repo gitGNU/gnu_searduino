@@ -144,7 +144,7 @@ log_to_sim_callback_ptr log_sim_callback = NULL ;
 
 
 void 
-init_extio(void)
+init_ext_io(void)
 {
   static int init;
   if (!init)
@@ -233,7 +233,7 @@ int
 ext_digital_set_mode(uint8_t pin, uint8_t mode)
 {
   /* Make sure all is set up before continuing*/
-  init_comm();
+  init_ext_io();
 
   /* If output enabled, print info on pin/val to stream*/
   if ( stub_output_enabled ) 
@@ -262,7 +262,7 @@ int
 ext_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type)
 {
   /* Make sure all is set up before continuing*/
-  init_comm();
+  init_ext_io();
 
   /* If output enabled, print info on pin/val to stream*/
   if ( stub_output_enabled ) 

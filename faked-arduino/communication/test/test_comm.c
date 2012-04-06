@@ -63,7 +63,7 @@ void test_do_to_sim_callback(uint8_t pin, uint8_t val)
 
 START_TEST (test_comm)
 {
-  init_comm();
+  init_ext_io();
 
   fail_if(set_proto_stream(NULL)!=
 	  SEARD_INVALID_STREAM);

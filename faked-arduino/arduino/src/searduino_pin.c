@@ -299,7 +299,7 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
 		      time_diff,genericWrite_timelimit, 
 		      (arduino_pins[pin].last_write.tv_sec*1000000+arduino_pins[pin].last_write.tv_usec),
 		      (arduino_pins[pin].last_actual_write.tv_sec*1000000+arduino_pins[pin].last_actual_write.tv_usec)));
-	  ret = comm_generic_write_outpin(pin,val,pin_type);
+	  ret = ext_generic_write_outpin(pin,val,pin_type);
 	  if (ret != SEARD_ARDUINO_OK)
 	    {
 	      SEARD_ERROR(ret);
