@@ -8,7 +8,7 @@ dist_pkgdataexample_DATA = \
 
 
 
-check:
+check2:
 	make -f Makefile.digpins clean
 	make -f Makefile.digpins prog
 	make -f Makefile.digpins clean
