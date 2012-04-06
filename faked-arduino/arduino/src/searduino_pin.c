@@ -208,7 +208,7 @@ set_generic_pin_val_impl(uint8_t pin,
 {
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
     {
-w      arduino_pins[pin].type=pin_type;
+      arduino_pins[pin].type=pin_type;
     }
     
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL)
