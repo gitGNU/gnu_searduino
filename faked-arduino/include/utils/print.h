@@ -52,12 +52,8 @@ void log_error(char* s,  ...);
 #define SEARDUINO_DEBUG(a)  printf( "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
 #else
 #define SEARDUINO_DEBUG(a)
-#endif
-
-
-
-
-
+#endif  /* SEARDUINO_STUB */
+ 
 
 void 
 print_dummy_function_implementation (FILE* stream,  

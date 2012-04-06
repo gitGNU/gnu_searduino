@@ -10,7 +10,7 @@ dist_pkgdataexample_DATA = \
   simple-hw.sh
 
 
-check:
+check2:
 	make -f Makefile.digcounter clean
 	make -f Makefile.digcounter prog
 	make -f Makefile.digcounter clean

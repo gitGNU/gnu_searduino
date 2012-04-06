@@ -193,7 +193,7 @@ load_arduino_code(void)
       searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
       if ( searduino_main_entry == NULL)
 	{
-	  printf ("Couldn't find searduino_main_ptr in arduino code\n");
+	  printf ("Couldn't find searduino_main in arduino code\n");
 	  return 1;
 	}
       /* printf ("setup.c:  code at %p\n", searduino_main_entry); */

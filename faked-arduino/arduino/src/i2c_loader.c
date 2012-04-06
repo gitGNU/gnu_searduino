@@ -21,60 +21,61 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-
-
+#include <dlfcn.h>
 #include <check.h>
-#include <stdlib.h>
+#include "i2c_loader.h"
 #include <stdio.h>
 
-#ifdef __cplusplus
-extern "C"{
-  #include "types.h"
-  #include "print.h"
-}
-#endif
-
-#include "Wire.h"
-
-
-
-
-START_TEST (test_begin)
+int  i2c_add_device (unsigned int device_nr, 
+                     const char  *setup_fun)
 {
-  Wire.begin();
-  uint8_t a=0;
-  uint8_t b=0;
+  void         *i2c_code;
+  i2c_setup_ptr i2c_setup_fun;
+  int           ret;
 
-  //  fail_if(Wire.requestFrom(a,b)!=42);
+  if (setup_fun==NULL)
+    {
+      fprintf (stderr, "Couldn't open dyn lib since none (NULL) was provided \n");
+      return 1;
+    }
+
+  if ( device_nr == 0)
+    {
+      fprintf (stderr, "Couldn't open dyn lib since device number is 0 \n");
+      return 2;
+    }
+
+  i2c_code = dlopen (setup_fun, RTLD_LAZY);
+  if ( setup_fun == NULL)
+    {
+      fprintf (stderr, "Couldn't open dyn lib '%s' \n", setup_fun);
+      return 3;
+    }
+  
+  i2c_setup_fun = (i2c_setup_ptr)dlsym(i2c_code, "i2c_setup");
+  if ( i2c_setup_fun == NULL)
+    {
+      fprintf (stderr, "Couldn't find setup in i2c code\n");
+      return 4;
+    }
+  
+  ret = i2c_setup_fun(device_nr);
+  if ( ret != 0 )
+    {
+      fprintf (stderr, "Couldn't call i2c_setup properly\n");
+      dlclose(i2c_code);
+      return 5;
+    }
+
+  ret = dlclose(i2c_code);
+  if ( ret != 0 )
+    {
+      fprintf (stderr, "Couldn't close i2c code properly\n");
+      ret = 6;
+    }
+
+
+  fprintf (stderr, "I2C code seems to work :)\n");
+  return ret;
 }
-END_TEST
 
-
-
-Suite *
-buffer_suite(void) {
-  Suite *s = suite_create("Begin_Fuctions");
-  TCase *tc_core = tcase_create("Core");
-  suite_add_tcase (s, tc_core);
-
-  printf ("Testing wire begin in faked-arduino/wire\n");
-
-  tcase_add_test(tc_core, test_begin);
-
-  return s;
-}
-
-int main(void)
-{
-  int num_failed;
-
-  Suite *s = buffer_suite();
-  SRunner *sr = srunner_create(s);
-
-  srunner_run_all(sr, CK_NORMAL);
-  num_failed = srunner_ntests_failed(sr);
-  srunner_free(sr);
-  return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
-
-  return 0;
-}

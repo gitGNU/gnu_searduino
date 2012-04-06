@@ -23,19 +23,23 @@
 
 
 PROG=test
-SRC_C=
+SRC_C=test.c
 SRC_CXX=
-MAIN_SRC=test.c
+MAIN_SRC=
 ARDUINO=stub
 
 SEARDUINO_PATH=../../
 
 USER_LD_FLAGS=-ldl
 
-check: $(PROG)
+first:
+	echo nothing to do for all
 
-include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
-#include $(SEARDUINO_PATH)/mk/searduino_lib.mk
+check: 
+	make clean
+	make prog
+	make clean
+	make shlib
 
 check-upload:
 	BOARD=due
@@ -47,5 +51,5 @@ install:
 distdir:
 	echo nothing to do in dist
 
-all:
-	echo nothing to do for all
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+#include $(SEARDUINO_PATH)/mk/searduino_lib.mk

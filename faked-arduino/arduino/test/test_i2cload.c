@@ -22,59 +22,58 @@
  ****/
 
 
-
+#include "i2c_loader.h"
 #include <check.h>
-#include <stdlib.h>
-#include <stdio.h>
-
-#ifdef __cplusplus
-extern "C"{
-  #include "types.h"
-  #include "print.h"
-}
-#endif
-
-#include "Wire.h"
 
 
-
-
-START_TEST (test_begin)
+START_TEST (test_faulty_i2c)
 {
-  Wire.begin();
-  uint8_t a=0;
-  uint8_t b=0;
+  int ret ; 
+  
+  ret = i2c_add_device (0, "dummy value");
+  fail_if(ret!=2, "Failed to yield error on faulty i2c code");
+  
+  ret = i2c_add_device (1, NULL);
+  fail_if(ret!=1, "Failed to yield error on NULL i2c code");
+}
+END_TEST
 
-  //  fail_if(Wire.requestFrom(a,b)!=42);
+START_TEST (test_working_i2c)
+{
+  int ret ; 
+  
+  ret = i2c_add_device (5, "./.libs/libi2c.so");
+  fail_if(ret==0, "Failed to yield error on faulty i2c code (dev nr 5). Got %d", ret);
+
+  ret = i2c_add_device (50, "./.libs/libi2c.so");
+  fail_if(ret!=0, "Failed to load i2c code (dev nr 50). Got %d ", ret);
 }
 END_TEST
 
 
-
 Suite *
 buffer_suite(void) {
-  Suite *s = suite_create("Begin_Fuctions");
+  Suite *s = suite_create("I2C test");
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
-
-  printf ("Testing wire begin in faked-arduino/wire\n");
-
-  tcase_add_test(tc_core, test_begin);
-
+  
+  //  tcase_add_test(tc_core, test_faulty_i2c);
+  tcase_add_test(tc_core, test_working_i2c);
+  
   return s;
 }
 
 int main(void)
 {
   int num_failed;
-
+  //  test_micros();
+  
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
-
+  
+  
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
   srunner_free(sr);
   return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
-
-  return 0;
 }

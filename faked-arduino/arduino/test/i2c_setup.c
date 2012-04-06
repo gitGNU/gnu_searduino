@@ -21,60 +21,22 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-
-
-#include <check.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include "i2c_loader.h"
 
-#ifdef __cplusplus
-extern "C"{
-  #include "types.h"
-  #include "print.h"
-}
-#endif
-
-#include "Wire.h"
-
-
-
-
-START_TEST (test_begin)
+int i2c_setup(int device_nr)
 {
-  Wire.begin();
-  uint8_t a=0;
-  uint8_t b=0;
+  fprintf (stderr, "***  I2C CODE  %s:%d:%s(%d)\n", 
+	  __FILE__, __LINE__, __func__, 
+	  device_nr);
+  
+  if (device_nr > 10 ) 
+    {
+      fprintf (stderr, "\tdevice_nr > 10, returning 0\n");
+      return 0;
+    }
+  
 
-  //  fail_if(Wire.requestFrom(a,b)!=42);
-}
-END_TEST
-
-
-
-Suite *
-buffer_suite(void) {
-  Suite *s = suite_create("Begin_Fuctions");
-  TCase *tc_core = tcase_create("Core");
-  suite_add_tcase (s, tc_core);
-
-  printf ("Testing wire begin in faked-arduino/wire\n");
-
-  tcase_add_test(tc_core, test_begin);
-
-  return s;
-}
-
-int main(void)
-{
-  int num_failed;
-
-  Suite *s = buffer_suite();
-  SRunner *sr = srunner_create(s);
-
-  srunner_run_all(sr, CK_NORMAL);
-  num_failed = srunner_ntests_failed(sr);
-  srunner_free(sr);
-  return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
-
-  return 0;
+  fprintf (stderr, "\tdevice_nr < 10, returning 1\n");
+  return 1;
 }

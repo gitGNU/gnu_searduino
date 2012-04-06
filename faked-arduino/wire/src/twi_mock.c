@@ -24,6 +24,7 @@
 #include <stdlib.h> 
 #include "twi_mock.h"
 #include "twi.h"
+#include "utils/print.h"
 
 struct mockTarget {
   uint8_t address;
