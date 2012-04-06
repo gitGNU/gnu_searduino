@@ -57,24 +57,9 @@ FILE* proto_stream ;
  *
  */
 
-/*
-di_callback_ptr di_callback;
-do_callback_ptr do_callback;
-*/
-
 out_to_sim_callback_ptr out_sim_callback = NULL;
-/*
-do_to_sim_callback_ptr  do_sim_callback;
-ao_to_sim_callback_ptr  ao_sim_callback;
-*/
 dm_to_sim_callback_ptr  dm_sim_callback = NULL ;
 log_to_sim_callback_ptr log_sim_callback = NULL ;
-
-
-
-/*
-a_mode_callback_ptr    a_mode_callback;
-*/
 
 
 
@@ -102,39 +87,6 @@ set_proto_stream(FILE *f)
   return SEARD_INVALID_STREAM;
 }
 
-
-
-/*
-uint8_t
-comm_register_digout_sim_cb(do_to_sim_callback_ptr cb)
-{
-  PRINT_FUNCTION_NAME(("%d",(int)cb));
-
-  if (cb==NULL)
-    {
-      return SEARD_COMM_NULL_CALLBACK;
-    }
-
-  do_sim_callback = cb;
-
-  return SEARD_COMM_OK;
-}
-*/
- /*
-uint8_t
-comm_register_anaout_sim_cb(ao_to_sim_callback_ptr cb)
-{
-  PRINT_FUNCTION_NAME(("%d",(int)cb));
-
-  if (cb==NULL)
-    {
-      return SEARD_COMM_NULL_CALLBACK;
-    }
-  ao_sim_callback = cb;
-
-  return SEARD_COMM_OK;
-}
- */
 
 uint8_t
 comm_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)
