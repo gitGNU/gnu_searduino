@@ -26,67 +26,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "types.h"
-#include "comm.h"
+#include "ext_io.h"
 
-int callbacked_pin ;
-int callbacked_val ;
-
-void test_di_callback(uint8_t pin, uint8_t val)
+START_TEST (test_output)
 {
-  printf ("test_di_callback(%d, %d)\n", 
-	  pin, val);
+  fail_if(searduino_is_enable_streamed_output()==0);
 
-  callbacked_pin = pin;
-  callbacked_val = (val!=0);
-  return ;
-}
+  searduino_enable_streamed_output();
+  fail_if(searduino_is_enable_streamed_output()==0);
 
-uint8_t test_do_callback(uint8_t pin)
-{
-  printf ("test_do_callback(%d)\n", 
-	  pin);
-
-  return callbacked_val;
-}
-
-void test_do_to_sim_callback(uint8_t pin, uint8_t val)
-{
-  printf ("test_do_to_sim__callback(%d, %d)\n", 
-	  pin, val);
-  callbacked_pin = pin;
-  callbacked_val = val;
-
-
-  return ;
-}
-
-
-START_TEST (test_comm)
-{
-  init_ext_io();
-
-  fail_if(set_proto_stream(NULL)!=
-	  SEARD_INVALID_STREAM);
-
-}
-END_TEST
-
-
-START_TEST (test_di)
-{
-
-  fail_if (seasim_register_out_sim_cb(NULL)!=
-	   SEARD_COMM_NULL_CALLBACK);	   
-
-  fail_if (seasim_register_out_sim_cb(test_do_to_sim_callback)!=
-	   SEARD_COMM_OK);	   
-
-  callbacked_pin = -1;
-  callbacked_val = -1;
-
-  callbacked_pin = -1;
-  callbacked_val = -1;
-
+  searduino_disable_streamed_output();
+  fail_if(searduino_is_enable_streamed_output()==1);
 }
 END_TEST
 
@@ -97,10 +47,9 @@ buffer_suite(void) {
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
 
-  printf ("Testing setup functions in faked-arduino/arduino\n");
+  printf ("Testing (untested via other modules) code in Communication layer \n");
 
-  tcase_add_test(tc_core, test_comm);
-  tcase_add_test(tc_core, test_di);
+  tcase_add_test(tc_core, test_output);
 
   return s;
 }
