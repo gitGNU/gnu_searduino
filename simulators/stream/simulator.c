@@ -74,7 +74,7 @@ sim_setup(char *ard_lib)
     }
   
   ret  = seasim_register_out_sim_cb(my_out_sim_callback);
-  if (ret != SEARD_COMM_OK)
+  if (ret != SEARD_ARDUINO_OK)
     {
       fprintf (stderr, "Failed to register callback for Digital output (pin, val)\n");
       return ret;
@@ -82,7 +82,7 @@ sim_setup(char *ard_lib)
  
 
   ret  = seasim_register_dig_mode_sim_cb(my_dm_sim_callback);
-  if (ret != SEARD_COMM_OK)
+  if (ret != SEARD_ARDUINO_OK)
     {
       fprintf (stderr, "Failed to register callback for Digital mode (pin, mode)\n");
       return ret;
