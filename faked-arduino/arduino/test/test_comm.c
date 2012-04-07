@@ -22,44 +22,85 @@
  ****/
 
 
-
 #include <check.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include "types.h"
+#include "ext_io.h"
 
-#ifdef __cplusplus
-extern "C"{
-  #include "types.h"
-  #include "print.h"
-}
-#endif
+int callbacked_pin ;
+int callbacked_val ;
 
-#include "Wire.h"
-
-
-
-
-START_TEST (test_begin)
+void test_di_callback(uint8_t pin, uint8_t val)
 {
-  Wire.begin();
-  uint8_t a=0;
-  uint8_t b=0;
+  printf ("test_di_callback(%d, %d)\n", 
+	  pin, val);
 
-  //  fail_if(Wire.requestFrom(a,b)!=42);
+  callbacked_pin = pin;
+  callbacked_val = (val!=0);
+  return ;
+}
+
+uint8_t test_do_callback(uint8_t pin)
+{
+  printf ("test_do_callback(%d)\n", 
+	  pin);
+
+  return callbacked_val;
+}
+
+void test_do_to_sim_callback(uint8_t pin, uint8_t val)
+{
+  printf ("test_do_to_sim__callback(%d, %d)\n", 
+	  pin, val);
+  callbacked_pin = pin;
+  callbacked_val = val;
+
+
+  return ;
+}
+
+
+START_TEST (test_comm)
+{
+  init_ext_io();
+
+  fail_if(set_proto_stream(NULL)!=
+	  SEARD_INVALID_STREAM);
+
 }
 END_TEST
 
 
+START_TEST (test_di)
+{
+
+  fail_if (seasim_register_out_sim_cb(NULL)!=
+	   SEARD_SEARDUINO_NULL_CALLBACK);	   
+
+  fail_if (seasim_register_out_sim_cb(test_do_to_sim_callback)!=
+	   SEARD_SEARDUINO_OK);	   
+
+  callbacked_pin = -1;
+  callbacked_val = -1;
+
+  callbacked_pin = -1;
+  callbacked_val = -1;
+
+}
+END_TEST
+
 
 Suite *
 buffer_suite(void) {
-  Suite *s = suite_create("Begin_Fuctions");
+  Suite *s = suite_create("Setup_Fuctions");
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
 
-  printf ("Testing wire begin in faked-arduino/wire\n");
+  printf ("Testing setup functions in faked-arduino/arduino\n");
 
-  tcase_add_test(tc_core, test_begin);
+  tcase_add_test(tc_core, test_comm);
+  tcase_add_test(tc_core, test_di);
 
   return s;
 }
@@ -67,14 +108,19 @@ buffer_suite(void) {
 int main(void)
 {
   int num_failed;
+  //  test_micros();
 
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
+
+  searduino_set_arduino_code_name("libarduino-code.so.0");
 
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
   srunner_free(sr);
   return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+  /*   test_delay(); */
 
   return 0;
 }

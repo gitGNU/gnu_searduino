@@ -33,6 +33,7 @@ from gi.repository import Gtk
 from gi.repository import Gdk
 #from gi.repository import Glib
 from gi.repository import GObject
+import os
 
 semaphore = BoundedSemaphore(1)
 
@@ -365,7 +366,8 @@ class MyWindow(Gtk.Window):
 #            digTable.attach(self.digs[i], 0, 1, i, i+1)
 #            self.pinUpdate(i,"on")
 
-            wid = Pin(self,i%5, i, i)
+#            wid = Pin(self,i%5, i, i)
+            wid = Pin(self,1, i, i)
             self.anas[i] = wid
 
             pinTable.attach(wid.type_text,    1, 2, i+1, i+2)
@@ -449,7 +451,7 @@ class MyWindow(Gtk.Window):
 class FileChooserWindow(Gtk.Window):
 
     def __init__(self):
-        dialog = Gtk.FileChooserDialog("Please choose a file", self,
+        dialog = Gtk.FileChooserDialog("Choose a file to load", self,
             Gtk.FileChooserAction.OPEN,
             (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
              Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
@@ -580,6 +582,9 @@ parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac", help='
 parser.add_argument('--pins', nargs=1, action="store", dest="pins", help='Number of pins in GUI')
 args = parser.parse_args()
 
+
+print "con..."
+
 ard_code=""
 if args.ac != None:
     ard_code=args.ac[0]
@@ -594,6 +599,44 @@ if args.pins != None:
     global size
     size = int(args.pins[0])+2
 
+print "ARD CODE:" + ard_code
+
+if os.path.isdir(ard_code) == True:
+    print "Dir"
+    command = "arduino-ex2c --shlib  --build " + ard_code
+    print "EXEC:   " + command
+    os.system(command)
+    code_dir = os.path.basename(ard_code)
+
+    path = ard_code.rsplit(os.path.sep)[1:]
+    
+    for dir in path:
+        if (dir!=""):
+            code_dir=dir
+
+
+    dirs = os.listdir( code_dir )
+    for file in dirs:
+        print file    
+        file_suff = os.path.splitext(file)[1]
+        if (file_suff == ".so"):
+            ard_code = "./" + code_dir + "/" + file
+            print "shlib: " + ard_code
+            break
+        else:
+            print "... " + file
+            
+    
+else:
+    file_suff = os.path.splitext(ard_code)[1]
+    print "ARD CODE:" + file_suff
+    if (file_suff == ".ino"):
+        print "Arduino example"
+    else:
+        print "shlib"
+        
+print "ready  " + ard_code
+
 
 
 time.sleep(1)
@@ -601,7 +644,7 @@ time.sleep(1)
 seasim_set_arduino_code(ard_code)
 seasim_initialise();
 seasim_start();
-
+seasim_set_Write_timelimit(0)
 #parser.print_help()
 
        

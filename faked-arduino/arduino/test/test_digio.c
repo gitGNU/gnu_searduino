@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2012 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -21,65 +21,55 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#ifndef COMMUNICATION_DIGIO_H
-#define COMMUNICATION_DIGIO_H
 
-/*
- *
- * Description:   
- *  
- *    Callback registered function (one function)
- *    with value and pin (Arduino board's output pins)
- * 
- * Function name: comm_digital_write_outpin
- *
- * Arguments:     uint8_t pin, uint8_t val
- *
- *    pin - the output pin to inform value for
- *    val - the value (for the pin) to report
- *
- * Return:        uint8_t
- *    If ok:      SEARD_COMM_OK 
- *
- */
-uint8_t  comm_digital_write_outpin(uint8_t pin, uint8_t val);
+#include <check.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "types.h"
+#include "ext_io.h"
 
-/*
- *
- * Description:   searduino_enable_streamed_output
- *  
- *    Enable printouts to stream
- * 
- * Function name: 
- *
- * Arguments:     void
- *
- * Returns:       void
- *
- */
-void searduino_enable_streamed_output(void);
+START_TEST (test_output)
+{
+  fail_if(searduino_is_enable_streamed_output()==0);
 
-/*
- *
- * Description:   searduino_disable_streamed_output
- *  
- *    Disable printouts to stream
- * 
- * Function name: 
- *
- * Arguments:     void
- *
- * Returns:       void
- *
- */
-void searduino_disable_streamed_output(void);
+  searduino_enable_streamed_output();
+  fail_if(searduino_is_enable_streamed_output()==0);
 
-uint8_t searduino_is_enable_streamed_output(void);
+  searduino_disable_streamed_output();
+  fail_if(searduino_is_enable_streamed_output()==1);
+}
+END_TEST
 
-int 
-comm_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type);
 
-int 
-comm_digital_set_mode(uint8_t pin, uint8_t mode);
+Suite *
+buffer_suite(void) {
+  Suite *s = suite_create("Setup_Fuctions");
+  TCase *tc_core = tcase_create("Core");
+  suite_add_tcase (s, tc_core);
 
-#endif  /* COMMUNICATION_DIGIO_H */
+  printf ("Testing (untested via other modules) code in Communication layer \n");
+
+  tcase_add_test(tc_core, test_output);
+
+  return s;
+}
+
+int main(void)
+{
+  int num_failed;
+  //  test_micros();
+
+  Suite *s = buffer_suite();
+  SRunner *sr = srunner_create(s);
+
+  searduino_set_arduino_code_name("libarduino-code.so.0");
+
+  srunner_run_all(sr, CK_NORMAL);
+  num_failed = srunner_ntests_failed(sr);
+  srunner_free(sr);
+  return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
+
+  /*   test_delay(); */
+
+  return 0;
+}

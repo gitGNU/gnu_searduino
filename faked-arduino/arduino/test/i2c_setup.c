@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2012 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -21,9 +21,22 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#ifndef SEARD_COMM_ERROR_H
-#define SEARD_COMM_ERROR_H
+#include <stdio.h>
+#include "i2c_loader.h"
 
-#define SEARD_COMM_OK 0
+int i2c_setup(int device_nr)
+{
+  fprintf (stderr, "***  I2C CODE  %s:%d:%s(%d)\n", 
+	  __FILE__, __LINE__, __func__, 
+	  device_nr);
+  
+  if (device_nr > 10 ) 
+    {
+      fprintf (stderr, "\tdevice_nr > 10, returning 0\n");
+      return 0;
+    }
+  
 
-#endif /* SEARD_COMM_ERROR_H */
+  fprintf (stderr, "\tdevice_nr < 10, returning 1\n");
+  return 1;
+}

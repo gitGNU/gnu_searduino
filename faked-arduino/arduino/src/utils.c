@@ -49,7 +49,7 @@ void seard_prot_get_status()
 
 
 int
-comm_digital_read(uint8_t pin)
+ext_digital_read(uint8_t pin)
 {
   init_proto();
   return ;
@@ -64,7 +64,7 @@ int digitalReadMode(uint8_t pin)
       return;
     }
 
-  ret = comm_digital_write(pin,arduino_in_pins[pin].mode);
+  ret = ext_digital_write(pin,arduino_in_pins[pin].mode);
   if (ret != SEARD_ARDUINO_OK)
     {
       SEARD_ERROR(ret);

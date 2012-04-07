@@ -104,6 +104,7 @@ pkgdataexampledir = $(pkgdatadir)/tmpl
 
 dist_pkgdataexample_DATA = \
   tmpl/main_c.tmpl     \
+  tmpl/main_tot_c.tmpl \
   tmpl/post_c.tmpl     \
   tmpl/pre_c.tmpl      \
   tmpl/Makefile.tmpl

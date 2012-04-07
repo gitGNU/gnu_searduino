@@ -1,8 +1,12 @@
 
 if UNITTEST
 
-TESTS = testtime testwiring testsetup
-check_PROGRAMS = testtime testwiring testsetup testlimit
+lib_LTLIBRARIES = libi2c.la
+libi2c_la_SOURCES = i2c_setup.c
+AM_CFLAGS= -I../../include/arduino -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
+
+TESTS =  testtime testwiring testsetup  testi2c testcomm testdigio
+check_PROGRAMS = testtime testwiring testsetup testlimit testi2c  testcomm testdigio
 
 testtime_SOURCES = test_time.c 
 testtime_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core 
@@ -20,5 +24,17 @@ testlimit_SOURCES = test_limit.c
 testlimit_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
 testlimit_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
+testi2c_SOURCES = test_i2cload.c 
+testi2c_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
+testi2c_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
+
+testcomm_SOURCES = test_comm.c 
+testcomm_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include
+testcomm_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
+
+
+testdigio_SOURCES = test_digio.c 
+testdigio_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include
+testdigio_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 endif

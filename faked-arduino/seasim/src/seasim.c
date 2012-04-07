@@ -38,13 +38,13 @@ seasim_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type)
 uint8_t 
 seasim_register_out_sim_cb(out_to_sim_callback_ptr cb)
 {
-  return comm_register_pinout_sim_cb(cb);
+  return ext_register_pinout_sim_cb(cb);
 }
 
 uint8_t
 seasim_register_log_cb(log_to_sim_callback_ptr cb)
 {
-  return comm_register_log_cb(cb);
+  return ext_register_log_cb(cb);
 }
 
 
@@ -147,21 +147,21 @@ seasim_set_arduino_code_name(const char* libname)
 uint8_t 
 seasim_register_digout_sim_cb(do_to_sim_callback_ptr cb)
 {
-  return comm_register_digout_sim_cb(cb);
+  return ext_register_digout_sim_cb(cb);
 }
 
 
 uint8_t
 seasim_register_anaout_sim_cb(ao_to_sim_callback_ptr cb)
 {
-  return comm_register_anaout_sim_cb(cb);
+  return ext_register_anaout_sim_cb(cb);
 }
 */
 
 uint8_t
 seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)
 {
-  return comm_register_dig_mode_sim_cb(cb);
+  return ext_register_dig_mode_sim_cb(cb);
 }
 
 

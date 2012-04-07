@@ -22,86 +22,44 @@
  ****/
 
 
+#include "i2c_loader.h"
 #include <check.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "types.h"
-#include "comm.h"
 
-int callbacked_pin ;
-int callbacked_val ;
 
-void test_di_callback(uint8_t pin, uint8_t val)
+START_TEST (test_faulty_i2c)
 {
-  printf ("test_di_callback(%d, %d)\n", 
-	  pin, val);
-
-  callbacked_pin = pin;
-  callbacked_val = (val!=0);
-  return ;
-}
-
-uint8_t test_do_callback(uint8_t pin)
-{
-  printf ("test_do_callback(%d)\n", 
-	  pin);
-
-  return callbacked_val;
-}
-
-void test_do_to_sim_callback(uint8_t pin, uint8_t val)
-{
-  printf ("test_do_to_sim__callback(%d, %d)\n", 
-	  pin, val);
-  callbacked_pin = pin;
-  callbacked_val = val;
-
-
-  return ;
-}
-
-
-START_TEST (test_comm)
-{
-  init_comm();
-
-  fail_if(set_proto_stream(NULL)!=
-	  SEARD_INVALID_STREAM);
-
+  int ret ; 
+  
+  ret = i2c_add_device (0, "dummy value");
+  fail_if(ret!=2, "Failed to yield error on faulty i2c code");
+  
+  ret = i2c_add_device (1, NULL);
+  fail_if(ret!=1, "Failed to yield error on NULL i2c code");
 }
 END_TEST
 
-
-START_TEST (test_di)
+START_TEST (test_working_i2c)
 {
+  int ret ; 
+  
+  ret = i2c_add_device (5, "./.libs/libi2c.so");
+  fail_if(ret==0, "Failed to yield error on faulty i2c code (dev nr 5). Got %d", ret);
 
-  fail_if (seasim_register_out_sim_cb(NULL)!=
-	   SEARD_COMM_NULL_CALLBACK);	   
-
-  fail_if (seasim_register_out_sim_cb(test_do_to_sim_callback)!=
-	   SEARD_COMM_OK);	   
-
-  callbacked_pin = -1;
-  callbacked_val = -1;
-
-  callbacked_pin = -1;
-  callbacked_val = -1;
-
+  ret = i2c_add_device (50, "./.libs/libi2c.so");
+  fail_if(ret!=0, "Failed to load i2c code (dev nr 50). Got %d ", ret);
 }
 END_TEST
 
 
 Suite *
 buffer_suite(void) {
-  Suite *s = suite_create("Setup_Fuctions");
+  Suite *s = suite_create("I2C test");
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
-
-  printf ("Testing setup functions in faked-arduino/arduino\n");
-
-  tcase_add_test(tc_core, test_comm);
-  tcase_add_test(tc_core, test_di);
-
+  
+  //  tcase_add_test(tc_core, test_faulty_i2c);
+  tcase_add_test(tc_core, test_working_i2c);
+  
   return s;
 }
 
@@ -109,18 +67,13 @@ int main(void)
 {
   int num_failed;
   //  test_micros();
-
+  
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
-
-  searduino_set_arduino_code_name("libarduino-code.so.0");
-
+  
+  
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
   srunner_free(sr);
   return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
-
-  /*   test_delay(); */
-
-  return 0;
 }

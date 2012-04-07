@@ -45,6 +45,16 @@ micros(void)
 	   (current_time.tv_usec-arduino_exec_start_time.tv_usec));
 }
 
+unsigned long 
+millis(void)
+{
+   struct timeval current_time;
+   gettimeofday( &current_time, NULL);
+
+   return ((current_time.tv_sec-arduino_exec_start_time.tv_sec) * 1000 +
+	   (current_time.tv_usec-arduino_exec_start_time.tv_usec)/1000);
+}
+
 void 
 delay(unsigned long del)
 {

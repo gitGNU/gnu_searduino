@@ -21,56 +21,61 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-
+#include <dlfcn.h>
 #include <check.h>
-#include <stdlib.h>
+#include "i2c_loader.h"
 #include <stdio.h>
-#include "types.h"
-#include "comm.h"
-#include "digio.h"
 
-START_TEST (test_output)
+int  i2c_add_device (unsigned int device_nr, 
+                     const char  *setup_fun)
 {
-  fail_if(searduino_is_enable_streamed_output()==0);
+  void         *i2c_code;
+  i2c_setup_ptr i2c_setup_fun;
+  int           ret;
 
-  searduino_enable_streamed_output();
-  fail_if(searduino_is_enable_streamed_output()==0);
+  if (setup_fun==NULL)
+    {
+      fprintf (stderr, "Couldn't open dyn lib since none (NULL) was provided \n");
+      return 1;
+    }
 
-  searduino_disable_streamed_output();
-  fail_if(searduino_is_enable_streamed_output()==1);
+  if ( device_nr == 0)
+    {
+      fprintf (stderr, "Couldn't open dyn lib since device number is 0 \n");
+      return 2;
+    }
+
+  i2c_code = dlopen (setup_fun, RTLD_LAZY);
+  if ( setup_fun == NULL)
+    {
+      fprintf (stderr, "Couldn't open dyn lib '%s' \n", setup_fun);
+      return 3;
+    }
+  
+  i2c_setup_fun = (i2c_setup_ptr)dlsym(i2c_code, "i2c_setup");
+  if ( i2c_setup_fun == NULL)
+    {
+      fprintf (stderr, "Couldn't find setup in i2c code\n");
+      return 4;
+    }
+  
+  ret = i2c_setup_fun(device_nr);
+  if ( ret != 0 )
+    {
+      fprintf (stderr, "Couldn't call i2c_setup properly\n");
+      dlclose(i2c_code);
+      return 5;
+    }
+
+  ret = dlclose(i2c_code);
+  if ( ret != 0 )
+    {
+      fprintf (stderr, "Couldn't close i2c code properly\n");
+      ret = 6;
+    }
+
+
+  fprintf (stderr, "I2C code seems to work :)\n");
+  return ret;
 }
-END_TEST
 
-
-Suite *
-buffer_suite(void) {
-  Suite *s = suite_create("Setup_Fuctions");
-  TCase *tc_core = tcase_create("Core");
-  suite_add_tcase (s, tc_core);
-
-  printf ("Testing (untested via other modules) code in Communication layer \n");
-
-  tcase_add_test(tc_core, test_output);
-
-  return s;
-}
-
-int main(void)
-{
-  int num_failed;
-  //  test_micros();
-
-  Suite *s = buffer_suite();
-  SRunner *sr = srunner_create(s);
-
-  searduino_set_arduino_code_name("libarduino-code.so.0");
-
-  srunner_run_all(sr, CK_NORMAL);
-  num_failed = srunner_ntests_failed(sr);
-  srunner_free(sr);
-  return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
-
-  /*   test_delay(); */
-
-  return 0;
-}

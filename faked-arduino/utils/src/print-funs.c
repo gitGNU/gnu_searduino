@@ -24,6 +24,7 @@
 #include "stdio.h"
 #include "stdarg.h"
 #include "utils/print.h"
+#include "arduino/ext_io.h"
 
 void 
 print_function_name (FILE* stream,  const char *fun, char * str,  ...) 

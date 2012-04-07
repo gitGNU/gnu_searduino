@@ -22,15 +22,11 @@
 #
 
 AUTOMAKE_OPTIONS = gnu
-
-SUBDIRS=include arduino communication wire EEPROM Ethernet Firmata LiquidCrystal SD Servo SoftwareSerial SPI Stepper 
+SUBDIRS=include arduino wire EEPROM Ethernet Firmata LiquidCrystal SD Servo SoftwareSerial SPI Stepper 
 
 
 LIB_SEARDUINO_H_FILES=\
-       ./include/communication/error.h \
-       ./include/communication/comm.h \
-       ./include/communication/digio.h \
-       ./include/communication/ext_io.h \
+       ./include/arduino/ext_io.h \
        ./include/arduino/boards/pins_due.h \
        ./include/arduino/error.h \
        ./include/avr/interrupt.h \
@@ -38,6 +34,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/avr/pgmspace.h \
        ./include/avr/delay.h \
        ./include/arduino/wiring_private.h \
+       ./wire/src/twi_mock.h  \
        ./include/arduino/pins_arduino.h \
        ./include/arduino/setup.h \
        ./include/seasim/seasim.h \
@@ -46,10 +43,12 @@ LIB_SEARDUINO_H_FILES=\
        ./include/utils/print.h \
        ./include/arduino/time_stuff.h \
        ./include/arduino/searduino_pin.h \
-       ./include/arduino/setup.h 
+       ./include/arduino/setup.h \
+       ./include/arduino/i2c_loader.h 
 
 LIB_LIBRARIES_SOURCES_FILES = \
       wire/src/wire.cpp \
+      wire/src/twi_mock.c \
       EEPROM/src/eeprom.cpp  \
       Ethernet/src/ethernet.cpp  \
       Firmata/src/firmata.cpp  \
@@ -64,9 +63,7 @@ LIB_LIBRARIES_SOURCES_FILES = \
 #       ./include/arduino/searduino.h
 
 LIB_SEARDUINO_SOURCES_FILES= \
-       ./communication/src/ext_io.c \
-       ./communication/src/comm.c \
-       ./communication/src/digio.c \
+       ./arduino/src/ext_io.c \
        ./arduino/src/time_stuff.c \
        ./arduino/src/setup.c \
        ./arduino/src/searduino_pin.c \
@@ -79,7 +76,8 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./utils/src/print-funs.c \
        ./arduino/src/Print.cpp \
        ./arduino/src/HardwareSerial.cpp \
-        $(LIB_SEARDUINO_H_FILES) \
+       ./arduino/src/i2c_loader.c \
+        $(LIB_SEARDUINO_H_FILES)  \
         $(LIB_LIBRARIES_SOURCES_FILES)
 
 libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
@@ -90,14 +88,17 @@ lib_LTLIBRARIES = libsearduinostub.la
 
 
 
-AM_CFLAGS= -I../arduino-sources/core          \
-           -I../faked-arduino/include/arduino \
-           -I../faked-arduino/include/        \
-           -I../arduino-extras/include/       \
+AM_CFLAGS= -I../arduino-sources/core           \
+           -I../arduino-sources/libraries/Wire \
+           -I../arduino-sources/libraries/Wire/utility \
+           -I../faked-arduino/include/arduino  \
+           -I../faked-arduino/include/         \
+           -I../arduino-extras/include/        \
            $(PEDANTIC_FLAGS)
 
 AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-sources/libraries/Wire  \
+           -I../arduino-sources/libraries/Wire/utility \
            -I../arduino-sources/libraries/Servo \
            -I../faked-arduino/include/arduino   \
            -I../faked-arduino/include/          \
