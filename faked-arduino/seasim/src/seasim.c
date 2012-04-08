@@ -200,3 +200,11 @@ seasim_get_Write_timelimit(void)
 {
   return get_Write_timelimit();
 }
+
+int  
+seasim_i2c_add_device (unsigned int device_nr, 
+		       const char  *setup_fun)
+{
+  return i2c_add_device (device_nr, 
+			 setup_fun);
+}

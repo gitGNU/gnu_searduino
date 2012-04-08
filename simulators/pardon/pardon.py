@@ -579,20 +579,25 @@ print "Main - will parse"
 
 parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator)')
 parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac", help='Arduino code to test')
+parser.add_argument('--i2c-code',     nargs=1, action="store", dest="ic", help='I2C code for device')
 parser.add_argument('--pins', nargs=1, action="store", dest="pins", help='Number of pins in GUI')
 args = parser.parse_args()
 
 
-print "con..."
+print "continue ..."
 
 ard_code=""
+i2c_code=""
 if args.ac != None:
+    print "AC code"
     ard_code=args.ac[0]
 else:
     print "Reading via fc"
     ard_code=getArduinocodeLibrary()
 
-print "ard_code: " + ard_code
+if args.ic != None:
+    i2c_code=args.ic[0]
+    print "I2C   FOUND" + i2c_code
 
 if args.pins != None:
     print "Setting pins to: " + args.pins[0]
@@ -625,21 +630,21 @@ if os.path.isdir(ard_code) == True:
             break
         else:
             print "... " + file
-            
-    
 else:
     file_suff = os.path.splitext(ard_code)[1]
-    print "ARD CODE:" + file_suff
+    print "ARD CODE: " + file_suff
     if (file_suff == ".ino"):
         print "Arduino example"
     else:
-        print "shlib"
+        print "shlib: " + ard_code
         
-print "ready  " + ard_code
+print "ard:  " + ard_code
+print "i2c:  " + i2c_code
 
+if i2c_code != "":
+    seasim_add_i2c_device(50, i2c_code)
 
-
-time.sleep(1)
+#time.sleep(1)
 #time.sleep(10)
 seasim_set_arduino_code(ard_code)
 seasim_initialise();

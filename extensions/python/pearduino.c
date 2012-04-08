@@ -327,6 +327,23 @@ static PyObject* c_get_pin_mode(PyObject* self, PyObject* args)
   return o;
 }
 
+static PyObject* c_add_i2c_device(PyObject* self, PyObject* args)
+{
+  int ret;
+  unsigned int dev_nr ; 
+  char *i2c_lib;
+  PEARDUINO_PRINT_IN();
+  
+  PyArg_ParseTuple(args, "is", &dev_nr, &i2c_lib);
+  
+  ret = seasim_i2c_add_device(dev_nr, i2c_lib);
+  PyObject* o = Py_BuildValue("i", ret);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
 static PyObject* c_set_arduino_code(PyObject* self, PyObject* args)
 {
   uint8_t ret;
@@ -673,6 +690,7 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_quit", (PyCFunction)c_quit, METH_VARARGS, NULL},
   {"seasim_get_pin_mode", (PyCFunction)c_get_pin_mode, METH_VARARGS, NULL},
   {"seasim_set_arduino_code", (PyCFunction)c_set_arduino_code, METH_VARARGS, NULL},
+  {"seasim_add_i2c_device", (PyCFunction)c_add_i2c_device, METH_VARARGS, NULL},
   {"seasim_initialise", (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
   {"seasim_start", (PyCFunction)c_start, METH_VARARGS, NULL},
   {"seasim_set_Write_timelimit", (PyCFunction)c_set_Write_timelimit, METH_VARARGS, NULL},

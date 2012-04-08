@@ -121,7 +121,7 @@ void* command_reader(void* in)
   int  val;
   int  type;
 
-  printf ("COMMAND READER begins\n");
+  /* printf ("COMMAND READER begins\n"); */
     
   for (;;)
     {
@@ -172,6 +172,8 @@ void* command_reader(void* in)
 }
 
 
+static const char* I2C_CODE_ARG_LONG  = "--i2c-code";
+static const char* I2C_CODE_ARG_SHORT = "-ic";
 static const char* ARDUINO_CODE_ARG_LONG  = "--arduino-code";
 static const char* ARDUINO_CODE_ARG_SHORT = "-ac";
 static const char* HELP_ARG_LONG  = "--help";
@@ -183,6 +185,8 @@ static usage(void)
   printf ("OPTIONS\n");
   printf ("\t%s, %s <library>\n", ARDUINO_CODE_ARG_LONG, ARDUINO_CODE_ARG_SHORT);
   printf ("\t\tspecify what arduino code (shared library) to load\n");
+  printf ("\t%s, %s <library>\n", I2C_CODE_ARG_LONG, I2C_CODE_ARG_SHORT);
+  printf ("\t\tspecify what I2C code (shared library) to load\n");
   printf ("\t%s, %s <library>\n", HELP_ARG_LONG, HELP_ARG_SHORT);
   printf ("\t\tprint this text\n");
   printf ("\n");
@@ -218,6 +222,7 @@ main(int argc, char **argv)
   pthread_t command_thread;
   char *ard_code = "" ;
   int i = 0;
+  int ret;
 
   for (i=1;i<argc;i++)
     {
@@ -238,16 +243,40 @@ main(int argc, char **argv)
 	    }
 	}
       else if (ARGCMP(argv[i], 
+		 I2C_CODE_ARG_LONG, 
+		 I2C_CODE_ARG_LONG))
+	{
+	  if (argv[2]==NULL)
+	    {
+	      printf ("Missing argument to %s, %s\n",
+		      I2C_CODE_ARG_LONG, I2C_CODE_ARG_SHORT);
+	      return 1;
+	    }
+	  else
+	    {
+	      ret = seasim_i2c_add_device (50, 
+					   argv[i+1]);
+	      if (ret!=0)
+		{
+		  fprintf(stderr, "Failed to load I2C library\n");
+		  usage();
+		  return 1;
+		}
+
+	      i++;
+	    }
+	}
+      else if (ARGCMP(argv[i], 
 		 HELP_ARG_LONG, 
 		 HELP_ARG_SHORT))
 	{
 	  usage();
-	  return ;
+	  return 0;
 	}
       else
 	{
 	  usage();
-	  return ;
+	  return 1;
 	}
 
     }
@@ -255,8 +284,7 @@ main(int argc, char **argv)
   signal(SIGUSR1, sim_sighandler);
 
   
-  printf ("Using arduino code from library: %s\n",
-	  ard_code);
+  /* printf ("Using arduino code from library: %s\n",  ard_code); */
 
   sim_setup(ard_code);
 

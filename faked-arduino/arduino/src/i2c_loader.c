@@ -55,7 +55,7 @@ int  i2c_add_device (unsigned int device_nr,
   i2c_setup_fun = (i2c_setup_ptr)dlsym(i2c_code, "i2c_setup");
   if ( i2c_setup_fun == NULL)
     {
-      fprintf (stderr, "Couldn't find setup in i2c code\n");
+      fprintf (stderr, "Couldn't find setup in i2c code : %s\n", setup_fun);
       return 4;
     }
   
