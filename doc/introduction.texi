@@ -1,14 +1,15 @@
 Searduino is made to ease and speed up development for the Arduino
-boards. In short Searduino gives you
+boards. In short, with Searduino you get
 
 @itemize @bullet
-@item C/C++ interface
-@item Makefiles
-@item Stand alone program
-@item Simulator
-@item Simulation API
+@item C/C++ interface - use C/C++ to program your Arduino boards
+@item Makefiles - easy to use Makefiles for inclusion in your project
+@item Stand alone program - build your Arduino code to run on your
+local computer instead
+@item Simulator - run your Arduino code in a simulator to test it
+@item Simulation API - write your own test cases in C/C++
 @item Python simulation API - write your tests in Python
-@item Arduino example translation (not ready yet!)
+@item Arduino example translation (not ready yet, but really close) 
 @end itemize
 
 @section C/C++ interface
