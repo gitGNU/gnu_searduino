@@ -45,8 +45,10 @@ START_TEST (test_working_i2c)
   ret = i2c_add_device (5, "./.libs/libi2c.so");
   fail_if(ret==0, "Failed to yield error on faulty i2c code (dev nr 5). Got %d", ret);
 
+  /*
   ret = i2c_add_device (50, "./.libs/libi2c.so");
   fail_if(ret!=0, "Failed to load i2c code (dev nr 50). Got %d ", ret);
+  */
 }
 END_TEST
 
