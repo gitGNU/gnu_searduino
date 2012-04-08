@@ -1,4 +1,6 @@
 generate:
+	@echo "*** Creating dir for Arduino sources"
+	-mkdir -p arduino-sources
 
 	@echo "*** Creating autotools dir"
 	-mkdir -p autotools/
