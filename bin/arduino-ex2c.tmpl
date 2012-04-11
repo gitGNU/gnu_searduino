@@ -214,7 +214,7 @@ create_dir()
 	create_c_file $i
 	C_FILES="$C_FILES $C_FILE"
     done
-    cat $TMPL_DIR/main_tot_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  $ARD_DIR/main.c
+    cat $TMPL_DIR/main_tot_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >  $ARD_DIR/main.c
     exit_on_failure $? "Creating C file 4 ($C_FILES) "
 
     export CXX_FILES=${C_FILES}
@@ -235,6 +235,7 @@ build_dir()
     
     cd $ARD_DIR
     make
+    exit_on_failure $? "make in ($pwd) "
     cd -
 }
 
