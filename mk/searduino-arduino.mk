@@ -31,9 +31,14 @@ include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
 
 SEARDUINO_ARDUINO=dummyvalue
 
-OBJ_C = $(SRC_C:.c=.o) 
-OBJ_CXX = $(SRC_CXX:.cpp=.o) 
-OBJ_MAIN = $(MAIN_SRC:.c=.o) 
+OBJ_PATH = ./
+ifdef USER_OBJ_PATH
+OBJ_PATH = $(USER_OBJ_PATH)
+endif
+
+OBJ_C = $(addprefix $(OBJ_PATH), $(SRC_C:.c=.o)) 
+OBJ_CXX = $(addprefix $(OBJ_PATH), $(SRC_CXX:.cpp=.o))
+OBJ_MAIN = $(addprefix $(OBJ_PATH), $(MAIN_SRC:.c=.o)) 
 
 
 CC=avr-gcc
@@ -43,21 +48,21 @@ AR=avr-ar
 AVRDUDE=avrdude
 F_CPU=$(board_build.f_cpu)
 
-INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
-            -I$(SEARDUINO_INC_PATH)/arduino-extras/      \
-            -I$(SEARDUINO_INC_PATH)/arduino-extras/include    \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/$(VARIANT) \
+INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core 		   \
+            -I$(SEARDUINO_INC_PATH)/arduino-extras/ 			    \
+            -I$(SEARDUINO_INC_PATH)/arduino-extras/include    		     \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/$(VARIANT)	      \
             -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/utility \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/ \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SPI        \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Firmata     \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/utility \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/           \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility     \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM       \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal    \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo             \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial     \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/ 	\
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SPI       	 \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Firmata   	  \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/utility	   \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/       	    \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility	     \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM 	      \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal	       \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo        	        \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial	         \
             -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper
 
 
@@ -90,7 +95,7 @@ $(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
 #$(MAIN_SRC).hex:   $(MAIN_SRC).o $(LIB) $(MAIN_SRC).elf
 $(PROG).hex:   $(OBJ_MAIN) $(LIB) $(PROG).elf
 	echo HEX
-	$(OBJ_CP)   -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(PROG).elf $(PROG).eep 
+	$(OBJ_CP)  -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(PROG).elf $(PROG).eep 
 	$(OBJ_CP)  -O ihex -R .eeprom $(PROG).elf $(PROG).hex  
 
 #$(PROG): $(MAIN_SRC).hex 

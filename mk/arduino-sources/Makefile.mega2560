@@ -1,4 +1,5 @@
 ARDUINO=mega2560
+USER_OBJ_PATH=./objs/$(BOARD)/
 include arduino-sources.mk
 all:
 	make mega2560

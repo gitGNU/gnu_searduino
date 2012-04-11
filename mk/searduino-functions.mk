@@ -48,14 +48,16 @@ override LDFLAGS += $(_LDFLAGS) $(SEARDUINO_LIB_PATH) $(LIBRARIES_LIB) $(SEARDUI
 
 
 $(OBJ_C): $(SRC_HEADERS) $(SRC_C) 
-$(OBJ_CXX): $(SRC_HEADERS) $(SRC_CXX)  
+$(OBJ_CXX): $(SRC_HEADERS) $(SRC_CXX)
 
 INTERNAL_FLAGS= -DMY_ARDUINO=$(ARDUINO) -DMY_BOARD=$(BOARD)
 
-%.o: %.c
+$(OBJ_PATH)%.o: %.c
+	mkdir -p $(dir $@)
 	$(CC) -c $(CFLAGS) -I. $(INTERNAL_FLAGS) $<  -o $@
 
-%.o: %.cpp
+$(OBJ_PATH)%.o: %.cpp
+	mkdir -p $(dir $@)
 	$(CXX) -c $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
 
 %.E: %.cpp
@@ -74,9 +76,9 @@ efile: $(E_C) $(E_CXX)
 
 all: $(PROG) $(LIB) $(OBJ_C) $(OBJ_CXX)
 
-OBJ_C = $(SRC_C:.c=.o)
-OBJ_CXX = $(SRC_CXX:.cpp=.o)
-OBJ_JAVA= $(SRC_JAVA:.java=.o)
+#OBJ_C = $(SRC_C:.c=.o)
+#OBJ_CXX = $(SRC_CXX:.cpp=.o)
+#OBJ_JAVA= $(SRC_JAVA:.java=.o)
 
 #$(SHLIB): clean $(OBJ_C)  $(OBJ_CXX) 
 #	echo "msmsm"
@@ -84,6 +86,8 @@ OBJ_JAVA= $(SRC_JAVA:.java=.o)
 shlib: $(SHLIB)
 
 $(LIB): $(OBJ_C)  $(OBJ_CXX) 
+#	@echo "Objc: $(OBJ_C)"
+#	@echo "Objc++: $(OBJ_CXX)"
 	@echo "Creating directory: $(LIB_PATH)/"
 	mkdir -p $(LIB_PATH)/
 	$(AR) rcs $(LIB)  $(OBJ_C)  $(OBJ_CXX) 
