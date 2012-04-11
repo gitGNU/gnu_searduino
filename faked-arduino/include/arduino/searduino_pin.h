@@ -28,6 +28,12 @@
 #include "utils/types.h"
 #include "arduino/error.h"
 #include "utils/error.h"
+#ifdef __MINGW32__
+#include <time.h>
+#endif
+#ifdef __CYGWIN32__
+#include <sys/time.h>
+#endif
 
 #ifndef SEARDUINO_PIN_H
 #define SEARDUINO_PIN_H
