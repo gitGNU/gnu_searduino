@@ -22,7 +22,6 @@
  ****/
 
 #include <dlfcn.h>
-#include <check.h>
 #include "i2c_loader.h"
 #include <stdio.h>
 
