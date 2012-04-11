@@ -2,13 +2,19 @@
 
 @section Required software
 
-For Debian based GNU/Linux distributions:
+@subsection Debian based GNU/Linux distributions:
 @itemize @bullet
 @item gcc-avr
 @item binutils-avr
 @item avrdude
 @item avrprog
 @item avr-libc
+@end itemize
+
+@subsection Windows:
+@itemize @bullet
+@item WinAVR
+@item cygwin (gcc, g++, make)
 @end itemize
 
 
