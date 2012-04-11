@@ -27,11 +27,11 @@
 #include "utils/print.h"
 #include "utils/types.h"
 #include "arduino/error.h"
-#include "utils/error.h
-#ifndef __MINGW32__
+#include "utils/error.h"
+#ifdef __MINGW32__
 #include <time.h>
 #endif
-#ifndef __CYGWIN32__
+#ifdef __CYGWIN32__
 #include <sys/time.h>
 #endif
 
