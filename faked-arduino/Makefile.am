@@ -34,7 +34,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/avr/pgmspace.h \
        ./include/avr/delay.h \
        ./include/arduino/wiring_private.h \
-       ./wire/src/twi_mock.h  \
+       ./include/arduino/twi_mock.h  \
        ./include/arduino/pins_arduino.h \
        ./include/arduino/setup.h \
        ./include/seasim/seasim.h \
@@ -71,12 +71,14 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/WMath.cpp \
        ./arduino/src/wiring_digital.c \
        ./arduino/src/wiring_analog.c  \
+       ./arduino/src/Print.cpp  \
        ./arduino/src/utils.c \
        ./seasim/src/seasim.c \
-       ./utils/src/print-funs.c \
-       ./arduino/src/Print.cpp \
+       ./utils/src/print-funs.cpp \
        ./arduino/src/HardwareSerial.cpp \
+       ./arduino/src/USBCore.cpp \
        ./arduino/src/i2c_loader.c \
+       ./arduino/src/CDC.cpp \
         $(LIB_SEARDUINO_H_FILES)  \
         $(LIB_LIBRARIES_SOURCES_FILES)
 

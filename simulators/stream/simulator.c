@@ -57,6 +57,30 @@ my_dm_sim_callback(uint8_t pin, uint8_t mode)
   fprintf (stdout,"digmod:%d:%d\n",pin, mode);
 }
 
+void
+log_callback(uint8_t level, const char *str)
+{
+  switch (level)
+    {
+    case SEARDUINO_LOG_LEVEL_NONE:
+      break;
+    case SEARDUINO_LOG_LEVEL_INFO:
+      printf ("INFO:    %s", str);
+      break;
+    case SEARDUINO_LOG_LEVEL_WARNING:
+      printf ("WARNING: %s", str);
+      break;
+    case SEARDUINO_LOG_LEVEL_ERROR:
+      printf ("ERROR:   %s", str);
+      break;
+    case SEARDUINO_LOG_SERIAL:
+      printf ("SERIAL: %s", str);
+      break;
+    default:
+      break;
+    }
+}
+
 
 int 
 sim_setup(char *ard_lib)
@@ -87,7 +111,9 @@ sim_setup(char *ard_lib)
       fprintf (stderr, "Failed to register callback for Digital mode (pin, mode)\n");
       return ret;
     }
- 
+
+  printf ("CHECK IF REGISTRATION SUCCEEDED\n");
+  seasim_register_log_cb(log_callback);
 
   return 0;
 }

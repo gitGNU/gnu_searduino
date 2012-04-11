@@ -49,6 +49,7 @@ size_t Print::print(const __FlashStringHelper *ifsh)
 size_t Print::print(const String &s)
 {
   size_t n = 0;
+  log_generic(5, "Print::print(const String &s)\n");
   for (uint16_t i = 0; i < s.length(); i++) {
     n += printf("%c", (s[i]));
   }
@@ -57,12 +58,29 @@ size_t Print::print(const String &s)
 
 size_t Print::print(const char str[])
 {
-  return printf ("%s",str);
+  /* len is used to return the length to the Arduino code
+  *  We don't care how many chars have been written
+  */
+  unsigned int len;
+
+  /* Make sure string is not null ;)
+   *   ... do we get higher comment grade from this comment? */
+  if (str!=NULL){
+    len = strlen(str);
+
+    /* ... and finally: print it to the simulator */
+    //    printf ("str=%s\n", str);
+    serial_print_s((char *)str);
+    return len;
+  }
+  return 0;
 }
 
 size_t Print::print(char c)
-{
-  return printf ("%c",c);
+{ 
+  // printf ("C=%d\n", c);
+  serial_print_c(c);
+  return 1;
 }
 
 size_t Print::print(unsigned char b, int base)
@@ -134,6 +152,8 @@ size_t Print::println(const String &s)
 
 size_t Print::println(const char c[])
 {
+  static int ctr;
+  // printf ("%d ", ctr++);
   /* Do as Arduino */
   size_t n = print(c);
   n += println();
@@ -216,3 +236,4 @@ size_t Print::printFloat(double number, uint8_t digits)
   PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
   return 0;
 }
+

@@ -34,6 +34,13 @@
 #define NR_OF_ANALOG_PINS 20
 
 
+/* The macro below enables Serial "over USB" */
+#ifndef USBCON
+#define USBCON
+#endif
+#define CDC_ENABLED dummyvalue
+
+
 uint8_t  dig_mode_callback(uint8_t pin);
 void     input_callback(uint8_t pin, uint8_t val, uint8_t pin_type);
 

@@ -90,6 +90,9 @@ get_generic_pin_val(uint8_t pin, uint8_t pin_type);
 #define get_digital_pin_mode(pin)        get_generic_pin_mode(pin, SEARDUINO_PIN_TYPE_DIGITAL)
 #define set_digital_pin_mode(pin, mode)  set_generic_pin_mode(pin, mode, SEARDUINO_PIN_TYPE_DIGITAL)
 
+#define get_analog_pin_mode(pin)        get_generic_pin_mode(pin, SEARDUINO_PIN_TYPE_ANALOG)
+#define set_analog_pin_mode(pin, mode)  set_generic_pin_mode(pin, mode, SEARDUINO_PIN_TYPE_ANALOG)
+
 #define get_digital_pin_val(pin)         get_generic_pin_val(pin, SEARDUINO_PIN_TYPE_DIGITAL)
 #define set_digital_pin_val(pin,val)     set_generic_pin_val(pin, val, SEARDUINO_PIN_TYPE_DIGITAL)
 

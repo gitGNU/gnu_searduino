@@ -48,6 +48,8 @@ SEARDUINO_LOG_LEVEL_INFO    = 1
 SEARDUINO_LOG_LEVEL_WARNING = 2
 SEARDUINO_LOG_LEVEL_ERROR   = 3
 
+SEARDUINO_LOG_SERIAL   = 10
+
 currentLogLevel = SEARDUINO_LOG_LEVEL_INFO
 
 
@@ -79,10 +81,12 @@ redColor.alpha=0.7
 
 def getSem():
 #    print "Get semaphore"
+#    Gdk.threads_enter()
     semaphore.acquire()        
 
 def relSem():
     semaphore.release()        
+#    Gdk.threads_leave()
 #    print "Rel semaphore"
 
 def pardonPause():
@@ -324,7 +328,25 @@ class MyWindow(Gtk.Window):
         self.box = Gtk.VBox(spacing=6)
         self.add(self.box)
 
+        # Serial I/O
+        self.serialbox=Gtk.VBox(spacing=6)
+        self.seriallabel = Gtk.Label("Serial I/O")
+        self.serialbox.pack_start(self.seriallabel,    False, True, 0)
+        self.serialbox.pack_start(pause,    False, True, 0)
+        self.serialbox.pack_start(spin,    False, True, 0)
+        self.serialio = Gtk.TextView()
+        self.serialscroll = Gtk.ScrolledWindow()
+        self.serialscroll.set_hexpand(True)
+        self.serialscroll.set_vexpand(True)
+        self.serialtextbuffer = self.serialio.get_buffer()
+        self.serialtextbuffer.set_text("First thing..")
+        self.serialio.set_cursor_visible(True)
+        self.serialio.set_editable(True)
+        self.serialscroll.add(self.serialio)
+        self.serialbox.pack_start(self.serialscroll,    False, True, 0)
 
+
+        # EXTRAS
         self.extrasbox=Gtk.VBox(spacing=6)
 
         self.extraslabel = Gtk.Label("General")
@@ -344,9 +366,9 @@ class MyWindow(Gtk.Window):
         self.scroll.add(self.log)
         self.extrasbox.pack_start(self.scroll,    False, True, 0)
 
-
         self.innerbox.pack_start(pinTable, False, True, 0)
         self.innerbox.pack_start(self.extrasbox, False, True, 0)
+        self.innerbox.pack_start(self.serialbox, False, True, 0)
         
         self.bottomlabel = Gtk.Label("Pardon - a simulator frontend. Pardon is part of the Searduino project")
         self.box.pack_start(self.innerbox,    False, True, 0)
@@ -515,19 +537,43 @@ def newOutCallback(pin, val, pin_type):
         win.anas[pin].updateGenericPin(val, pin_type)
 
 def newLogCallback(level, text):
-    print ""
-    print ""
-    print ""
-    print "  LOG:  " + text
-    print "  LOG:  " + str(level)
-    print "  LOG:  " + str(currentLogLevel)
-    print ""
-    print ""
-    print ""
-    if ( level >= currentLogLevel ):
-        mark = win.textbuffer.get_end_iter()
-        mark = win.textbuffer.insert(mark, text)
-    
+    getSem()
+    print "---------->"
+#    print "  LOG:  text  " + text
+#    print "  LOG:  level " + str(level)
+#    print "  LOG:  curr  " + str(currentLogLevel)
+    if ( level == 10 ):
+        print " =======================  SERIAL "  + text
+        try:
+            time.sleep(0.001)
+            iter1 = win.serialtextbuffer.get_end_iter()
+#            print "iter2 " + str(iter1.get_offset())
+            win.serialtextbuffer.insert(iter1, text)
+#            win.serialtextbuffer.insert(iter1, text)
+ #           win.serialtestbuffer.append(text)
+#            print "iter2 " + str(iter1.get_offset())
+#            win.serialio.scroll_to_iter(iter1 , 0.0 , False, 0.0, 0.0)
+#            win.serialtextbuffer.scroll_to_end()
+            time.sleep(0.001)
+        except Error:
+            print "Error caught"
+            time.sleep(10)
+                    
+    elif ( currentLogLevel <= level ):
+        print "********************************** WILL DO " + text
+        try:
+            time.sleep(0.001)
+            iter2 = win.textbuffer.get_end_iter()
+            print "mark2 " + str(iter2.get_offset())
+            win.textbuffer.insert(iter2, text)
+            time.sleep(0.001)
+        except Error:
+            print "Error caught"
+            time.sleep(10)
+    else:
+        print "********************************** DISCARD" + text
+    print "<----------"
+    relSem()
 
 def newAnaOutCallback(pin, val):
 #    print ""
@@ -648,8 +694,10 @@ if i2c_code != "":
 #time.sleep(10)
 seasim_set_arduino_code(ard_code)
 seasim_initialise();
-seasim_start();
 seasim_set_Write_timelimit(0)
+time.sleep(1)
+win = MyWindow(size)
+win.connect("delete-event", Gtk.main_quit)
 #parser.print_help()
 
        
@@ -660,15 +708,14 @@ seasim_set_Write_timelimit(0)
 seasim_set_callback(newOutCallback)
 seasim_set_dig_mode_callback(newDigModeCallback)
 seasim_set_log_callback(newLogCallback)
+win.show_all()
+
+#time.sleep(2)
+seasim_start();
+
 
 #sys.exit(1)
 
-time.sleep(1)
-
-
-win = MyWindow(size)
-win.connect("delete-event", Gtk.main_quit)
-win.show_all()
 
 #GObject.idle_add(newDigOutCallback)
 #GObject.idle_add(newAnaOutCallback)
@@ -677,7 +724,8 @@ GObject.idle_add(newDigModeCallback)
 GObject.idle_add(newLogCallback)
 
 GObject.threads_init()
-
+Gdk.threads_init()
+#Gtk.threads_init()
 
   #GObject.threads_init()
   #mainloop = GObject.MainLoop()

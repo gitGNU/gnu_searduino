@@ -108,6 +108,7 @@ int digitalRead(uint8_t pin)
       fprintf(stderr, 
 	      "Can't read from a pin (%d) with mode (%d) NOT set INPUT\n",
 	      pin, get_digital_pin_mode(pin));
+      log_error("Can't read from an OUTPUT pin");
       SEARD_ERROR(SEARD_ARDUINO_WRONG_PIN_MODE);
       return 0;
     }

@@ -30,6 +30,8 @@
 #define SEARDUINO_LOG_LEVEL_WARNING  2
 #define SEARDUINO_LOG_LEVEL_ERROR    3
 
+#define SEARDUINO_LOG_SERIAL         10
+
 
 
 #ifdef __cplusplus
@@ -43,10 +45,13 @@ extern "C" {
 #define INFO_STREAM stdout
 #define ERR_STREAM  stderr
 
-  
 void print_function_name (FILE* stream,  const char* fun, char * str , ...) ;
 void log_generic(int level, char* s,  ...);
 void log_error(char* s,  ...);
+void log_warning(char* s,  ...);
+void serial_print_s(char* s, ...);
+void serial_print_c(char c);
+  
 
 #ifdef  SEARDUINO_STUB
 #define SEARDUINO_DEBUG(a)  printf( "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");

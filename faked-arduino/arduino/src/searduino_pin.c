@@ -265,6 +265,16 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
       return;
     }
 
+  if (get_generic_pin_mode(pin, pin_type) != OUTPUT)
+    {
+      log_warning("genericWrite: Pin (%d) is not set to OUTPUT\n", pin);
+      SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
+      return;
+    }
+
+
+  
+
   if( gettimeofday( &cur_time, &zoneData) == 0 )
     {
       if (arduino_pins[pin].last_actual_write.tv_sec!=0)
