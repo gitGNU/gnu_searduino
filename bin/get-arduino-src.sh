@@ -1,7 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 
-MY_OS=$(uname -s )
-OS_EXTRA_DIR="arduino-1.0"
+if [ "$SEARD_OS" != "" ]
+then
+    MY_OS=$SEARD_OS
+    OS_EXTRA_DIR="arduino-1.0"
+elif [ "$1" = "--os" ]
+then
+    MY_OS=$2
+    OS_EXTRA_DIR="arduino-1.0"
+else
+    MY_OS=$(uname -s )
+    OS_EXTRA_DIR="arduino-1.0"
+fi
 
 if [ "$MY_OS" = "Linux" ]
 then
