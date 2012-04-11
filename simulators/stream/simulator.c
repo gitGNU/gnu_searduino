@@ -29,9 +29,9 @@
 
 
 
-
+#ifndef __MINGW32__
 void sim_sighandler(int sig);
-
+#endif
 
 pthread_t arduino_thread;
 
@@ -107,9 +107,11 @@ void* arduino_code(void *in)
     }
 
   printf ("\n");
+#ifndef __MINGW32__
   printf ("*** Searduino will now try to close the simulator\n");
   printf ("*** If this fails, type 'quit' followed by enter (or press Ctrl-c) ***\n");
   kill(getpid(), SIGUSR1);
+#endif
   return NULL;
 }
 
@@ -281,8 +283,9 @@ main(int argc, char **argv)
 
     }
 
+#ifndef __MINGW32__
   signal(SIGUSR1, sim_sighandler);
-
+#endif
   
   /* printf ("Using arduino code from library: %s\n",  ard_code); */
 
@@ -297,9 +300,10 @@ main(int argc, char **argv)
   return 0;
 }
 
-
+#ifndef __MINGW32__
 void sim_sighandler(int sig)
 {
   close_simulator(&arduino_thread);
   exit(0);
 }
+#endif
