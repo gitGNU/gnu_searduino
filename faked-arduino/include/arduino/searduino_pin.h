@@ -28,6 +28,7 @@
 #include "utils/types.h"
 #include "arduino/error.h"
 #include "utils/error.h"
+#include <time.h>
 
 #ifndef SEARDUINO_PIN_H
 #define SEARDUINO_PIN_H
