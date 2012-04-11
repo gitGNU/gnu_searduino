@@ -32,6 +32,9 @@
 #include "utils/error.h"
 #include <sys/time.h>
 
+#include "ext_io.h"
+#include "setup.h"
+
 
 uint8_t analog_reference = 0;
 
@@ -43,7 +46,7 @@ void analogReference(uint8_t mode)
 int 
 analogRead(uint8_t pin)
 {
-    /* printf ("analogRead(%d)\n", pin); */
+  /* printf ("analogRead(%d)\n", pin); */
   searduino_setup();
   if (PIN_OUT_OF_RANGE(pin))
     {
@@ -78,6 +81,18 @@ anaout_callback(uint8_t pin)
       SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
       return 0;
     }
+  
+  if ( get_analog_pin_mode(pin) != INPUT )
+    {
+      fprintf(stderr, 
+	      "Can't read from a pin (%d) with mode (%d) NOT set INPUT\n",
+	      pin, get_analog_pin_mode(pin));
+      log_error("Can't read from an OUTPUT pin");
+      SEARD_ERROR(SEARD_ARDUINO_WRONG_PIN_MODE);
+      return 0;
+    }      
+  
+  
 
   return get_analog_pin_val(pin);
 }
