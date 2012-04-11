@@ -3,7 +3,7 @@
 rm -f $1.new
 
 cat $1 |\
- sed -e 's,=/,=C:\\,g' -e 's,/,\\,g' > $1.new
+ sed -e 's,=/,=C:\\cygwin\\,g' -e 's,/,\\,g' > $1.new
 if [ "$?" != "0" ]
 then
     echo "Failed creating new makefile for $1"
