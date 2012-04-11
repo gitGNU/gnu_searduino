@@ -177,9 +177,10 @@ log_callback(uint8_t level, const char *text)
 
   PEARDUINO_PRINT_INSIDE();
 
+  /*
   printf ("PEAR got %d %s\n", level, text);
   printf ("PEAR will call %p\n", my_log_callback); fflush(stdout);
-
+  */
   if (my_log_callback!=NULL)
     {
 
@@ -194,11 +195,11 @@ log_callback(uint8_t level, const char *text)
       /* printf(" Arguments to callback:  ");      fflush(stdout); */
       //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
-      printf ("PEAR will call\n"); fflush(stdout);
+      /* printf ("PEAR will call\n"); fflush(stdout); */
 
       result = PyEval_CallObject(my_log_callback, arglist);
 
-      printf ("PEAR just called\n"); fflush(stdout);
+      /* printf ("PEAR just called\n"); fflush(stdout); */
 
       Py_DECREF(arglist);
       
