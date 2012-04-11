@@ -34,7 +34,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/avr/pgmspace.h \
        ./include/avr/delay.h \
        ./include/arduino/wiring_private.h \
-       ./wire/src/twi_mock.h  \
+       ./include/arduino/twi_mock.h  \
        ./include/arduino/pins_arduino.h \
        ./include/arduino/setup.h \
        ./include/seasim/seasim.h \
