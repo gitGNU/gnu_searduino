@@ -17,6 +17,12 @@
 @item cygwin (gcc, g++, make)
 @end itemize
 
+@subsection Mac:
+@itemize @bullet
+@item 
+@item 
+@end itemize
+
 
 @section Released version of the source code 
 @*
