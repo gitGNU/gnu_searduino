@@ -32,7 +32,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/avr/interrupt.h \
        ./include/avr/io.h \
        ./include/avr/pgmspace.h \
-       ./include/avr/delay.h \
+       ./include/avr/util/delay.h \
        ./include/arduino/wiring_private.h \
        ./include/arduino/twi_mock.h  \
        ./include/arduino/pins_arduino.h \
@@ -95,6 +95,7 @@ AM_CFLAGS= -I../arduino-sources/core           \
            -I../arduino-sources/libraries/Wire/utility \
            -I../faked-arduino/include/arduino  \
            -I../faked-arduino/include/         \
+           -I../faked-arduino/include/avr      \
            -I../arduino-extras/include/        \
            $(PEDANTIC_FLAGS)
 
@@ -103,6 +104,7 @@ AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-sources/libraries/Wire/utility \
            -I../arduino-sources/libraries/Servo \
            -I../faked-arduino/include/arduino   \
+           -I../faked-arduino/include/avr       \
            -I../faked-arduino/include/          \
            -I../arduino-extras/include/         \
            $(PEDANTIC_FLAGS)
