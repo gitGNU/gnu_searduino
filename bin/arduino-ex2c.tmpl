@@ -157,6 +157,7 @@ create_makefile()
     export TO_BUILD=""
     export TO_BUILD_TARGET=""
 #    export MAIN_FILE=""
+    export BUILD_LD_FLAGS=""
 
     if [ "$BUILD_TYPE" = "prog" ]
     then
@@ -168,6 +169,7 @@ create_makefile()
 	ARDUINO_VALUE=stub
 	TO_BUILD_TARGET="\$(SHLIB)"
 	TO_BUILD="SHLIB=lib$(echo $ARD_DIR | tr [A-Z] [a-z]).so"
+	BUILD_LD_FLAGS="\$(SHLIB_LIBS)"
     elif [ "$BUILD_TYPE" = "uno" ] || [ "$BUILD_TYPE" = "due" ] || [ "$BUILD_TYPE" = "mega" ]
     then
 	ARDUINO_VALUE=$BUILD_TYPE
@@ -186,7 +188,8 @@ create_makefile()
           sed "s,__TO_BUILD__,$TO_BUILD,g" | \
           sed "s,__ALL_DEP__,$TO_BUILD_TARGET,g" | \
           sed "s,__ARDUINO_VALUE__,$ARDUINO_VALUE,g"   | \
-          sed "s,__SEARDUINO_PATH__,$SEARDUINO_PATH,g" \
+          sed "s,__SEARDUINO_PATH__,$SEARDUINO_PATH,g" | \
+	  sed "s,__BUILD_LD_FLAGS__,$BUILD_LD_FLAGS,g" \
           > $ARD_DIR/Makefile
     exit_on_failure $? "Creating Makefile "
 #          sed "s,__MAIN_FILE__,$MAIN_FILE,g" | \
