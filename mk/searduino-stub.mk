@@ -2,7 +2,7 @@ BOARD=stub
 
 E_C = $(SRC_C:.c=.E) $(MAIN_SRC:.c=.o)
 E_CXX = $(SRC_CXX:.cpp=.E) 
-OBJ_C = $(SRC_C:.c=.o) $(MAIN_SRC:.c=.o)
+OBJ_C = $(SRC_C:.c=.o) 
 OBJ_CXX = $(SRC_CXX:.cpp=.o) 
 OBJ_MAIN = $(MAIN_SRC:.c=.o) 
 
