@@ -1,0 +1,38 @@
+@chapter Using Arduino examples
+
+Searduino comes with a program, called arduino-ex2c, the can convert
+an Arduino example (.ino) to a C file that you compile with
+Searduino. Searduino also comes with all the Arduino examples.
+@* 
+Let's assume you want to work with the Arduino example called Blink
+and that you want to create a shared library (for use in the
+simulators). Do the the following:
+@*
+@*
+@code{/opt/searduino/bin/arduino-ex2c --shlib --searduino-path /opt/searduino/ \}
+@*
+@code{  /opt/searduino/share/examples/arduino/1.Basics/Blink/}
+@*
+@*
+If you want a stand alone program instead, do:
+@*
+@code{/opt/searduino/bin/arduino-ex2c --prog --searduino-path /opt/searduino/ \}
+@*
+@code{  /opt/searduino/share/examples/arduino/1.Basics/Blink/}
+@*
+@*
+If you want to build for Uno instead, do:
+@*
+@code{/opt/searduino/bin/arduino-ex2c --uno --searduino-path /opt/searduino/ \}
+@*
+@code{  /opt/searduino/share/examples/arduino/1.Basics/Blink/}
+@*
+
+You should now have a directory called Blink. Go to this dorectory and
+type:
+@*
+@code{make}
+@*
+
+
+@i{Note: If you only want to create the C file, simply pass the ino file insetad the directoy.}

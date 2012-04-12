@@ -1,0 +1,47 @@
+@chapter Various Searduino functions/macros
+Searduino provides a small set of macros for you. When building for
+your local computer they are enabled, and when building for the
+Arduino hw they are disabled.
+
+@multitable  @columnfractions .0 .30 .70
+@item 
+@tab @b{Macro}
+@tab @b{Description}
+@item
+@tab @code{SEARDUINO_LOOP}
+@tab On the Arduino boards this is the same as a for loop
+(@code{for(;;)}). When using this macro your code can be paused in the simulator.
+@end multitable
+
+
+
+@section print functions/macros
+@*
+If you want to print out strings when building your code for local use (not
+on an Arduino board) and have the printouts disabled when building for
+Arduino you can use the following macro:
+@*
+@*
+@multitable  @columnfractions .0 .40 .60
+@item 
+@tab @b{Macro}
+@tab @b{Description}
+@item 
+@tab @code{SEARDUINO_DEBUG((msg))}
+@tab The macro (if not building for Arduino boards) takes what is inside
+the parenthesies and passes that to printf. It does a bit more than
+that, put put simply, that's what it does. 
+Example use: @code{SEARDUINO_DEBUG(("The variable x is:%d",x));}
+@*
+@i{Note: @b{You must use double paranthesises!}}
+@end multitable
+@*
+@*
+
+
+
+
+@section pause/resume macros 
+@*
+coming soon
+
