@@ -1,0 +1,204 @@
+
+@chapter Using Searduino
+
+In the previous chapter we looked a bit at the digpins example, so we
+now have some feeling for what a Searduino Makefile contains. We will
+now proceed by writing our first Arduino program using Searduino.
+
+@section Writing the first program
+
+@subsection The first C file
+@*
+@*
+Open up your favorite editor (emacs?) and begin....
+@*
+@*
+To use the Arduino functionality you need to include Arduino.h and searduino.h, so
+we need to add this to our file:
+@*
+@*
+@code{#include <Arduino.h>}
+@*
+@code{#include <searduino.h>}
+@*
+@*
+@*
+When using Arduino IDE you've seen the @code{loop} function as the
+starting point for the program. With Searduino we're back to the
+normal C way of doing this with a @code{main} function, so we need to define a main function.
+@*
+@*
+@code{int main(void)}
+@{
+@}
+@*
+@*
+As with the loop function you're writing when you're using the Arduino IDE,
+the main function needs to never exit or return. It's a simple control
+loop (see @uref{http://en.wikipedia.org/wiki/Embedded_system#Simple_control_loop}).
+@*
+@*
+So a very simple main function looks like this
+@*
+@*
+@code{#include <Arduino.h>}
+@*
+@code{#include <searduino.h>}
+@*
+@*
+@*
+@code{int main(void)}
+@*
+@{
+@*
+@code{  for(;;)}
+@*
+@code{    }
+@{
+@*
+@code{init();}
+@*
+@*
+@code{       digitalWrite(13, 1);}
+@*
+@code{       delay(100);}
+@*
+@code{       digitalWrite(13, 0);}
+@*
+@code{       delay(100);}
+@*
+@code{   }
+@}
+@*
+@}
+@*
+@*
+@*
+@i{Note: this program sets pin 13 high and low with 0.1 secs
+interval. You don't need to connect a led to output pin 13, since
+pin 13 already has a built in led on the board.}
+
+@subsection Write the first Makefile
+
+@b{Inporant settings in the Makefile}
+@itemize @bullet
+@item SEARDUINO_PATH - should be set to the directory of your
+Searduino installation
+@item PROG - name of the program to build
+@item SHLIB - name of the shared library to build
+@item SRC_C - a list (separated with space) of C files to compile
+@item SRC_CXX - a list (separated with space) of C++ files to compile
+@item ARDUINO - should be set to the type of software you want to
+build (see @b{Build types} below)
+@end itemize
+@*
+@*
+@b{Include the searduino makefile}
+@*
+You need to include some settings, targets and rules from
+Searduino. This is done by adding the following line to your Makefile.
+@*
+@*
+@code{include $(SEARDUINO_PATH)/share/searduino/mk/searduino.mk}
+@*
+@*
+@*
+A Makefile to build the code above can look like this:
+@*
+@*
+@code{SEARDUINO_PATH=/opt/searduino/}
+@*
+@code{SRC_C=seardex.c}
+@*
+@code{SRC_CXX=}
+@*
+@code{ARDUINO=stub}
+@*
+@code{PROG=seardex}
+@*
+@code{SHLIB=seardex.so}
+@*
+@code{include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk}
+@*
+@*
+
+
+
+@i{Note: You don't have to use the makefiles provided by
+Searduino. The makefiles do however provide a lot of help (board settings etc).}
+
+
+
+@subsection Building the program for PC
+To build your software to be executed on your PC:
+
+make sure the the variable @b{ARDUINO} in the Makefile is set to
+@b{stub}.
+
+
+ and type:
+@*
+@*
+@code{make clean}
+@*
+@code{make prog}
+@*
+
+To run the program
+@*
+@*
+@code{./seardex}
+
+
+@subsection Building a shared library for use in the simulators
+To build your software to be executed on your PC:
+make sure the the variable @b{ARDUINO} in the Makefile is set to
+@b{stub}.
+
+ and type:
+@*
+@*
+@code{make clean}
+@*
+@code{make shlib}
+@*
+@*
+To run the code in the stream simulator
+@*
+@*
+@code{/opt/searduino/bin/searduino-stream-sim --arduino-code ./seardex.so}
+@*
+@*
+To run the code in the Pardon simulator
+@*
+@*
+@code{/opt/searduino/bin/searduino-pardon.sh --arduino-code ./seardex.so}
+
+
+@subsection Building the program for UNO
+To build your software to be executed on your PC:
+
+make sure the the variable @b{ARDUINO} in the Makefile is set to
+@b{uno} and type:
+@*
+@*
+By setting ARDUINO to uno the Searduino makefiles will use the
+settings for building and uploading for the Arduino UNO board. 
+@*
+To build the program, all we have to do now is to type:
+@*
+@*
+@code{make clean}
+@*
+@code{make prog}
+@*
+@*
+@*
+To upload and run the program on the Arduino UNO board:
+@*
+@*
+@code{make upload}
+@*
+@*
+You should now be able to see the built in led (pin 13) flash. If not,
+the author of this document need to his homework.

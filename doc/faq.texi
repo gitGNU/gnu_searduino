@@ -1,0 +1,16 @@
+@chapter FAQ
+
+@cindex @b{What does undefined reference mean?}
+
+In short it means that the linker can't find all the needed ``function
+implementation'' for your binary/library. If you're compiling your
+Arduino code for local execution it means you're using a function that
+has not yet been implemented in Searduino.
+
+You can ask the Searduino folks to do it or you can implement it your
+self.
+
+@cindex @b{How do I use an external library in Searduino?}
+
+
+

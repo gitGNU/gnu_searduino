@@ -1,0 +1,228 @@
+@chapter Simulators
+
+With Searduino you can easily build your code for use with:
+
+@itemize @bullet
+@item stubed program - the Arduino fuctions print when they are being called
+(stdout by default)
+@item stream - same as with stub, but now also with a listening
+(stdin) thread to which you can send commands (such as settig digital input
+pin 2 to 1).
+@item pardon - a Simulator, written in Python, using the Python
+simulator interface (pearduino)
+@item python scripts - your own Python scripts, using the Python
+simulator interface (pearduino)
+@item xxxx - a simulator, written in C++/Qt/Qml.
+simulator interface - more info soon
+@end itemize
+How to use each of the above is explained below in separate sections.
+
+@section Stub 
+Use this way if you want to run your program stand alone, with no way
+of giving input to it. As soon as your program sets a pin you will see
+a printout on stdout.
+
+To build a stand alone stubed program set the following variables in
+your @code{Makefile} (before you include @code{searduino.mk}):
+@*
+@code{ARDUINO=stub}
+@*
+@code{PROG=somename}
+@*
+@i{Note: You must NOT have the variable SHLIB set in the Makefile}
+
+Check out the example as found in
+@code{example/python-digcounter}. Edit the Makefile
+(@code{Makefile.digcounter}) and make sure to set the variables as
+described above. After you're done, type:
+@*
+@code{make -f Makefile.digcounter clean}
+@*
+@code{make -f Makefile.digcounter}
+@*
+and possibly also
+@*
+@code{make -f Makefile.digcounter check}
+
+
+
+@subsection Stub output syntax
+
+With this mode set Searduino print messages to a stream (default to
+stdout) for the function calls where some hardware is set. 
+@*
+@*
+You switch on and off this mode as many times you want during execution using the functions:
+@*
+@code{void searduino_enable_streamed_output(void)}
+@*
+@code{void searduino_disable_streamed_output(void)}
+
+@multitable  @columnfractions .0 .30 .20 .50
+@item 
+@tab @b{Directive}
+@tab @b{Example}
+@tab @b{Description}
+
+@item
+@tab @code{dpin:<pin>:<value>}
+@tab @code{dpin:1:0}
+@tab Digital output pin 1 is 0
+
+@item
+@tab @code{dmode:<pin>:<mode>}
+@tab @code{dpin:1:0}
+@tab Mode of digital pin 1 is 0
+
+@item
+@tab @code{apin:<pin>:<value>}
+@tab @code{apin:2:1.123}
+@tab Analogue pin 2 is 1.123
+
+@end multitable
+
+
+@section Streamed simulator
+With the program searduino-stream-sim you can test your Arduino
+program and give input data to it using stdin. 
+
+@subsection Preparing your arduino code for the simulator
+First of all you must build your Arduino code as a shared library. To
+do this you must set the following variables in your @code{Makefile}
+(before you include @code{searduino.mk}):
+
+@* 
+@code{ARDUINO=stub} 
+@*
+@code{SHLIB=libyourcode.so} 
+@*
+@*
+@i{Note: You must NOT have the variable PROG set in the Makefile}
+
+After this you must do a clean build:
+
+@code{make -f Makefile.digcounter clean}
+@*
+@code{make -f Makefile.digcounter}
+@*
+@*
+
+@subsection Preparing the simulator
+Next thing to do is to make sure that your system can find all the
+shared libraries. Type:
+
+@*
+@code{export LD_LIBRARY_PATH=/opt/searduino/lib}
+@*
+@*
+
+By doing this we tell the system to look for libraries in
+@code{/opt/searduino/lib}, which is where we assume you've installed
+searduino in.
+
+@*
+
+We're now ready to launch the simulator, but let's do a quick check
+before we proceed. Let's verify that the dynamic loader will find all
+the libraries needed by pearduino (Searduino's Python library). On
+GNU/Linux and similar system do:
+@*
+@code{ldd /opt/searduino/lib/pearduino.so}
+@*
+
+We are, as before, assuming you've installed Searduino in
+/opt/searduino. ldd (a tool to print out dynamic link dependencies)
+will print out a list of the libraries pearduino depends on. Make sure
+that you see no printouts waring you of missing libraries (ldd reports
+this by saying ``not found''). 
+
+@*
+If this went ok, we're finally ready to proceed by invoking pardon.
+
+@subsection Launching the simulator
+You need to pass the arduino code to load by using command line
+arguments, here how to do it:
+@*
+@code{/opt/searduino/bin/searduino-stream-sim --arduino-code /some/dir/libyourcode.so}
+@*
+
+
+@subsection Streamed simulator input syntax
+
+@multitable  @columnfractions .0 .30 .20 .50
+@item 
+@tab @b{Directive}
+@tab @b{Example}
+@tab @b{Description}
+
+@item
+@tab @code{dpin:<pin>:<value>}
+@tab @code{dpin:13:1}
+@tab Set digital pin 13 to 1
+
+@item
+@tab @code{apin:<pin>:<value>}
+@tab @code{apin:7:1.123}
+@tab Set analogue pin 7 to 1.123
+
+@end multitable
+
+
+@subsection Scripting with bash
+TBD
+@subsection Scripting over the network
+TBD
+
+@section Pardon simulator
+With Searduino you can test your Arduino program in the Python
+simulator (written in Python using Gtk). 
+
+@subsection Preparing your arduino code for the simulator
+The procedure for doing this is the same as described in the section
+``Streamed simulator''
+
+@subsection Setting up the Python environment
+Now, the shared library is ready for use by python. It's almost time
+to start the simulator. But there's some few more things to do before
+we're there. First, we must tell Python where to look for the
+Searduino Python library called Pearduino. Using bash, as most do on
+GNU/Linux, BSD, cygwin systems, you type:
+
+@*
+@code{export PYTHONPATH=/opt/searduino/lib}
+@*
+assuming you've installed Searduino in @i{/opt/searduino/}. 
+
+@* 
+
+
+@subsection Preparing the simulator
+The procedure for doing this is the same as described in the section
+``Streamed simulator''
+
+@subsection Launching the simulator
+
+@*
+@*
+@code{/opt/searduino/bin/pardon}
+@*
+
+Pardon will ask you to point to the shared library containing the
+arduino code you want to execute in the simulator. Browse your way to
+the file and click ok. Now pardon should be executing your binary.
+
+If you want to pass the arduino code to load by using command line
+arguments, here how to do it:
+@*
+@code{/opt/searduino/bin/pardon --arduino-code /some/dir/libyourcode.so}
+@*
+
+@section Python scripts
+With Searduino you can write test code for your Arduino program in
+Python. Searduino comes with a Python library, called pearduino, for
+this. 
+
+Until we've written this section, we refer to the example @code{example/python-digcounter/simple-hw.py}.
+
+@section xxx simulator
+
