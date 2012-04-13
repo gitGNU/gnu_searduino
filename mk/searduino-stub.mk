@@ -2,9 +2,20 @@ BOARD=stub
 
 E_C = $(SRC_C:.c=.E) $(MAIN_SRC:.c=.o)
 E_CXX = $(SRC_CXX:.cpp=.E) 
-OBJ_C = $(SRC_C:.c=.o) 
-OBJ_CXX = $(SRC_CXX:.cpp=.o) 
-OBJ_MAIN = $(MAIN_SRC:.c=.o) 
+
+# These are now set with a optional OBJ_PATH prefix
+#OBJ_C = $(SRC_C:.c=.o) 
+#OBJ_CXX = $(SRC_CXX:.cpp=.o) 
+#OBJ_MAIN = $(MAIN_SRC:.c=.o) 
+
+OBJ_PATH = ./
+ifdef USER_OBJ_PATH
+OBJ_PATH = $(USER_OBJ_PATH)
+endif
+
+OBJ_C = $(addprefix $(OBJ_PATH), $(SRC_C:.c=.o)) 
+OBJ_CXX = $(addprefix $(OBJ_PATH), $(SRC_CXX:.cpp=.o))
+OBJ_MAIN = $(addprefix $(OBJ_PATH), $(MAIN_SRC:.c=.o)) 
 
 CC=gcc
 CXX=g++
@@ -24,12 +35,13 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SPI        \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Firmata     \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/utility \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/           \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility     \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM       \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal    \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo             \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial     \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire          \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/            \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility      \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM        \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal     \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo              \
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial      \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper
 #           -I$(SEARDUINO_INC_PATH)/boards  \
 #\

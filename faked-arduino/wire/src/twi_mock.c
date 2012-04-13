@@ -2,7 +2,7 @@
  *    
  *                   Searduino                                       
  *                                                                   
- *   Copyright (C) 2012 Henrik Sandklef                              
+ *   Copyright (C) 2012 Viktor Green                              
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -137,7 +137,7 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
   /* Find target in address list */
   while(target != NULL && target->address != address) target = target->next;
   if(target == NULL) return 2; /* address not in list */
-
+  
   for(i = 0; i < length; i++) {
     target->write(data[i]);
   }

@@ -67,10 +67,10 @@ $(OBJ_PATH)%.o: %.cpp
 	$(CC) -E $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
 
 clean:
-	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex *.a $(LIB) $(SHLIB) *.so libs/*/* $(PROG) *.pyc
+	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN) *.eep *.hex *.a $(LIB) $(SHLIB) *.so libs/*/* $(PROG) *.pyc
 
 light-clean:
-	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) *.eep *.hex $(PROG) *.pyc
+	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN) *.eep *.hex $(PROG) *.pyc
 
 efile: $(E_C) $(E_CXX)
 
@@ -86,8 +86,6 @@ all: $(PROG) $(LIB) $(OBJ_C) $(OBJ_CXX)
 shlib: $(SHLIB)
 
 $(LIB): $(OBJ_C)  $(OBJ_CXX) 
-#	@echo "Objc: $(OBJ_C)"
-#	@echo "Objc++: $(OBJ_CXX)"
 	@echo "Creating directory: $(LIB_PATH)/"
 	mkdir -p $(LIB_PATH)/
 	$(AR) rcs $(LIB)  $(OBJ_C)  $(OBJ_CXX) 
