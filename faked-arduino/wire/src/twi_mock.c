@@ -2,7 +2,7 @@
  *    
  *                   Searduino                                       
  *                                                                   
- *   Copyright (C) 2012 Henrik Sandklef                              
+ *   Copyright (C) 2012 Viktor Green                              
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -30,30 +30,33 @@ struct mockTarget {
   uint8_t address;
   void (*write)(uint8_t);
   uint8_t (*read)(void);
+  void (*end)(void);
   struct mockTarget* next;
 };
 
 struct mockTarget* createTarget(uint8_t address, void (*write)(uint8_t),
-				uint8_t (*read)(void), struct mockTarget* next);
+				uint8_t (*read)(void), void (*end)(void),
+				struct mockTarget* next);
 
-struct mockTarget* list;
+struct mockTarget* twiTargetList;
 
 
 void twiMock_addTarget(uint8_t address, void (*write)(uint8_t),
-		       uint8_t (*read)(void)) {
+		       uint8_t (*read)(void), void (*end)(void)) {
   struct mockTarget* target;
   struct mockTarget* last;
 
-  if(list == NULL) {
-    list = createTarget(address, write, read, NULL);
+  if(twiTargetList == NULL) {
+    twiTargetList = createTarget(address, write, read, end, NULL);
     return;
   }
 
-  target = last = list;
+  target = last = twiTargetList;
   while(target != NULL) {
     if(target->address == address) {
       /*
-       * Something is wrong, there should not be two targets with the same address.
+       * Something is wrong, there should not be two targets with
+       * the same address.
        * The user must have done something wrong
        */
       return;
@@ -61,7 +64,7 @@ void twiMock_addTarget(uint8_t address, void (*write)(uint8_t),
 
     if(target->address > address) {
       /* Insert target in the linked list */
-      last->next = createTarget(address, write, read, target);
+      last->next = createTarget(address, write, read, end, target);
       if(last->next == NULL) {
 	last->next = target;
       }
@@ -74,9 +77,10 @@ void twiMock_addTarget(uint8_t address, void (*write)(uint8_t),
 
   /* Target should be at the end of the list */
 
-  last->next = createTarget(address, write, read, NULL);
+  last->next = createTarget(address, write, read, end, NULL);
   /* 
-   * Does not matter if createTarget returns NULL, since that was the previos value anyway
+   * Does not matter if createTarget returns NULL, since that was
+   * the previos value anyway
    */
 
   return;
@@ -101,7 +105,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length) {
     return 0;
   }
 
-  target = list;
+  target = twiTargetList;
 
   /* Find target in address list */
 
@@ -111,6 +115,9 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length) {
   for(i = 0; i < length; i++) {
     data[i] = target->read();
   }
+
+  /* Tell the target that this transmission is completed */
+  target->end();
 
   return length;
 }
@@ -125,17 +132,21 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
 
   /* original code waits for TWI to become ready */
 
-  target = list;
+  target = twiTargetList;
 
   /* Find target in address list */
   while(target != NULL && target->address != address) target = target->next;
   if(target == NULL) return 2; /* address not in list */
-
+  
   for(i = 0; i < length; i++) {
     target->write(data[i]);
   }
 
-  return 0;
+  /* Tell the target that the transmission has ended */
+
+  target->end();
+
+  return 0; /* success */
 }
 
 uint8_t twi_transmit(const uint8_t* data, uint8_t length) {
@@ -167,7 +178,8 @@ void twi_releaseBus(void) {
 }
 
 struct mockTarget* createTarget(uint8_t address, void (*write)(uint8_t),
-				uint8_t (*read)(void), struct mockTarget* next) {
+				uint8_t (*read)(void), void (*end)(void),
+				struct mockTarget* next) {
   struct mockTarget* t = malloc(sizeof(struct mockTarget));
   if(t == NULL) return NULL;
   
@@ -175,6 +187,7 @@ struct mockTarget* createTarget(uint8_t address, void (*write)(uint8_t),
   t->write = write;
   t->read = read;
   t->next = next;
+  t->end = end;
 
   return t;
 }

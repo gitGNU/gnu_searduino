@@ -27,8 +27,7 @@
 #include <inttypes.h>
 
 void twiMock_addTarget(uint8_t adress, void (*write)(uint8_t),
-		       uint8_t (*read)(void));
-/*uint8_t twiMock_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait);*/
+		       uint8_t (*read)(void), void (*end)(void));
 
 
 #endif // _TWI_MOCK_H_
