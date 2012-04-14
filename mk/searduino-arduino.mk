@@ -48,6 +48,10 @@ AR=avr-ar
 AVRDUDE=avrdude
 F_CPU=$(board_build.f_cpu)
 
+
+SEARDUINO_ARDUINO=dummyvalue
+
+
 INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core 		   \
             -I$(SEARDUINO_INC_PATH)/arduino-extras/ 			    \
             -I$(SEARDUINO_INC_PATH)/arduino-extras/include    		     \
