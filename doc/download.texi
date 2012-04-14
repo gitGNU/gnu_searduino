@@ -92,12 +92,12 @@ After this, you should follow the procedures for Installing a released version
 @*
 @b{Create a installation directiory (e.g /opt/searduino)}
 @*
-@code{mkdir -p /opt/searduino}
+@code{mkdir -p /opt/}
 @*
 @*
 @b{Go to the installation directory}
 @*
-@code{cd /opt/searduino}
+@code{cd /opt/}
 @*
 @*
 @b{Download a release from}
