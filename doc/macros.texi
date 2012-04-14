@@ -8,24 +8,15 @@ Arduino hw they are disabled.
 @tab @b{Macro}
 @tab @b{Description}
 @item
+@tab @code{SEARDUINO_STUB}
+@tab SEARDUINO_STUB is set when compiling for stub (not Arduino boards)
+@item
+@tab @code{SEARDUINO_ARDUINO}
+@tab SEARDUINO_ARDUINO is set when compiling for Arduino boards
+@item
 @tab @code{SEARDUINO_LOOP}
 @tab On the Arduino boards this is the same as a for loop
 (@code{for(;;)}). When using this macro your code can be paused in the simulator.
-@end multitable
-
-
-
-@section print functions/macros
-@*
-If you want to print out strings when building your code for local use (not
-on an Arduino board) and have the printouts disabled when building for
-Arduino you can use the following macro:
-@*
-@*
-@multitable  @columnfractions .0 .40 .60
-@item 
-@tab @b{Macro}
-@tab @b{Description}
 @item 
 @tab @code{SEARDUINO_DEBUG((msg))}
 @tab The macro (if not building for Arduino boards) takes what is inside
