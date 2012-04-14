@@ -206,10 +206,20 @@ static const char* ARDUINO_CODE_ARG_LONG  = "--arduino-code";
 static const char* ARDUINO_CODE_ARG_SHORT = "-ac";
 static const char* HELP_ARG_LONG  = "--help";
 static const char* HELP_ARG_SHORT = "-h";
+static const char* VERSION_ARG_LONG  = "--version";
+static const char* VERSION_ARG_SHORT = "-V";
 
-static usage(void)
+static void usage(void)
 {
-  printf ("searduino-stream-sim\n\n");
+  printf ("NAME\n");
+  printf ("\tsearduino-stream-sim\n");
+  printf ("\n");
+  printf ("VERSION\n");
+  printf ("\t%s\n", seasim_get_searduino_version());
+  printf ("\n");
+  printf ("PROJECT\n");
+  printf ("\t%s\n",  seasim_get_searduino_name());
+  printf ("\n");
   printf ("OPTIONS\n");
   printf ("\t%s, %s <library>\n", ARDUINO_CODE_ARG_LONG, ARDUINO_CODE_ARG_SHORT);
   printf ("\t\tspecify what arduino code (shared library) to load\n");
@@ -218,6 +228,11 @@ static usage(void)
   printf ("\t%s, %s <library>\n", HELP_ARG_LONG, HELP_ARG_SHORT);
   printf ("\t\tprint this text\n");
   printf ("\n");
+}
+
+static void version(void)
+{
+  printf ("%s\n", seasim_get_searduino_version());
 }
 
 #define ARGCMP(arg, along, ashort) 					\
@@ -299,6 +314,13 @@ main(int argc, char **argv)
 		 HELP_ARG_SHORT))
 	{
 	  usage();
+	  return 0;
+	}
+      else if (ARGCMP(argv[i], 
+		 VERSION_ARG_LONG, 
+		 VERSION_ARG_SHORT))
+	{
+	  version();
 	  return 0;
 	}
       else

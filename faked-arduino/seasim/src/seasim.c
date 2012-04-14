@@ -22,6 +22,18 @@
  ****/
 
 #include "seasim/seasim.h"
+#include "searduino.h"
+
+const char* seasim_get_searduino_version(void)
+{
+  return SEARDUINO_VERSION;
+}
+
+const char* seasim_get_searduino_name(void)
+{
+  return SEARDUINO_NAME;
+}
+
 
 unsigned int
 seasim_get_generic_output(uint8_t pin, uint8_t pin_type)

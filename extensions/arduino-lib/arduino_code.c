@@ -31,7 +31,7 @@
  */
 
 #include <Arduino.h>
-#include "arduino/setup.h"
+#include "searduino.h"
 
 
 void setup() {

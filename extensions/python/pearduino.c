@@ -61,7 +61,7 @@ static PyObject *c_my_set_ana_callback(PyObject *dummy, PyObject *args);
 static PyObject *c_my_set_callback(PyObject *dummy, PyObject *args);
 static PyObject *c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args);
 
-void* arduino_code(void *in);
+void* c_arduino_code(void *in);
 
 
 void 
@@ -453,7 +453,7 @@ static PyObject* c_start(PyObject* self, PyObject* args)
   PEARDUINO_PRINT_IN();
   
   PEARDUINO_PRINT_INSIDE_STR("Starting thread for arduino code\n");
-  pthread_create(searduino_thread, NULL, arduino_code, NULL);
+  pthread_create(searduino_thread, NULL, c_arduino_code, NULL);
 
   PEARDUINO_PRINT_OUT();
   PyObject* o = Py_BuildValue("i", 0);
@@ -671,6 +671,32 @@ c_my_set_log_callback(PyObject *dummy, PyObject *args)
   return result;
 }
 
+static PyObject *
+c_get_searduino_version(PyObject *dummy, PyObject *args)
+{
+  const char * val;
+  PEARDUINO_PRINT_IN();
+
+  val= seasim_get_searduino_version();
+  PyObject* o = Py_BuildValue("s", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
+static PyObject *
+c_get_searduino_name(PyObject *dummy, PyObject *args)
+{
+  const char * val;
+  PEARDUINO_PRINT_IN();
+
+  val= seasim_get_searduino_name();
+  PyObject* o = Py_BuildValue("s", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
 
 
 /*
@@ -680,24 +706,26 @@ c_my_set_log_callback(PyObject *dummy, PyObject *args)
  * Bind Python function names to our C functions
  */
 static PyMethodDef myModule_methods[] = {
-  {"seasim_Read", (PyCFunction)c_Read, METH_VARARGS, NULL},
-  {"seasim_set_input", (PyCFunction)c_ext_set_input, METH_VARARGS, NULL},
-  {"seasim_set_dig_mode_callback", (PyCFunction)c_my_set_dig_mode_callback, METH_VARARGS, NULL},
-  {"seasim_set_callback", (PyCFunction)c_my_set_callback, METH_VARARGS, NULL},
-  {"seasim_set_log_callback", (PyCFunction)c_my_set_log_callback, METH_VARARGS, NULL},
-  {"my_arduino_code", (PyCFunction)arduino_code, METH_VARARGS, NULL},
-  {"seasim_pause", (PyCFunction)c_pause, METH_VARARGS, NULL},
-  {"seasim_resume", (PyCFunction)c_resume, METH_VARARGS, NULL},
-  {"seasim_quit", (PyCFunction)c_quit, METH_VARARGS, NULL},
-  {"seasim_get_pin_mode", (PyCFunction)c_get_pin_mode, METH_VARARGS, NULL},
-  {"seasim_set_arduino_code", (PyCFunction)c_set_arduino_code, METH_VARARGS, NULL},
-  {"seasim_add_i2c_device", (PyCFunction)c_add_i2c_device, METH_VARARGS, NULL},
-  {"seasim_initialise", (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
-  {"seasim_start", (PyCFunction)c_start, METH_VARARGS, NULL},
-  {"seasim_set_Write_timelimit", (PyCFunction)c_set_Write_timelimit, METH_VARARGS, NULL},
-  {"seasim_get_Write_timelimit", (PyCFunction)c_get_Write_timelimit, METH_VARARGS, NULL},
+  {"seasim_Read",                    (PyCFunction)c_Read, METH_VARARGS, NULL},
+  {"seasim_set_input",               (PyCFunction)c_ext_set_input, METH_VARARGS, NULL},
+  {"seasim_set_dig_mode_callback",   (PyCFunction)c_my_set_dig_mode_callback, METH_VARARGS, NULL},
+  {"seasim_set_callback",            (PyCFunction)c_my_set_callback, METH_VARARGS, NULL},
+  {"seasim_set_log_callback",        (PyCFunction)c_my_set_log_callback, METH_VARARGS, NULL},
+  {"my_arduino_code",                (PyCFunction)c_arduino_code, METH_VARARGS, NULL},
+  {"seasim_pause",                   (PyCFunction)c_pause, METH_VARARGS, NULL},
+  {"seasim_resume",                  (PyCFunction)c_resume, METH_VARARGS, NULL},
+  {"seasim_quit",                    (PyCFunction)c_quit, METH_VARARGS, NULL},
+  {"seasim_get_pin_mode",            (PyCFunction)c_get_pin_mode, METH_VARARGS, NULL},
+  {"seasim_set_arduino_code",        (PyCFunction)c_set_arduino_code, METH_VARARGS, NULL},
+  {"seasim_add_i2c_device",          (PyCFunction)c_add_i2c_device, METH_VARARGS, NULL},
+  {"seasim_initialise",              (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
+  {"seasim_start",                   (PyCFunction)c_start, METH_VARARGS, NULL},
+  {"seasim_set_Write_timelimit",     (PyCFunction)c_set_Write_timelimit, METH_VARARGS, NULL},
+  {"seasim_get_Write_timelimit",     (PyCFunction)c_get_Write_timelimit, METH_VARARGS, NULL},
   {"seasim_disable_streamed_output", (PyCFunction)c_disable_streamed_output, METH_VARARGS, NULL},
-  {"seasim_enable_streamed_output", (PyCFunction)c_enable_streamed_output, METH_VARARGS, NULL},
+  {"seasim_enable_streamed_output",  (PyCFunction)c_enable_streamed_output, METH_VARARGS, NULL},
+  {"seasim_get_searduino_version",   (PyCFunction)c_get_searduino_version, METH_VARARGS, NULL},
+  {"seasim_get_searduino_name",      (PyCFunction)c_get_searduino_name, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
   /*  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
@@ -709,7 +737,9 @@ static PyMethodDef myModule_methods[] = {
 
 
 
-void* arduino_code(void *in)
+
+
+void* c_arduino_code(void *in)
 {
 
   usleep(1000*1000);

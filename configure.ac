@@ -109,20 +109,17 @@ AM_CONDITIONAL(PYTHON_SUPPORT, test "x$python_enabled" = "xyes")
 AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
 AM_CONDITIONAL(SHAREDTEST,     test "x$st_enabled"     = "xyes")
 
-AC_MSG_NOTICE([summary of build options:
-  version:          ${VERSION} shared
-  Host type:        ${host}
-  Install prefix:   ${prefix}
-  Compiler:         ${CC}
-  Warning flags:    ${WARN_CFLAGS}
-  Library types:    Shared=${enable_shared}, Static=${enable_static}
-  Python:           $python_enabled
-  Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
-  Unit test:        $ut_enabled
-  Unit test flags:  C: '$CHECK_CFLAGS   LD: '$CHECK_LIBS'
-  Shared lib test:  $st_enabled
-  Pedantic flags:   $PEDANTIC_FLAGS
-])
+#
+# Set up misc stuff:
+#     shared lib extensions, 
+#
+case $host in
+ *linux*) SHLIB_EXT='.so'    ;;
+ *mac*)   SHLIB_EXT='.dylib' ;;
+ *win*)   SHLIB_EXT='.dll'   ;;
+esac
+AC_SUBST([SHLIB_EXT])
+
 
 exit_on_failure()
 {
@@ -135,17 +132,6 @@ exit_on_failure()
   fi
 }
 
-
-#
-# Set up misc stuff:
-#     shared lib extensions, 
-#
-case $host in
- *linux*) SHLIB_EXT='.so'    ;;
- *mac*)   SHLIB_EXT='.dylib' ;;
- *win*)   SHLIB_EXT='.dll'   ;;
-esac
-AC_SUBST([SHLIB_EXT])
 
 
 ./bin/get-arduino-src.sh
@@ -193,4 +179,26 @@ exit_on_failure $? "Prepared Arduino examples to C translator"
 AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile ])
 
 AC_OUTPUT
+	
+AC_SUBST([VERSION])
+AC_SUBST([PACKAGE])
+
+AC_MSG_NOTICE([summary of build options:
+  package:          ${PACKAGE} 
+  version:          ${VERSION} 
+  Host type:        ${host}
+  Install prefix:   ${prefix}
+  Compiler:         ${CC}
+  Warning flags:    ${WARN_CFLAGS}
+  Library types:    Shared=${enable_shared}, Static=${enable_static}
+  Python:           $python_enabled
+  Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+  Unit test:        $ut_enabled
+  Unit test flags:  C: '$CHECK_CFLAGS'   LD: '$CHECK_LIBS'
+  Shared lib test:  $st_enabled
+  Pedantic flags:   $PEDANTIC_FLAGS
+])
+
+
+
 

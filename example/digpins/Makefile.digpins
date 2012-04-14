@@ -29,7 +29,7 @@
 #
 # Path to your Searduino installation
 #
-SEARDUINO_PATH=/tmp/TMP_INSTALL3/
+SEARDUINO_PATH=/opt/searduino/
 
 #
 # Source code

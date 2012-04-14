@@ -315,7 +315,7 @@ class MyWindow(Gtk.Window):
         self.digs = [None]*size
         self.anas = [None]*size
 
-        Gtk.Window.__init__(self, title="Pardon - a simulator frontend for the Searduino project")
+        Gtk.Window.__init__(self, title="Pardon  ( " + seasim_get_searduino_name() + " - " + seasim_get_searduino_version() + " )")
 
         self.innerbox = Gtk.HBox(spacing=6)
 
@@ -370,7 +370,7 @@ class MyWindow(Gtk.Window):
         self.innerbox.pack_start(self.extrasbox, False, True, 0)
         self.innerbox.pack_start(self.serialbox, False, True, 0)
         
-        self.bottomlabel = Gtk.Label("Pardon - a simulator frontend. Pardon is part of the Searduino project")
+        self.bottomlabel = Gtk.Label("Pardon - a simulator frontend. Pardon is part of the " + seasim_get_searduino_name() + "  project")
         self.box.pack_start(self.innerbox,    False, True, 0)
         self.box.pack_start(self.bottomlabel,    False, True, 0)
 
@@ -623,10 +623,11 @@ def getArduinocodeLibrary():
 
 print "Main - will parse"
 
-parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator)')
-parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac", help='Arduino code to test')
-parser.add_argument('--i2c-code',     nargs=1, action="store", dest="ic", help='I2C code for device')
-parser.add_argument('--pins', nargs=1, action="store", dest="pins", help='Number of pins in GUI')
+parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator " + seasim_get_searduino_version() + ")')
+parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac",   help='Arduino code to test')
+parser.add_argument('--i2c-code',     nargs=1, action="store", dest="ic",   help='I2C code for device')
+parser.add_argument('--pins',         nargs=1, action="store", dest="pins", help='Number of pins in GUI')
+parser.add_argument('--version',      action='version', version=seasim_get_searduino_version())
 args = parser.parse_args()
 
 

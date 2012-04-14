@@ -121,6 +121,7 @@ GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
 GPROF_FLAG = "-pg -g"
 
 
+
 init-cov:
 	make clean
 	lcov --directory . --zerocounters
@@ -149,3 +150,8 @@ old-check:
 	cd test/ && cd shared && make clean && make && make check 
 	cd test/ && cd shared-main && make clean && make && make check
 	cd test/ && cd stub && make clean && make && make check
+
+install-data-local:
+	echo "$(PACKAGE)" >  version.txt
+	echo "$(VERSION)" >> version.txt
+	cp version.txt $(pkgdatadir)/

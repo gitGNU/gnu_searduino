@@ -30,7 +30,7 @@ libarduino_code_la_SOURCES = $(LIB_ARDUINOCODE_C_FILES)
 lib_LTLIBRARIES = libarduino-code.la
 
 
-AM_CFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../faked-arduino/ -Dmain=searduino_main
+AM_CFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../faked-arduino/ -I../../arduino-extras/include -Dmain=searduino_main
 AM_LDFLAGS=
 
 
