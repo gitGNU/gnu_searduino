@@ -47,17 +47,6 @@ void     input_callback(uint8_t pin, uint8_t val, uint8_t pin_type);
 typedef void (*searduino_main_ptr)(void* in); 
 typedef searduino_main_ptr searduino_main_ptr_ptr ;
 
-
-#define ENABLE_SLEEP
-#ifdef  ENABLE_SLEEP
-#define   SEARDUINO_LOOP() for (;;)  \
-    if      (searduino_is_paused())  { fprintf (stderr, "z"); usleep(1000*200); } \
-    else if ( searduino_is_halted()) { fprintf (stderr, "Simulator halted, will return\n"); return 0; } \
-    else  
-#else
-#define   SEARDUINO_LOOP() for (;;) 
-#endif
-
 #ifdef __cplusplus
 extern "C"{
 #endif
