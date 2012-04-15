@@ -67,8 +67,7 @@ typeLabels[SEARDUINO_PIN_TYPE_END]     = "Unknown"
 #
 
 paused = 0 
-
-size = 16
+size  = 16
 
 redColor = Gdk.RGBA()
 redColor.red=1.0
@@ -235,15 +234,13 @@ class Pin(Gtk.Widget):
         relSem()
 
     def updateGenericMode(self, pin, mode):
-        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
+#        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
         getSem()
-        print "===> setMode"
         if (mode==1):
             self.mode.set_text("OUTPUT")
         else:
             self.mode.set_text("INPUT")
             self.output_label.set_text("")
-        print "<=== setMode"
         relSem()
 
 
@@ -252,7 +249,7 @@ class Pin(Gtk.Widget):
         if self.input.get_active():
             val = 1
             
-        print "Pin toggle " + str(self.pin_nr) + ", " + str(val) + ", " + str(self.pin_type)
+#        print "Pin toggle " + str(self.pin_nr) + ", " + str(val) + ", " + str(self.pin_type)
         seasim_set_input(self.pin_nr, 
                          val, 
                          self.pin_type )
@@ -267,48 +264,6 @@ class Pin(Gtk.Widget):
 
 class MyWindow(Gtk.Window):
 
-    def updateGUI(self):
-#        print "updateGUI()  <-- " + str(paused)
-        if (paused):
-            print "no GUI update"
-        else:
-            print "Updating GUI manually (not anymore)"
-#            self.updateAllOut()
-                
-        return True
-
-
-    def updateModes(self):
-#        print "  --------------------------------------------- UPDATEMODES ============================================================"
-        if (paused):
-            print "no GUI update"
-        else:
-            for i in range(1,size-1):
-                mode = seasim_get_pin_mode(i)
-                print "updateModes (" + str(i)+ ", " + str(mode) + ")"
-                self.pinUpdateMode(i,mode);
-                
-        self.sendInputPins()        
-        return True
-        
-    def sendInputPins(self):
-        if (paused):
-            print "no GUI update"
-        else:
- #           print "  --------------------------------------------- SIN"
-            for i in range(1,size-1):
-  #              print "  --------------------------------------------- SIN " + str(i)
-                if (seasim_get_pin_mode(i)==0):
-                    print "updateModes:"
-                    getSem()        
-                    value = self.digs[i].getVal()
-                    relSem()
-#                    print "                                                                         WILL SEND: " + str(value) + "  from " + str(i)
-                    seasim_set_input(i,
-                                     value, 0)
-                
-        return True
-        
     def __init__(self, size):
 #        global size
         
@@ -330,16 +285,17 @@ class MyWindow(Gtk.Window):
 
         # Serial I/O
         self.serialbox=Gtk.VBox(spacing=6)
-        self.seriallabel = Gtk.Label("Serial I/O")
+        self.seriallabel = Gtk.Label("Serial Output")
+        self.seriallabel.set_width_chars(40);
         self.serialbox.pack_start(self.seriallabel,    False, True, 0)
-        self.serialbox.pack_start(pause,    False, True, 0)
-        self.serialbox.pack_start(spin,    False, True, 0)
         self.serialio = Gtk.TextView()
+
         self.serialscroll = Gtk.ScrolledWindow()
         self.serialscroll.set_hexpand(True)
         self.serialscroll.set_vexpand(True)
+
         self.serialtextbuffer = self.serialio.get_buffer()
-        self.serialtextbuffer.set_text("First thing..")
+        self.serialtextbuffer.set_text("")
         self.serialio.set_cursor_visible(True)
         self.serialio.set_editable(True)
         self.serialscroll.add(self.serialio)
@@ -360,17 +316,17 @@ class MyWindow(Gtk.Window):
         self.scroll.set_hexpand(True)
         self.scroll.set_vexpand(True)
         self.textbuffer = self.log.get_buffer()
-        self.textbuffer.set_text("First thing..")
+        self.textbuffer.set_text("")
         self.log.set_cursor_visible(True)
         self.log.set_editable(True)
         self.scroll.add(self.log)
         self.extrasbox.pack_start(self.scroll,    False, True, 0)
 
-        self.innerbox.pack_start(pinTable, False, True, 0)
-        self.innerbox.pack_start(self.extrasbox, False, True, 0)
+        self.innerbox.pack_start(pinTable,       False, True, 0)
         self.innerbox.pack_start(self.serialbox, False, True, 0)
+        self.innerbox.pack_start(self.extrasbox, False, True, 0)
         
-        self.bottomlabel = Gtk.Label("Pardon - a simulator frontend. Pardon is part of the " + seasim_get_searduino_name() + "  project")
+        self.bottomlabel = Gtk.Label("Pardon - a simulator frontend to the " + seasim_get_searduino_name() + " project")
         self.box.pack_start(self.innerbox,    False, True, 0)
         self.box.pack_start(self.bottomlabel,    False, True, 0)
 
@@ -386,7 +342,6 @@ class MyWindow(Gtk.Window):
 #            print "Update on pin: " + str(i)
 #            self.digs[i] = digitalPin(self,i)
 #            digTable.attach(self.digs[i], 0, 1, i, i+1)
-#            self.pinUpdate(i,"on")
 
 #            wid = Pin(self,i%5, i, i)
             wid = Pin(self,1, i, i)
@@ -400,75 +355,6 @@ class MyWindow(Gtk.Window):
             pinTable.attach(wid.output_label, 6, 7, i+1, i+2)
 
             
-        print "init...1"
-        self.updateAllOut()
-        print "init..."
-#        self._positiontimeoutid = GObject.timeout_add(2000, self.updateModes)
-        print "init..."
-        self._positiontimeoutid = GObject.timeout_add(5000, self.updateGUI)
-        print "init..."
-        self.updateGUI()
-        print "init..."
-
-    def updateDigOutPin(self,pin, val):
-#        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
-        print "updateDigOutPin "+ str(pin) + " " + str(val)
-        getSem()
-#        print "self.digs[" + str(pin) + "].set_text(" + str(val)+ ")"
-        self.digs[pin].setVal(val)
-        relSem()
-#        print "<--- rel sem #####################################################################"
-
-    def updateDigMode(self, pin, mode):
-        print "updateDigOutMode( " + str(pin) + " , " + str(mode) + ")"
-        getSem()
-        self.digs[pin].setMode(mode)
-        relSem()
-#        print "<--- rel sem #####################################################################"
-
-    def updateAnaOutPin(self,pin, val):
-        #        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
-        print "updateAnaOutPin"
-        getSem()
-#        print "self.digs[" + str(pin) + "].set_text(" + str(val)+ ")"
-        self.anas[pin].setVal(val)
-        relSem()
-#        print "<--- rel sem #####################################################################"
-
-    def updatePin(self, pin, val, pin_type):
-#        print "---> get sem #####################################################################     " + str(pin) + " " + str(val)
-        print "updatePin(...)"
-        getSem()
-        print "updatePin(...) 2"
-        print "updatePin(...) 3 : " + str(pin) + " " + str(val) + "  type:" + str(pin_type)
-        self.anas[pin].updateGenericPin(val, pin_type)
-        print "updatePin(...) 4"
-        relSem()
-        print "updatePin(...) 5"
-#        print "<--- rel sem #####################################################################"
-
-    def updateAllOut(self):
-        print "will update late"
-#        for i in range(1,(size-1)):
-#            self.digs[i].setValCond()
-
-
-    def pinUpdateMode(self, pin, mode):
-#        print "digs at  " + str(pin) + " : " + str(self.digs[pin])
-        print "pinUpdateMode"
-        getSem()
-        self.digs[pin].setMode(mode)
-        relSem()
-
-    def pinUpdate(self, nr, val_str):
-        val=0
-#        print "CHECK pin set in GUI: "+str(nr)+ ": " + str(val)
-        if (val_str=="on"):
-            val=1
-        seasim_set_input(nr,val, 0)            
-#        self.updateAllOut()
-
-
 
 class FileChooserWindow(Gtk.Window):
 
@@ -522,13 +408,6 @@ class FileChooserWindow(Gtk.Window):
         dialog.destroy()
 
 
-def newDigOutCallback(pin, val):
-    if (pin>size):
-        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring pin mode update"
-    else:
-        global win
-        win.updateDigOutPin(pin,val)
-
 def newOutCallback(pin, val, pin_type):
     if (pin>size):
         print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring pin update"
@@ -538,12 +417,12 @@ def newOutCallback(pin, val, pin_type):
 
 def newLogCallback(level, text):
     getSem()
-    print "---------->"
+#    print "---------->"
 #    print "  LOG:  text  " + text
 #    print "  LOG:  level " + str(level)
 #    print "  LOG:  curr  " + str(currentLogLevel)
     if ( level == 10 ):
-        print " =======================  SERIAL "  + text
+ #       print " =======================  SERIAL "  + text
         try:
             time.sleep(0.001)
             iter1 = win.serialtextbuffer.get_end_iter()
@@ -560,7 +439,7 @@ def newLogCallback(level, text):
             time.sleep(10)
                     
     elif ( currentLogLevel <= level ):
-        print "********************************** WILL DO " + text
+#        print "********************************** WILL DO " + text
         try:
             time.sleep(0.001)
             iter2 = win.textbuffer.get_end_iter()
@@ -570,31 +449,22 @@ def newLogCallback(level, text):
         except Error:
             print "Error caught"
             time.sleep(10)
-    else:
-        print "********************************** DISCARD" + text
-    print "<----------"
+#    else:
+#        print "********************************** DISCARD" + text
+#    print "<----------"
     relSem()
 
-def newAnaOutCallback(pin, val):
-#    print ""
-#    print "==================== in Py:  new ANALOG out: " + str(pin) + " = " + str(val)
-#    print ""
-    if (pin>size):
-        print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
-    else:
-        global win
-        self.anas[pin].setVal(val)
 
 def newDigModeCallback(pin, mode):
 #    print ""
-    print ">==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
+#    print ">==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
     if (pin>size):
         print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring update"
     else:
         global win
         win.anas[pin].updateGenericMode(pin,mode)
-    print " done with new mode"
-    print "<==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
+#    print " done with new mode"
+#    print "<==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
 
 
 
@@ -621,7 +491,7 @@ def getArduinocodeLibrary():
     return file
     
 
-print "Main - will parse"
+#print "Main - will parse"
 
 parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator " + seasim_get_searduino_version() + ")')
 parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac",   help='Arduino code to test')
@@ -631,32 +501,23 @@ parser.add_argument('--version',      action='version', version=seasim_get_seard
 args = parser.parse_args()
 
 
-print "continue ..."
+#print "continue ..."
 
 ard_code=""
 i2c_code=""
 if args.ac != None:
-    print "AC code"
     ard_code=args.ac[0]
 else:
-    print "Reading via fc"
     ard_code=getArduinocodeLibrary()
 
 if args.ic != None:
     i2c_code=args.ic[0]
-    print "I2C   FOUND" + i2c_code
 
 if args.pins != None:
-    print "Setting pins to: " + args.pins[0]
-    global size
     size = int(args.pins[0])+2
 
-print "ARD CODE:" + ard_code
-
 if os.path.isdir(ard_code) == True:
-    print "Dir"
     command = "arduino-ex2c --shlib  --build " + ard_code
-    print "EXEC:   " + command
     os.system(command)
     code_dir = os.path.basename(ard_code)
 
@@ -679,14 +540,13 @@ if os.path.isdir(ard_code) == True:
             print "... " + file
 else:
     file_suff = os.path.splitext(ard_code)[1]
-    print "ARD CODE: " + file_suff
     if (file_suff == ".ino"):
         print "Arduino example"
     else:
         print "shlib: " + ard_code
         
-print "ard:  " + ard_code
-print "i2c:  " + i2c_code
+#print "ard:  " + ard_code
+#print "i2c:  " + i2c_code
 
 if i2c_code != "":
     seasim_add_i2c_device(50, i2c_code)
@@ -702,10 +562,6 @@ win.connect("delete-event", Gtk.main_quit)
 #parser.print_help()
 
        
-#/*
-#seasim_set_dig_callback(newDigOutCallback)
-#seasim_set_ana_callback(newAnaOutCallback)
-#*/
 seasim_set_callback(newOutCallback)
 seasim_set_dig_mode_callback(newDigModeCallback)
 seasim_set_log_callback(newLogCallback)
@@ -718,7 +574,6 @@ seasim_start();
 #sys.exit(1)
 
 
-#GObject.idle_add(newDigOutCallback)
 #GObject.idle_add(newAnaOutCallback)
 GObject.idle_add(newOutCallback)
 GObject.idle_add(newDigModeCallback)
