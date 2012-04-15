@@ -242,9 +242,7 @@ new_dig_mode(uint8_t pin, uint8_t mode)
 	  exit(1);
 	}
 
-      /* printf(" Arguments to callback:  ");      fflush(stdout); */
-      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
-
+      /* printf(" Arguments to callback:  ");      fflush(stdout);  */
       result = PyEval_CallObject(my_dig_mode_callback, arglist);
 
       Py_DECREF(arglist);
@@ -644,7 +642,6 @@ c_my_set_log_callback(PyObject *dummy, PyObject *args)
   PyObject *temp;
   PEARDUINO_PRINT_IN();
 
-  printf ("registering cb in PEAR\n");
   usleep(1000*1000*3);
 
   if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
