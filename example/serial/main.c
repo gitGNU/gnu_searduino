@@ -24,11 +24,6 @@
 #include <Arduino.h>
 #include "searduino.h"
 
-void setup() {
-  pinMode(13, OUTPUT);      
-}
-
-
 int main(void)
 {
   uint8_t i ;
@@ -40,7 +35,10 @@ int main(void)
     {
       i++;
       serial_stuff();
-      delay(10);
+      digitalWrite(13, HIGH);
+      delay(500);
+      digitalWrite(13, LOW);
+      delay(200);
     }
   return 0;
 }
