@@ -24,14 +24,20 @@
 #include <Arduino.h>
 #include "searduino.h"
 
+void setup() {
+  pinMode(13, OUTPUT);      
+  Serial.begin(9600);
+}
+
+
 extern "C" {
+
   void serial_stuff(void)
   {
-    static char i ;
+    static unsigned char i ;
     i++;
-    Serial.println("Serial.cpp prints: i=");
-    Serial.print(i);
-    Serial.print("\n");
-    delay(1000);
+    Serial.print("Serial.cpp prints: i=");
+    Serial.print((int)i);
+    Serial.print("\r\n");
   }
 }
