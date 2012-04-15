@@ -25,8 +25,6 @@
 #define ARDUINO_EXTRAS_SETUP_H
 
 
-#include "../../config.h"
-
 #if defined ARDUINO == stub
 #define ENABLE_SLEEP
 #include "setup.h"
@@ -43,10 +41,6 @@
 #else
 #define   SEARDUINO_LOOP() for (;;) 
 #endif
-
-
-#define SEARDUINO_VERSION  VERSION
-#define SEARDUINO_NAME     PACKAGE
 
 
 

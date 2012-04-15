@@ -17,15 +17,15 @@ dnl
 dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_PREREQ(2.63)
-AC_INIT([Searduino], [0.51], [hesa@sandklef.com])
+#AC_PREREQ(2.63)
+AC_INIT(Searduino,0.51,[hesa@sandklef.com])
 AC_COPYRIGHT([Copyright (c) 2012 Henrik Sandklef <hesa@sandklef.com>.])
 AC_CONFIG_AUX_DIR([build-aux])
+AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
-AM_INIT_AUTOMAKE([1.10 -Wall -Werror -Wno-override])
+#AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_SILENT_RULES([yes])
-
 AC_PROG_CXX
 AC_PROG_CC
 AC_LANG_C
@@ -180,8 +180,8 @@ AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile 
 
 AC_OUTPUT
 	
-AC_SUBST([VERSION])
-AC_SUBST([PACKAGE])
+AC_SUBST(VERSION)
+AC_SUBST(PACKAGE)
 
 AC_MSG_NOTICE([summary of build options:
   package:          ${PACKAGE} 

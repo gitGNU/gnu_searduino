@@ -26,12 +26,12 @@
 
 const char* seasim_get_searduino_version(void)
 {
-  return SEARDUINO_VERSION;
+  return VERSION;
 }
 
 const char* seasim_get_searduino_name(void)
 {
-  return SEARDUINO_NAME;
+  return PACKAGE;
 }
 
 

@@ -97,7 +97,9 @@ AM_CFLAGS= -I../arduino-sources/core           \
            -I../faked-arduino/include/         \
            -I../faked-arduino/include/avr      \
            -I../arduino-extras/include/        \
-           $(PEDANTIC_FLAGS)
+           $(PEDANTIC_FLAGS) -DPACKAGE="\"$(PACKAGE)\"" -DVERSION="\"$(VERSION)\""
+
+
 
 AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-sources/libraries/Wire  \
