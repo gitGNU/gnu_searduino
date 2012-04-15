@@ -3,13 +3,23 @@ News in 0.6
   New log window in Python GUI
   Added lib-libraries for linker to add
   Compilation warnings from pedantic mode
-
+  Serial window in Python GUI
+  Version number in programs (and seasim API)
 
   Fixed Savannah bugs: 
   ---------------------
-  #36061 analogWrite currently writes to analog pins (should be to digital pins)
-  #36049 configure error on i86
-
+   #36061  analogWrite currently writes to analog pins (should be to digital pins)
+   #36049  configure error on i86
+   #36188  SCrollbar missing in Parduino's log windows
+   #36173  Helper macros not in correct header files 
+   #36162  Add debug flag (choosesn during configure) to Searduino 	
+   #36158  digitalWrites etc don't show up in Mac     
+   #36142  Remove generated files from git    
+   #36103  Minor error in binary install instructions in manual
+   #36075  Missing version information in programs    
+   #36072  Libraries for arduino are built when install
+   #36061  analogWrite currently writes to analog pins (should be to digital pins)
+   #36050  Compilation warnings on i686
 
 News in 0.5
 
