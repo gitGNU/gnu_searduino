@@ -78,7 +78,7 @@ size_t Print::print(const char str[])
 
 size_t Print::print(char c)
 { 
-  // printf ("C=%d\n", c);
+  printf ("C=%d\n", c);
   serial_print_c(c);
   return 1;
 }
@@ -103,7 +103,8 @@ size_t Print::print(long n, int base)
   if (base == 0) {
     return printf("%ld",n);
   } else if (base == 10) {
-    PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
+    serial_print_l(n);
+    //    PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
   }
   return 0;
 }

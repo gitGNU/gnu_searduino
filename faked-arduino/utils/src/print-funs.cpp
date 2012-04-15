@@ -133,6 +133,19 @@ serial_print_c(char c )
     }
 }
 
+void 
+serial_print_l(long l )
+{
+  char buffer[10];
+
+  sprintf(buffer, "%u", l);
+
+  if (log_sim_callback!=NULL)
+    {
+      log_sim_callback(SEARDUINO_LOG_SERIAL, buffer);
+    }
+}
+
 
 /* Make the functions (who calls C++ methods) available in C */
 extern "C" {
