@@ -51,6 +51,7 @@ void log_error(char* s,  ...);
 void log_warning(char* s,  ...);
 void serial_print_s(char* s, ...);
 void serial_print_c(char c);
+  void serial_print_l(long l );
   
 
 #ifdef  SEARDUINO_STUB
