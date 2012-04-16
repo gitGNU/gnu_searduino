@@ -41,37 +41,8 @@ loop (see @uref{http://en.wikipedia.org/wiki/Embedded_system#Simple_control_loop
 So a very simple main function looks like this
 @*
 @*
-@code{#include <Arduino.h>}
-@*
-@code{#include <searduino.h>}
-@*
-@*
-@*
-@code{int main(void)}
-@*
-@{
-@*
-@code{  for(;;)}
-@*
-@code{    }
-@{
-@*
-@code{init();}
-@*
-@*
-@code{       digitalWrite(13, 1);}
-@*
-@code{       delay(100);}
-@*
-@code{       digitalWrite(13, 0);}
-@*
-@code{       delay(100);}
-@*
-@code{   }
-@}
-@*
-@}
-@*
+@include example_01.texi
+
 @*
 @*
 @i{Note: this program sets pin 13 high and low with 0.1 secs
@@ -106,22 +77,7 @@ Searduino. This is done by adding the following line to your Makefile.
 A Makefile to build the code above can look like this:
 @*
 @*
-@code{SEARDUINO_PATH=/opt/searduino/}
-@*
-@code{SRC_C=seardex.c}
-@*
-@code{SRC_CXX=}
-@*
-@code{ARDUINO=stub}
-@*
-@code{PROG=seardex}
-@*
-@code{SHLIB=seardex.so}
-@*
-@code{include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk}
-@*
-@*
-
+@include example_m_01.texi
 
 
 @i{Note: You don't have to use the makefiles provided by

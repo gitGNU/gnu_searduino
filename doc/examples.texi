@@ -18,37 +18,7 @@
 @section Example C code
 @*
 @*
-@code{#include <Arduino.h>}
-@*
-@code{#include <searduino.h>}
-@*
-@*
-@*
-@code{int main(void)}
-@*
-@{
-@*
-@code{init();}
-@*
-@*
-@code{  for(;;)}
-@*
-@code{    }
-   @{
-@*
-@code{       digitalWrite(13, 1);}
-@*
-@code{       delay(400);}
-@*
-@code{       digitalWrite(13, 0);}
-@*
-@code{       delay(400);}
-@*
-@code{   }
-    @}
-@*
-@}
-@*
+@include example_01.texi
 
 @section Building the example
 
