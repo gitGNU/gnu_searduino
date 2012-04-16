@@ -98,7 +98,6 @@ $(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
 
 #$(MAIN_SRC).hex:   $(MAIN_SRC).o $(LIB) $(MAIN_SRC).elf
 $(PROG).hex:   $(OBJ_MAIN) $(LIB) $(PROG).elf
-	echo HEX
 	$(OBJ_CP)  -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(PROG).elf $(PROG).eep 
 	$(OBJ_CP)  -O ihex -R .eeprom $(PROG).elf $(PROG).hex  
 
