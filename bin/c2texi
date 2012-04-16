@@ -1,0 +1,40 @@
+#!/bin/bash
+
+C_FILE=$1
+TEXI_FILE=$2
+
+if [ "$C_FILE" = "-" ] 
+then
+    TEXI_FILE=""
+    C_FILE=""
+elif [ ! -f "$C_FILE" ] || [ "$C_FILE" = "" ] 
+then
+    echo "Missing C file arg (to read from stdin, us \"-\""
+    exit 1
+fi
+
+
+if [ "$TEXI_FILE" = "" ]
+then
+    TEXI_FILE="$(echo $C_FILE | sed 's,\.c,\.texi,g')"
+fi
+
+#echo "$C_FILE => $TEXI_FILE"
+
+cat $C_FILE | awk ' { \
+      if      ( $0 ~ /^[ \t]*$/ )    { printf "@*\n"} \
+      else if ( $0 ~ /^[ \t\{]*$/ ) { printf "@*\n@{\n@*\n"} \
+      else if ( $0 ~ /^[ \t\}]*$/ ) { printf "@*\n@}\n@*\n"} \
+      else                           { printf "@code{%s}\n@*\n", $0} \
+     } ' > c2texi.tmp
+
+if [ "$TEXI_FILE" = "" ]
+then
+    cat c2texi.tmp
+    rm c2texi.tmp
+else
+    mv c2texi.tmp $TEXI_FILE
+fi
+
+
+

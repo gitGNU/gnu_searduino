@@ -1,0 +1,35 @@
+#!/bin/bash
+
+M_FILE=$1
+TEXI_FILE=$2
+
+if [ "$M_FILE" = "-" ] 
+then
+    TEXI_FILE=""
+    M_FILE=""
+elif [ ! -f "$M_FILE" ] || [ "$M_FILE" = "" ] 
+then
+    echo "Missing Makefile arg (to read from stdin, us \"-\""
+    exit 1
+fi
+
+
+if [ "$TEXI_FILE" = "" ]
+then
+    TEXI_FILE="$(echo $M_FILE | sed 's,\.m,\.texi,g')"
+fi
+
+cat $M_FILE | awk ' { \
+       { printf "@code{%s}\n@*\n", $0} \
+     } ' > m2texi.tmp
+
+if [ "$TEXI_FILE" = "" ]
+then
+    cat m2texi.tmp
+    rm m2texi.tmp
+else
+    mv m2texi.tmp $TEXI_FILE
+fi
+
+
+
