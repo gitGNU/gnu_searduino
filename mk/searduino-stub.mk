@@ -51,16 +51,16 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
 SEARDUINO_LIB=-lsearduinostub
 LIBRARIES_LIB=
 
-SEARDUINO_STUB=dummyvalue
+
 
 _CFLAGS=   -g $(USER_C_FLAGS) -Wall -fPIC \
             $(LIB_FLAGS) \
             $(MODULE_C_FLAGS) \
-            $(INC_FLAGS)
+            $(INC_FLAGS) -DSEARDUINO_STUB
 
 _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
              $(MODULE_CXX_FLAGS) \
-             $(INC_FLAGS)
+             $(INC_FLAGS) -DSEARDUINO_STUB
 
 _LDFLAGS = $(USER_LD_FLAGS) -lpthread -Wl,-rpath,$(SEARDUINO_PATH)/lib 
 

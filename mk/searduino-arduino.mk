@@ -29,7 +29,7 @@ endif
 
 include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
 
-SEARDUINO_ARDUINO=dummyvalue
+
 
 OBJ_PATH = ./
 ifdef USER_OBJ_PATH
@@ -74,7 +74,7 @@ LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -ffunction-sections -fdata-sections \
                           -mmcu=$(CPU) -DF_CPU=$(F_CPU) \
                           -DARDUINO=$(ARDUINO_VERSION) \
-                           $(INC_FLAGS)
+                           $(INC_FLAGS) -DSEARDUINO_ARDUINO
 
 SEARDUINO_LIB=-lsearduino
 LIBRARIES_LIB=-llibraries

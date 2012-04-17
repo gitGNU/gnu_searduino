@@ -1,10 +1,11 @@
-News in 0.6
+News in coming release
 
   New log window in Python GUI
   Added lib-libraries for linker to add
   Compilation warnings from pedantic mode
   Serial window in Python GUI
   Version number in programs (and seasim API)
+  Setting ARDUINO=100 in makefiles (used to determine version)
 
   Fixed Savannah bugs: 
   ---------------------
