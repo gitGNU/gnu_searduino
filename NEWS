@@ -1,4 +1,4 @@
-News in coming release
+News in 0.6
 
   New log window in Python GUI
   Added lib-libraries for linker to add
@@ -21,6 +21,7 @@ News in coming release
    #36072  Libraries for arduino are built when install
    #36061  analogWrite currently writes to analog pins (should be to digital pins)
    #36050  Compilation warnings on i686
+   #36220  Read status of output pin
 
 News in 0.5
 
