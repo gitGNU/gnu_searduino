@@ -76,13 +76,6 @@ efile: $(E_C) $(E_CXX)
 
 all: $(PROG) $(LIB) $(OBJ_C) $(OBJ_CXX)
 
-#OBJ_C = $(SRC_C:.c=.o)
-#OBJ_CXX = $(SRC_CXX:.cpp=.o)
-#OBJ_JAVA= $(SRC_JAVA:.java=.o)
-
-#$(SHLIB): clean $(OBJ_C)  $(OBJ_CXX) 
-#	echo "msmsm"
-
 shlib: $(SHLIB)
 
 $(LIB): $(OBJ_C)  $(OBJ_CXX) 
@@ -92,10 +85,10 @@ $(LIB): $(OBJ_C)  $(OBJ_CXX)
 	@echo "Created lib: $(LIB)   for $(BOARD) $(ARDUINO)"
 
 $(SHLIB): LIB_FLAGS:=-Dmain=searduino_main
-$(SHLIB): $(OBJ_C)  $(OBJ_CXX) 
+$(SHLIB): $(OBJ_MAIN) $(OBJ_C)  $(OBJ_CXX) 
 	@echo "Creating directory: $(LIB_PATH)/"
 	mkdir -p $(LIB_PATH)/
-	$(CXX)  -shared  $(OBJ_C)  $(OBJ_CXX)   -o $(SHLIB) $(LDFLAGS)
+	$(CXX)  -shared  $(OBJ_MAIN) $(OBJ_C)  $(OBJ_CXX)   -o $(SHLIB) $(LDFLAGS)
 	@echo "Created lib: $(SHLIB)"
 
 
