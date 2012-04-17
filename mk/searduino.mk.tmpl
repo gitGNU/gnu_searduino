@@ -28,8 +28,20 @@ endif
 UNAME := $(shell uname -s)
 
 ARDUINO_VERSION=100
-SEARDUINO_MK_PATH=__INSTALL_DIR__/share/searduino/
-SEARDUINO_INC_PATH=__INSTALL_DIR__/include/searduino/
+
+#
+# Under cygwin, we need to add "C:\\cygwin" to the path
+#   .... we're assuming cygwin has been installed to 
+#   the default installation dir
+#
+ROOT_PATH=""
+ifeq ($(UNAME), CYGWIN_NT_5.1)
+  ROOT_PATH="C:\\\\cygwin"
+endif
+
+
+SEARDUINO_MK_PATH=$(ROOT_PATH)__INSTALL_DIR__/share/searduino/
+SEARDUINO_INC_PATH=$(ROOT_PATH)__INSTALL_DIR__/include/searduino/
 
 ifeq (${ARDUINO},stub)
 include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
@@ -37,6 +49,6 @@ else
 include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
 endif
 
-SEARDUINO_LIB_PATH=-L__INSTALL_DIR__/libs/searduino/arduino-libs/$(BOARD) -L__INSTALL_DIR__/lib
+SEARDUINO_LIB_PATH=-L$(ROOT_PATH)__INSTALL_DIR__/libs/searduino/arduino-libs/$(BOARD) -L$(ROOT_PATH)__INSTALL_DIR__/lib
 
 include $(SEARDUINO_MK_PATH)/mk/searduino-functions.mk
