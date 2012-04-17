@@ -8,7 +8,7 @@ E_CXX = $(SRC_CXX:.cpp=.E)
 #OBJ_CXX = $(SRC_CXX:.cpp=.o) 
 #OBJ_MAIN = $(MAIN_SRC:.c=.o) 
 
-OBJ_PATH = ./
+OBJ_PATH = 
 ifdef USER_OBJ_PATH
 OBJ_PATH = $(USER_OBJ_PATH)
 endif
