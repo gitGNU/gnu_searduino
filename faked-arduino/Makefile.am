@@ -31,6 +31,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/error.h \
        ./include/avr/interrupt.h \
        ./include/avr/io.h \
+       ./include/avr/eeprom.h \
        ./include/avr/pgmspace.h \
        ./include/avr/util/delay.h \
        ./include/arduino/wiring_private.h \
