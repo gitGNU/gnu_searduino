@@ -97,6 +97,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
 int digitalRead(uint8_t pin)
 {
   searduino_setup();
+
   if (PIN_OUT_OF_RANGE(pin))
     {
       SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
@@ -105,12 +106,7 @@ int digitalRead(uint8_t pin)
 
   if ( get_digital_pin_mode(pin) != INPUT )
     {
-      fprintf(stderr, 
-	      "Can't read from a pin (%d) with mode (%d) NOT set INPUT\n",
-	      pin, get_digital_pin_mode(pin));
-      log_error("Can't read from an OUTPUT pin");
-      SEARD_ERROR(SEARD_ARDUINO_WRONG_PIN_MODE);
-      return 0;
+      log_error("You're reading from pin %d, which is an OUTPUT pin", pin);
     }
   
 
