@@ -25,7 +25,7 @@
 #define ARDUINO_EXTRAS_SETUP_H
 
 
-#if defined ARDUINO == stub
+#ifdef SEARDUINO_STUB
 #define ENABLE_SLEEP
 #include "setup.h"
 #include <stdio.h>
