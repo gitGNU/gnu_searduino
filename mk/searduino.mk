@@ -21,30 +21,23 @@
 #
 #
 
-ifeq ($(UNAME), Linux)
-  ifeq (${ARDUINO},due)
-	USB_DEV=/dev/ttyACM0
-  endif
-  ifeq (${ARDUINO},uno)
-	USB_DEV=/dev/ttyUSB0
-  endif
-endif
-ifeq ($(UNAME), Darwin)
-	USB_DEV=/dev/change-me-atmega328.mk
+ifndef ARDUINO
+$(error Variables not set correctly ARDUINO='${ARDUINO}')
+endif		
+
+UNAME := $(shell uname -s)
+
+
+ARDUINO_VERSION=100
+SEARDUINO_MK_PATH=/opt/searduino/share/searduino/
+SEARDUINO_INC_PATH=/opt/searduino/include/searduino/
+
+ifeq (${ARDUINO},stub)
+include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
+else
+include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
 endif
 
-board_name="Arduino Duemilanove w/ ATmega328"
-board_upload.protocol="arduino"
-board_upload.maximum_size="30720"
-board_upload.speed=115200
-board_bootloader.low_fuses="0xFF"
-board_bootloader.high_fuses="0xDA"
-board_bootloader.extended_fuses="0x05"
-board_bootloader.path="atmega"
-board_bootloader.file="ATmegaBOOT_168_board_hex"
-board_bootloader.unlock_bits="0x3F"
-board_bootloader.lock_bits="0x0F"
-board_build.mcu="board_"
-board_build.f_cpu=16000000L
-board_build.core="arduino"
-board_build.variant="standard"
+SEARDUINO_LIB_PATH=-L/opt/searduino/libs/searduino/arduino-libs/$(BOARD) -L/opt/searduino/lib
+
+include $(SEARDUINO_MK_PATH)/mk/searduino-functions.mk

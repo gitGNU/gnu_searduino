@@ -20,6 +20,13 @@
 # MA  02110-1301, USA.                                                          
 #                                                                               
 #                                                                               
+ifeq ($(UNAME), Linux)
+      USB_DEV=/dev/ttyACM0
+endif
+ifeq ($(UNAME), Darwin)
+	USB_DEV=/dev/change-me-atmega1280.mk
+endif
+
 
 
 board_name="Arduino Mega 2560"

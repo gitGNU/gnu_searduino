@@ -21,6 +21,14 @@
 #
 #
 
+ifeq ($(UNAME), Linux)
+	USB_DEV=/dev/ttyUSB0
+endif
+ifeq ($(UNAME), Darwin)
+	USB_DEV=/dev/change-me-atmega1280.mk
+endif
+
+
 
 board_name="Arduino Mega (ATboard_280)"
 board_upload.protocol="arduino"
