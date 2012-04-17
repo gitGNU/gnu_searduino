@@ -25,6 +25,8 @@ ifndef ARDUINO
 $(error Variables not set correctly ARDUINO='${ARDUINO}')
 endif		
 
+UNAME := $(shell uname -s)
+
 ARDUINO_VERSION=100
 SEARDUINO_MK_PATH=__INSTALL_DIR__/share/searduino/
 SEARDUINO_INC_PATH=__INSTALL_DIR__/include/searduino/
