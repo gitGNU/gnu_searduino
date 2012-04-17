@@ -443,8 +443,7 @@ def newLogCallback(level, text):
         try:
             time.sleep(0.001)
             iter2 = win.textbuffer.get_end_iter()
-            print "mark2 " + str(iter2.get_offset())
-            win.textbuffer.insert(iter2, text)
+w            win.textbuffer.insert(iter2, text)
             time.sleep(0.001)
         except Error:
             print "Error caught"
