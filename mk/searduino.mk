@@ -26,14 +26,15 @@ $(error Variables not set correctly ARDUINO='${ARDUINO}')
 endif		
 
 ARDUINO_VERSION=100
-SEARDUINO_MK_PATH=$(SEARDUINO_PATH)/
-SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
-SEARDUINO_LIB_PATH=-L$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD) -L$(SEARDUINO_PATH)/faked-arduino/.libs 
+SEARDUINO_MK_PATH=/opt/searduino/share/searduino/
+SEARDUINO_INC_PATH=/opt/searduino/include/searduino/
 
 ifeq (${ARDUINO},stub)
 include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
 else
 include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
 endif
+
+SEARDUINO_LIB_PATH=-L/opt/searduino/libs/searduino/arduino-libs/$(BOARD) -L/opt/searduino/lib
 
 include $(SEARDUINO_MK_PATH)/mk/searduino-functions.mk
