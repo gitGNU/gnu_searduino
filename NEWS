@@ -22,6 +22,7 @@ News in 0.6
    #36061  analogWrite currently writes to analog pins (should be to digital pins)
    #36050  Compilation warnings on i686
    #36220  Read status of output pin
+   #36223  SEARDUINO_PATH incorrect in verify-install.sh
 
 News in 0.5
 
