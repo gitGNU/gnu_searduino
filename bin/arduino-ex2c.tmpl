@@ -193,7 +193,7 @@ create_makefile()
           sed "s,__ARDUINO_VALUE__,$ARDUINO_VALUE,g"   | \
           sed "s,__SEARDUINO_PATH__,$SEARDUINO_PATH,g" | \
 	  sed "s,__BUILD_LD_FLAGS__,$BUILD_LD_FLAGS,g" | 
-	  sed "s,__SHLIB_LIBS__,$SHLIB_LIBS,g" | \
+	  sed "s,__SHLIB_LIBS__,$SHLIB_LIBS,g"  \
           > $ARD_DIR/Makefile
     exit_on_failure $? "Creating Makefile "
 #          sed "s,__MAIN_FILE__,$MAIN_FILE,g" | \
