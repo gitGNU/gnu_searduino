@@ -1,6 +1,6 @@
 SUBDIRS = arduino-sources arduino-extras faked-arduino extensions simulators mk example test 
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh 
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 
 
 
 ARD_SRC= \
@@ -97,7 +97,7 @@ ARD_EXAMPLES = \
     ard-ex/1.Basics/Blink/Blink.ino 
 
 
-bin_SCRIPTS = bin/arduino-ex2c bin/functions bin/verify-install.sh 
+bin_SCRIPTS = bin/arduino-ex2c bin/functions bin/verify-install.sh bin/find_port.sh
 
 
 pkgdataexampledir = $(pkgdatadir)/tmpl
