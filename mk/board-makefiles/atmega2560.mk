@@ -20,13 +20,18 @@
 # MA  02110-1301, USA.                                                          
 #                                                                               
 #                                                                               
-ifeq ($(UNAME), Linux)
-      USB_DEV=/dev/ttyACM0
-endif
-ifeq ($(UNAME), Darwin)
-	USB_DEV=/dev/change-me-atmega1280.mk
-endif
 
+ifeq ("$(USB_DEV)", "")
+  ifeq ($(UNAME), Linux)
+	USB_DEV=/dev/ttyACM0
+  endif
+  ifeq ($(UNAME), Darwin)
+	USB_DEV=unknown-port-$(ARDUINO)
+  endif
+  ifeq ($(UNAME), CYGWIN_NT_5.1)
+	USB_DEV="\\.\COM1"
+  endif
+endif
 
 
 board_name="Arduino Mega 2560"

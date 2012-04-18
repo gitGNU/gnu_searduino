@@ -21,13 +21,17 @@
 #
 #
 
-ifeq ($(UNAME), Linux)
+ifeq ("$(USB_DEV)", "")
+  ifeq ($(UNAME), Linux)
 	USB_DEV=/dev/ttyUSB0
+  endif
+  ifeq ($(UNAME), Darwin)
+	USB_DEV=unknown-port-$(ARDUINO)
+  endif
+  ifeq ($(UNAME), CYGWIN_NT_5.1)
+	USB_DEV="\\.\COM1"
+  endif
 endif
-ifeq ($(UNAME), Darwin)
-	USB_DEV=/dev/change-me-atmega1280.mk
-endif
-
 
 
 board_name="Arduino Mega (ATboard_280)"
