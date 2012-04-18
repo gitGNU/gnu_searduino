@@ -91,6 +91,8 @@ AC_ARG_ENABLE([shared-test],
 
 if test "$python_enabled" = "yes"; then
 # Check for program
+# Keep this echo, it's needed on cygwin
+echo
   AM_MISSING_PROG(PYTHON, python, $missing_dir)
 #   AX_PYTHON_DEVEL([])
 #   AX_PYTHON_DEVEL([">= '2.7'"])
