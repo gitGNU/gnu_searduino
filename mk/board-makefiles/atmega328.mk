@@ -30,10 +30,11 @@ ifeq ("$(USB_DEV)", "")
 	USB_DEV=/dev/ttyUSB0
     endif
   endif
+
   ifeq ($(UNAME), Darwin)
 	USB_DEV=unknown-port-$(ARDUINO)
   endif
-  ifeq ($(UNAME), CYGWIN_NT_5.1)
+  ifeq ($(UNAME), CYGWIN_NT-5.1)
 	USB_DEV="\\.\COM1"
   endif
 endif

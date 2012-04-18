@@ -65,7 +65,7 @@ _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
 _LDFLAGS = $(USER_LD_FLAGS) -lpthread -Wl,-rpath,$(SEARDUINO_PATH)/lib 
 
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN)
-	$(CC) $(LIB) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS)
+	$(CXX) $(LIB) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS)
 
 
 plugin: ARDUINO=stub
