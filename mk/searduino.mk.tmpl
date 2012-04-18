@@ -34,9 +34,9 @@ ARDUINO_VERSION=100
 #   .... we're assuming cygwin has been installed to 
 #   the default installation dir
 #
-ROOT_PATH=""
-ifeq ($(UNAME), CYGWIN_NT_5.1)
-  ROOT_PATH="C:\\\\cygwin"
+ROOT_PATH=
+ifeq ($(UNAME), CYGWIN_NT-5.1)
+  ROOT_PATH=C:\\\\cygwin
 endif
 
 
