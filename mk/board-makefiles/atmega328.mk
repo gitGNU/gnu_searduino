@@ -42,7 +42,12 @@ endif
 board_name="Arduino Duemilanove w/ ATmega328"
 board_upload.protocol="arduino"
 board_upload.maximum_size="30720"
-board_upload.speed=115200
+ifeq (${ARDUINO},due)
+   board_upload.speed=57600
+endif
+ifeq (${ARDUINO},uno)
+   board_upload.speed=115200
+endif
 board_bootloader.low_fuses="0xFF"
 board_bootloader.high_fuses="0xDA"
 board_bootloader.extended_fuses="0x05"
