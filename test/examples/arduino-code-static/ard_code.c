@@ -22,7 +22,7 @@
  ****/
 
 #include <Arduino.h>
-#include "setup.h"
+#include "searduino.h"
 
 void setup(void) {
   pinMode(13, OUTPUT);      
