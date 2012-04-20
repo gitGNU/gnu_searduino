@@ -189,7 +189,7 @@ prepare_examples()
 prepare_searduino_mk()
 {
     export CYGWIN=""
-    if [ "$(uname -s | grep -i -c cygwin)" != "0" ]
+    if test "$(uname -s | grep -i -c cygwin)" != "0" ;
     then   
         CYGWIN="true"
     fi
