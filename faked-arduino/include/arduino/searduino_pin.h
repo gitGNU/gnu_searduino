@@ -29,7 +29,7 @@
 #include "arduino/error.h"
 #include "utils/error.h"
 #ifdef __MINGW32__
-#include <time.h>
+#include <sys/time.h>
 #endif
 #ifdef __CYGWIN32__
 #include <sys/time.h>
