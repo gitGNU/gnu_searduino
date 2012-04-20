@@ -135,6 +135,39 @@ exit_on_failure()
 }
 
 
+set_lversion()
+{
+    VERSION_SPLIT=`echo  ${VERSION} | sed 's,\., ,g'` 
+    VERSION_LONG_MAJOR=`echo ${VERSION_SPLIT} | awk '{print $1}' `
+    VERSION_LONG_MINOR=`echo ${VERSION_SPLIT} | awk '{print $2}' `
+    VERSION_LONG_PREPARE=`echo ${VERSION_SPLIT} | awk '{print $3}' `
+
+#    echo "$VERSION_LONG_MAJOR - $VERSION_LONG_MINOR - $VERSION_LONG_PREPARE"
+
+    VERSION_LONG=0
+
+    if test "x$VERSION_LONG_MAJOR" != "x" ;
+    then
+	VERSION_LONG=`echo "$VERSION_LONG_MAJOR * 10000" | bc`
+    fi
+    if test "x$VERSION_LONG_MINOR" != "x" ;
+    then
+	if test $VERSION_LONG_MINOR -gt 99 ; 
+	then
+	    echo "You can't have minor version greater than 99 (you've set it to $VERSION_LONG_MINOR)"
+	    exit
+	fi
+	VERSION_LONG=`echo "$VERSION_LONG + $VERSION_LONG_MINOR * 100 " | bc`
+    fi
+    if test "x$VERSION_LONG_PREPARE" != "x" ;
+    then
+	VERSION_LONG=`echo "$VERSION_LONG + $VERSION_LONG_PREPARE " | bc`
+    fi
+
+ #   echo "VERSION_LONG is now:     $VERSION_LONG  / $VERSION"
+}
+
+
 
 ./bin/get-arduino-src.sh
 exit_on_failure $? ./bin/get-arduino-src.sh
@@ -152,9 +185,25 @@ prepare_examples()
     exit_on_failure $? "Prepared  python-digcounter"
 }
 
+
 prepare_searduino_mk()
 {
-    cat mk/searduino.mk.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > mk/searduino.mk
+    export CYGWIN=""
+    if [ "$(uname -s | grep -i -c cygwin)" != "0" ]
+    then   
+        CYGWIN="true"
+    fi
+#  CYGWIN_NT-6.1
+#  CYGWIN_NT-6.1-WOW64
+#  CYGWIN_NT-5.1
+	
+    export VERSION_LONG=""
+    set_lversion
+    cat mk/searduino.mk.tmpl  | \
+        sed "s,__INSTALL_DIR__,${prefix},g" | \
+        sed "s,__CYGWIN__,${CYGWIN},g" | \
+        sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"  > \
+        mk/searduino.mk
     exit_on_failure $? "Prepared searduino.mk "
 
     cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > arduino-sources/Makefile
@@ -189,6 +238,7 @@ AC_MSG_NOTICE([summary of build options:
   package:          ${PACKAGE} 
   version:          ${VERSION} 
   Host type:        ${host}
+  Target:           ${target}
   Install prefix:   ${prefix}
   Compiler:         ${CC}
   Warning flags:    ${WARN_CFLAGS}
