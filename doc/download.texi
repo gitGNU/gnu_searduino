@@ -5,6 +5,7 @@
 @subsection Debian based GNU/Linux distributions:
 @itemize @bullet
 @item gcc-avr
+@item g++
 @item binutils-avr
 @item avrdude
 @item avrprog
@@ -13,9 +14,11 @@
 
 @subsection Windows:
 @itemize @bullet
-@item WinAVR
-@item cygwin (gcc, g++, make)
+@item Arduino (we need the avrdue program in there)
+@item cygwin (gcc-core, gcc-g++, make)
 @end itemize
+
+@i{Note: Don't install WinAVR (avrdude doesn't seem to work)}
 
 @subsection Mac:
 @itemize @bullet
