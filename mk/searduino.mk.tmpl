@@ -25,6 +25,21 @@ ifndef ARDUINO
 $(error Variables not set correctly ARDUINO='${ARDUINO}')
 endif		
 
+SEARDUINO_VERSION=__SEARDUINO_VERSION__
+
+#
+#
+#
+ifdef REQUESTED_SEARDUINO_VERSION
+
+  VERSION_OK := $(shell [ $(REQUESTED_SEARDUINO_VERSION) -gt  $(SEARDUINO_VERSION) ] && echo true)
+
+  ifeq ($(VERSION_OK),true)    
+     $(error "You've requested version ${REQUESTED_SEARDUINO_VERSION} of Searudino and ${SEARDUINO_VERSION} is installed")
+  endif
+
+endif
+
 UNAME := $(shell uname -s)
 
 ARDUINO_VERSION=100
@@ -36,6 +51,12 @@ ARDUINO_VERSION=100
 #
 ROOT_PATH=
 ifeq ($(UNAME), CYGWIN_NT-5.1)
+  ROOT_PATH=C:\\\\cygwin
+endif
+ifeq ($(UNAME), CYGWIN_NT-6.1-WOW64)
+  ROOT_PATH=C:\\\\cygwin
+endif
+ifeq ($(UNAME), CYGWIN_NT-6.1)
   ROOT_PATH=C:\\\\cygwin
 endif
 
