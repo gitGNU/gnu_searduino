@@ -24,7 +24,7 @@
 #include "Arduino.h"
 #include <stdio.h>
 #include <stdarg.h>
-#include <unistd.h>
+//#include <unistd.h>
 #include "utils/print.h"
 #include "arduino/ext_io.h"
 
