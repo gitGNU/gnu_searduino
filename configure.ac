@@ -18,7 +18,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #AC_PREREQ(2.63)
-AC_INIT([Searduino], [0.6], [hesa@sandklef.com])
+AC_INIT([Searduino], [0.61], [hesa@sandklef.com])
 AC_COPYRIGHT([Copyright (c) 2012 Henrik Sandklef <hesa@sandklef.com>.])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
@@ -31,9 +31,11 @@ AM_SILENT_RULES([yes])
 AC_PROG_CXX
 AC_PROG_CC
 # PREPARING FOR USING GNULIB (for pthread.h)
-#gl_EARLY
-#gl_INIT
+gl_EARLY
+gl_INIT
 AC_LANG_C
+AC_LIBTOOL_DLOPEN
+AC_LIBLTDL_CONVENIENCE
 AC_PROG_LIBTOOL
 AM_PROG_CC_C_O
 
@@ -41,6 +43,17 @@ AM_PROG_CC_C_O
 # Checks for header files.
 AC_HEADER_STDC
 
+AC_CHECK_HEADER([ltdl.h],
+    [AC_CHECK_LIB([ltdl], [lt_dladvise_init],
+        [LIBLTDL=-lltdl], [LIBLTDL=])],
+    [LIBLTDL=])
+
+# libtool impl of dlopen
+LT_INIT([dlopen])
+#LT_CONFIG_LTDL_DIR([libltdl])
+AC_CONFIG_SUBDIRS(libltdl)		 
+
+#LTDL_INIT([subproject])
 
 AC_ARG_ENABLE([pedantic],
   [AS_HELP_STRING([--enable-pedantic],
@@ -113,24 +126,24 @@ if test "$ut_enabled" = "yes"; then
 fi
 
 # GNULIB 
-#gl_PTHREAD_CHECK
+gl_PTHREAD_CHECK
 
 AM_CONDITIONAL(PYTHON_SUPPORT, test "x$python_enabled" = "xyes")
 AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
 AM_CONDITIONAL(SHAREDTEST,     test "x$st_enabled"     = "xyes")
 
 # GNULIB
-#AM_CONDITIONAL(GL_GENERATE_PTHREAD_H, test "x$ac_cv_header_pthread_h"  = "xno")
-#AM_CONDITIONAL(GL_GENERATE_SCHED_H,   test "x$ac_cv_header_pthread_h"  = "xno")
-#AM_CONDITIONAL(GL_GENERATE_STDDEF_H,  test "x$ac_cv_header_pthread_h"  = "xno")
+AM_CONDITIONAL(GL_GENERATE_PTHREAD_H, test "x$ac_cv_header_pthread_h"  = "xno")
+AM_CONDITIONAL(GL_GENERATE_SCHED_H,   test "x$ac_cv_header_pthread_h"  = "xno")
+AM_CONDITIONAL(GL_GENERATE_STDDEF_H,  test "x$ac_cv_header_pthread_h"  = "xno")
 
-#if test "x$ac_cv_header_pthread_h"  = "xno"; then
-#   echo " ***  Will generate pthread.h from gnulib  "
-#   GL_GENERATE_PTHREAD_H=true
-#   AC_SUBST([GL_GENERATE_PTHREAD_H])
-#   AC_SUBST([GL_GENERATE_SCHED_H])
-#   AC_SUBST([GL_GENERATE_STDDEF_H])
-#fi
+if test "x$ac_cv_header_pthread_h"  = "xno"; then
+   echo " ***  Will generate pthread.h from gnulib  "
+   GL_GENERATE_PTHREAD_H=true
+   AC_SUBST([GL_GENERATE_PTHREAD_H])
+   AC_SUBST([GL_GENERATE_SCHED_H])
+   AC_SUBST([GL_GENERATE_STDDEF_H])
+fi
 
 #
 # Set up misc stuff:
@@ -144,7 +157,7 @@ esac
 AC_SUBST([SHLIB_EXT])
 
 # GNULIB
-#AC_SUBST(GL_GENERATE_PTHREAD_H)
+AC_SUBST(GL_GENERATE_PTHREAD_H)
 
 exit_on_failure()
 {
@@ -250,14 +263,16 @@ cat bin/arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > bin/arduino-ex
 exit_on_failure $? "Prepared Arduino examples to C translator"
 
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile ])
-# GNULIB
-# lib/Makefile
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile  ])
+
+
 
 AC_OUTPUT
 	
 AC_SUBST(VERSION)
 AC_SUBST(PACKAGE)
+AC_SUBST(INCLTDL)
+AC_SUBST(LIBLTDL)	
 
 AC_MSG_NOTICE([summary of build options:
   package:          ${PACKAGE} 
@@ -274,7 +289,7 @@ AC_MSG_NOTICE([summary of build options:
   Unit test flags:  C: '$CHECK_CFLAGS'   LD: '$CHECK_LIBS'
   Shared lib test:  $st_enabled
   Pedantic flags:   $PEDANTIC_FLAGS
-#  Pthreads:         $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
+  Pthreads:         $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
 ])
 
 

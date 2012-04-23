@@ -6,5 +6,5 @@ cat configure.ac.orig | \
       -e 's,AC_PYTHON_DEVEL,#AC_PYTHON_DEVEL,g' > configure.ac 
 
 make -f Makefile.git && \
-  ./configure --disable-python --disable-unittest && \
+  ./configure --disable-python --disable-unittest --prefix=/opt/searduino && \
   make && make install
