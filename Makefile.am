@@ -1,4 +1,4 @@
-SUBDIRS =  arduino-sources arduino-extras faked-arduino extensions simulators mk example test 
+SUBDIRS =  libltdl arduino-sources arduino-extras faked-arduino extensions simulators mk example test 
 # lib
 
 SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 
@@ -113,7 +113,8 @@ dist_pkgdataexample_DATA = \
 
 
 
-EXTRA_DIST =  ${ARD_SRC} ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl m4/gnulib-cache.m4
+EXTRA_DIST =  ${ARD_SRC} ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl 
+#m4/gnulib-cache.m4
 
 
 
