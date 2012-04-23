@@ -65,14 +65,14 @@ int  i2c_add_device (unsigned int device_nr,
       dlclose(i2c_code);
       return 5;
     }
-
+  /*
   ret = dlclose(i2c_code);
   if ( ret != 0 )
     {
       fprintf (stderr, "Couldn't close i2c code properly\n");
       ret = 6;
     }
-
+  */
 
   fprintf (stderr, "I2C code seems to work :)\n");
   return ret;
