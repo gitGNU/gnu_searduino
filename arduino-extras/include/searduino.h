@@ -25,9 +25,11 @@
 #define ARDUINO_EXTRAS_SETUP_H
 
 
+
 #ifdef SEARDUINO_STUB
 #define ENABLE_SLEEP
 #include "setup.h"
+#include "searduino_pin.h"
 #include <stdio.h>
 #else
 #undef ENABLE_SLEEP
