@@ -121,6 +121,14 @@ anaout_callback(uint8_t pin);
 
 void init_arduino_pins(void);
 
+extern const uint8_t A0 ;
+extern const uint8_t A1 ;
+extern const uint8_t A2 ;
+extern const uint8_t A3 ;
+extern const uint8_t A4 ;
+extern const uint8_t A5 ;
+extern const uint8_t A6 ;
+extern const uint8_t A7 ;
 
 
 #endif /* SEARDUINO_PIN_H */
