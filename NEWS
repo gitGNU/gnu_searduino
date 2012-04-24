@@ -1,3 +1,12 @@
+News in 0.61
+
+  Installing all headers - to make simulator API accessible
+  Better USB device handling
+  
+  Fixed Savannah bugs: 
+  ---------------------
+
+
 News in 0.6
 
   New log window in Python GUI
