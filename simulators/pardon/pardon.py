@@ -443,7 +443,7 @@ def newLogCallback(level, text):
         try:
             time.sleep(0.001)
             iter2 = win.textbuffer.get_end_iter()
-w            win.textbuffer.insert(iter2, text)
+            win.textbuffer.insert(iter2, text)
             time.sleep(0.001)
         except Error:
             print "Error caught"
