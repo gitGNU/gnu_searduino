@@ -36,14 +36,8 @@ int main(void)
 	  printf(" ERROR: %d != %d\n", get_distance(), (uint8_t)(i+j));
 	  return 1;
 	}
-      if (i==255) 
-	{
-	  j++;    
-	}
-      if (j==255) 
-	{ 
-	  break ; 
-	}
+      if (i==255) 	  j++;    
+      if (j==255) 	  break ; 
     }  
   return 0;
 }
