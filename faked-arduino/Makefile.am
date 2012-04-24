@@ -45,7 +45,8 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/time_stuff.h \
        ./include/arduino/searduino_pin.h \
        ./include/arduino/setup.h \
-       ./include/arduino/i2c_loader.h 
+       ./include/arduino/i2c_loader.h \
+       ./include/seasim/seasim.h 
 
 LIB_LIBRARIES_SOURCES_FILES = \
       wire/src/wire.cpp \
@@ -87,7 +88,6 @@ libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 #libsearduino-stub_SOURCES=$(LIB_SEARDUINO_SOURCES_FILES)
 #EXTRA_LTLIBRARIES = libsearduino-stub.la
 lib_LTLIBRARIES = libsearduinostub.la
-
 
 
 

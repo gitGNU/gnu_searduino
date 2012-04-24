@@ -50,6 +50,10 @@ uint8_t
 seasim_get_dig_output(uint8_t pin);
 */
 
+uint8_t 
+seasim_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type);
+
+
 int
 seasim_get_output(uint8_t pin, uint8_t pin_type);
 

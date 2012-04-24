@@ -23,7 +23,7 @@
 
 #include "Arduino.h"
 #include "arduino/pins_arduino.h"
-#include "../include/arduino/error.h"
+#include "arduino/error.h"
 #include "utils/print.h"
 #include "utils/types.h"
 #include "arduino/error.h"

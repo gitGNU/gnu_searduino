@@ -1,1 +1,2 @@
-SUBDIRS =    arduino utils avr
+SUBDIRS =    arduino utils avr seasim
+
