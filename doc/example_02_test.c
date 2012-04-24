@@ -33,11 +33,15 @@ int main(void)
       
       if (get_distance()!=(uint8_t)(i+j))
 	{
-	  printf(" ERROR: %d != %d\n", get_distance(), (uint8_t)(i+j));
+	  printf(" ERROR: %d != %d.   %d succeeded before this one failed\n", 
+		 get_distance(), (uint8_t)(i+j), ctr);
 	  return 1;
 	}
       if (i==255) 	  j++;    
       if (j==255) 	  break ; 
+      ctr++;
     }  
+
+  printf ("%d tests passed\n", ctr);
   return 0;
 }
