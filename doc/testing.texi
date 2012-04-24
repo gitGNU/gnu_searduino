@@ -2,9 +2,48 @@
 
 Apart from making it easier to develop code for the Arduino boards, a
 major goal with Searduino is to be able to test your code (logically)
-on your local host. This chapter introduce you to how to do this.
+on your local host. This chapter introduce you to how to write test
+code using the C API for the simulator (in a way you're writing a
+simulator within your test code).
 
 @section Writing C code to test your application
+
+It's easy to test your code using the simulator interface
+(seasim.h). Below you can find an example on this.
+
+@subsection Introducing the code
+Assume that we have written some code to give us the distance to an
+object of some kind. The function is called get_distance
+(@code{uint8_t get_distance(void)}) and returns the sum of the analog
+pin 11 and 12. We want to test this function by writing values to the
+pins 11 and 12 and check of our function returns the correct value.
+@*
+@*
+This is not a rocket science or Nobel prize winning function but it
+serves well as an example.
+@*
+
+@subsection Your Arduino code
+@include example_02.texi
+
+@subsection Your test code
+@include example_02_test.texi
+
+@subsection Your Makefile
+@include example_m_02.texi
+@*
+@i{Note: this makefile includes some hacks with USER_C_FLAGS which will be removed asap}
+
+@subsection Executing the test
+@*
+First we need to build the test program.
+@*
+@code{make clean prog}
+@*
+@*
+Then simply execute the test program
+@*
+@code{./distance}
 
 @section Writing Python code to test your application
 

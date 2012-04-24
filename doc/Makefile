@@ -16,8 +16,8 @@ DOC= $(PDF) $(HTML) $(TXT)
 DOC_DIST=searduino-docs-$(VERSION).tar.gz
 DAILY_DOC_DIST=searduino-docs-$(DATE).tar.gz
 SRC=$(TEXI) Makefile ../mk/VERSION $(TEXI_INC)
-C_FILES=example_01.c
-M_FILES=example_m_01.m
+C_FILES=example_01.c example_02.c example_02_test.c
+M_FILES=example_m_01.m example_m_02.m
 C_EXAMPLES := $(C_FILES:.c=.texi)
 M_EXAMPLES := $(M_FILES:.m=.texi)
 
@@ -26,7 +26,7 @@ UPDATED_MONTH=UPDATED-MONTH=
 version.texi:
 	echo "@set UPDATED $(DATE_SHORT)" > version.texi
 	echo "@set UPDATED_MONTH $(MONTH) " >> version.texi
-	echo "@set EDITION $(VERSION)" >> version.texi
+	echo "@set EDITIOgN $(VERSION)" >> version.texi
 	echo "@set VERSION $(VERSION)" >> version.texi
 
 daily-version:
@@ -81,6 +81,10 @@ daily-doc:
 view: $(PDF)
 	$(VIEWER) $(PDF) 
 
+list:
+	@echo "C examples: $(C_EXAMPLES)"
+	@echo "M examples: $(M_EXAMPLES)"
+
 
 check1:
 	-mkdir -p tmp-doc-test
@@ -91,4 +95,14 @@ check1:
 	cat example_m_01.m | sed 's,ARDUINO=[a-z]*,ARDUINO=uno,g' > tmp-doc-test/Makefile
 	cd tmp-doc-test/ && make clean prog
 
-check: check1
+check2:
+	-mkdir -p tmp-test2
+	cp example_02.c tmp-test2/distance.c
+	cp example_02_test.c tmp-test2/test_distance.c
+	cat example_m_02.m | sed 's,ARDUINO=[a-z]*,ARDUINO=stub,g' > tmp-test2/Makefile
+	cd tmp-test2/ && make clean shlib 
+	cd tmp-test2/ && make clean prog
+#	cat example_m_02.m | sed 's,ARDUINO=[a-z]*,ARDUINO=uno,g' > tmp-test2/Makefile
+#	cd tmp-test2/ && make clean prog
+
+check: check1 check2
