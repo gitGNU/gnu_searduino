@@ -25,7 +25,6 @@
 #define ARDUINO_EXTRAS_SETUP_H
 
 
-
 #ifdef SEARDUINO_STUB
 #define ENABLE_SLEEP
 #include "setup.h"
@@ -43,6 +42,14 @@
 #else
 #define   SEARDUINO_LOOP() for (;;) 
 #endif
+
+
+#ifdef  SEARDUINO_STUB
+#define SEARDUINO_DEBUG(a)  fprintf(stder, "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
+#else
+#define SEARDUINO_DEBUG(a)
+#endif  /* SEARDUINO_STUB */
+ 
 
 
 
