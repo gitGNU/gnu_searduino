@@ -89,6 +89,7 @@ libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 lib_LTLIBRARIES = libsearduinostub.la
 
 
+INCLUDES        = @INCLTDL@	
 
 
 AM_CFLAGS= -I../arduino-sources/core           \
@@ -112,5 +113,5 @@ AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-extras/include/         \
            $(PEDANTIC_FLAGS)
 
-
-AM_LDFLAGS= -ldl 
+AM_LDFLAGS=  @LIBLTDL@ 
+#-ldl 

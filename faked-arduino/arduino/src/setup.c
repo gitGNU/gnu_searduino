@@ -20,10 +20,11 @@
  * Foundation, Inc., 51 Franklin Street, Boston,            
  * MA  02110-1301, USA.                                              
  ****/
-#include <dlfcn.h>
+
+/* #include <dlfcn.h> */
 #include <stdlib.h>
 #include <string.h>
-
+#include <ltdl.h>
 
 #include "arduino/wiring_private.h"
 #include "arduino/pins_arduino.h"
@@ -167,11 +168,17 @@ searduino_set_arduino_code_name(const char* libname)
 int
 load_arduino_code(void)
 {
-  void *arduino_lib;
+  lt_dlhandle arduino_lib;
+  /* void *arduino_lib; */
   char *ard_lib_name;
+  int ret;
 
   ard_lib_name = get_arduino_code_name();
   
+  /* Init libltdl */
+  ret = lt_dlinit ();
+     
+  printf ("libtool init: %d\n", ret);
 
   if (ard_lib_name == NULL)
     {
@@ -182,7 +189,8 @@ load_arduino_code(void)
     {
       /* If we have been given a library name, load it */
       /* printf ("Dynamically linked code\n"); */
-      arduino_lib = dlopen ((const char*)ard_lib_name, RTLD_LAZY);
+
+      arduino_lib = lt_dlopenext ((const char*)ard_lib_name);
       if ( arduino_lib == NULL)
 	{
 	  fprintf (stderr, "Couldn't open dyn lib\n");
@@ -190,7 +198,7 @@ load_arduino_code(void)
 	}
       /* printf ("setup.c:  code at %p\n", arduino_lib); */
       
-      searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
+      searduino_main_entry = (searduino_main_ptr_ptr)lt_dlsym(arduino_lib, "searduino_main");
       if ( searduino_main_entry == NULL)
 	{
 	  printf ("Couldn't find searduino_main in arduino code\n");

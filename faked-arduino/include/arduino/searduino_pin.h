@@ -28,6 +28,7 @@
 #include "utils/types.h"
 #include "arduino/error.h"
 #include "utils/error.h"
+#include <sys/time.h>
 #ifdef __MINGW32__
 #include <sys/time.h>
 #endif

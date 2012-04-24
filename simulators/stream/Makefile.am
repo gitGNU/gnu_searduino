@@ -26,18 +26,20 @@ SIMULATOR=searduino-stream-sim
 bin_PROGRAMS= $(SIMULATOR)
 searduino_stream_sim_SOURCES=simulator.c
 
-#if GL_GENERATE_PTHREAD_H
-#  GNULIB_PTHREAD_I=-I../../lib
-#  GNULIB_PTHREAD_A=lib/libgnu.a
-#else
-#  GNULIB_PTHREAD_I=
-#  GNULIB_PTHREAD_A= -lpthread 
-#endif
+
+if GL_GENERATE_PTHREAD_H
+  GNULIB_PTHREAD_I=-I../../lib
+  GNULIB_PTHREAD_A=lib/libgnu.a
+else
+  GNULIB_PTHREAD_I=
+  GNULIB_PTHREAD_A= -lpthread 
+endif
 
 AM_CFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../arduino-extras/include/ $(GNULIB_PTHREAD_I) --std=c99
 
-AM_LDFLAGS= -L../../faked-arduino/.libs  -lsearduinostub  -lpthread
-#$(GNULIB_PTHREAD_I) 
+AM_LDFLAGS= -L../../faked-arduino/.libs  -lsearduinostub $(GNULIB_PTHREAD_I) 
+
+#include ../../libltdl/Makefile.inc
 
 
 

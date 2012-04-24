@@ -32,7 +32,7 @@ void setup() {
 
 
 
-uint8_t main(void)
+int main(void)
 {
   uint8_t i ;
   

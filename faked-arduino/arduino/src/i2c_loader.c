@@ -21,14 +21,16 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#include <dlfcn.h>
+/* #include <dlfcn.h> */
 #include "i2c_loader.h"
 #include <stdio.h>
+#include <ltdl.h>
+
 
 int  i2c_add_device (unsigned int device_nr, 
                      const char  *setup_fun)
 {
-  void         *i2c_code;
+  lt_dlhandle i2c_code;
   i2c_setup_ptr i2c_setup_fun;
   int           ret;
 
@@ -44,14 +46,14 @@ int  i2c_add_device (unsigned int device_nr,
       return 2;
     }
 
-  i2c_code = dlopen (setup_fun, RTLD_LAZY);
+  i2c_code = lt_dlopenext (setup_fun);
   if ( setup_fun == NULL)
     {
       fprintf (stderr, "Couldn't open dyn lib '%s' \n", setup_fun);
       return 3;
     }
   
-  i2c_setup_fun = (i2c_setup_ptr)dlsym(i2c_code, "i2c_setup");
+  i2c_setup_fun = (i2c_setup_ptr)lt_dlsym(i2c_code, "i2c_setup");
   if ( i2c_setup_fun == NULL)
     {
       fprintf (stderr, "Couldn't find setup in i2c code : %s\n", setup_fun);
@@ -66,7 +68,7 @@ int  i2c_add_device (unsigned int device_nr,
       return 5;
     }
 
-  ret = dlclose(i2c_code);
+  ret = lt_dlclose(i2c_code);
   if ( ret != 0 )
     {
       fprintf (stderr, "Couldn't close i2c code properly\n");

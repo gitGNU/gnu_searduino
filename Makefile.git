@@ -7,8 +7,7 @@ generate:
 	libtoolize --automake  --copy --force
 
 	@echo "*** Retrieving configure tests needed by configure.in"
-	@aclocal -I ./autotools/ 
-# GNULIB  -I ./m4
+	@aclocal -I ./autotools/  -I ./m4
 	@ # echo "*** Scanning for include statements"
 
 	@autoheader
