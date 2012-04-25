@@ -3,8 +3,11 @@
 SEARDUINO_PATH=__INSTALL_DIR__
 
 INO_EX=/tmp/ino-example
+EX_EX=/tmp/seard-example
 EX_PATH=$SEARDUINO_PATH/share/examples/arduino
+EXAMPLES_PATH=$SEARDUINO_PATH/share/searduino/example
 
+mkdir -p $EX_EX
 mkdir -p $INO_EX
 cd       $INO_EX
 
@@ -70,6 +73,113 @@ test_types()
     
 }
 
+test_arduino_examples()
+{
+
+    test_types ./1.Basics/AnalogReadSerial
+    test_types ./1.Basics/BareMinimum
+    test_types ./1.Basics/Blink
+    test_types ./1.Basics/DigitalReadSerial
+    test_types ./1.Basics/Fade
+    test_types ./2.Digital/BlinkWithoutDelay
+    test_types ./2.Digital/Button
+    test_types ./2.Digital/Debounce
+    test_types ./2.Digital/StateChangeDetection
+### test_types ./2.Digital/toneKeyboard
+### test_types ./2.Digital/toneMelody
+### test_types ./2.Digital/toneMultiple
+### test_types ./2.Digital/tonePitchFollower
+ test_types ./3.Analog/AnalogInOutSerial
+ test_types ./3.Analog/AnalogInput
+ test_types ./3.Analog/AnalogWriteMega
+ test_types ./3.Analog/Calibration
+    test_types ./3.Analog/Fading
+### test_types ./3.Analog/Smoothing
+    test_types ./4.Communication/ASCIITable
+    test_types ./4.Communication/Dimmer
+    test_types ./4.Communication/Graph
+###    test_types ./4.Communication/MIDI
+### serial1: ###    test_types ./4.Communication/MultiSerialMega
+    test_types ./4.Communication/PhysicalPixel
+###    test_types ./4.Communication/SerialCallResponse
+###    test_types ./4.Communication/SerialCallResponseASCII
+###    test_types ./4.Communication/SerialEvent
+    test_types ./4.Communication/VirtualColorMixer
+    test_types ./5.Control/Arrays
+    test_types ./5.Control/ForLoopIteration
+    test_types ./5.Control/IfStatementConditional
+    test_types ./5.Control/switchCase
+    test_types ./5.Control/switchCase2
+###    test_types ./5.Control/WhileStatementConditional
+    test_types ./6.Sensors/ADXL3xx
+    test_types ./6.Sensors/Knock
+###    test_types ./6.Sensors/Memsic2125
+###    test_types ./6.Sensors/Ping
+    test_types ./7.Display/barGraph
+###    test_types ./7.Display/RowColumnScanning
+    test_types ./8.Strings/CharacterAnalysis
+###    test_types ./8.Strings/StringAdditionOperator
+###    test_types ./8.Strings/StringAppendOperator
+###    test_types ./8.Strings/StringCaseChanges
+###    test_types ./8.Strings/StringCharacters
+###    test_types ./8.Strings/StringComparisonOperators
+###    test_types ./8.Strings/StringConstructors
+###    test_types ./8.Strings/StringIndexOf
+###    test_types ./8.Strings/StringLength
+###    test_types ./8.Strings/StringLengthTrim
+###    test_types ./8.Strings/StringReplace
+###    test_types ./8.Strings/StringStartsWithEndsWith
+###    test_types ./8.Strings/StringSubstring
+###    test_types ./8.Strings/StringToInt
+###    test_types ./8.Strings/StringToIntRGB
+    echo
+}
+
+
+test_examples()
+{
+    STORED_DIR=$(pwd)
+
+    cd $EX_EX 
+    exit_on_failure $? "cp  $EX_EX"
+
+    cp -r $EXAMPLES_PATH/ .
+    exit_on_failure $? "cp  examples"
+
+    cd $EXAMPLES_PATH/ 
+    exit_on_failure $? "cd  examples"
+
+    #
+    # DISTANCE 
+    cd verifications/distance
+    exit_on_failure $? "cd to distance in $(pwd)"
+
+    make -f Makefile.distance clean all prog
+    exit_on_failure $? "Make in $(pwd)"
+
+    ./distance
+    exit_on_failure $? "Make in $(pwd)"
+
+    #
+    # DIGPINS
+    cd ../../digpins
+    exit_on_failure $? "cd to digpin"
+
+    make -f Makefile.digpins clean all prog
+    exit_on_failure $? "Make in $(pwd)"
+
+
+    #
+    # DIGCOUNTER
+    cd ../python-digcounter
+    exit_on_failure $? "cd to digcounter"
+
+    make -f Makefile.digcounter clean all 
+    exit_on_failure $? "Make in $(pwd)"
+
+    cd $STORED_DIR
+}
+
 while [ "$1" != "" ]
 do
     if [ "$1" = "--upload" ]
@@ -82,60 +192,9 @@ do
     shift
 done
 
-#test_types ./1.Basics/AnalogReadSerial
-test_types ./1.Basics/BareMinimum
-test_types ./1.Basics/Blink
-#test_types ./1.Basics/DigitalReadSerial
-test_types ./1.Basics/Fade
-#test_types ./2.Digital/BlinkWithoutDelay
-test_types ./2.Digital/Button
-#test_types ./2.Digital/Debounce
-#test_types ./2.Digital/StateChangeDetection
-#test_types ./2.Digital/toneKeyboard
-#test_types ./2.Digital/toneMelody
-#test_types ./2.Digital/toneMultiple
-#test_types ./2.Digital/tonePitchFollower
-#test_types ./3.Analog/AnalogInOutSerial
-#test_types ./3.Analog/AnalogInput
-#test_types ./3.Analog/AnalogWriteMega
-#test_types ./3.Analog/Calibration
-#test_types ./3.Analog/Fading
-#test_types ./3.Analog/Smoothing
-exit 0
-test_types ./4.Communication/ASCIITable
-test_types ./4.Communication/Dimmer
-test_types ./4.Communication/Graph
-test_types ./4.Communication/MIDI
-test_types ./4.Communication/MultiSerialMega
-test_types ./4.Communication/PhysicalPixel
-test_types ./4.Communication/SerialCallResponse
-test_types ./4.Communication/SerialCallResponseASCII
-test_types ./4.Communication/SerialEvent
-test_types ./4.Communication/VirtualColorMixer
-test_types ./5.Control/Arrays
-test_types ./5.Control/ForLoopIteration
-test_types ./5.Control/IfStatementConditional
-test_types ./5.Control/switchCase
-test_types ./5.Control/switchCase2
-test_types ./5.Control/WhileStatementConditional
-test_types ./6.Sensors/ADXL3xx
-test_types ./6.Sensors/Knock
-test_types ./6.Sensors/Memsic2125
-test_types ./6.Sensors/Ping
-test_types ./7.Display/barGraph
-test_types ./7.Display/RowColumnScanning
-test_types ./8.Strings/CharacterAnalysis
-test_types ./8.Strings/StringAdditionOperator
-test_types ./8.Strings/StringAppendOperator
-test_types ./8.Strings/StringCaseChanges
-test_types ./8.Strings/StringCharacters
-test_types ./8.Strings/StringComparisonOperators
-test_types ./8.Strings/StringConstructors
-test_types ./8.Strings/StringIndexOf
-test_types ./8.Strings/StringLength
-test_types ./8.Strings/StringLengthTrim
-test_types ./8.Strings/StringReplace
-test_types ./8.Strings/StringStartsWithEndsWith
-test_types ./8.Strings/StringSubstring
-test_types ./8.Strings/StringToInt
-test_types ./8.Strings/StringToIntRGB
+
+test_examples
+test_arduino_examples
+
+
+

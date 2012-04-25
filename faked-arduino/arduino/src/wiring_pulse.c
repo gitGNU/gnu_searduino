@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2012 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -21,36 +21,11 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#ifndef ARDUINO_EXTRAS_SETUP_H
-#define ARDUINO_EXTRAS_SETUP_H
+#include "wiring_private.h"
+#include "pins_arduino.h"
 
-
-#ifdef SEARDUINO_STUB
-#define ENABLE_SLEEP
-#include "setup.h"
-#include "searduino_pin.h"
-#include <stdio.h>
-#else
-#undef ENABLE_SLEEP
-#endif
-
-#ifdef  ENABLE_SLEEP
-#define   SEARDUINO_LOOP() for (;;)  \
-    if      (searduino_is_paused())  { fprintf (stderr, "z"); usleep(1000*200); } \
-    else if ( searduino_is_halted()) { fprintf (stderr, "Simulator halted, will return\n"); return 0; } \
-    else  
-#else
-#define   SEARDUINO_LOOP() for (;;) 
-#endif
-
-
-#ifdef  SEARDUINO_STUB
-#define SEARDUINO_DEBUG(a)  fprintf(stder, "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
-#else
-#define SEARDUINO_DEBUG(a)
-#endif  /* SEARDUINO_STUB */
- 
-
-
-
-#endif /* ARDUINO_EXTRAS_SETUP_H*/
+unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
+{
+  PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
+  return 100; 
+}

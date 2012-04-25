@@ -72,6 +72,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/WString.cpp \
        ./arduino/src/WMath.cpp \
        ./arduino/src/wiring_digital.c \
+       ./arduino/src/wiring_pulse.c \
        ./arduino/src/wiring_analog.c  \
        ./arduino/src/Print.cpp  \
        ./arduino/src/utils.c \

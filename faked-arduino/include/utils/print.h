@@ -51,15 +51,9 @@ void log_error(char* s,  ...);
 void log_warning(char* s,  ...);
 void serial_print_s(char* s, ...);
 void serial_print_c(char c);
-  void serial_print_l(long l );
+void serial_print_l(long l );
   
 
-#ifdef  SEARDUINO_STUB
-#define SEARDUINO_DEBUG(a)  printf( "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
-#else
-#define SEARDUINO_DEBUG(a)
-#endif  /* SEARDUINO_STUB */
- 
 
 void 
 print_dummy_function_implementation (FILE* stream,  

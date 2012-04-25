@@ -42,7 +42,8 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal     \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo              \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial      \
-           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper
+           -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper \
+           -I$(SEARDUINO_INC_PATH)/seasim 
 #           -I$(SEARDUINO_INC_PATH)/boards  \
 #\
 #           -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino \

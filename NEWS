@@ -1,4 +1,17 @@
-News in 0.61
+News in coming release
+
+  More Arduino examples used to verify installation
+  If no registered listener for log msgs, then default to fprintf to stderr
+  
+  Fixed Savannah bugs: 
+  ---------------------
+   #36284  SEARDUINO_DEBUG not available...
+   #36280  Serial print functions do not work for stand alone programs
+   #36227  arduino_ex2c: main.c not added in Makefile
+   #36226  Add OS specific paths to upload script
+   #36285  Add pulseIn to searduino stubs
+
+News in 0.62
 
   Installing all headers - to make simulator API accessible
   Better USB device handling

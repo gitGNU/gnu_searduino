@@ -119,6 +119,10 @@ serial_print_s(char* s, ...)
     {
       log_sim_callback(SEARDUINO_LOG_SERIAL, buffer);
     }
+  else
+    {
+      fprintf(stderr, "%s", buffer);
+    }
 }
 
 void 
@@ -130,6 +134,10 @@ serial_print_c(char c )
   if (log_sim_callback!=NULL)
     {
       log_sim_callback(SEARDUINO_LOG_SERIAL, buffer);
+    }
+  else
+    {
+      fprintf(stderr, "%s", buffer);
     }
 }
 
@@ -143,6 +151,10 @@ serial_print_l(long l )
   if (log_sim_callback!=NULL)
     {
       log_sim_callback(SEARDUINO_LOG_SERIAL, buffer);
+    }
+  else
+    {
+      fprintf(stderr, "%s", buffer);
     }
 }
 
