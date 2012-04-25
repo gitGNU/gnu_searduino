@@ -158,3 +158,50 @@ To upload and run the program on the Arduino UNO board:
 @*
 You should now be able to see the built in led (pin 13) flash. If not,
 the author of this document need to his homework.
+
+@section Setting the USB port to use for uploading to Arduino boards
+@*
+Searduino tries to find the USB port to use automatically for you. In some
+cases, e g if you have more than one Arduino board attached yo your
+computer, it is not possible for Searduino to know which port you aim
+to program.
+@*
+You can bypass Searduino's method of finding correct device. You do
+this by the environment variable @code{USER_PORT}. 
+@*
+@subsection Setting USER_PORT in bash
+@*
+Here's an example of how to instruct Searduino to use
+@code{/dev/ttyACM0} for programming.
+@*
+@code{export USER_POR=/dev/ttyACM0}
+@*
+After this you can invoke make on your makefile as usual.
+@*
+@subsection Setting USER_PORT in a Makefile
+@*
+Here's an example of how to instruct Searduino to use
+@code{/dev/ttyACM0} for programming.
+@*
+Add the following to your Makefile, before you include the file @code{searduino.mk}
+@*
+@code{USER_POR=/dev/ttyACM0}
+@*
+After this you can invoke make on your makefile as usual.
+
+
+@section Checking version of Searduino
+@*
+In your makefile you can specify the earliest version you want to
+use. If this requirement is not met, including the file
+@code{searduino.mk} will yield an error. Set the variable
+@code{REQUESTED_SEARDUINO_VERSION} 
+to the version you (at least) want, e g 0.60:
+@*
+@*
+@code{REQUESTED_SEARDUINO_VERSION=0.60}
+@*
+
+
+
+
