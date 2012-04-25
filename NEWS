@@ -2,6 +2,7 @@ News in coming release
 
   More Arduino examples used to verify installation
   If no registered listener for log msgs, then default to fprintf to stderr
+  Added rather stupid stub for pulseIn
   
   Fixed Savannah bugs: 
   ---------------------
