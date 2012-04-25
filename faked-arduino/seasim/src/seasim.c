@@ -74,35 +74,6 @@ seasim_get_output(uint8_t pin, uint8_t pin_type)
   return ext_get_generic_output(pin, pin_type);
 }
 
-/*
-
-unsigned int
-seasim_get_ana_output(uint8_t pin)
-{
-  return ext_get_ana_output(pin);
-}
-
-
-uint8_t
-seasim_set_ana_input(uint8_t pin, unsigned int val)
-{
-  return ext_set_ana_input(pin, val);
-}
-
-
-uint8_t 
-seasim_get_dig_output(uint8_t pin)
-{
-  return ext_get_dig_output(pin);
-}
-
-uint8_t 
-seasim_set_dig_input(uint8_t pin, uint8_t val)
-{
-  return ext_set_dig_input(pin, val);
-}
-
-*/
 
 
 uint8_t 
@@ -153,22 +124,6 @@ seasim_set_arduino_code_name(const char* libname)
 {
   return searduino_set_arduino_code_name(libname);
 }
-
-/*
-
-uint8_t 
-seasim_register_digout_sim_cb(do_to_sim_callback_ptr cb)
-{
-  return ext_register_digout_sim_cb(cb);
-}
-
-
-uint8_t
-seasim_register_anaout_sim_cb(ao_to_sim_callback_ptr cb)
-{
-  return ext_register_anaout_sim_cb(cb);
-}
-*/
 
 uint8_t
 seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)

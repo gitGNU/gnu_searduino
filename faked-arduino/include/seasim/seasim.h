@@ -38,21 +38,15 @@
 extern searduino_main_ptr_ptr searduino_main_entry;
 
 
-
-/*
-unsigned int
-seasim_get_ana_output(uint8_t pin);
-
-uint8_t
-seasim_set_ana_input(uint8_t pin, unsigned int val);
-
-uint8_t 
-seasim_get_dig_output(uint8_t pin);
-*/
-
 uint8_t 
 seasim_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type);
 
+unsigned int
+seasim_get_generic_output(uint8_t pin, uint8_t pin_type);
+
+
+uint8_t
+seasim_set_input(uint8_t pin, unsigned int val, uint8_t pin_type);
 
 int
 seasim_get_output(uint8_t pin, uint8_t pin_type);
@@ -81,14 +75,9 @@ seasim_get_dig_mode(uint8_t pin);
 int 
 seasim_set_arduino_code_name(const char* libname);
 
-/*
-uint8_t 
-seasim_register_digout_sim_cb(do_to_sim_callback_ptr cb);
-
 uint8_t
-seasim_register_anaout_sim_cb(ao_to_sim_callback_ptr cb);
+seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb);
 
-*/
 
 
 uint8_t 
@@ -103,13 +92,15 @@ seasim_register_log_cb(log_to_sim_callback_ptr cb);
 int 
 seasim_setup(void);
 
-void seasim_disable_streamed_output(void);
+void 
+seasim_disable_streamed_output(void);
 
 
 uint8_t 
 seasim_is_enable_streamed_output(void);
 
-void seasim_enable_streamed_output(void);
+void 
+seasim_enable_streamed_output(void);
 
 void 
 seasim_set_Write_timelimit(unsigned int lim);
@@ -125,6 +116,7 @@ seasim_i2c_add_device (unsigned int device_nr,
 const char* seasim_get_searduino_version(void);
 
 const char* seasim_get_searduino_name(void);
+
 
 
 #endif  /* SEASIM_SEASIM_H */
