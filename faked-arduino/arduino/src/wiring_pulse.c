@@ -23,6 +23,7 @@
 
 #include "wiring_private.h"
 #include "pins_arduino.h"
+#include "utils/print.h"
 
 unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
 {
