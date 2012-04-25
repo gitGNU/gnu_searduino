@@ -3,6 +3,8 @@ News in coming release
   More Arduino examples used to verify installation
   If no registered listener for log msgs, then default to fprintf to stderr
   Added rather stupid stub for pulseIn
+  Searduino version can be requested in Makefile
+  Documented how to set USB device manually
   
   Fixed Savannah bugs: 
   ---------------------
@@ -11,6 +13,8 @@ News in coming release
    #36227  arduino_ex2c: main.c not added in Makefile
    #36226  Add OS specific paths to upload script
    #36285  Add pulseIn to searduino stubs
+   #36286  Add doc about USER_PORT
+   #36224  Add version handling in makefiles
 
 News in 0.62
 
