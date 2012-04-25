@@ -16,7 +16,17 @@ exit_on_failure()
 	echo "ERROR:  $2"
 	exit $1
     else
-	printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+       	  printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+    fi
+}
+
+exit_on_failure_no_print()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -ne 0 ]
+    then
+	echo "ERROR:  $2"
+	exit $1
     fi
 }
 
@@ -26,6 +36,22 @@ log_and_exec()
     logn "$*"
     $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
     exit_on_failure $? ""
+}
+
+log_and_exec_comment()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    logn "$1"
+    shift
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_failure $? ""
+}
+
+log_and_exec_no_print()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_failure_no_print $? ""
 }
 
 set_vars()
