@@ -7,8 +7,12 @@ M2TEXI=../bin/makefile2texi
 #| sed -e 's,\[,,g' -e  's,\],,g' -e 's/,//g')
 all: doc
 VIEWER=evince
-TEXI=architecture.texi manual.texi
-TEXI_INC=abbrevs.texi  background.texi  supported.texi download.texi examples.texi
+TEXI=architecture.texi manual.texi 
+TEXI_INC=abbrevs.texi  background.texi  supported.texi download.texi  \
+         examples.texi adding-func.texi background.texi examples.texi \
+         faq.texi future.texi ino.texi introduction.texi libraries.texi \
+         macros.texi simulators.texi testing.texi using.texi version.texi
+
 PDF := $(TEXI:.texi=.pdf)
 HTML := $(TEXI:.texi=.html)
 TXT := $(TEXI:.texi=.txt)
