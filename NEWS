@@ -2,6 +2,7 @@ News in 0.61
 
   Installing all headers - to make simulator API accessible
   Better USB device handling
+  All seasim functions have prototypes in header file.
   
   Fixed Savannah bugs: 
   ---------------------
