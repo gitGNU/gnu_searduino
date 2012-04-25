@@ -1,6 +1,18 @@
-#!/bin/sh
+#!/bin/bash
 
 SEARDUINO_PATH=__INSTALL_DIR__
+
+LOG_FILE=$(pwd)/verify-sh.log
+
+FUNC_FILE=$(dirname $0)/functions
+if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
+then
+    echo "Can't find the file: 'function'"
+    echo "... bailing out"
+    exit 1
+fi
+
+. $FUNC_FILE
 
 INO_EX=/tmp/ino-example
 EX_EX=/tmp/seard-example
@@ -11,24 +23,34 @@ mkdir -p $EX_EX
 mkdir -p $INO_EX
 cd       $INO_EX
 
+export ARDUINO_EX_CTR=0
+export SEARDUINO_EX_CTR=0
 
-
-exit_on_failure()
+inc_arduino_test()
 {
-    if [ $1 -ne 0 ]
-    then
-	echo "ERROR:  $2"
-	exit $1
-    fi
+    ARDUINO_EX_CTR=$(( $ARDUINO_EX_CTR + 1 ))
 }
 
+inc_searduino_test()
+{
+    SEARDUINO_EX_CTR=$(( $SEARDUINO_EX_CTR + 1 ))
+}
+
+
+test_report()
+{
+    echo "Tests performed and passed:"
+    echo "   Arduino examples tested:   $ARDUINO_EX_CTR"
+    echo "   Searduino examples tested: $SEARDUINO_EX_CTR"
+    echo ""
+}
 
 test_ex()
 {
     TYPE=$1
     EXA=$2
 
-    echo "Test: type:$TYPE $EXA"
+#    echo "Test: type:$TYPE $EXA"
     
 
     $SEARDUINO_PATH/bin/arduino-ex2c    \
@@ -36,27 +58,27 @@ test_ex()
        --$TYPE                          \
        --yes                            \
        $EX_PATH/$EXA
-    exit_on_failure $? "Failed creating C code for $EXA with type $TYPE  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA
+    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA
 )"
 
     cd $(basename $EXA)
 
     make clean 
-    exit_on_failure $? "Make clean in $(pwd)"
+    exit_on_failure_no_print $? "Make clean in $(pwd)"
     
     make 
-    exit_on_failure $? "Make in $(pwd)"
+    exit_on_failure_no_print $? "Make in $(pwd)"
   
     if [ "$TYPE" = "uno" ] && [ "$UPLOAD" = "true" ] 
     then
 	make upload 
-	exit_on_failure $? "Make in $(pwd)"
+	exit_on_failure_no_print $? "Make in $(pwd)"
     fi
   
     if [ "$TYPE" = "shlib" ] && [ "$SIMULATE" = "true" ] 
     then
 	make simulate
-	exit_on_failure $? "Make in $(pwd)"
+	exit_on_failure_no_print $? "Make in $(pwd)"
     fi
   
     cd ..
@@ -69,55 +91,63 @@ test_types()
     for t in  $TYPES
     do
 	test_ex $t $DIR
+	exit_on_failure_no_print $?
     done
+    inc_arduino_test
     
+}
+
+
+my_log()
+{
+    log_and_exec_comment "$2" $*
 }
 
 test_arduino_examples()
 {
 
-    test_types ./1.Basics/AnalogReadSerial
-    test_types ./1.Basics/BareMinimum
-    test_types ./1.Basics/Blink
-    test_types ./1.Basics/DigitalReadSerial
-    test_types ./1.Basics/Fade
-    test_types ./2.Digital/BlinkWithoutDelay
-    test_types ./2.Digital/Button
-    test_types ./2.Digital/Debounce
-    test_types ./2.Digital/StateChangeDetection
+    my_log test_types ./1.Basics/AnalogReadSerial
+    my_log test_types ./1.Basics/BareMinimum
+    my_log test_types ./1.Basics/Blink
+    my_log test_types ./1.Basics/DigitalReadSerial
+    my_log test_types ./1.Basics/Fade
+    my_log test_types ./2.Digital/BlinkWithoutDelay
+    my_log test_types ./2.Digital/Button
+    my_log test_types ./2.Digital/Debounce
+    my_log test_types ./2.Digital/StateChangeDetection
 ### test_types ./2.Digital/toneKeyboard
 ### test_types ./2.Digital/toneMelody
 ### test_types ./2.Digital/toneMultiple
 ### test_types ./2.Digital/tonePitchFollower
- test_types ./3.Analog/AnalogInOutSerial
- test_types ./3.Analog/AnalogInput
- test_types ./3.Analog/AnalogWriteMega
- test_types ./3.Analog/Calibration
-    test_types ./3.Analog/Fading
+    my_log test_types ./3.Analog/AnalogInOutSerial
+    my_log test_types ./3.Analog/AnalogInput
+    my_log test_types ./3.Analog/AnalogWriteMega
+    my_log test_types ./3.Analog/Calibration
+    my_log test_types ./3.Analog/Fading
 ### test_types ./3.Analog/Smoothing
-    test_types ./4.Communication/ASCIITable
-    test_types ./4.Communication/Dimmer
-    test_types ./4.Communication/Graph
+    my_log test_types ./4.Communication/ASCIITable
+    my_log test_types ./4.Communication/Dimmer
+    my_log test_types ./4.Communication/Graph
 ###    test_types ./4.Communication/MIDI
 ### serial1: ###    test_types ./4.Communication/MultiSerialMega
-    test_types ./4.Communication/PhysicalPixel
+    my_log test_types ./4.Communication/PhysicalPixel
 ###    test_types ./4.Communication/SerialCallResponse
 ###    test_types ./4.Communication/SerialCallResponseASCII
 ###    test_types ./4.Communication/SerialEvent
-    test_types ./4.Communication/VirtualColorMixer
-    test_types ./5.Control/Arrays
-    test_types ./5.Control/ForLoopIteration
-    test_types ./5.Control/IfStatementConditional
-    test_types ./5.Control/switchCase
-    test_types ./5.Control/switchCase2
+    my_log test_types ./4.Communication/VirtualColorMixer
+    my_log test_types ./5.Control/Arrays
+    my_log test_types ./5.Control/ForLoopIteration
+    my_log test_types ./5.Control/IfStatementConditional
+    my_log test_types ./5.Control/switchCase
+    my_log test_types ./5.Control/switchCase2
 ###    test_types ./5.Control/WhileStatementConditional
-    test_types ./6.Sensors/ADXL3xx
-    test_types ./6.Sensors/Knock
+    my_log test_types ./6.Sensors/ADXL3xx
+    my_log test_types ./6.Sensors/Knock
 ###    test_types ./6.Sensors/Memsic2125
 ###    test_types ./6.Sensors/Ping
-    test_types ./7.Display/barGraph
+    my_log test_types ./7.Display/barGraph
 ###    test_types ./7.Display/RowColumnScanning
-    test_types ./8.Strings/CharacterAnalysis
+    my_log test_types ./8.Strings/CharacterAnalysis
 ###    test_types ./8.Strings/StringAdditionOperator
 ###    test_types ./8.Strings/StringAppendOperator
 ###    test_types ./8.Strings/StringCaseChanges
@@ -136,46 +166,60 @@ test_arduino_examples()
 }
 
 
+test_distance()
+{
+    #
+    # DISTANCE 
+    log_and_exec_no_print cd verifications/distance
+
+    log_and_exec_no_print make -f Makefile.distance clean all prog
+
+    log_and_exec_no_print ./distance
+
+    inc_searduino_test
+    return 0
+}
+
+test_digpins()
+{
+    #
+    # DIGPINS
+    log_and_exec_no_print cd ../../digpins
+
+    log_and_exec_no_print make -f Makefile.digpins clean all prog
+    inc_searduino_test
+    return 0
+}
+
+
+test_digcounter()
+{
+    #
+    # DIGCOUNTER
+    log_and_exec_no_print  cd ../python-digcounter
+
+    log_and_exec_no_print  make -f Makefile.digcounter clean all 
+
+    inc_searduino_test
+
+    return 0
+}
+
+
 test_examples()
 {
     STORED_DIR=$(pwd)
 
-    cd $EX_EX 
-    exit_on_failure $? "cp  $EX_EX"
+    log_and_exec_no_print cd $EX_EX 
 
-    cp -r $EXAMPLES_PATH/ .
-    exit_on_failure $? "cp  examples"
+    log_and_exec_no_print cp -r $EXAMPLES_PATH/ .
 
-    cd $EXAMPLES_PATH/ 
-    exit_on_failure $? "cd  examples"
+    log_and_exec_no_print cd $EXAMPLES_PATH/ 
 
-    #
-    # DISTANCE 
-    cd verifications/distance
-    exit_on_failure $? "cd to distance in $(pwd)"
+    log_and_exec test_distance
+    log_and_exec test_digpins
+    log_and_exec test_digcounter
 
-    make -f Makefile.distance clean all prog
-    exit_on_failure $? "Make in $(pwd)"
-
-    ./distance
-    exit_on_failure $? "Make in $(pwd)"
-
-    #
-    # DIGPINS
-    cd ../../digpins
-    exit_on_failure $? "cd to digpin"
-
-    make -f Makefile.digpins clean all prog
-    exit_on_failure $? "Make in $(pwd)"
-
-
-    #
-    # DIGCOUNTER
-    cd ../python-digcounter
-    exit_on_failure $? "cd to digcounter"
-
-    make -f Makefile.digcounter clean all 
-    exit_on_failure $? "Make in $(pwd)"
 
     cd $STORED_DIR
 }
@@ -193,8 +237,17 @@ do
 done
 
 
+init_logging
+
+#
+#
+#
 test_examples
 test_arduino_examples
 
+#
+#
+#
+test_report
 
 
