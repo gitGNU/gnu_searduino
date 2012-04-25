@@ -238,9 +238,13 @@ prepare_searduino_mk()
 	
     export VERSION_LONG=""
     set_lversion
-    cat mk/searduino.mk.tmpl  | \
+    cat mk/searduino.mk.tmpl                | \
         sed "s,__INSTALL_DIR__,${prefix},g" | \
-        sed "s,__CYGWIN__,${CYGWIN},g" | \
+        sed "s,__CYGWIN__,${CYGWIN},g"      | \
+        sed "s,__SEARDUINO_VERSION_MAJOR__,${VERSION_LONG_MAJOR},g"     | \
+        sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
+        sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
+        sed "s,__SEARDUINO_VERSION_PREPARE__,${VERSION_LONG_PREPARE},g" | \
         sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"  > \
         mk/searduino.mk
     exit_on_failure $? "Prepared searduino.mk "
