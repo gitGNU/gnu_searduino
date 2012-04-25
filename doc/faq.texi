@@ -1,6 +1,7 @@
 @chapter FAQ
 
-@cindex @b{What does undefined reference mean?}
+@cindex What does undefined reference mean?
+@b{What does undefined reference mean?}
 
 In short it means that the linker can't find all the needed ``function
 implementation'' for your binary/library. If you're compiling your
