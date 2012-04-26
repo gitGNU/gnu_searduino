@@ -1,0 +1,14 @@
+void setup(void)
+{
+  pinMode(13, OUTPUT);
+}
+
+
+
+int main(void)
+{
+  for (;;)
+    {
+      delay(1000);
+    }
+}

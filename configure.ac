@@ -217,11 +217,15 @@ prepare_examples()
     cat example/python-digcounter/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/Makefile.digcounter
     exit_on_failure $? "Prepared  python-digcounter"
 
+    cat example/python-digcounter/simple-hw.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/simple-hw.sh
+    exit_on_failure $? "Prepared  python-digcounter"
+
     cat example/verification/distance/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/verification/distance/Makefile.distance
     exit_on_failure $? "Prepared  verification/distance"
 
-    cat example/python-digcounter/simple-hw.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/simple-hw.sh
-    exit_on_failure $? "Prepared  python-digcounter"
+    cat example/verification/ok-version/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/verification/ok-version/Makefile.ok-version
+    exit_on_failure $? "Prepared  verification/ok-version"
+
 }
 
 
@@ -270,7 +274,7 @@ cat bin/arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > bin/arduino-ex
 exit_on_failure $? "Prepared Arduino examples to C translator"
 
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile ])
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile example/verification/ok-version/Makefile ])
 
 
 
