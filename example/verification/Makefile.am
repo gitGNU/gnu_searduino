@@ -1,2 +1,2 @@
-SUBDIRS =   distance
+SUBDIRS =   distance ok-version 
 
