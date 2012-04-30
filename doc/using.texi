@@ -203,5 +203,30 @@ to the version you (at least) want, e g 0.60:
 @*
 
 
+@section I2C devices
+@* 
+Searduino provies an API to write software to simulate I2C devices.
+@*
+@subsection Registering an I2C device
+@*
+To register an I2C device you us the function @code{int  seasim_i2c_add_device (unsigned int device_nr, const char  *setup_fun)}. 
+@*
+
+The argument (device_nr) corespond to the device number of the device
+you want to simulate and the name of the function that setups up your
+I2C code.
+@*
+When calling the i2c_add_device function Searduino will find the
+setup function you provide and call it.
+@*
+
+@*
+@subsection Build the I2C device
+@*
+To build your I2C code and prepare it to be loaded by the simulator,
+simply write a Makefile and follow the procedures as in the section
+``Building a shared library for use in the simulators''.
+
+
 
 
