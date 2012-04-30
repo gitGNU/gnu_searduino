@@ -167,6 +167,13 @@ arguments, here how to do it:
 
 @end multitable
 
+@subsection using I2C sw devices 
+To plugin a I2C device to the simulator you add the following to the simulator
+command line argument:
+@*
+@code{ --i2c-code /some/dir/youri2c-code.so}
+@*
+
 
 @subsection Scripting with bash
 TBD
