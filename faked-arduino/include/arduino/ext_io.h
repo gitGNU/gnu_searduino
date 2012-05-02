@@ -268,6 +268,9 @@ ext_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type);
 int 
 ext_digital_set_mode(uint8_t pin, uint8_t mode);
 
+int 
+ext_analog_set_mode(uint8_t pin, uint8_t mode);
+
 
 
 #endif /* ARDUINO_EXT_IO_H */
