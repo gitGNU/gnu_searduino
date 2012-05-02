@@ -26,9 +26,9 @@ JAVAC=gcj
 
 INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/arduino/             \
-           -I$(SEARDUINO_INC_PATH)/arduino-extras/      \
-           -I$(SEARDUINO_INC_PATH)/                      \
-           -I$(SEARDUINO_INC_PATH)/faked-arduino/include \
+           -I$(SEARDUINO_INC_PATH)/arduino-extras/       \
+           -I$(SEARDUINO_INC_PATH)/                       \
+           -I$(SEARDUINO_INC_PATH)/faked-arduino/include  \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/standard  \
 	   -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/utility \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/ \
@@ -43,7 +43,8 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-sources/core \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo              \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial      \
            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper \
-           -I$(SEARDUINO_INC_PATH)/seasim 
+           -I$(SEARDUINO_INC_PATH)/seasim  \
+           $(VCS_IFLAGS)
 #           -I$(SEARDUINO_INC_PATH)/boards  \
 #\
 #           -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino \
