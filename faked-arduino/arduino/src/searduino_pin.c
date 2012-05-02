@@ -192,6 +192,7 @@ get_generic_pin_mode(uint8_t pin, uint8_t pin_type)
 int 
 set_generic_pin_mode(uint8_t pin, uint8_t mode, uint8_t pin_type)
 {
+  /* printf("set_generic_pin_mode(%d, %d, %d)\n", pin, mode, pin_type); */
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
     {
       arduino_pins[pin].type=pin_type;
@@ -267,6 +268,7 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
   searduino_setup();
 
   PRINT_FUNCTION_NAME(("%d,%d",pin,val));
+  /* printf("%s(%d,%d)\n",__func__, pin,val); */
 
   if (PIN_OUT_OF_RANGE(pin))
     {
@@ -281,9 +283,6 @@ genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
       SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
       return;
     }
-
-
-  
 
   if( gettimeofday( &cur_time, &zoneData) == 0 )
     {
