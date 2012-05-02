@@ -64,7 +64,7 @@ seasim_register_log_cb(log_to_sim_callback_ptr cb)
 uint8_t
 seasim_set_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
-  return ext_set_generic_input(pin, val, pin_type);
+  return sim_set_generic_pin_val(pin, val, pin_type);
 }
 
 
