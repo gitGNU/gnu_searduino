@@ -77,9 +77,18 @@ pinMode(uint8_t pin, uint8_t mode)
       return;
     }
 
-  set_digital_pin_mode(pin,mode);
 
-  ext_digital_set_mode(pin, mode);
+  if (pin < A0)
+    {
+      set_digital_pin_mode(pin,mode);
+      ext_digital_set_mode(pin,mode);
+    }
+  else
+    {
+      set_analog_pin_mode(pin,mode);
+      ext_analog_set_mode(pin,mode);
+    }
+
 
   return;
 }
