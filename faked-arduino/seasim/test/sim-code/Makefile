@@ -44,4 +44,7 @@ SEARDUINO_PATH=../../../../
 
 all: $(SHLIB)
 
+check: $(PROG)
+	export LD_LIBRARY_PATH=../../../../../searduino/faked-arduino/.libs/ && ./test-sim
+
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk

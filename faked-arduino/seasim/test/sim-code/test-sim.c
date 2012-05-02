@@ -27,7 +27,15 @@
 #include "seasim/seasim.h"
 
 
+struct pin
+{
+  uint val;
+  int mode;
+  int callbacks ;
+};
 
+static struct pin pins[100];
+//#define DEBUG
 /* 
  * Function to register in the Searduino code
  *
@@ -36,7 +44,53 @@
 void 
 my_out_sim_callback(uint8_t pin, uint8_t val, uint8_t pin_type)
 {
-  fprintf (stdout,"SIM:%d:%d:%d\n",pin_type, pin, val);
+  
+#ifdef DEBUG
+  printf("----->\n%s(%d,%d,%d)   (%d,%d)  callback #:%d\n",
+	 __func__, pin, val, pin_type, 
+	 SEARDUINO_PIN_TYPE_ANALOG, SEARDUINO_PIN_TYPE_DIGITAL,
+	 pins[pin].callbacks); 
+#endif
+
+  /* skip first check, to make sure we're in sync */
+  if (pins[pin].callbacks !=0 )
+    {
+      if (val != pins[pin].val)
+	{
+	  printf ("ERROR(pin[%d] %d %d   (%d)\n", 
+		  pin, val, pins[pin-1].val, pins[pin].callbacks);
+	  exit(1);
+	}
+      else
+	{
+	  printf ("."); fflush(stdout);
+	}
+
+    }
+
+  pins[pin].callbacks++;
+
+  if (pin_type == SEARDUINO_PIN_TYPE_ANALOG)
+    {
+      pins[pin].val = val+1;
+    }
+  else
+    {
+      pins[pin].val = !val;
+    }
+
+#ifdef DEBUG
+  printf ("set pin %d to %d\n", pin-1, pins[pin].val); 
+#endif
+  seasim_set_generic_input(pin-1, pins[pin].val, pin_type);
+  //  seasim_set_generic_input(A0, 253, SEARDUINO_PIN_TYPE_ANALOG);
+  
+  if (pins[pin].callbacks > 5 )
+    {
+      printf("Time to quit\n");
+      exit(0);
+    }
+  //  fprintf (stdout,"SIM:%d:%d:%d\n",pin_type, pin, val);
 }
 
 /* 
@@ -47,7 +101,7 @@ my_out_sim_callback(uint8_t pin, uint8_t val, uint8_t pin_type)
 void 
 my_dm_sim_callback(uint8_t pin, uint8_t mode)
 {
-  fprintf (stdout,"digmod:%d:%d\n",pin, mode);
+  pins[pin].mode=mode;
 }
 
 void
@@ -121,11 +175,19 @@ main(int argc, char **argv)
   int i = 0;
   int ret;
 
+
+  /* Set to zer0 */
+  memset(&pins,0, 100*sizeof(struct pin));
   /*  ret = seasim_i2c_add_device (50, 
 			       argv[i+1]);
   */
 
   sim_setup("../arduino-code/arduino-code.so");
+
+  seasim_set_generic_input(2, 0,   SEARDUINO_PIN_TYPE_DIGITAL);
+  seasim_set_generic_input(A1, 0,   SEARDUINO_PIN_TYPE_ANALOG);
+  seasim_set_generic_input(2, 1,   SEARDUINO_PIN_TYPE_DIGITAL);
+  seasim_set_generic_input(A1, 3, SEARDUINO_PIN_TYPE_ANALOG);
 
   if (searduino_main_entry!=NULL)
     {
@@ -137,6 +199,7 @@ main(int argc, char **argv)
       fprintf (stderr, "This probably means you haven't provided searduino with a shared library containing Arduino code\n");
       fflush (stderr);
     }
+
 
 
   return 0;

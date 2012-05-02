@@ -25,10 +25,8 @@
 #include "searduino.h"
 
 void setup(void) {
-  int i ; 
-
-  pinMode(1, OUTPUT);      
   pinMode(3, OUTPUT);      
+  pinMode(A1, OUTPUT);      
 }
 
 
@@ -42,13 +40,13 @@ int main(void)
 
   SEARDUINO_LOOP()
     {
-      digitalWrite(1,i%2);
+      /* printf ("pin 2: %d\n", digitalRead(2)); */
+      /* printf ("pin 3: %u\n", digitalRead(2));  */
       digitalWrite(3,digitalRead(2));
-
-      analogWrite(3,analogRead(4));
+      /* printf ("pin %d: %u   (reading from A1)\n", A1, analogRead(A0));  */
+      analogWrite(A1, analogRead(A0));
       
-      i++;
-      delay(11); 
+      delay(500); 
     }
 }
 
