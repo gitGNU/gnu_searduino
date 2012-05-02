@@ -256,6 +256,33 @@ ext_digital_set_mode(uint8_t pin, uint8_t mode)
 }
 
 
+int 
+ext_analog_set_mode(uint8_t pin, uint8_t mode)
+{
+  /* Make sure all is set up before continuing*/
+  init_ext_io();
+
+  /* If output enabled, print info on pin/val to stream*/
+  if ( stub_output_enabled ) 
+    {
+      fprintf(proto_stream, "amode:%d:%d  (in stub)\n", pin, mode); 
+      fflush(proto_stream);
+    }
+
+  /*
+   * Call registered listener
+   *
+   */
+  if ( dm_sim_callback != NULL )
+    {
+      /* Ok, the function pointer is not NULL, 
+	 so let's call it */
+      dm_sim_callback(pin, mode);
+    }
+  return SEARD_ARDUINO_OK;
+}
+
+
 
 
 int 
