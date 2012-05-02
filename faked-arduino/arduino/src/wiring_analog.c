@@ -92,7 +92,5 @@ anaout_callback(uint8_t pin)
       return 0;
     }      
   
-  
-
   return get_analog_pin_val(pin);
 }
