@@ -6,6 +6,7 @@ News in coming release
   Searduino version can be requested in Makefile
   Documented how to set USB device manually
   Started working on documenting I2C devices
+  Better management of Analog pins
   
   Fixed Savannah bugs: 
   ---------------------
