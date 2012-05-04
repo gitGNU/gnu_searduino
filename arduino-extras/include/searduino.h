@@ -45,7 +45,7 @@
 
 
 #ifdef  SEARDUINO_STUB
-#define SEARDUINO_DEBUG(a)  fprintf(stder, "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
+#define SEARDUINO_DEBUG(a)  fprintf(stderr, "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
 #else
 #define SEARDUINO_DEBUG(a)
 #endif  /* SEARDUINO_STUB */
