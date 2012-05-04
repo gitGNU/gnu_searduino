@@ -69,12 +69,13 @@ INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core 		   \
             -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SPI       	 \
             -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Firmata   	  \
             -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/utility	   \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/       	    \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility	     \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM 	      \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal	       \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo        	        \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial	         \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/	            \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/       	     \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility	      \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM 	       \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal	        \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo        	         \
+            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial	          \
             -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper
 
 
