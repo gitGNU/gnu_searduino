@@ -258,7 +258,7 @@ get_pin_val(uint8_t pin)
 
 
 void 
-genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type)
+genericWrite(uint8_t pin, int val, uint8_t pin_type)
 {
   int ret;
   struct timeval  cur_time;
