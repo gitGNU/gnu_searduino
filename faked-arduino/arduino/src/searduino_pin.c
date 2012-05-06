@@ -212,8 +212,8 @@ set_generic_pin_mode(uint8_t pin, uint8_t mode, uint8_t pin_type)
 }
 
 int 
-set_generic_pin_val_impl(uint8_t pin, 
-			 int val, 
+set_generic_pin_val_impl(uint8_t      pin, 
+			 unsigned int val, 
 			 uint8_t pin_type, 
 			 uint8_t exp_inout)
 {
@@ -346,7 +346,7 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
  *
  */
 void 
-input_callback(uint8_t pin, uint8_t val, uint8_t pin_type)
+input_callback(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   searduino_setup();
   PRINT_FUNCTION_NAME(("%d,%d,%d",pin,val, pin_type));

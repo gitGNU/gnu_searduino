@@ -66,8 +66,9 @@ static uint8_t stub_output_enabled = 1;
 
 
 uint8_t
-ext_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type)
+ext_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
+  printf ("%s (%d,%d)\n", __func__, pin, val);
   input_callback(pin, val, pin_type);
 
   DEBUG_INFO(("ext_set_generic_input  %d,%d,%d",pin,val, pin_type));
@@ -286,7 +287,7 @@ ext_analog_set_mode(uint8_t pin, uint8_t mode)
 
 
 int 
-ext_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type)
+ext_generic_write_outpin(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   /* Make sure all is set up before continuing*/
   init_ext_io();

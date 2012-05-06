@@ -60,7 +60,7 @@ int
 set_generic_pin_mode(uint8_t pin, uint8_t mode, uint8_t pin_type);
 
 int 
-set_generic_pin_val_impl(uint8_t pin, int val, uint8_t pin_type, uint8_t exp_inout);
+set_generic_pin_val_impl(uint8_t pin, unsigned int val, uint8_t pin_type, uint8_t exp_inout);
 
 #define sim_set_generic_pin_val(pin, val, pin_type) \
    set_generic_pin_val_impl(pin, val, pin_type, INPUT);
@@ -98,7 +98,7 @@ get_generic_pin_val(uint8_t pin, uint8_t pin_type);
 
 
 void 
-genericWrite(uint8_t pin, uint8_t val, uint8_t pin_type);
+genericWrite(uint8_t pin, int val, uint8_t pin_type);
 
 int 
 get_pin_val(uint8_t pin);

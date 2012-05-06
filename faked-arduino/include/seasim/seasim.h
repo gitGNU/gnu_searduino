@@ -39,7 +39,7 @@ extern searduino_main_ptr_ptr searduino_main_entry;
 
 
 uint8_t 
-seasim_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type);
+seasim_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type);
 
 unsigned int
 seasim_get_generic_output(uint8_t pin, uint8_t pin_type);

@@ -42,7 +42,7 @@
 
 
 uint8_t  dig_mode_callback(uint8_t pin);
-void     input_callback(uint8_t pin, uint8_t val, uint8_t pin_type);
+void     input_callback(uint8_t pin, unsigned int val, uint8_t pin_type);
 
 typedef void (*searduino_main_ptr)(void* in); 
 typedef searduino_main_ptr searduino_main_ptr_ptr ;

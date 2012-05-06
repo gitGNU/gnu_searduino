@@ -45,7 +45,7 @@
  *  
  */
 typedef void    (*dm_to_sim_callback_ptr)(uint8_t pin, uint8_t mode); 
-typedef void    (*out_to_sim_callback_ptr)(uint8_t pin, uint8_t mode, uint8_t pin_type); 
+typedef void    (*out_to_sim_callback_ptr)(uint8_t pin, unsigned int val, uint8_t pin_type); 
 typedef void    (*log_to_sim_callback_ptr)(uint8_t level, const char*);
 
 
@@ -204,7 +204,7 @@ int
 ext_get_generic_output(uint8_t pin, uint8_t pin_type);
 
 uint8_t
-ext_set_generic_input(uint8_t pin, uint8_t val, uint8_t pin_type);
+ext_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type);
 
 uint8_t 
 ext_get_dig_mode(uint8_t pin);
@@ -263,7 +263,7 @@ void searduino_disable_streamed_output(void);
 uint8_t searduino_is_enable_streamed_output(void);
 
 int 
-ext_generic_write_outpin(uint8_t pin, uint8_t val, uint8_t pin_type);
+ext_generic_write_outpin(uint8_t pin, unsigned int val, uint8_t pin_type);
 
 int 
 ext_digital_set_mode(uint8_t pin, uint8_t mode);
