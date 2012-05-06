@@ -65,7 +65,7 @@ void* c_arduino_code(void *in);
 
 
 void 
-new_out(uint8_t pin, uint8_t val, uint8_t pin_type)
+new_out(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   PyObject *arglist;
   PyObject *result; 
@@ -86,8 +86,8 @@ new_out(uint8_t pin, uint8_t val, uint8_t pin_type)
 	  printf ("wooops, arglist is no no\n");
 	  exit(1);
 	}
-
-      //  printf(" Arguments to callback: (%d,%d) ", pin, val);      fflush(stdout); 
+      
+      //printf(" Arguments to callback: (%d,%d) ", pin, val);      fflush(stdout); 
       //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
 
       result = PyEval_CallObject(my_callback, arglist);
