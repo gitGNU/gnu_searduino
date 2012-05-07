@@ -26,7 +26,7 @@
 
 
 void setup() {
-  pinMode(13, OUTPUT);      
+  pinMode(A1, OUTPUT);      
 }
 
 
@@ -42,7 +42,9 @@ uint8_t main(void)
   
   SEARDUINO_LOOP()
     {
-      digitalRead(13)? digitalWrite(13,LOW):digitalWrite(13,HIGH);
+      //      digitalRead(13)? digitalWrite(13,LOW):digitalWrite(13,HIGH);
+      printf ("Analog pin %d is now: %d   setting %d\n", A0, analogRead(A0), A1);
+      analogWrite(A1,analogRead(A0));
       delay(500);
     }
 }

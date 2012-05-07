@@ -413,6 +413,7 @@ def newOutCallback(pin, val, pin_type):
         print "Pin " + str(pin) + " is bigger than highest pin in simulator (" + str(size) + ". Ignoring pin update"
     else:
         global win
+#        print "PYTHON: val=" + str(val)
         win.anas[pin].updateGenericPin(val, pin_type)
 
 def newLogCallback(level, text):

@@ -176,6 +176,13 @@ void* command_reader(void* in)
 	  printf ("Will pause sim\n");
 	  seasim_set_paused();
 	}
+      else if (strncmp(buf,"a",1)==0)
+	{
+	  static int a=255;
+	  printf ("\n\tSETTING %d\n", a);
+	  printf ("%s (%d,%d)\n", __func__, 14, a);
+	  seasim_set_generic_input(14, (unsigned int)a++, SEARDUINO_PIN_TYPE_ANALOG);
+	}
       else if (strncmp(buf,"resume",5)==0)
 	{
 	  printf ("Will resume sim\n");
