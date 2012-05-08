@@ -1,4 +1,7 @@
 News in coming release
+  Only allow write on serial after a call to begin has been made
+
+News in 0.63,64
 
   More Arduino examples used to verify installation
   If no registered listener for log msgs, then default to fprintf to stderr
