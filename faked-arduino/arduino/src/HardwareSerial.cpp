@@ -31,7 +31,6 @@
 
 #define SERIAL_BUFFER_SIZE 16
 
-
 struct ring_buffer
 {
   unsigned char buffer[SERIAL_BUFFER_SIZE];
