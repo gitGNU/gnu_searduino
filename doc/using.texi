@@ -174,7 +174,7 @@ this by the environment variable @code{USER_PORT}.
 Here's an example of how to instruct Searduino to use
 @code{/dev/ttyACM0} for programming.
 @*
-@code{export USER_POR=/dev/ttyACM0}
+@code{export USER_PORT=/dev/ttyACM0}
 @*
 After this you can invoke make on your makefile as usual.
 @*
