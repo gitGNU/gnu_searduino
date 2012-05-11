@@ -31,6 +31,7 @@
 #include "utils/error.h"
 #include "ext_io.h"
 #include "setup.h"
+#include "stdio.h"
 
 #include <sys/time.h>
 
@@ -73,6 +74,9 @@ void init_arduino_pins(void)
       arduino_pins[i].val=0;
       arduino_pins[i].discard_ctr=0;
     }
+
+  board_setup();
+
   return;
 }
 
