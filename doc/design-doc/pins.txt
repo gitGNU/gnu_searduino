@@ -1,0 +1,50 @@
+The current implementation of the pin is, well to be honest, a
+mess. Instead of patching a bad implemented, the goal now is to
+redesign the implementation trying to get it right.
+
+--
+
+Facts
+====================
+
+Arduino pins
+--------------------
+
+ 1. Digital INPUT/OUTPUT
+ 1. Digital INPUT/OUTPUT, with pwm
+ 2. Analog  INPUT
+
+Note: there are no analog output pins in Arduino
+
+
+Proposed design steps
+====================
+
+1. Board specific pin settings
+
+   Implement a setting function per board, which sets up the pins
+   reflecting reality (that is reflecting the pins on the actual
+   board). E g:
+
+   int    seasim_set_board_uno(void);
+
+
+2. Remove any setting of type in the various *write functions.
+
+3. Add code to check if requested action is valid when calling the
+   *read and *write functions.
+
+4. Searduino should default to one board (proposed board: Uno)
+
+5. Add functions to seasim to set and get what board to simulate.
+
+     int    seasim_set_board_name(char * board);
+
+     int    seasim_set_board(int board);
+
+     char*  seasim_get_board_name(void);
+
+     int    seasim_get_board(void);
+
+6. Add functions to extensions to set and get what board to simulate
+   (via seasim)
