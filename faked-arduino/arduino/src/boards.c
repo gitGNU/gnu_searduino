@@ -51,9 +51,25 @@ struct searduino_board_t
 
 static struct searduino_board_t searduino_boards[] = 
   {
+    { SEARDUINO_BOARD_UNSET, 
+      "none",
+      NULL
+    },
     { SEARDUINO_BOARD_UNO, 
       "Uno",
       board_setup_uno
+    },
+    { SEARDUINO_BOARD_MEGA, 
+      "Mega",
+      NULL
+    },
+    { SEARDUINO_BOARD_MEGA_2560, 
+      "Mega2560",
+      NULL
+    },
+    { SEARDUINO_BOARD_LAST, 
+      NULL,
+      NULL
     }
   };
 
@@ -72,7 +88,11 @@ get_board_name(void)
       return NULL;
     }
 
-  searduino_boards[board_index];
+  /*
+  printf ("board index: %d\n", board_index);
+  printf ("board index: %s\n", searduino_boards[board_index].name);
+  */
+  return searduino_boards[board_index].name;
 }
 
 
@@ -89,10 +109,11 @@ set_board_name(char *board)
 
   for (i=1;i<SEARDUINO_BOARD_LAST;i++)
     {
+      printf ("   checking %d '%s'\n", i, searduino_boards[i].name);
       if (searduino_boards[i].name==NULL)
 	{
-	  fprintf(stderr, "Major internal error: %s:%d\n", 
-		  __func__, __LINE__);
+	  fprintf(stderr, "Major internal error: %s:%d (%s) when setting board to '%s'\n", 
+		  __FILE__, __LINE__, __func__, board);
 	  return -2;
 	}
       if (strncasecmp(board, 
