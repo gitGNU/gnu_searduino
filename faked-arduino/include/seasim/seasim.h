@@ -113,9 +113,19 @@ seasim_i2c_add_device (unsigned int device_nr,
 		       const char  *setup_fun);
 
 
-const char* seasim_get_searduino_version(void);
+const char* 
+seasim_get_searduino_version(void);
 
-const char* seasim_get_searduino_name(void);
+const char* 
+seasim_get_searduino_name(void);
+
+int
+seasim_set_board_name(char *board);
+
+char *
+seasim_get_board_name(void);
+
+
 
 
 

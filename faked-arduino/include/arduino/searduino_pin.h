@@ -121,6 +121,19 @@ anaout_callback(uint8_t pin);
 
 void init_arduino_pins(void);
 
+int 
+set_generic_pin_type(uint8_t pin, uint8_t pin_type);
+
+int 
+get_generic_pin_type(uint8_t pin);
+
+int 
+set_generic_nr_of_pins(uint8_t pins);
+
+uint8_t
+get_generic_nr_of_pins(void);
+
+
 extern const uint8_t A0 ;
 extern const uint8_t A1 ;
 extern const uint8_t A2 ;
