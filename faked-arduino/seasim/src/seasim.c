@@ -175,3 +175,18 @@ seasim_i2c_add_device (unsigned int device_nr,
   return i2c_add_device (device_nr, 
 			 setup_fun);
 }
+
+
+
+int
+seasim_set_board_name(char *board)
+{
+  return set_board_name(board);
+}
+
+char *
+seasim_get_board_name(void)
+{
+  return get_board_name();
+}
+
