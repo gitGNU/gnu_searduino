@@ -125,6 +125,17 @@ board_setup(void)
 int
 board_setup_uno(void)
 {
+  /*
+    From the Arduino Uno page:
+
+    "It has 14 digital input/output pins (of which 6 can be used as PWM outputs), 6 analog inputs,"
+
+    PWM: 3, 5, 6, 9, 10, and 11. Provide 8-bit PWM output with the analogWrite() function. 
+
+    LED: 13. There is a built-in LED connected to digital pin 13. When the pin is HIGH value, the LED is on, when the pin is LOW, it's off. 
+
+   */
+
   printf ("\n\t*** UNO BOARD SETUP\n\n");
   return 0;
 }
