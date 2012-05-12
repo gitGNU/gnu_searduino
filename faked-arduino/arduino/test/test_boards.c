@@ -23,37 +23,68 @@
 
 
 #include "boards.h"
+#include "searduino_pin.h"
 #include <check.h>
 #include <stdlib.h>
 #include <stdio.h>
 
-const char *MY_UNO     = "uno";
-const char *MY_UNO_MIX = "uNo";
+const char *MY_UNO      = "uno";
+const char *MY_UNO_MIX  = "uNo";
+const char *MY_MEGA     = "meGA";
+const char *MY_MEGA_MIX = "MEGa";
 
-START_TEST (test_uno)
+const char *MY_BAD_BOARD= "dummy";
+
+void
+test_setboard_sub(const char *board)
 {
   int ret;
-  
+  printf ("* Setting board to %s\n", board);
+  ret = set_board_name(board);
+  fail_if( ret <= 0 || ret >= 30 );
+
+  printf ("* Comparing board name %s\n", board);
+  ret = strncasecmp(get_board_name(), board, strlen(board));
+  fail_if( ret !=0 );
+}
+
+
+START_TEST (test_board)
+{
+  int ret;
+
   board_setup();
 
-  /* UNO */
+  test_setboard_sub(MY_UNO);
+  test_setboard_sub(MY_UNO_MIX);
+  test_setboard_sub(MY_MEGA);
+  test_setboard_sub(MY_MEGA_MIX);
 
-  printf ("* Setting board to %s\n", MY_UNO);
-  ret = set_board_name(MY_UNO);
-  fail_if( ret <= 0 || ret >= 30 );
+  printf ("* Setting board to %s\n", MY_BAD_BOARD);
+  ret = set_board_name(MY_BAD_BOARD);
+  fail_if( ret > 0 );
 
-  printf ("* Comparing board name %s\n", MY_UNO);
-  ret = strncasecmp(get_board_name(), MY_UNO, strlen(MY_UNO));
-  fail_if( ret !=0 );
+  printf ("* Comparing board name %s\n", MY_BAD_BOARD);
+  fail_if( get_board_name() != NULL );
 
-  /* UNO_MIX */
-  printf ("* Setting board to %s\n", MY_UNO_MIX);
-  ret = set_board_name(MY_UNO_MIX);
-  fail_if( ret <= 0 || ret >= 30 );
+  printf ("* Setting board to %s\n", "null");
+  ret = set_board_name(NULL);
+  fail_if( ret > 0 );
 
-  printf ("* Comparing board name %s\n", MY_UNO_MIX);
-  ret = strncasecmp(get_board_name(), MY_UNO_MIX, strlen(MY_UNO_MIX));
-  fail_if( ret !=0 );
+  printf ("* Comparing board name %s\n", "null");
+  fail_if( get_board_name() != NULL );
+
+  ret = set_generic_pin_type(11, SEARDUINO_PIN_TYPE_DIGITAL);
+  fail_if (ret != 0 );
+
+  ret = get_generic_pin_type(11);
+  fail_if (ret != SEARDUINO_PIN_TYPE_DIGITAL );
+
+  ret = set_generic_pin_type(11, 128);
+  fail_if (ret == 0 );
+
+  ret = get_generic_pin_type(11);
+  fail_if (ret != SEARDUINO_PIN_TYPE_NONE );
 
 }
 END_TEST
@@ -65,7 +96,7 @@ buffer_suite(void) {
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
 
-  tcase_add_test(tc_core, test_uno);
+  tcase_add_test(tc_core, test_board);
 
   return s;
 }
