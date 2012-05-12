@@ -47,7 +47,7 @@
  *
  */ 
 static arduino_pin arduino_pins[NR_OF_ARDUINO_PINS+1];
-
+static uint8_t     nr_of_pins;
 
 
 
@@ -194,14 +194,46 @@ get_generic_pin_mode(uint8_t pin, uint8_t pin_type)
 }
 
 int 
+get_generic_pin_type(uint8_t pin)
+{
+  return arduino_pins[pin].type ;
+}
+
+int 
+set_generic_pin_type(uint8_t pin, uint8_t pin_type)
+{
+  if ( pin_type >= SEARDUINO_PIN_TYPE_END )
+    {
+      arduino_pins[pin].type = SEARDUINO_PIN_TYPE_NONE;
+      return 1;
+    }
+  arduino_pins[pin].type = pin_type;
+  return 0;
+}
+
+int 
+set_generic_nr_of_pins(uint8_t pins)
+{
+  nr_of_pins = pins;
+}
+
+uint8_t
+get_generic_nr_of_pins(void)
+{
+  return nr_of_pins;
+}
+
+
+int 
 set_generic_pin_mode(uint8_t pin, uint8_t mode, uint8_t pin_type)
 {
   /* printf("set_generic_pin_mode(%d, %d, %d)\n", pin, mode, pin_type); */
+  /*
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
     {
       arduino_pins[pin].type=pin_type;
     }
-
+  */
   if (arduino_pins[pin].type==pin_type)
     {
       arduino_pins[pin].mode=mode; 
@@ -221,11 +253,12 @@ set_generic_pin_val_impl(uint8_t      pin,
 			 uint8_t pin_type, 
 			 uint8_t exp_inout)
 {
+  /*
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
     {
       arduino_pins[pin].type=pin_type;
     }
-    
+  */
   if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL)
     {
       if (get_digital_pin_mode(pin) != exp_inout)
