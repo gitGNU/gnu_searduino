@@ -28,6 +28,19 @@ Proposed design steps
 
    int    seasim_set_board_uno(void);
 
+   HENRIK IS CURRENTLY DOING OR HAVE DONE:
+   ---------------------------------------------
+     Added file: faked-arduino/arduino/src/boards.c
+     and test file (in test dir)
+
+     These provide basic means to manage boards specific settings
+
+     Next steps are to:
+     * add more tests
+     * start with implementing Uno settings
+
+     and then proceed with (2) below.
+
 
 2. Remove any setting of type in the various *write functions.
 
