@@ -89,8 +89,10 @@ get_board_name(void)
       return NULL;
     }
 
-  printf ("board index: %d\n", board_index);
-  printf ("board index: %s\n", searduino_boards[board_index].name);
+  /*  printf ("board index: %d\n", board_index);
+  printf ("board name:  %p\n", searduino_boards[board_index].name);
+  printf ("board name:  %s\n", searduino_boards[board_index].name);
+  */
   return searduino_boards[board_index].name;
 }
 
@@ -116,9 +118,10 @@ set_board_name(char *board)
 		  __FILE__, __LINE__, __func__, board);
 	  return 0;
 	}
-      if (strncasecmp(board, 
+      if ( (strncasecmp(board, 
 		      searduino_boards[i].name, 
 		      strlen(searduino_boards[i].name))==0)
+	   && (strlen(searduino_boards[i].name) == strlen(board)))
 	{
 	  board_index = i;
 	  return i;
@@ -140,6 +143,13 @@ board_setup(void)
       board_index = SEARDUINO_BOARD_UNO;
     }
   
+  if ( searduino_boards[board_index].setup == NULL )
+    {
+      fprintf(stderr, "Missing setup function for '%s'\n", 
+	      searduino_boards[board_index].name);
+      return 1;
+    }
+
   return searduino_boards[board_index].setup();
 }
 
@@ -159,7 +169,7 @@ board_setup_uno(void)
 
    */
 
-  set_generic_pin_type(3, SEARDUINO_PIN_TYPE_PWM);
+  //  set_generic_pin_type(3, SEARDUINO_PIN_TYPE_PWM);
 
 
   printf ("\n\t*** UNO BOARD SETUP\n\n");

@@ -23,6 +23,7 @@
 
 #include "seasim/seasim.h"
 #include "searduino.h"
+#include "boards.h"
 
 const char* seasim_get_searduino_version(void)
 {
@@ -187,6 +188,14 @@ seasim_set_board_name(char *board)
 char *
 seasim_get_board_name(void)
 {
-  return get_board_name();
+  char *tmp;
+  tmp = get_board_name();
+  /*
+  printf ("SEASIM board: \n");
+  printf ("SEASIM board: %p\n", tmp);
+  printf ("SEASIM board: %s\n", tmp);
+  printf ("SEASIM board: \n");
+  */
+  return tmp;
 }
 
