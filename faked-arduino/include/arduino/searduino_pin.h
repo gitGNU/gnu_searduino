@@ -72,7 +72,7 @@ int
 get_generic_pin_val(uint8_t pin, uint8_t pin_type);
 
 
-#define NR_OF_ARDUINO_PINS 20
+#define NR_OF_ARDUINO_PINS 50
 
 /*
  * #define PIN_OUT_OF_RANGE(pin)            (pin<0 || pin> NR_OF_ARDUINO_PINS) 
@@ -134,14 +134,14 @@ uint8_t
 get_generic_nr_of_pins(void);
 
 
-extern const uint8_t A0 ;
-extern const uint8_t A1 ;
-extern const uint8_t A2 ;
-extern const uint8_t A3 ;
-extern const uint8_t A4 ;
-extern const uint8_t A5 ;
-extern const uint8_t A6 ;
-extern const uint8_t A7 ;
+extern uint8_t A0 ;
+extern uint8_t A1 ;
+extern uint8_t A2 ;
+extern uint8_t A3 ;
+extern uint8_t A4 ;
+extern uint8_t A5 ;
+extern uint8_t A6 ;
+extern uint8_t A7 ;
 
 
 #endif /* SEARDUINO_PIN_H */

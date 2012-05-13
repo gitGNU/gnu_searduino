@@ -50,6 +50,7 @@ struct searduino_board_t
 
 
 
+
 static struct searduino_board_t searduino_boards[] = 
   {
     { SEARDUINO_BOARD_UNSET, 
@@ -153,6 +154,61 @@ board_setup(void)
   return searduino_boards[board_index].setup();
 }
 
+static void print_board_digital_pins(char *s, int type)
+{
+  int i ; 
+  printf ("%s", s);
+  for (i=0;i<NR_OF_ARDUINO_PINS;i++)
+    {
+      if ( get_generic_pin_type(i) == type)
+	{
+	  printf ("%d, ", i);
+	}
+    }
+  printf ("\n");
+}
+
+static void print_board_analog_pins(void)
+{
+  int i ; 
+  int j ; 
+  int   apins[]     = { A0, A1, A2, A3, A4, A5, A6, A7} ;
+  char* apins_str[] = { "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"} ;
+ 
+
+  printf ("Analog pins:  ");
+  for (i=0;i<NR_OF_ARDUINO_PINS;i++)
+    {
+      /* printf (" *%d \n", i); */
+      if ( get_generic_pin_type(i) == SEARDUINO_PIN_TYPE_ANALOG )
+	{
+	  printf ("%d", i);
+	  for (j=0;j<8;j++)
+	    {
+	      if (apins[j]==i)
+		{
+		  printf (" (%s)", apins_str[j]);
+		  break;
+		}
+	    }
+	  printf (", ");
+	}
+    }
+  printf ("\n");
+}
+
+void 
+print_board_setup(void)
+{
+  printf ("\n");
+  printf ("Board settings:\n");
+  printf ("---------------\n");
+  printf ("Name:         %s\n", get_board_name());
+  print_board_digital_pins("Digital pins: ", SEARDUINO_PIN_TYPE_DIGITAL);
+  print_board_digital_pins("PWM pins:     ", SEARDUINO_PIN_TYPE_PWM);
+  print_board_analog_pins();
+  printf ("\n");
+}
 
 int
 board_setup_uno(void)
@@ -168,11 +224,46 @@ board_setup_uno(void)
     LED: 13. There is a built-in LED connected to digital pin 13. When the pin is HIGH value, the LED is on, when the pin is LOW, it's off. 
 
    */
+  A0 = 15;
+  A1 = 16;
+  A2 = 17;
+  A3 = 18;
+  A4 = 19;
+  A5 = 20;
 
-  //  set_generic_pin_type(3, SEARDUINO_PIN_TYPE_PWM);
+  /*
+   *    6 PWM pins
+   */
+  set_generic_pin_type(3,  SEARDUINO_PIN_TYPE_PWM);
+  set_generic_pin_type(5,  SEARDUINO_PIN_TYPE_PWM);
+  set_generic_pin_type(6,  SEARDUINO_PIN_TYPE_PWM);
+  set_generic_pin_type(9,  SEARDUINO_PIN_TYPE_PWM);
+  set_generic_pin_type(10, SEARDUINO_PIN_TYPE_PWM);
+  set_generic_pin_type(11, SEARDUINO_PIN_TYPE_PWM);
 
+  /* 
+   *   Digital pins
+   */
+  set_generic_pin_type(1,  SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(2,  SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(4,  SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(7,  SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(8,  SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(12, SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(13, SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(14, SEARDUINO_PIN_TYPE_DIGITAL);
 
-  printf ("\n\t*** UNO BOARD SETUP\n\n");
+  set_generic_pin_type(A0, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A1, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A2, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A3, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A4, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A5, SEARDUINO_PIN_TYPE_ANALOG);
+  
+  
+
+  printf ("\n\t*** UNO BOARD SETUP done\n\n");
+  print_board_setup();
   return 0;
 }
 

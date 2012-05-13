@@ -55,14 +55,14 @@ static unsigned int digitalWrite_timelimit = 20*1000;
 #define genericWrite_timelimit digitalWrite_timelimit
 
 
-const uint8_t A0 = 14;
-const uint8_t A1 = 15;
-const uint8_t A2 = 16;
-const uint8_t A3 = 17;
-const uint8_t A4 = 18;
-const uint8_t A5 = 19;
-const uint8_t A6 = 20;
-const uint8_t A7 = 21;
+uint8_t A0 = 0;
+uint8_t A1 = 0;
+uint8_t A2 = 0;
+uint8_t A3 = 0;
+uint8_t A4 = 0;
+uint8_t A5 = 0;
+uint8_t A6 = 0;
+uint8_t A7 = 0;
 
 
 void init_arduino_pins(void)
