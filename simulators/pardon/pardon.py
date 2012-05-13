@@ -270,7 +270,7 @@ class MyWindow(Gtk.Window):
         self.digs = [None]*size
         self.anas = [None]*size
 
-        Gtk.Window.__init__(self, title="Pardon  ( " + seasim_get_searduino_name() + " - " + seasim_get_searduino_version() + " )")
+        Gtk.Window.__init__(self, title="Pardon  ( " + seasim_get_searduino_name() + " - " + seasim_get_searduino_version() + " ) board " + seasim_get_board_name())
 
         self.innerbox = Gtk.HBox(spacing=6)
 
@@ -548,6 +548,10 @@ else:
 #print "ard:  " + ard_code
 #print "i2c:  " + i2c_code
 
+seasim_set_board_name("Uno")
+print " ***** BOARD " + seasim_get_board_name()
+
+
 if i2c_code != "":
     seasim_add_i2c_device(50, i2c_code)
 
@@ -555,6 +559,7 @@ if i2c_code != "":
 #time.sleep(10)
 seasim_set_arduino_code(ard_code)
 seasim_initialise();
+
 seasim_set_Write_timelimit(0)
 time.sleep(1)
 win = MyWindow(size)
