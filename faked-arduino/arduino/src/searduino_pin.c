@@ -227,14 +227,8 @@ get_generic_nr_of_pins(void)
 int 
 set_generic_pin_mode(uint8_t pin, uint8_t mode, uint8_t pin_type)
 {
-  /* printf("set_generic_pin_mode(%d, %d, %d)\n", pin, mode, pin_type); */
-  /*
-  if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
-    {
-      arduino_pins[pin].type=pin_type;
-    }
-  */
-  if (arduino_pins[pin].type==pin_type)
+  if ( (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL) ||
+       (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_PWM) )
     {
       arduino_pins[pin].mode=mode; 
       return 0;
@@ -259,23 +253,27 @@ set_generic_pin_val_impl(uint8_t      pin,
       arduino_pins[pin].type=pin_type;
     }
   */
-  if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL)
+  if ( (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL) ||
+       (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_PWM) )
     {
       if (get_digital_pin_mode(pin) != exp_inout)
 	{
 	  SEARD_ERROR( SEARD_ARDUINO_WRONG_PIN_MODE);
 	  return SEARD_ARDUINO_WRONG_PIN_MODE;
 	}
-    }
-
-  if (arduino_pins[pin].type==pin_type)
-    {
       arduino_pins[pin].val=val; 
-      return 0;
     }
   else
     {
-      ;
+      if (arduino_pins[pin].type==pin_type)
+	{
+	  arduino_pins[pin].val=val; 
+	  return 0;
+	}
+      else
+	{
+	  ;
+	}
     }
   return  -1;
 }
@@ -305,7 +303,7 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
   searduino_setup();
 
   PRINT_FUNCTION_NAME(("%d,%d",pin,val));
-  /* printf("%s(%d,%d)\n",__func__, pin,val); */
+  /* printf("%s(%d,%d)\n",__func__, pin,val);  */
 
   if (PIN_OUT_OF_RANGE(pin))
     {
@@ -338,6 +336,7 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
    */
   if ( get_pin_val(pin) != val)
     {
+
       set_generic_pin_val(pin, val, pin_type);
       
       /*

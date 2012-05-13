@@ -125,6 +125,8 @@ seasim_set_board_name(char *board);
 char *
 seasim_get_board_name(void);
 
+int 
+seasim_get_generic_pin_type(uint8_t pin);
 
 
 

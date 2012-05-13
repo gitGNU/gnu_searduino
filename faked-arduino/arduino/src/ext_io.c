@@ -311,3 +311,5 @@ ext_generic_write_outpin(uint8_t pin, unsigned int val, uint8_t pin_type)
     }
   return SEARD_ARDUINO_OK;
 }
+
+

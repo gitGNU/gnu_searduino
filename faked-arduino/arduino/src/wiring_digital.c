@@ -77,18 +77,8 @@ pinMode(uint8_t pin, uint8_t mode)
       return;
     }
 
-
-  if (pin < A0)
-    {
-      set_digital_pin_mode(pin,mode);
-      ext_digital_set_mode(pin,mode);
-    }
-  else
-    {
-      set_analog_pin_mode(pin,mode);
-      ext_analog_set_mode(pin,mode);
-    }
-
+  set_digital_pin_mode(pin,mode);
+  ext_digital_set_mode(pin,mode);
 
   return;
 }
@@ -124,7 +114,8 @@ int digitalRead(uint8_t pin)
 
 void analogWrite(uint8_t pin, int val)
 {
-  return genericWrite(pin, val, SEARDUINO_PIN_TYPE_ANALOG);
+  if (val > 255 ) { val = 255; }
+  return genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
 }
 
 
