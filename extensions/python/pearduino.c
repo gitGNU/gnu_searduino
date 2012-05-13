@@ -247,6 +247,8 @@ static PyObject* c_add_i2c_device(PyObject* self, PyObject* args)
 }
 
 
+
+
 static PyObject* c_set_arduino_code(PyObject* self, PyObject* args)
 {
   uint8_t ret;
@@ -509,6 +511,38 @@ c_get_searduino_name(PyObject *dummy, PyObject *args)
 }
 
 
+
+static PyObject *
+c_get_board_name(PyObject *dummy, PyObject *args)
+{
+  const char * val;
+  PEARDUINO_PRINT_IN();
+
+  printf ("GET BOARD: %s\n");
+  val= seasim_get_board_name();
+  printf ("GET BOARD: %s\n", val);
+
+  PyObject* o = Py_BuildValue("s", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+static PyObject* c_set_board_name(PyObject* self, PyObject* args)
+{
+  int ret;
+  char *name;
+  PEARDUINO_PRINT_IN();
+  
+  PyArg_ParseTuple(args, "s", &name);
+  
+  ret = seasim_set_board_name(name);
+  PyObject* o = Py_BuildValue("i", ret);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
 /*
  * Another function to be called from Python
  */
@@ -536,6 +570,8 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_enable_streamed_output",  (PyCFunction)c_enable_streamed_output, METH_VARARGS, NULL},
   {"seasim_get_searduino_version",   (PyCFunction)c_get_searduino_version, METH_VARARGS, NULL},
   {"seasim_get_searduino_name",      (PyCFunction)c_get_searduino_name, METH_VARARGS, NULL},
+  {"seasim_set_board_name",          (PyCFunction)c_set_board_name, METH_VARARGS, NULL},
+  {"seasim_get_board_name",          (PyCFunction)c_get_board_name, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
   /*  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
