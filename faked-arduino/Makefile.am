@@ -47,7 +47,6 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/searduino_pin.h \
        ./include/arduino/setup.h \
        ./include/arduino/i2c_loader.h \
-       ./include/seasim/boards.h      \
        ./include/seasim/seasim.h 
 
 LIB_LIBRARIES_SOURCES_FILES = \
