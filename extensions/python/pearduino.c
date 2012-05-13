@@ -305,6 +305,23 @@ static PyObject* c_enable_streamed_output(PyObject* self, PyObject* args)
   return o;
 }
 
+static PyObject* c_get_generic_pin_type(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  unsigned int pin;
+  
+  PyArg_ParseTuple(args, "i", &pin);
+
+  PEARDUINO_PRINT_IN();
+  
+  ret = seasim_get_generic_pin_type(pin);
+  PyObject* o = Py_BuildValue("i", ret);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
 static PyObject* c_get_Write_timelimit(PyObject* self, PyObject* args)
 {
   unsigned int ret;
@@ -518,9 +535,7 @@ c_get_board_name(PyObject *dummy, PyObject *args)
   const char * val;
   PEARDUINO_PRINT_IN();
 
-  printf ("GET BOARD: %s\n");
   val= seasim_get_board_name();
-  printf ("GET BOARD: %s\n", val);
 
   PyObject* o = Py_BuildValue("s", val);
 
@@ -572,6 +587,7 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_get_searduino_name",      (PyCFunction)c_get_searduino_name, METH_VARARGS, NULL},
   {"seasim_set_board_name",          (PyCFunction)c_set_board_name, METH_VARARGS, NULL},
   {"seasim_get_board_name",          (PyCFunction)c_get_board_name, METH_VARARGS, NULL},
+  {"seasim_get_generic_pin_type",    (PyCFunction)c_get_generic_pin_type, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
   /*  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
