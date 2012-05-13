@@ -112,55 +112,6 @@ new_out(uint8_t pin, unsigned int val, uint8_t pin_type)
 
 
 
-#ifdef OBSO
-void 
-new_dig_out(uint8_t pin, uint8_t val)
-{
-  PyObject *arglist;
-  PyObject *result; 
-
-  PyGILState_STATE gstate;   
-  gstate = PyGILState_Ensure();   
-
-  PEARDUINO_PRINT_IN();
-
-  PEARDUINO_PRINT_INSIDE();
-
-  if (my_dig_callback!=NULL)
-    {
-
-      arglist = Py_BuildValue("(ii)", pin, val);
-      
-      if (arglist==NULL)
-	{
-	  printf ("wooops, arglist is no no\n");
-	  exit(1);
-	}
-
-      //  printf(" Arguments to callback: (%d,%d) ", pin, val);      fflush(stdout); 
-      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
-
-      result = PyEval_CallObject(my_dig_callback, arglist);
-
-      Py_DECREF(arglist);
-      
-      if (result)
-	{
-	  Py_DECREF(result);
-	}      
-    }
-  else
-    {
-      fprintf (stderr, "*** ERRROR ***\n");
-      fprintf (stderr, "*** Could not call digital out callback since no callback ***\n");
-    }
-
-
-  PyGILState_Release(gstate);
-  PEARDUINO_PRINT_OUT();
-}
-
-#endif
 
 
 
@@ -262,53 +213,6 @@ new_dig_mode(uint8_t pin, uint8_t mode)
   PEARDUINO_PRINT_OUT();
 }
 
-#ifdef OBSO
-void new_ana_out(uint8_t pin, unsigned int val)
-{
-  PyObject *arglist;
-  PyObject *result; 
-
-  PyGILState_STATE gstate;   
-  gstate = PyGILState_Ensure();   
-
-  PEARDUINO_PRINT_IN();
-
-  PEARDUINO_PRINT_INSIDE();
-
-  if (my_ana_callback!=NULL)
-    {
-
-       arglist = Py_BuildValue("(ii)", pin, val);
-
-      if (arglist==NULL)
-	{
-	  printf ("wooops, arglist is no no\n");
-	  exit(1);
-	}
-
-      /* printf(" Arguments to callback:  ");      fflush(stdout); */
-      //PyObject_Print(arglist, stdout, Py_PEARDUINO_PRINT_RAW);
-
-      result = PyEval_CallObject(my_ana_callback, arglist);
-
-      Py_DECREF(arglist);
-      
-      if (result)
-	{
-	  Py_DECREF(result);
-	}      
-    }
-  else
-    {
-      fprintf (stderr, "*** ERRROR ***\n");
-      fprintf (stderr, "*** Could not call analog out callback since no callback ***\n");
-    }
-
-  PyGILState_Release(gstate);
-  PEARDUINO_PRINT_OUT();
-}
-
-#endif
 
 static PyObject* c_get_pin_mode(PyObject* self, PyObject* args)
 {
@@ -459,46 +363,6 @@ static PyObject* c_start(PyObject* self, PyObject* args)
 }
 
 
-#ifdef OBSO
-
-/*
- * Function to be called from Python
- */
-static PyObject* c_digitalRead(PyObject* self, PyObject* args)
-{
-  int pin;
-  uint8_t val ;
-  PEARDUINO_PRINT_IN();
-  
-  PyArg_ParseTuple(args, "i", &pin);
-
-  val = seasim_get_dig_output(pin);
-  PyObject* o = Py_BuildValue("i", val);
-
-  PEARDUINO_PRINT_OUT();
-  return o;
-}
-
-
-/*
- * Function to be called from Python
- */
-static PyObject* c_analogRead(PyObject* self, PyObject* args)
-{
-  int pin;
-  unsigned int val ;
-  PEARDUINO_PRINT_IN();
-  
-  PyArg_ParseTuple(args, "i", &pin);
-
-  val = seasim_get_ana_output(pin);
-
-  PyObject* o = Py_BuildValue("i", val);
-
-  PEARDUINO_PRINT_OUT();
-  return o;
-}
-#endif
 
 
 static PyObject* c_Read(PyObject* self, PyObject* args)
@@ -545,57 +409,6 @@ static PyObject* c_ext_set_input(PyObject* self, PyObject* args)
 }
 
 
-#ifdef OBSO
-
-/*
- * Function to be called from Python
- */
-static PyObject* c_ext_set_ana_input(PyObject* self, PyObject* args)
-{
-  unsigned int pin;
-  unsigned int val;
-  PEARDUINO_PRINT_IN();
-
-  if (!PyArg_ParseTuple(args, "ii", &pin, &val))
-    {
-      return NULL;
-    }
-
-  PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
-
-  val= seasim_set_ana_input(pin, val);
-
-  PyObject* o = Py_BuildValue("i", val);
-
-  PEARDUINO_PRINT_OUT();
-  return o;
-}
-
-
-/*
- * Function to be called from Python
- */
-static PyObject* c_ext_set_dig_input(PyObject* self, PyObject* args)
-{
-  int pin;
-  int val;
-  PEARDUINO_PRINT_IN();
-
-  if (!PyArg_ParseTuple(args, "ii", &pin, &val))
-    {
-      return NULL;
-    }
-
-  PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
-
-  val= seasim_set_dig_input(pin, val);
-  PyObject* o = Py_BuildValue("i", val);
-
-  PEARDUINO_PRINT_OUT();
-  return o;
-}
-
-#endif
 
 
 PyObject * c_pause(void)
@@ -747,39 +560,6 @@ void* c_arduino_code(void *in)
   return NULL;
 }
 
-#ifdef OBSO
-static PyObject *
-c_my_set_dig_callback(PyObject *dummy, PyObject *args)
-{
-  PyObject *result = NULL;
-  PyObject *temp;
-  PEARDUINO_PRINT_IN();
-
-  if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
-    if (!PyCallable_Check(temp)) {
-      PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-      PEARDUINO_PRINT_OUT();
-
-      return NULL;
-    }
-
-    Py_XINCREF(temp);         /* Add a ref to the new callback */
-    Py_XDECREF(my_dig_callback);  /* Dispose possible previous callback */
-    my_dig_callback = temp;       /* Remember new callback */
-
-    /* Boilerplate to return "None" */
-    Py_INCREF(Py_None);
-    result = Py_None;
-
-    PEARDUINO_PRINT_INSIDE_STR("Python callback is registered");
-    usleep (1000);
-  }
-
-  PEARDUINO_PRINT_OUT();
-  return result;
-}
-
-#endif
 
 static PyObject *
 c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args)
@@ -812,39 +592,6 @@ c_my_set_dig_mode_callback(PyObject *dummy, PyObject *args)
   return result;
 }
 
-#ifdef OBSO
-static PyObject *
-c_my_set_ana_callback(PyObject *dummy, PyObject *args)
-{
-  PyObject *result = NULL;
-  PyObject *temp;
-  PEARDUINO_PRINT_IN();
-
-  if (PyArg_ParseTuple(args, "O:set_callback", &temp)) {
-    if (!PyCallable_Check(temp)) {
-      PyErr_SetString(PyExc_TypeError, "parameter must be callable");
-      PEARDUINO_PRINT_OUT();
-
-      return NULL;
-    }
-
-    Py_XINCREF(temp);         /* Add a ref to the new callback */
-Py_XDECREF(my_ana_callback);  /* Dispose possible previous callback */
-    my_ana_callback = temp;       /* Remember new callback */
-
-    /* Boilerplate to return "None" */
-    Py_INCREF(Py_None);
-    result = Py_None;
-
-    PEARDUINO_PRINT_INSIDE_STR("Python callback is registered");
-    usleep (1000);
-  }
-
-  PEARDUINO_PRINT_OUT();
-  return result;
-}
-
-#endif
 
 static PyObject *
 c_my_set_callback(PyObject *dummy, PyObject *args)
