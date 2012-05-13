@@ -67,7 +67,7 @@ typeLabels[SEARDUINO_PIN_TYPE_END]     = "Unknown"
 #
 
 paused = 0 
-size  = 16
+size  = 20
 
 redColor = Gdk.RGBA()
 redColor.red=1.0
@@ -201,20 +201,36 @@ class Pin(Gtk.Widget):
         self.mode = Gtk.Label("Undef")
         self.mode.set_width_chars(7);
 
-        # Input  
-        #   digital
-        self.input = Gtk.ToggleButton()
-        self.input.connect("clicked", self.on_dig_toggled, "1")
-        #   analog
-        self.adjustment = Gtk.Adjustment(0, 0, 1023, 1, 100, 0)
-        self.spinbutton = Gtk.SpinButton()
-        self.spinbutton.set_adjustment(self.adjustment)
-        self.spinbutton.set_numeric(True)
-        self.spinbutton.connect("value-changed", self.on_update)
+        if pin_type == SEARDUINO_PIN_TYPE_DIGITAL:
+
+            # Input  
+            #   digital
+            self.input = Gtk.ToggleButton()
+            self.input.connect("clicked", self.on_dig_toggled, "1")
+
+            # Output
+            self.output_label = Gtk.Label("NaN")
+
+        elif pin_type==SEARDUINO_PIN_TYPE_ANALOG:
+
+            #   analog
+            self.adjustment = Gtk.Adjustment(0, 0, 1023, 1, 100, 0)
+            self.spinbutton = Gtk.SpinButton()
+            self.spinbutton.set_adjustment(self.adjustment)
+            self.spinbutton.set_numeric(True)
+            self.spinbutton.connect("value-changed", self.on_update)
+
+        elif pin_type==SEARDUINO_PIN_TYPE_PWM:
+            # Input  
+            #   digital
+            self.input = Gtk.ToggleButton()
+            self.input.connect("clicked", self.on_dig_toggled, "1")
+
+            # Output
+            self.output_label = Gtk.Label("NaN")
+
 
         
-        # Output
-        self.output_label = Gtk.Label("NaN")
 
     def updateGenericPin(self, val, pin_type):
 
@@ -249,7 +265,7 @@ class Pin(Gtk.Widget):
         if self.input.get_active():
             val = 1
             
-#        print "Pin toggle " + str(self.pin_nr) + ", " + str(val) + ", " + str(self.pin_type)
+#      print "Pin toggle " + str(self.pin_nr) + ", " + str(val) + ", " + str(self.pin_type)
         seasim_set_input(self.pin_nr, 
                          val, 
                          self.pin_type )
@@ -334,25 +350,36 @@ class MyWindow(Gtk.Window):
         pinTable.attach(Gtk.Label("Type"),    1, 2, 1, 2)
         pinTable.attach(Gtk.Label("Pin"),     2, 3, 1, 2)
         pinTable.attach(Gtk.Label("Mode"),    3, 4, 1, 2)
-        pinTable.attach(Gtk.Label("Dig in"),  4, 5, 1, 2)
-        pinTable.attach(Gtk.Label("Ana in"),  5, 6, 1, 2)
-        pinTable.attach(Gtk.Label("Output"),  6, 7, 1, 2)
+        pinTable.attach(Gtk.Label("Input"),   4, 5, 1, 2)
+        pinTable.attach(Gtk.Label("Output"),  5, 6, 1, 2)
 
         for i in range(1,(size-1)):
-#            print "Update on pin: " + str(i)
+            pin_type = seasim_get_generic_pin_type(i)
+#            print "New pin: " + str(i) + " type: " + str(pin_type)
+
 #            self.digs[i] = digitalPin(self,i)
 #            digTable.attach(self.digs[i], 0, 1, i, i+1)
 
 #            wid = Pin(self,i%5, i, i)
-            wid = Pin(self,1, i, i)
+            wid = Pin(self,pin_type, i, i)
             self.anas[i] = wid
+
+            
 
             pinTable.attach(wid.type_text,    1, 2, i+1, i+2)
             pinTable.attach(wid.pinLabel,     2, 3, i+1, i+2)
             pinTable.attach(wid.mode,         3, 4, i+1, i+2)
-            pinTable.attach(wid.input,        4, 5, i+1, i+2)
-            pinTable.attach(wid.spinbutton,   5, 6, i+1, i+2)
-            pinTable.attach(wid.output_label, 6, 7, i+1, i+2)
+            if pin_type == SEARDUINO_PIN_TYPE_DIGITAL:
+                pinTable.attach(wid.input,        4, 5, i+1, i+2)
+                pinTable.attach(wid.output_label, 5, 6, i+1, i+2)
+
+            elif pin_type==SEARDUINO_PIN_TYPE_ANALOG:
+                pinTable.attach(wid.spinbutton,   4, 5, i+1, i+2)
+
+            elif pin_type == SEARDUINO_PIN_TYPE_PWM:
+                pinTable.attach(wid.input,        4, 5, i+1, i+2)
+                pinTable.attach(wid.output_label, 5, 6, i+1, i+2)
+
 
             
 
