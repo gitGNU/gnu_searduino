@@ -29,6 +29,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/ext_io.h \
        ./include/arduino/boards/pins_due.h \
        ./include/arduino/error.h \
+       ./include/arduino/boards.h \
        ./include/avr/interrupt.h \
        ./include/avr/io.h \
        ./include/avr/eeprom.h \
