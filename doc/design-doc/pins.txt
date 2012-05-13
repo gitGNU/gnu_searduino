@@ -36,8 +36,10 @@ Proposed design steps
      These provide basic means to manage boards specific settings
 
      Next steps are to:
-     * add more tests
-     * start with implementing Uno settings
+     * add more tests (done)
+     * start with implementing Uno settings (begun)
+     * implement new functions in python extension (done)
+     * try new py funs in pardon (done)
 
      and then proceed with (2) below.
 
