@@ -253,8 +253,9 @@ set_generic_pin_val_impl(uint8_t      pin,
       arduino_pins[pin].type=pin_type;
     }
   */
-  if ( (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL) ||
-       (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_PWM) )
+  if (pin_type == SEARDUINO_PIN_TYPE_DIGITAL)
+    /*  if ( (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL) ||
+	(arduino_pins[pin].type==SEARDUINO_PIN_TYPE_PWM) ) */
     {
       if (get_digital_pin_mode(pin) != exp_inout)
 	{
@@ -262,6 +263,7 @@ set_generic_pin_val_impl(uint8_t      pin,
 	  return SEARD_ARDUINO_WRONG_PIN_MODE;
 	}
       arduino_pins[pin].val=val; 
+      return 0;
     }
   else
     {
@@ -272,7 +274,8 @@ set_generic_pin_val_impl(uint8_t      pin,
 	}
       else
 	{
-	  ;
+	  SEARD_ERROR( SEARD_ARDUINO_WRONG_PIN_TYPE);
+	  return SEARD_ARDUINO_WRONG_PIN_TYPE;
 	}
     }
   return  -1;
@@ -282,6 +285,11 @@ set_generic_pin_val_impl(uint8_t      pin,
 int 
 get_generic_pin_val(uint8_t pin, uint8_t pin_type)
 {
+  if( (pin_type == SEARDUINO_PIN_TYPE_ANALOG) && 
+      (arduino_pins[pin].type != SEARDUINO_PIN_TYPE_ANALOG) )
+    {
+      SEARD_ERROR( SEARD_ARDUINO_WRONG_PIN_TYPE);
+    }
   return arduino_pins[pin].val; 
 }
 
