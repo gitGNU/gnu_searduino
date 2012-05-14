@@ -51,7 +51,7 @@ Proposed design steps
 3. Add code to check if requested action is valid when calling the
    *read and *write functions.
 
-  (TODO)
+  (begun)
 
 4. Searduino should default to one board (proposed board: Uno)
 
