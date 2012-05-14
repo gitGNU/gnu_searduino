@@ -37,7 +37,7 @@ Proposed design steps
 
      Next steps are to:
      * add more tests (done)
-     * start with implementing Uno settings (begun)
+     * start with implementing Uno settings (done)
      * implement new functions in python extension (done)
      * try new py funs in pardon (done)
 
@@ -46,20 +46,27 @@ Proposed design steps
 
 2. Remove any setting of type in the various *write functions.
 
+   (done)
+
 3. Add code to check if requested action is valid when calling the
    *read and *write functions.
 
+  (TODO)
+
 4. Searduino should default to one board (proposed board: Uno)
+
+   (done)
 
 5. Add functions to seasim to set and get what board to simulate.
 
      int    seasim_set_board_name(char * board);
-
-     int    seasim_set_board(int board);
-
      char*  seasim_get_board_name(void);
 
-     int    seasim_get_board(void);
+     (done)
+
 
 6. Add functions to extensions to set and get what board to simulate
    (via seasim)
+
+     (done)
+
