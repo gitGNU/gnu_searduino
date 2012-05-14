@@ -112,10 +112,5 @@ int digitalRead(uint8_t pin)
   return get_digital_pin_val(pin);
 }
 
-void analogWrite(uint8_t pin, int val)
-{
-  if (val > 255 ) { val = 255; }
-  return genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
-}
 
 
