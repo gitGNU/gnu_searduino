@@ -179,19 +179,9 @@ static void print_board_analog_pins(void)
   printf ("Analog pins:  ");
   for (i=0;i<NR_OF_ARDUINO_PINS;i++)
     {
-      /* printf (" *%d \n", i); */
       if ( get_generic_pin_type(i) == SEARDUINO_PIN_TYPE_ANALOG )
 	{
 	  printf ("%d (A%d), ", i, i - A0);
-	  /*for (j=0;j<8;j++)
-	    {
-	      if (apins[j]==i)
-		{
-		  printf (" (%s)", apins_str[j]);
-		  break;
-		}
-	    }
-	    printf (", "); */
 	}
     }
   printf ("\n");
