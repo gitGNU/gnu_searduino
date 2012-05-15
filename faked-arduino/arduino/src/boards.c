@@ -182,8 +182,8 @@ static void print_board_analog_pins(void)
       /* printf (" *%d \n", i); */
       if ( get_generic_pin_type(i) == SEARDUINO_PIN_TYPE_ANALOG )
 	{
-	  printf ("%d", i);
-	  for (j=0;j<8;j++)
+	  printf ("%d (A%d), ", i, i - A0);
+	  /*for (j=0;j<8;j++)
 	    {
 	      if (apins[j]==i)
 		{
@@ -191,7 +191,7 @@ static void print_board_analog_pins(void)
 		  break;
 		}
 	    }
-	  printf (", ");
+	    printf (", "); */
 	}
     }
   printf ("\n");
