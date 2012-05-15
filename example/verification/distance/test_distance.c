@@ -23,8 +23,8 @@ int main(void)
     {    
       /* Set the analog pin 11 & 12, 
 	 which is used by get_distance() */
-      seasim_set_generic_input(11, i, INPUT);
-      seasim_set_generic_input(12, j, INPUT);
+      seasim_set_generic_input(A0, i, SEARDUINO_PIN_TYPE_ANALOG);
+      seasim_set_generic_input(A1, j, SEARDUINO_PIN_TYPE_ANALOG);
       
       /*
 	printf ("get_distance()=%.4d  (i:%.4d  j:%.4d  ctr:%.4d)\n", 

@@ -26,7 +26,7 @@
 
 uint8_t get_distance(void)
 {
-  uint8_t ret = (analogRead(11) + analogRead(12)); 
+  uint8_t ret = (analogRead(A0) + analogRead(A1)); 
   return ret ; 
 }
 
