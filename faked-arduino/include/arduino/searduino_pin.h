@@ -142,6 +142,14 @@ extern uint8_t A4 ;
 extern uint8_t A5 ;
 extern uint8_t A6 ;
 extern uint8_t A7 ;
+extern uint8_t A8 ;
+extern uint8_t A9 ;
+extern uint8_t A10 ;
+extern uint8_t A11 ;
+extern uint8_t A12 ;
+extern uint8_t A13 ;
+extern uint8_t A14 ;
+extern uint8_t A15 ;
 
 
 #endif /* SEARDUINO_PIN_H */
