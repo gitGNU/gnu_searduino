@@ -108,8 +108,12 @@ int digitalRead(uint8_t pin)
       log_error("You're reading from pin %d, which is an OUTPUT pin", pin);
     }
   
-
-  return get_digital_pin_val(pin);
+  /*
+   * If the digital pin has been used as a PWM, then
+   * we're returning HIGH if !=0, otherwise LOW (
+   *    (   0 => 0   !0 => 1 )
+   */
+  return (get_digital_pin_val(pin)!=0);
 }
 
 
