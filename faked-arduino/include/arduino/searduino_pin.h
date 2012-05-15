@@ -72,7 +72,7 @@ int
 get_generic_pin_val(uint8_t pin, uint8_t pin_type);
 
 
-#define NR_OF_ARDUINO_PINS 50
+#define NR_OF_ARDUINO_PINS 100
 
 /*
  * #define PIN_OUT_OF_RANGE(pin)            (pin<0 || pin> NR_OF_ARDUINO_PINS) 

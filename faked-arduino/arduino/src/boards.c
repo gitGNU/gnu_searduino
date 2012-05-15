@@ -268,3 +268,72 @@ board_setup_uno(void)
 }
 
 
+int
+board_setup_mega2560(void)
+{
+  int i;
+  /*
+    From the Arduino Mega2560 page:
+
+    It has 54 digital input/output pins (of which 14 can be used as PWM outputs), 16 analog inputs
+
+    PWM: 2 to 13 and 44 to 46. Provide 8-bit PWM output with the analogWrite() function.
+
+    LED: 13. There is a built-in LED connected to digital pin 13. When the pin is HIGH value, the LED is on, when the pin is LOW, it's off. 
+
+   */
+  
+  A0  = 55;
+  A1  = 56;
+  A2  = 57;
+  A3  = 58;
+  A4  = 59;
+  A5  = 60;
+  A6  = 61;
+  A7  = 62;
+  A8  = 63;
+  A9  = 64;
+  A10 = 65;
+  A11 = 66;
+  A12 = 67;
+  A13 = 68;
+  A14 = 69;
+  A15 = 70;
+
+  /* Set Digital pin type */
+  set_generic_pin_type(1,  SEARDUINO_PIN_TYPE_DIGITAL);
+  for(i = 2; i < A0; i++) {
+    set_generic_pin_type(i,  SEARDUINO_PIN_TYPE_DIGITAL);
+  }
+
+  /* Set PWM pin type */
+  for(i = 2; i <= 13; i++) {
+    set_generic_pin_type(i,  SEARDUINO_PIN_TYPE_PWM);    
+  }
+  set_generic_pin_type(44,  SEARDUINO_PIN_TYPE_PWM);
+  set_generic_pin_type(45,  SEARDUINO_PIN_TYPE_PWM);
+  set_generic_pin_type(46,  SEARDUINO_PIN_TYPE_PWM);
+
+  /* Set Analog pin type */
+  set_generic_pin_type(A0,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A1,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A2,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A3,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A4,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A5,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A6,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A7,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A8,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A9,  SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A10, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A11, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A12, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A13, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A14, SEARDUINO_PIN_TYPE_ANALOG);
+  set_generic_pin_type(A15, SEARDUINO_PIN_TYPE_ANALOG);
+
+
+  printf ("\n\t*** MEGA2560 BOARD SETUP done\n\n");
+  print_board_setup();
+  return 0;
+}
