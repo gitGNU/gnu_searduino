@@ -67,7 +67,7 @@ static struct searduino_board_t searduino_boards[] =
     },
     { SEARDUINO_BOARD_MEGA_2560, 
       "Mega2560",
-      NULL
+      board_setup_mega
     },
     { SEARDUINO_BOARD_LAST, 
       NULL,
