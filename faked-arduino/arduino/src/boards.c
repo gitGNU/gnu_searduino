@@ -224,12 +224,12 @@ board_setup_uno(void)
     LED: 13. There is a built-in LED connected to digital pin 13. When the pin is HIGH value, the LED is on, when the pin is LOW, it's off. 
 
    */
-  A0 = 15;
-  A1 = 16;
-  A2 = 17;
-  A3 = 18;
-  A4 = 19;
-  A5 = 20;
+  A0 = 14;
+  A1 = 15;
+  A2 = 16;
+  A3 = 17;
+  A4 = 18;
+  A5 = 19;
 
   /*
    *    6 PWM pins
@@ -251,7 +251,7 @@ board_setup_uno(void)
   set_generic_pin_type(8,  SEARDUINO_PIN_TYPE_DIGITAL);
   set_generic_pin_type(12, SEARDUINO_PIN_TYPE_DIGITAL);
   set_generic_pin_type(13, SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(14, SEARDUINO_PIN_TYPE_DIGITAL);
+  set_generic_pin_type(0, SEARDUINO_PIN_TYPE_DIGITAL);
 
   set_generic_pin_type(A0, SEARDUINO_PIN_TYPE_ANALOG);
   set_generic_pin_type(A1, SEARDUINO_PIN_TYPE_ANALOG);
@@ -283,26 +283,27 @@ board_setup_mega2560(void)
 
    */
   
-  A0  = 55;
-  A1  = 56;
-  A2  = 57;
-  A3  = 58;
-  A4  = 59;
-  A5  = 60;
-  A6  = 61;
-  A7  = 62;
-  A8  = 63;
-  A9  = 64;
-  A10 = 65;
-  A11 = 66;
-  A12 = 67;
-  A13 = 68;
-  A14 = 69;
-  A15 = 70;
+  A0  = 54;
+  A1  = 55;
+  A2  = 56;
+  A3  = 57;
+  A4  = 58;
+  A5  = 59;
+  A6  = 60;
+  A7  = 61;
+  A8  = 62;
+  A9  = 63;
+  A10 = 64;
+  A11 = 65;
+  A12 = 66;
+  A13 = 67;
+  A14 = 68;
+  A15 = 69;
 
   /* Set Digital pin type */
+  set_generic_pin_type(0,  SEARDUINO_PIN_TYPE_DIGITAL);
   set_generic_pin_type(1,  SEARDUINO_PIN_TYPE_DIGITAL);
-  for(i = 2; i < A0; i++) {
+  for(i = 14; i < A0; i++) {
     set_generic_pin_type(i,  SEARDUINO_PIN_TYPE_DIGITAL);
   }
 
