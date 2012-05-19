@@ -31,61 +31,35 @@ import sys
 #
 # Digital pins (as seen by the Arduino)
 # 
-arduinoDigOutPinA = 1
 arduinoDigOutPinB = 3
 arduinoDigInPin   = 2
 
 sim_pause=0
 
-arduinoDigOutPinAValue = 0 
 arduinoDigOutPinBValue = 0 
 
-expectedArduinoDigOutPinAValue = 0 
 expectedArduinoDigOutPinBValue = 0 
-
-arduinoAnaOutPin              = 3
-arduinoAnaInPin               = 4 
-arduinoAnaOutPinValue         = 0 
-expectedArduinoAnaOutPinValue = 0 
-
 
 checkCounter = 0 
 
 def newDigModeCallback(pin, mode):
     print "py:dmode" + str(pin) + ":" + str(mode) + "   callbacked Arduino dig mode   "
 
-def newAnaOutCallback(pin, val):
-    global arduinoAnaOutPin
-    global arduinoAnaOutPinValue
-    global expectedArduinoAnaOutPinValue
-
-#    print "py:apin" + str(pin) + ":" + str(val) + "   callbacked Arduino ana pin   "
-
-    if (pin==arduinoAnaOutPin):
-        arduinoAnaOutPinValue = val
-    else:
-        print "py:apin" + str(pin) + ":" + str(val) + "   callbacked Arduino ana pin   "
-
-def newDigOutCallback(pin, val):
+def newDigOutCallback(pin, val, pin_type):
     global arduinoDigOutPinBValue
-    global arduinoDigOutPinA
     global arduinoDigOutPinB
-#    print "pyc:" + str(pin) + ":" + str(val) + "   callbacked Arduino dig out   "
-    if (pin==arduinoDigOutPinA):
-        arduinoDigOutPinAValue = val
-    elif (pin==arduinoDigOutPinB):
+    print "pyc:" + str(pin) + ":" + str(val) 
+    if (pin==arduinoDigOutPinB):
         arduinoDigOutPinBValue = val
     
     
 def setValues(value):
     global expectedArduinoDigOutPinBValue
-    global expectedArduinoAnaOutPinValue
     expectedArduinoDigOutPinBValue = value%2
-    expectedArduinoAnaOutPinValue  = value
-#    print "Write Analog value(" + str(arduinoAnaInPin) + ", " + str(expectedArduinoAnaOutPinValue) + ")"
-    seasim_set_dig_input(arduinoDigInPin,expectedArduinoDigOutPinBValue)
-    seasim_set_ana_input(arduinoAnaInPin,expectedArduinoAnaOutPinValue)
-    time.sleep(0.2)
+
+    print "setValues(" + str(value) + ")  => set pin " + str(arduinoDigInPin) + " => " + str(expectedArduinoDigOutPinBValue)
+    seasim_set_input(arduinoDigInPin,expectedArduinoDigOutPinBValue,1)
+    time.sleep(0.4)
 
 
 
@@ -108,26 +82,19 @@ def check_values():
     global expectedArduinoDigOutPinBValue
     global arduinoDigOutPinBValue
     global sim_pause
-    global expectedArduinoAnaOutPinValue
-    global arduinoAnaOutPinValue
 
     if (sim_pause==0):
         checkCounter = checkCounter + 1
         checkEq1 = (expectedArduinoDigOutPinBValue==arduinoDigOutPinBValue)
-        checkEq2 = (expectedArduinoAnaOutPinValue==arduinoAnaOutPinValue)
         if (checkEq1==False):
             print "CHECK 1 Failed:     " + str(expectedArduinoDigOutPinBValue) + "==" + \
                 str(arduinoDigOutPinBValue) + " => " + \
                 str(checkEq1)
             sys.exit(1)
-        if (checkEq2==False):
-            print "CHECK 2 Failed:     " + str(expectedArduinoAnaOutPinValue) + "==" + \
-                str(arduinoAnaOutPinValue) + " => " + \
-                str(checkEq2)
-            sys.exit(1)
-        print "check " + str(checkCounter) + ": OK   [" + \
-                str(arduinoDigOutPinBValue) + "," + \
-                str(arduinoAnaOutPinValue) + "]" 
+
+        print "CHECK 1 OK:     " + str(expectedArduinoDigOutPinBValue) + "==" + \
+                str(arduinoDigOutPinBValue) + " => " + \
+                str(checkEq1)
 
             
 def main():
@@ -138,23 +105,25 @@ def main():
     seasim_set_arduino_code("./libarduino-code.so")
     seasim_initialise();
     seasim_disable_streamed_output()
+
     print "Register callback for digital "
 
-    seasim_set_dig_callback(newDigOutCallback)
+    seasim_set_callback(newDigOutCallback)
     seasim_set_dig_mode_callback(newDigModeCallback)
-    seasim_set_ana_callback(newAnaOutCallback)
 
     seasim_start();
 
     tmp = 2 
     setValues(tmp)
     time.sleep(2)
+
     while True:
 
         setValues(tmp)
         check_values()
 
         setValues(tmp+1)
+        time.sleep(0.1)
         check_values()
         
         remainder = tmp%10
