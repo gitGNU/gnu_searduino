@@ -1,4 +1,4 @@
-SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test 
+SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
 # lib
 
 SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 

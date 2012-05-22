@@ -22,16 +22,13 @@
 #
 
 AUTOMAKE_OPTIONS = gnu
+
+if CYGWIN_USED
+
 FIND_PORT=find_port
 bin_PROGRAMS= $(FIND_PORT)
 find_port_SOURCES=find_port.c
-
 AM_CFLAGS= 
-
 AM_LDFLAGS= 
 
-
-
-
-
-
+endif
