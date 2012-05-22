@@ -10,7 +10,7 @@ int main(int argc, char** argv) {
   DWORD size;
   COMMCONFIG cc;
 
-  for (i = MAX_PORTS; i > 0; i++) {
+  for (i = MAX_PORTS; i > 0; i--) {
 
     port_name[0]='\0';
     sprintf(port_name, "COM%d", i);
