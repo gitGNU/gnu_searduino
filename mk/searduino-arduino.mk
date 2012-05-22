@@ -23,21 +23,6 @@ VARIANT=mega
 ARDUINO_CPU=ATmega2560
 endif
 
-#USB_DEV="no-device-set"
-
-ifdef USER_PORT
-# User has defined a port, use that one
-USB_DEV=$(USER_PORT)
-else
-# Try to identify port automatically
-USB_DEV=$(shell $(SEARDUINO_MK_PATH)/../../bin/find_port.sh $(ARDUINO))
-
-   ifneq "$(findstring No support, $(USB_DEV))" ""
-   USB_DEV=""
-   endif
-endif
-
-
 include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
 
 

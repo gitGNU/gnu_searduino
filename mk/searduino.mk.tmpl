@@ -71,6 +71,25 @@ endif
 SEARDUINO_MK_PATH=$(ROOT_PATH)__INSTALL_DIR__/share/searduino/
 SEARDUINO_INC_PATH=$(ROOT_PATH)__INSTALL_DIR__/include/searduino/
 
+ifdef USER_PORT
+# User has defined a port, use that one
+USB_DEV=$(USER_PORT)
+else
+# Try to identify port automatically
+  ifeq (${CYGWIN},true)
+       USB_DEV=$(shell $(SEARDUINO_MK_PATH)/../../bin/find_port.exe $(ARDUINO))
+  else
+       USB_DEV=$(shell $(SEARDUINO_MK_PATH)/../../bin/find_port.sh $(ARDUINO))
+  endif
+
+   ifneq "$(findstring No support, $(USB_DEV))" ""
+   USB_DEV=""
+   endif
+endif
+
+
+
+
 ifeq (${ARDUINO},stub)
 include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
 else
