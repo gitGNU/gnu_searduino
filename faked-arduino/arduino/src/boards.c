@@ -275,9 +275,11 @@ board_setup_mega2560(void)
   /*
     From the Arduino Mega2560 page:
 
-    It has 54 digital input/output pins (of which 14 can be used as PWM outputs), 16 analog inputs
+    It has 54 digital input/output pins
+        (of which 14 can be used as PWM outputs), 16 analog inputs
 
-    PWM: 2 to 13 and 44 to 46. Provide 8-bit PWM output with the analogWrite() function.
+    PWM: 2 to 13 and 44 to 46. 
+         Provide 8-bit PWM output with the analogWrite() function.
 
     LED: 13. There is a built-in LED connected to digital pin 13. When the pin is HIGH value, the LED is on, when the pin is LOW, it's off. 
 
@@ -336,5 +338,45 @@ board_setup_mega2560(void)
 
   printf ("\n\t*** MEGA2560 BOARD SETUP done\n\n");
   print_board_setup();
+  return 0;
+}
+
+
+
+int
+board_setup_leonardo(void)
+{
+  int i;
+  /*
+    From the Arduino Leonardo page[1]:
+
+    It has 20 digital input/output pins 
+       (of which 7 can be used as PWM outputs and 12 as analog inputs),
+
+    PWM: 3, 5, 6, 9, 10, 11, and 13. 
+       Provide 8-bit PWM output with the analogWrite() function. 
+
+    LED: 13. There is a built-in LED connected to digital pin 13. 
+       When the pin is HIGH value, the LED is on, when the pin is LOW, it's off. 
+
+    Analog Inputs: A0-A5, A6 - A11 (on digital pins 4, 6, 8, 9, 10, and 12). 
+       The Leonardo has 12 analog inputs, labeled A0 through A11, all
+       of which can also be used as digital i/o. Pins A0-A5 appear in
+       the same locations as on the Uno; inputs A6-A11 are on digital
+       i/o pins 4, 6, 8, 9, 10, and 12 respectively. Each analog input
+       provide 10 bits of resolution (i.e. 1024 different values). By
+       default the analog inputs measure from ground to 5 volts,
+       though is it possible to change the upper end of their range
+       using the AREF pin and the analogReference() function.
+
+    There are a couple of other pins on the board:
+
+    AREF. Reference voltage for the analog inputs. Used with analogReference().
+    Reset. Bring this line LOW to reset the microcontroller. Typically used to add a reset button to shields which block the one on the board. 
+
+   [1] http://arduino.cc/en/Main/ArduinoBoardLeonardo
+   */
+  
+
   return 0;
 }
