@@ -1,0 +1,5 @@
+@subsection Writing a simulator in C/C++ 
+
+@subsection Writing local tests in Python
+For now, we would like to refer to pardon in the Searduino source
+treee for en example on how to write a simulator in Python.
