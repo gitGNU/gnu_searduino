@@ -96,13 +96,8 @@ variable in the Makefile. The following values of that variable are implemented.
 
 
 @chapter Write your own simulator
-@subsection Writing a simulator in C/C++ 
+@include seasim.texi
 
-
-
-@subsection Writing local tests in Python
-For now, we would like to refer to pardon in the Searduino source
-treee for en example on how to write a simulator in Python.
 
 
 @chapter Future and possible enhancements
