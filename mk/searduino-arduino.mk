@@ -22,6 +22,12 @@ CPU=atmega2560
 VARIANT=mega
 ARDUINO_CPU=ATmega2560
 endif
+ifeq ($(ARDUINO),leonardo)
+BOARD=atmega32u4
+CPU=atmega32u4
+VARIANT=leonardo
+ARDUINO_CPU=atmega32u4
+endif
 
 include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
 
@@ -68,7 +74,8 @@ LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -ffunction-sections -fdata-sections \
                           -mmcu=$(CPU) -DF_CPU=$(F_CPU) \
                           -DARDUINO=$(ARDUINO_VERSION) \
-                           $(INC_FLAGS) -DSEARDUINO_ARDUINO
+                           $(INC_FLAGS) -DSEARDUINO_ARDUINO \
+                           -D__AVR_LIBC_DEPRECATED_ENABLE__=1
 
 SEARDUINO_LIB=-lsearduino
 LIBRARIES_LIB=-llibraries
