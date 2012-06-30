@@ -45,8 +45,8 @@ enum {
 typedef struct arduino_pin
 {
   uint8_t         type;  /* digital, analog, pwm */
-  uint8_t         mode;
-  int             val;
+  uint8_t         mode;  /* input, output */
+  int             val;   /* value */
   struct timeval  last_write;
   struct timeval  last_actual_write;
   int             discard_ctr;
