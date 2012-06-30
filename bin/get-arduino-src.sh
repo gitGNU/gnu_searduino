@@ -3,14 +3,14 @@
 if [ "$SEARD_OS" != "" ]
 then
     MY_OS=$SEARD_OS
-    OS_EXTRA_DIR="arduino-1.0"
+    OS_EXTRA_DIR="arduino-1.0.1"
 elif [ "$1" = "--os" ]
 then
     MY_OS=$2
-    OS_EXTRA_DIR="arduino-1.0"
+    OS_EXTRA_DIR="arduino-1.0.1"
 else
     MY_OS=$(uname -s )
-    OS_EXTRA_DIR="arduino-1.0"
+    OS_EXTRA_DIR="arduino-1.0.1"
 fi
 
 if [ "$MY_OS" = "Linux" ]
@@ -18,22 +18,22 @@ then
     if [ "$(uname -m | grep -c _64)" != "0" ]
 	then
 	ARD_BASE=http://arduino.googlecode.com/files/
-	ARD_FILE=arduino-1.0-linux64.tgz
+	ARD_FILE=arduino-1.0.1-linux64.tgz
 	ARD_URL=$ARD_BASE/$ARD_FILE
     else
 	ARD_BASE=http://arduino.googlecode.com/files/
-	ARD_FILE=arduino-1.0-linux.tgz
+	ARD_FILE=arduino-1.0.1-linux.tgz
 	ARD_URL=$ARD_BASE/$ARD_FILE
     fi
 elif [ "${MY_OS:0:5}" = "CYGWI" ]
 then
 	ARD_BASE=http://arduino.googlecode.com/files/
-	ARD_FILE=arduino-1.0-windows.zip
+	ARD_FILE=arduino-1.0.1-windows.zip
 	ARD_URL=$ARD_BASE/$ARD_FILE
 elif [ "${MY_OS:0:6}" = "Darwin" ]
 then
 	ARD_BASE=http://arduino.googlecode.com/files/
-	ARD_FILE=arduino-1.0-macosx.zip
+	ARD_FILE=arduino-1.0.1-macosx.zip
 	ARD_URL=$ARD_BASE/$ARD_FILE
 	OS_EXTRA_DIR="Arduino.app/Contents/Resources/Java"
 else
