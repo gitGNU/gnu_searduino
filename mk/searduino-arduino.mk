@@ -27,6 +27,7 @@ BOARD=atmega32u4
 CPU=atmega32u4
 VARIANT=leonardo
 ARDUINO_CPU=atmega32u4
+BOARD_SPECIFIC_CFLAGS=-MMD
 endif
 
 include $(SEARDUINO_MK_PATH)/mk/board-makefiles/$(BOARD).mk
@@ -73,16 +74,19 @@ INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core 		   \
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -ffunction-sections -fdata-sections \
                           -mmcu=$(CPU) -DF_CPU=$(F_CPU) \
-                          -DARDUINO=$(ARDUINO_VERSION) \
+                          -DARDUINO=$(ARDUINO_VERSION)  \
+			  $(BOARD_SPECIFIC_CFLAGS)      \
                            $(INC_FLAGS) -DSEARDUINO_ARDUINO \
-                           -D__AVR_LIBC_DEPRECATED_ENABLE__=1
+                           -D__AVR_LIBC_DEPRECATED_ENABLE__=1 \
+                           -DUSB_VID=$(build_vid) -DUSB_PID=$(build_pid)
 
 SEARDUINO_LIB=-lsearduino
 LIBRARIES_LIB=-llibraries
 
 
 $(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
-	$(CXX) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) $(LIB) -lm $(LDFLAGS) 
+	$(CXX) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) \
+               -Wl,-whole-archive $(LIB)  -lm $(LDFLAGS) 
 
 $(PROG).hex: $(LIB) $(PROG).elf
 	$(OBJ_CP)  -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(PROG).elf $(PROG).eep 
@@ -93,8 +97,9 @@ $(PROG): $(PROG).hex
 
 prog: $(PROG).hex
 
+
 upload: $(PROG).hex
-	echo "Will upload to: $(ARDUINO)   $(BOARD)"
+	@echo "Will upload to: $(ARDUINO)   $(BOARD)  (device: (" $(USB_DEV) ")"
 	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) \
                    -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
 

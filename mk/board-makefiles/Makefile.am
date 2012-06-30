@@ -4,6 +4,7 @@ dist_pkgdataexample_DATA = \
   atmega1280.mk \
   atmega168.mk \
   atmega328.mk \
+  atmega32u4.mk \
   atmega8.mk \
   bt328.mk \
   bt.mk \
