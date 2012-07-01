@@ -9,5 +9,7 @@ library_include_HEADERS =  \
 	ext_io.h \
 	twi_mock.h \
 	i2c_loader.h \
+	hid-generic.h \
+	hid-x11.h \
 	setup.h 
 
