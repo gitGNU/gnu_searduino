@@ -40,3 +40,4 @@ int main(void)
       move_mouse(-1, -1,  STEPS);
     }
 }
+
