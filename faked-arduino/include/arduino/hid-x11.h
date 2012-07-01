@@ -21,14 +21,29 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-#ifdef USE_X11
+/* TEMPORARILY WHILE DEVELOPING */
+#define  USE_X11
+/* EO TEMP */
 
+#ifdef USE_X11
 
 #include <X11/Xlib.h>
 #include <X11/extensions/XTest.h>
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 int x11_initilise_hid(void);
 void x11_hid_mouse_move(signed char x, signed char y, signed char wheel);
+
+int  x11_enable_faked_hid(void);
+int  x11_disable_faked_hid(void);
+
+
+#ifdef __cplusplus
+}
+#endif
 
 
 #endif /* USE_X11 */
