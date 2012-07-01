@@ -1,3 +1,3 @@
-SUBDIRS =   digpins python-digcounter verification
+SUBDIRS =   digpins python-digcounter verification hid
 
 
