@@ -47,6 +47,8 @@ LIB_SEARDUINO_H_FILES=\
        ./include/arduino/searduino_pin.h \
        ./include/arduino/setup.h \
        ./include/arduino/i2c_loader.h \
+       ./include/arduino/hid-x11.h \
+       ./include/arduino/hid-generic.h \
        ./include/seasim/seasim.h 
 
 LIB_LIBRARIES_SOURCES_FILES = \
@@ -85,6 +87,8 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/i2c_loader.c \
        ./arduino/src/CDC.cpp \
        ./arduino/src/boards.c \
+       ./arduino/src/hid-backends/x11.c     \
+       ./arduino/src/hid-backends/generic.c \
         $(LIB_SEARDUINO_H_FILES)  \
         $(LIB_LIBRARIES_SOURCES_FILES)
 
