@@ -29,6 +29,7 @@
 #define ENABLE_SLEEP
 #include "setup.h"
 #include "searduino_pin.h"
+#include "hid-generic.h"
 #include <stdio.h>
 #else
 #undef ENABLE_SLEEP
@@ -57,7 +58,11 @@
     #define searduino_usb_init()   
   #endif
 #else
-  #define searduino_usb_init()   fprintf(stderr, "Not setting up USB (since not on an Arduino board)\n");
+  #if defined(USBCON)
+    #define searduino_usb_init()  initialise_hid()
+  #else
+    #define searduino_usb_init()   
+  #endif
 #endif
 
 
