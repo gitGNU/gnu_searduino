@@ -30,6 +30,8 @@
 
 
 #ifndef __MINGW32__
+#include <signal.h>
+#include <sys/types.h>
 void sim_sighandler(int sig);
 #endif
 
