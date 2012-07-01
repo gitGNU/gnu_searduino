@@ -50,8 +50,8 @@ typedef searduino_main_ptr searduino_main_ptr_ptr ;
 #ifdef __cplusplus
 extern "C"{
 #endif
-
-
+  
+  
 int searduino_setup(void);
 
 void searduino_set_paused(void);
@@ -82,13 +82,14 @@ get_digitalWrite_timelimit(void);
 
 unsigned int 
 get_discard_ctr(unsigned char pin);
-
-
+  
+  
 int
 load_arduino_code(void);
-
+  
 void init_time(void);
-
+  
+int initialise_hid(void);
 
 #ifdef __cplusplus
 } /* extern "C" */
