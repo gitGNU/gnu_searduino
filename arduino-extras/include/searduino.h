@@ -50,6 +50,16 @@
 #define SEARDUINO_DEBUG(a)
 #endif  /* SEARDUINO_STUB */
  
+#ifndef  SEARDUINO_STUB
+  #if defined(USBCON)
+    #define searduino_usb_init()   USBDevice.attach()
+  #else
+    #define searduino_usb_init()   
+  #endif
+#else
+  #define searduino_usb_init()   fprintf(stderr, "Not setting up USB (since not on an Arduino board)\n");
+#endif
+
 
 
 
