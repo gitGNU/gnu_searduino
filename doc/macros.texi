@@ -21,10 +21,15 @@ Arduino hw they are disabled.
 @tab @code{SEARDUINO_DEBUG((msg))}
 @tab The macro (if not building for Arduino boards) takes what is inside
 the parenthesies and passes that to printf. It does a bit more than
-that, put put simply, that's what it does. 
+that, but put simply, that's what it does. 
 Example use: @code{SEARDUINO_DEBUG(("The variable x is:%d",x));}
 @*
 @i{Note: @b{You must use double paranthesises!}}
+@item 
+@tab @code{searduino_usb_init()}
+@tab If building for Arduino boards this macro initialises the
+USB Device (USBDevice). If building for simulator this macro is unused.
+Example use: @code{searduino_usb_init();}
 @end multitable
 @*
 @*
