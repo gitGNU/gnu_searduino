@@ -1,4 +1,4 @@
-pkgdataexampledir = $(pkgdatadir)/example/digpins/
+pkgdataexampledir = $(pkgdatadir)/example/hid/
 dist_pkgdataexample_DATA = \
   Makefile.hid \
   Makefile.tmpl
@@ -7,7 +7,7 @@ dist_pkgdataexample_DATA = \
 
 
 check2:
-	make -f Makefile.digpins clean
-	make -f Makefile.digpins prog
-	make -f Makefile.digpins clean
-	make -f Makefile.digpins shlib
+	make -f Makefile.hid clean
+	make -f Makefile.hid prog
+	make -f Makefile.hid clean
+	make -f Makefile.hid shlib

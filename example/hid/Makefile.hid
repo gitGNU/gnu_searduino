@@ -29,13 +29,13 @@
 #
 # Path to your Searduino installation
 #
-SEARDUINO_PATH=/opt/searduino
+SEARDUINO_PATH=/opt/searduino/
 
 #
 # Source code
 #
-SRC_C=
-SRC_CXX=mouse.cpp
+SRC_C=mouse.c main.c
+SRC_CXX=
 
 #
 # Build type should be any of the following
@@ -48,7 +48,7 @@ SRC_CXX=mouse.cpp
 # By default, we're building for local execution (not Arduino boards)
 #   you can change this value at wish
 #
-ARDUINO=leonardo
+ARDUINO=stub
 
 PROG=hid
 SHLIB=hid.so
