@@ -80,6 +80,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./seasim/src/seasim.c \
        ./utils/src/print-funs.cpp \
        ./arduino/src/HardwareSerial.cpp \
+       ./arduino/src/HID.cpp \
        ./arduino/src/USBCore.cpp \
        ./arduino/src/i2c_loader.c \
        ./arduino/src/CDC.cpp \
