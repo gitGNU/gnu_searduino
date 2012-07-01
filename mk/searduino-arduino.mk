@@ -86,7 +86,7 @@ LIBRARIES_LIB=-llibraries
 
 $(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
 	$(CXX) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) \
-               -Wl,-whole-archive $(LIB)  -lm $(LDFLAGS) 
+                $(LIB)  -lm $(LDFLAGS) 
 
 $(PROG).hex: $(LIB) $(PROG).elf
 	$(OBJ_CP)  -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(PROG).elf $(PROG).eep 
