@@ -95,7 +95,7 @@ void twi_setAddress(uint8_t address) {
   PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
 }
 
-uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length) {
+uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sendStop) {
   
   struct mockTarget* target;
   uint8_t i;
@@ -122,7 +122,7 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length) {
   return length;
 }
 
-uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait) {
+uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait, uint8_t sendStop) {
   uint8_t i;
   struct mockTarget* target;
   

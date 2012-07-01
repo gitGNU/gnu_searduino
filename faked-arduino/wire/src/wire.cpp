@@ -80,7 +80,7 @@ uint8_t TwoWire::requestFrom(uint8_t address, uint8_t quantity)
     quantity = BUFFER_LENGTH;
   }
   // perform blocking read into buffer
-  uint8_t read = twi_readFrom(address, rxBuffer, quantity);
+  uint8_t read = twi_readFrom(address, rxBuffer, quantity, 0); //VIKTOR: DO YOUR STUFF
   // set rx buffer iterator vars
   rxBufferIndex = 0;
   rxBufferLength = read;
@@ -112,7 +112,7 @@ void TwoWire::beginTransmission(int address)
 uint8_t TwoWire::endTransmission(void)
 {
   // transmit buffer (blocking)
-  int8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1);
+  int8_t ret = twi_writeTo(txAddress, txBuffer, txBufferLength, 1, 0); //VIKTOR: DO YOUR STUFF
   // reset tx buffer iterator vars
   txBufferIndex = 0;
   txBufferLength = 0;
