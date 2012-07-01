@@ -38,6 +38,11 @@ void Serial_::end(void)
   ;
 }
 
+void Serial_::accept(void) 
+{
+  ;
+}
+
 int Serial_::available(void)
 {
   return USB_Available(CDC_RX);
