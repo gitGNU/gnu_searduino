@@ -34,6 +34,10 @@ int main(void)
       delay(100);
       release_key(38);
       delay(1000);
+
+      click_mouse(1);
+      delay(1000);
     }
+
 }
 

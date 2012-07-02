@@ -10,6 +10,7 @@ extern "C"{
 
 void setup_mouse();
 void move_mouse(uint8_t x, uint8_t y, uint8_t times);
+void click_mouse(uint8_t b);
 
 #ifdef __cplusplus
 }

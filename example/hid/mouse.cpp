@@ -24,3 +24,15 @@ void move_mouse(uint8_t x, uint8_t y, uint8_t times)
   digitalWrite(13,0);
 }
 
+void click_mouse(uint8_t b)
+{
+  digitalWrite(13,1);
+  Mouse.click(b);
+  delay(100);
+  Mouse.press(b);
+  delay(100);
+  Mouse.release(b);
+  delay(100);
+  digitalWrite(13,0);
+}
+

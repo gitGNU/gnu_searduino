@@ -1,6 +1,0 @@
-
-
-void setup_kbd();
-void press_key(uint8_t k);
-void release_key(uint8_t k);
-

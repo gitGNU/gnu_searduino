@@ -1,6 +1,0 @@
-#include <Arduino.h>
-#include "searduino.h"
-
-void setup_mouse();
-
-void move_mouse(uint8_t x, uint8_t y, uint8_t times);
