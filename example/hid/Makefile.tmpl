@@ -34,8 +34,8 @@ SEARDUINO_PATH=__INSTALL_DIR__/
 #
 # Source code
 #
-SRC_C=mouse.c main.c
-SRC_CXX=
+SRC_C=
+SRC_CXX=mouse.cpp
 
 #
 # Build type should be any of the following
@@ -52,6 +52,8 @@ ARDUINO=stub
 
 PROG=hid
 SHLIB=hid.so
+
+USER_LD_FLAGS=-lX11 -lXtst
 
 include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
 

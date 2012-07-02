@@ -1,0 +1,11 @@
+#ifndef SEARDUINO_KBD_H
+#ifndef SEARDUINO_KBD_H
+
+#include <Arduino.h>
+#include "searduino.h"
+
+void setup_kbd();
+void press_key(uint8_t k);
+
+
+#endif /* SEARDUINO_KBD_H */

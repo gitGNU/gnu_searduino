@@ -1,8 +1,9 @@
 #include <Arduino.h>
 #include "searduino.h"
+#include "mouse.h"
 
 void
-setup()
+setup_mouse()
 {
   pinMode(13, OUTPUT);
   Mouse.begin();
@@ -21,23 +22,5 @@ void move_mouse(uint8_t x, uint8_t y, uint8_t times)
       delay(10);
     }
   digitalWrite(13,0);
-}
-
-int main(void)
-{
-  #define STEPS 30
-  init();
-  searduino_usb_init();
-  setup();
-
-  while(1)
-    {
-      move_mouse( 1,  0,  STEPS);
-      move_mouse( 0,  1,  STEPS);
-      move_mouse(-1,  0,  STEPS);
-      move_mouse( 0, -1,  STEPS);
-      move_mouse( 1,  1,  STEPS);
-      move_mouse(-1, -1,  STEPS);
-    }
 }
 

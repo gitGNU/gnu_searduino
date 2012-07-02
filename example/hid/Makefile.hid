@@ -29,13 +29,13 @@
 #
 # Path to your Searduino installation
 #
-SEARDUINO_PATH=/opt/searduino/
+SEARDUINO_PATH=/opt/searduino
 
 #
 # Source code
 #
-SRC_C=mouse.c main.c
-SRC_CXX=
+SRC_C=main.c
+SRC_CXX=mouse.cpp kbd.cpp
 
 #
 # Build type should be any of the following
@@ -52,6 +52,8 @@ ARDUINO=stub
 
 PROG=hid
 SHLIB=hid.so
+
+USER_LD_FLAGS=-lX11 -lXtst
 
 include $(SEARDUINO_PATH)/share/searduino//mk/searduino.mk
 
