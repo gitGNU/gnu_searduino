@@ -10,11 +10,24 @@ enum KEY_STATES
     KEY_PRESSED
   } ;
 
+enum BUTTON_STATES
+  {
+    BUTTON_RELEASED,
+    BUTTON_PRESSED
+  } ;
+
 enum KEY_REQUESTS
   {
-    KEY_PRESS,
-    KEY_RELEASE
+    KEY_RELEASE,
+    KEY_PRESS
   } ;
+
+enum BUTTON_REQUESTS
+  {
+    BUTTON_RELEASE,
+    BUTTON_PRESS
+  } ;
+
 
 
 int initialise_hid(void);
