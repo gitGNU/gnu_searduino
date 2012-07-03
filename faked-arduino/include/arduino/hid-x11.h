@@ -21,11 +21,16 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#ifndef HID_X11_H
+#define HID_X11_H
+
 /* TEMPORARILY WHILE DEVELOPING */
 #define  USE_X11
 /* EO TEMP */
 
 #ifdef USE_X11
+
+
 
 #include <Arduino.h>
 #include <X11/Xlib.h>
@@ -42,6 +47,7 @@ int  hid_x11_hid_mouse(uint8_t b, uint8_t request);
 
 int  hid_x11_enable_faked_hid(void);
 int  hid_x11_disable_faked_hid(void);
+int  hid_x11_faked_hid_enabled(void)
 
 
 #ifdef __cplusplus
@@ -50,3 +56,5 @@ int  hid_x11_disable_faked_hid(void);
 
 
 #endif /* USE_X11 */
+
+#endif /* HID_X11_H */
