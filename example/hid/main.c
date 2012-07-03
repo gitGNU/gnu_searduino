@@ -34,7 +34,10 @@ void setup()
   searduino_usb_init();
   init();
 
+#ifdef SEARDUINO_STUB
+  /* By default Searduino faked hid is *NOT* enabled */
   x11_enable_faked_hid();
+#endif
 
   setup_mouse();
   setup_kbd();
