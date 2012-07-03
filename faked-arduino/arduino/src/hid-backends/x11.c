@@ -30,7 +30,7 @@
 #include <stdio.h>
 
 Display *dpy      = NULL;
-char     x11_used = 0;
+char     hid_x11_enabled = 0;
 char     xtest_available = 0;
 
 int hid_x11_initilise_hid(void)
@@ -70,7 +70,7 @@ int hid_x11_initilise_hid(void)
 
 void hid_x11_hid_mouse_move(signed char x, signed char y, signed char wheel)
 {
-  if ( (x11_used!=0) && (dpy!=NULL))
+  if ( (hid_x11_enabled!=0) && (dpy!=NULL))
     {
       fprintf(stderr, "X11:move %d,%d  \n", x, y);
       /* XSync(dpy, True); */
@@ -84,7 +84,7 @@ void hid_x11_hid_mouse_move(signed char x, signed char y, signed char wheel)
 
 int hid_x11_hid_key(uint8_t k, uint8_t request )
 {
-  if ( (x11_used!=0) && (dpy!=NULL))
+  if ( (hid_x11_enabled!=0) && (dpy!=NULL))
     {
       fprintf(stderr, "X11:key %d,%d  \n", k, request);
       XTestFakeKeyEvent(dpy, k, request==KEY_PRESS?True:False, 0);
@@ -94,24 +94,29 @@ int hid_x11_hid_key(uint8_t k, uint8_t request )
 }
 
 
-int  hid_x11_enable_faked_hid(void)
+int hid_x11_enable_faked_hid(void)
 {
   if (xtest_available != 0 )
     {
-      x11_used = 1;
+      hid_x11_enabled = 1;
     }
   return 0;
 }
 
-int  hid_x11_disable_faked_hid(void)
+int hid_x11_disable_faked_hid(void)
 {
-  x11_used = 0;
+  hid_x11_enabled = 0;
   return 0;
+}
+
+int hid_x11_faked_hid_enabled(void)
+{
+  return (hid_x11_enabled == 1);
 }
 
 int hid_x11_hid_mouse(uint8_t b, uint8_t request)
 {
-  if ( (x11_used!=0) && (dpy!=NULL))
+  if ( (hid_x11_enabled!=0) && (dpy!=NULL))
     {
       fprintf(stderr, "X11:mouse %d,%d  \n", b, request);
       XTestFakeButtonEvent(dpy, b, request==KEY_PRESS?True:False, 0);
