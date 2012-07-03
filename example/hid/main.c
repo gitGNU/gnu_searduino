@@ -36,7 +36,7 @@ void setup()
 
 #ifdef SEARDUINO_STUB
   /* By default Searduino faked hid is *NOT* enabled */
-  x11_enable_faked_hid();
+  hid_enable_faked_hid();
 #endif
 
   setup_mouse();
