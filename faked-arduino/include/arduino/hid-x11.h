@@ -35,13 +35,13 @@
 extern "C"{
 #endif
 
-int x11_initilise_hid(void);
-void x11_hid_mouse_move(signed char x, signed char y, signed char wheel);
-int x11_hid_key(uint8_t k, uint8_t request );
-int x11_hid_mouse(uint8_t b, uint8_t request);
+int  hid_x11_initilise_hid(void);
+void hid_x11_hid_mouse_move(signed char x, signed char y, signed char wheel);
+int  hid_x11_hid_key(uint8_t k, uint8_t request );
+int  hid_x11_hid_mouse(uint8_t b, uint8_t request);
 
-int  x11_enable_faked_hid(void);
-int  x11_disable_faked_hid(void);
+int  hid_x11_enable_faked_hid(void);
+int  hid_x11_disable_faked_hid(void);
 
 
 #ifdef __cplusplus

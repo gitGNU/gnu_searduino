@@ -30,7 +30,7 @@ enum BUTTON_REQUESTS
 
 
 
-int initialise_hid(void);
-int enable_faked_hid(void);
-int disable_faked_hid(void);
+int hid_initialise_hid(void);
+int hid_enable_faked_hid(void);
+int hid_disable_faked_hid(void);
 
