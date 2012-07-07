@@ -116,8 +116,11 @@ uint8_t twi_readFrom(uint8_t address, uint8_t* data, uint8_t length, uint8_t sen
     data[i] = target->read();
   }
 
-  /* Tell the target that this transmission is completed */
-  target->end();
+
+  if(sendStop) {
+    /* Tell the target that this transmission is completed */
+    target->end();
+  }
 
   return length;
 }
@@ -142,9 +145,10 @@ uint8_t twi_writeTo(uint8_t address, uint8_t* data, uint8_t length, uint8_t wait
     target->write(data[i]);
   }
 
-  /* Tell the target that the transmission has ended */
-
-  target->end();
+  if(sendStop) {
+    /* Tell the target that the transmission has ended */
+    target->end();
+  }
 
   return 0; /* success */
 }
