@@ -30,6 +30,17 @@ exit_on_failure_no_print()
     fi
 }
 
+exit_on_success_no_print()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -eq 0 ]
+    then
+	echo "ERROR:  $2 (expected error, so a success is treated as an error)"
+	exit $1
+    fi
+}
+
+
 log_and_exec()
 {
     LOCAL_START_SEC=$(date '+%s')
@@ -53,6 +64,15 @@ log_and_exec_no_print()
     $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
     exit_on_failure_no_print $? ""
 }
+
+
+log_and_false_exec_no_print()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_success_no_print $? ""
+}
+
 
 set_vars()
 {
