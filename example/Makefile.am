@@ -1,3 +1,3 @@
-SUBDIRS =   digpins python-digcounter verification hid
+SUBDIRS =   digpins python-digcounter verification hid digital-rw serial
 
 
