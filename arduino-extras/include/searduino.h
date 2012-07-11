@@ -59,7 +59,7 @@
   #endif
 #else
   #if defined(USBCON)
-    #define searduino_usb_init()  initialise_hid()
+    #define searduino_usb_init()  hid_initialise_hid()
   #else
     #define searduino_usb_init()   
   #endif
