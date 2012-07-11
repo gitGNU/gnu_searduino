@@ -55,7 +55,7 @@ int main(void)
 	  blink(13,i);
 	}
       /* Can't run for ever in make check */
-      return 
+      return ;
     }
 }
 
