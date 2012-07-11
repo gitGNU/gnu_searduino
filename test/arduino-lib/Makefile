@@ -35,11 +35,15 @@ all: $(SHLIB)
 SEARDUINO_PATH=../..
 
 USER_C_FLAGS=-fPIC 
-USER_LD_FLAGS= -fPIC  -lsearduino
+USER_LD_FLAGS= -fPIC  -Wl,-rpath,$(SEARDUINO_PATH)/faked-arduino/.libs
 
 $(LIB):
 
 install: lib-install
+
+check:
+	make clean
+	make lib
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
