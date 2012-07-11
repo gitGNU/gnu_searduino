@@ -5,5 +5,5 @@ dist_pkgdataexample_DATA = \
 
 
 check2:
-	make -f Makefile.distance clean
-	make -f Makefile.distance prog
+	make -f Makefile.ok-version clean
+	make -f Makefile.ok-version prog
