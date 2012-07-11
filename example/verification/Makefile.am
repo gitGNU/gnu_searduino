@@ -1,2 +1,2 @@
-SUBDIRS =   distance ok-version 
+SUBDIRS =   distance ok-version nok-version 
 
