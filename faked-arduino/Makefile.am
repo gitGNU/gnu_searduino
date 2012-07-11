@@ -121,4 +121,10 @@ AM_CXXFLAGS= -I../arduino-sources/core          \
            $(PEDANTIC_FLAGS)
 
 
-AM_LDFLAGS= -ldl 
+if USE_XTEST
+XTESTFLAGS = $(LIBXTST)
+else
+XTESTFLAGS = 
+endif
+
+AM_LDFLAGS= -ldl  $(LIBXTST)
