@@ -206,6 +206,68 @@ test_digcounter()
 }
 
 
+test_hid()
+{
+    #
+    # HID
+    log_and_exec_no_print  cd ../hid
+
+    log_and_exec_no_print  make -f Makefile.hid clean all 
+
+    inc_searduino_test
+
+    return 0
+}
+
+test_digitalrw()
+{
+    #
+    # HID
+    log_and_exec_no_print  cd ../digital-rw
+
+    log_and_exec_no_print  make -f Makefile.digitalrw clean all
+
+    inc_searduino_test
+
+    return 0
+}
+
+test_serial()
+{
+    #
+    # HID
+    log_and_exec_no_print  cd ../serial
+
+    log_and_exec_no_print  make -f Makefile.serial clean all
+
+    inc_searduino_test
+
+    return 0
+}
+
+
+test_versions()
+{
+    #
+    # version
+    log_and_exec_no_print  cd ../verifications/ok-version
+
+    log_and_exec_no_print  make -f Makefile.ok-version clean all
+    inc_searduino_test
+
+    log_and_exec_no_print  cd ../nok-version
+
+    log_and_false_exec_no_print  make -f Makefile.nok-version clean all
+
+    cd ..
+
+    inc_searduino_test
+
+    return 0
+}
+
+
+
 test_examples()
 {
     STORED_DIR=$(pwd)
@@ -219,6 +281,10 @@ test_examples()
     log_and_exec test_distance
     log_and_exec test_digpins
     log_and_exec test_digcounter
+    log_and_exec test_hid
+    log_and_exec test_digitalrw
+    log_and_exec test_serial
+    log_and_exec test_versions
 
 
     cd $STORED_DIR
