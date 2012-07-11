@@ -38,8 +38,10 @@ first:
 check: 
 	make clean
 	make prog
+	./$(PROG)
 	make clean
 	make shlib
+	../../simulators/stream/searduino-stream-sim --arduino-code ./$(SHLIB)
 
 check-upload:
 	BOARD=due
