@@ -21,26 +21,33 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+
 #include <Arduino.h>
-#include "blink.h"
+#include "searduino.h"
 
 
-void setup() {
-  pinMode(13, OUTPUT);      
+void
+setup()
+{
 }
 
-
-
-
-uint8_t main(void)
+int main(void)
 {
-  uint8_t i ;
-  
-  init();  
-  setup();
-  
-  for (;;)
+  int i = 100;
+  init();
+  pinMode(13, OUTPUT);
+
+  /* The following line uses a Saerduino macro 
+   * You could use a plain "for (;;)" instead
+   */
+  SEARDUINO_LOOP()
     {
-      blinker(13);
+      i=i-10;
+      if (i<20) i = 250;
+      digitalWrite(13,1);
+      delay(i);
+      digitalWrite(13,0);
+      delay(i);
     }
 }
+
