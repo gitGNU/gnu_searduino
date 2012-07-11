@@ -27,10 +27,10 @@ SRC_C=test.c
 SRC_CXX=
 MAIN_SRC=
 ARDUINO=stub
-
+SHLIB=libtest.so
 SEARDUINO_PATH=../../
 
-USER_LD_FLAGS=-ldl
+USER_LD_FLAGS=-ldl  -Wl,-rpath,$(SEARDUINO_PATH)/faked-arduino/.libs
 
 first:
 	echo nothing to do for all
@@ -52,4 +52,3 @@ distdir:
 	echo nothing to do in dist
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
-#include $(SEARDUINO_PATH)/mk/searduino_lib.mk

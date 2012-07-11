@@ -23,48 +23,36 @@
 
 #include <Arduino.h>
 
-#ifndef INTERVAL
-#define INTERVAL 200
-#endif
-#define FIRST_LED 0
-#define LAST_LED 20
-
 void setup() {
-  int i ; 
-  for (i=FIRST_LED;i<=LAST_LED;i++)
-    {
-      pinMode(i, OUTPUT);      
-    }
+  pinMode(13, OUTPUT);      
 }
 
 
+void blink(uint8_t pin, uint16_t del )
+{
+  digitalWrite(pin, HIGH);
+  delay(del);
+  digitalWrite(pin, LOW);
+  delay(del);
+}
+
 int main(void)
 {
-  int i ;
+  uint8_t i;
   init();  
-  
-  pinMode(13, OUTPUT);      
+  setup();
+
   for (;;)
     {
-      digitalWrite(13, HIGH);
-      delay(2000);
-      digitalWrite(13, LOW);
-      delay(200);
-      digitalWrite(13, HIGH);
-      delay(1000);
-      digitalWrite(13, LOW);
-      delay(200);
-      digitalWrite(13, HIGH);
-      delay(500);
-      digitalWrite(13, LOW);
-      delay(200);
+      blink(13, 2000);
+      blink(13, 1000);
+      blink(13,  500);
+      blink(13,  100);
+      blink(13,   50);
 
       for (i=0;i<25;i++)
 	{
-	  digitalWrite(13, HIGH);
-	  delay(50);
-	  digitalWrite(13, LOW);
-	  delay(50);
+	  blink(13,i);
 	}
     }
 }
