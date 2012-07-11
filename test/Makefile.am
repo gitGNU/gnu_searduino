@@ -1,7 +1,7 @@
 if SHAREDTEST
-SUBDIRS= hw stub shared shared-main 
+SUBDIRS= arduino-lib hw stub shared shared-main 
 else
-SUBDIRS= hw stub 
+SUBDIRS= arduino-lib hw stub 
 endif
 
 EXTRA_DIST = \
