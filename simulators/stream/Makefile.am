@@ -36,7 +36,15 @@ searduino_stream_sim_SOURCES=simulator.c
 
 AM_CFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../arduino-extras/include/ $(GNULIB_PTHREAD_I) --std=c99
 
-AM_LDFLAGS= -L../../faked-arduino/.libs  -lsearduinostub  -lpthread
+if USE_XTEST
+XTESTFLAGS = $(LIBXTST)
+else
+XTESTFLAGS = 
+endif
+
+
+
+AM_LDFLAGS= -L../../faked-arduino/.libs  -lsearduinostub  -lpthread $(LIBXTST)
 #$(GNULIB_PTHREAD_I) 
 
 
