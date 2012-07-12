@@ -122,10 +122,10 @@ setup_sources()
 create_mk()
 {
     exec_comm cp mk/arduino-sources/Makefile.*                arduino-sources/
-    exec_comm cp mk/libraries//Makefile.*                arduino-sources/libraries/
+    exec_comm cp mk/libraries//Makefile.*                     arduino-sources/libraries/
 ##    exec_comm cp mk/arduino-sources/Makefile                  arduino-sources/
     exec_comm cp mk/arduino-sources/arduino-sources.mk        arduino-sources/
-    exec_comm cp mk/libraries/libraries.mk        arduino-sources/libraries/
+    exec_comm cp mk/libraries/libraries.mk                    arduino-sources/libraries/
 }
 
 if [ -f arduino-sources/core/WMath.cpp ]
