@@ -1,6 +1,6 @@
 pkgdataexampledir = $(pkgdatadir)/example/verifications/distance
 dist_pkgdataexample_DATA = \
-  distance.c  Makefile.distance  test_distance.c
+  distance.c  Makefile.distance  Makefile.tmpl  test_distance.c
 
 
 

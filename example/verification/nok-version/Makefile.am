@@ -1,6 +1,6 @@
 pkgdataexampledir = $(pkgdatadir)/example/verifications/nok-version
 dist_pkgdataexample_DATA = \
-  dummy.c  Makefile.nok-version
+  dummy.c  Makefile.nok-version Makefile.tmpl
 
 
 
