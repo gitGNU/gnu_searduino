@@ -12,6 +12,9 @@ EXTRA_DIST = \
      ./shared-main/Makefile   \
      ./shared-main/test.c   \
      ./hw/Makefile   \
-     ./hw/test.c     
+     ./hw/test.c     \
+     ./arduino-lib/Makefile \
+     ./arduino-lib/functions.c \
+     ./arduino-lib/functions.h
 
 
