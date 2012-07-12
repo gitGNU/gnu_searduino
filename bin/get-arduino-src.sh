@@ -42,6 +42,7 @@ else
     exit 1
 fi
 
+
 exit_on_failure()
 {
     RET=$1
@@ -72,8 +73,13 @@ exec_comm()
 get_sources()
 {
     mkdir -p download-tmp
-    exec_comm rm -f $ARD_FILE
-    wget $ARD_URL
+    if [ $ARDUNIO_SRC != "" ]
+    then
+	ARD_FILE=$ARDUINO_SR
+    else
+	exec_comm rm -f $ARD_FILE
+	wget $ARD_URL
+    fi
     exec_comm mv   $ARD_FILE download-tmp
 }
 
