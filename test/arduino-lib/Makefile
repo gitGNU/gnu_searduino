@@ -48,7 +48,8 @@ check:
 distdir:
 	echo nothing to do in dist
 
-
+all:
+	make check
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
