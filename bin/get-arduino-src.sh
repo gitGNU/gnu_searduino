@@ -74,14 +74,15 @@ get_sources()
 {
     mkdir -p download-tmp
 
-    if [ "$ARDUNIO_SRC" != "" ]
+    if [ "$ARDUINO_SOURCE" != "" ]
     then
-	ARD_FILE=$ARDUINO_SR
+	ARD_FILE=$ARDUINO_SOURCE
+	exec_comm cp   $ARD_FILE download-tmp
     else
 	exec_comm rm -f $ARD_FILE
 	wget $ARD_URL
+	exec_comm mv   $ARD_FILE download-tmp
     fi
-    exec_comm mv   $ARD_FILE download-tmp
 }
 
 unpack_sources()
