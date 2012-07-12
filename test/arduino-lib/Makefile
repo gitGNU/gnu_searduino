@@ -45,5 +45,10 @@ check:
 	make clean
 	make lib
 
+distdir:
+	echo nothing to do in dist
+
+
+
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
