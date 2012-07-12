@@ -73,7 +73,8 @@ exec_comm()
 get_sources()
 {
     mkdir -p download-tmp
-    if [ $ARDUNIO_SRC != "" ]
+
+    if [ "$ARDUNIO_SRC" != "" ]
     then
 	ARD_FILE=$ARDUINO_SR
     else
