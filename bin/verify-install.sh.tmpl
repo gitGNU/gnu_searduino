@@ -50,7 +50,7 @@ test_ex()
     TYPE=$1
     EXA=$2
 
-#    echo "Test: type:$TYPE $EXA"
+    echo "Test: type:$TYPE $EXA" > /tmp/wops1.txt
     
 
     $SEARDUINO_PATH/bin/arduino-ex2c    \
@@ -60,7 +60,6 @@ test_ex()
        $EX_PATH/$EXA
     exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA
 )"
-
     cd $(basename $EXA)
 
     make clean 
@@ -69,7 +68,7 @@ test_ex()
     make 
     exit_on_failure_no_print $? "Make in $(pwd)"
   
-    if [ "$TYPE" = "uno" ] && [ "$UPLOAD" = "true" ] 
+    if [ "$TYPE" = "leonardo" ] && [ "$UPLOAD" = "true" ] 
     then
 	make upload 
 	exit_on_failure_no_print $? "Make in $(pwd)"
@@ -87,14 +86,27 @@ test_ex()
 test_types()
 {
     DIR=$1
-    TYPES="shlib prog uno mega due"
-    for t in  $TYPES
+    TYPES="shlib prog uno mega due leonardo"
+
+    for t in $TYPES
     do
 	test_ex $t $DIR
 	exit_on_failure_no_print $?
     done
     inc_arduino_test
-    
+}
+
+test_types_usb()
+{
+    DIR=$1
+    TYPES="shlib prog leonardo"
+
+    for t in $TYPES
+    do
+	test_ex $t $DIR
+	exit_on_failure_no_print $?
+    done
+    inc_arduino_test
 }
 
 
@@ -105,64 +117,80 @@ my_log()
 
 test_arduino_examples()
 {
+    my_log test_types "./01.Basics/AnalogReadSerial"
+    my_log test_types "./01.Basics/BareMinimum"
+    my_log test_types "./01.Basics/Blink"
+    my_log test_types "./01.Basics/DigitalReadSerial"
+    my_log test_types "./01.Basics/Fade"
+    my_log test_types "./01.Basics/ReadAnalogVoltage"
+    my_log test_types "./02.Digital/BlinkWithoutDelay"
+    my_log test_types "./02.Digital/Button"
+    my_log test_types "./02.Digital/Debounce"
+    my_log test_types "./02.Digital/DigitalIputPullup"
+    my_log test_types "./02.Digital/StateChangeDetection"
+##    my_log test_types "./02.Digital/toneKeyboard"
+##    my_log test_types "./02.Digital/toneMelody"
+##    my_log test_types "./02.Digital/toneMultiple"
+##    my_log test_types "./02.Digital/tonePitchFollower"
+    my_log test_types "./03.Analog/AnalogInOutSerial"
+    my_log test_types "./03.Analog/AnalogInput"
+    my_log test_types "./03.Analog/AnalogWriteMega"
+    my_log test_types "./03.Analog/Calibration"
+    my_log test_types "./03.Analog/Fading"
+##    my_log test_types "./03.Analog/Smoothing"
+##    my_log test_types "./04.Communication/ASCIITable"
+    my_log test_types "./04.Communication/Dimmer"
+    my_log test_types "./04.Communication/Graph"
+##    my_log test_types "./04.Communication/MIDI"
+##    my_log test_types "./04.Communication/MultiSerialMega"
+    my_log test_types "./04.Communication/PhysicalPixel"
+##    my_log test_types "./04.Communication/ReadASCIIString"
+##    my_log test_types "./04.Communication/SerialCallResponseASCII"
+##    my_log test_types "./04.Communication/SerialCallResponse"
+##    my_log test_types "./04.Communication/SerialEvent"
+    my_log test_types "./04.Communication/VirtualColorMixer"
+    my_log test_types "./05.Control/Arrays"
+    my_log test_types "./05.Control/ForLoopIteration"
+    my_log test_types "./05.Control/IfStatementConditional"
+    my_log test_types "./05.Control/switchCase2"
+    my_log test_types "./05.Control/switchCase"
+##    my_log test_types "./05.Control/WhileStatementConditional"
+    my_log test_types "./06.Sensors/ADXL3xx"
+    my_log test_types "./06.Sensors/Knock"
+    my_log test_types "./06.Sensors/Memsic2125"
+##    my_log test_types "./06.Sensors/Ping"
+   my_log test_types "./07.Display/barGraph"
+##   my_log test_types "./07.Display/RowColumnScanning"
+##    my_log test_types "./08.Strings/CharacterAnalysis"
+##    my_log test_types "./08.Strings/StringAdditionOperator"
+##    my_log test_types "./08.Strings/StringAppendOperator"
+##    my_log test_types "./08.Strings/StringCaseChanges"
+##    my_log test_types "./08.Strings/StringCharacters"
+##    my_log test_types "./08.Strings/StringComparisonOperators"
+##   my_log test_types "./08.Strings/StringConstructors"
+##    my_log test_types "./08.Strings/StringIndexOf"
+##    my_log test_types "./08.Strings/StringLength"
+##    my_log test_types "./08.Strings/StringLengthTrim"
+##    my_log test_types "./08.Strings/StringReplace"
+##    my_log test_types "./08.Strings/StringStartsWithEndsWith"
+##    my_log test_types "./08.Strings/StringSubstring"
+##    my_log test_types "./08.Strings/StringToIntRGB"
+##    my_log test_types "./08.Strings/StringToInt"
 
-    my_log test_types ./1.Basics/AnalogReadSerial
-    my_log test_types ./1.Basics/BareMinimum
-    my_log test_types ./1.Basics/Blink
-    my_log test_types ./1.Basics/DigitalReadSerial
-    my_log test_types ./1.Basics/Fade
-    my_log test_types ./2.Digital/BlinkWithoutDelay
-    my_log test_types ./2.Digital/Button
-    my_log test_types ./2.Digital/Debounce
-    my_log test_types ./2.Digital/StateChangeDetection
-### test_types ./2.Digital/toneKeyboard
-### test_types ./2.Digital/toneMelody
-### test_types ./2.Digital/toneMultiple
-### test_types ./2.Digital/tonePitchFollower
-    my_log test_types ./3.Analog/AnalogInOutSerial
-    my_log test_types ./3.Analog/AnalogInput
-    my_log test_types ./3.Analog/AnalogWriteMega
-    my_log test_types ./3.Analog/Calibration
-    my_log test_types ./3.Analog/Fading
-### test_types ./3.Analog/Smoothing
-    my_log test_types ./4.Communication/ASCIITable
-    my_log test_types ./4.Communication/Dimmer
-    my_log test_types ./4.Communication/Graph
-###    test_types ./4.Communication/MIDI
-### serial1: ###    test_types ./4.Communication/MultiSerialMega
-    my_log test_types ./4.Communication/PhysicalPixel
-###    test_types ./4.Communication/SerialCallResponse
-###    test_types ./4.Communication/SerialCallResponseASCII
-###    test_types ./4.Communication/SerialEvent
-    my_log test_types ./4.Communication/VirtualColorMixer
-    my_log test_types ./5.Control/Arrays
-    my_log test_types ./5.Control/ForLoopIteration
-    my_log test_types ./5.Control/IfStatementConditional
-    my_log test_types ./5.Control/switchCase
-    my_log test_types ./5.Control/switchCase2
-###    test_types ./5.Control/WhileStatementConditional
-    my_log test_types ./6.Sensors/ADXL3xx
-    my_log test_types ./6.Sensors/Knock
-###    test_types ./6.Sensors/Memsic2125
-###    test_types ./6.Sensors/Ping
-    my_log test_types ./7.Display/barGraph
-###    test_types ./7.Display/RowColumnScanning
-    my_log test_types ./8.Strings/CharacterAnalysis
-###    test_types ./8.Strings/StringAdditionOperator
-###    test_types ./8.Strings/StringAppendOperator
-###    test_types ./8.Strings/StringCaseChanges
-###    test_types ./8.Strings/StringCharacters
-###    test_types ./8.Strings/StringComparisonOperators
-###    test_types ./8.Strings/StringConstructors
-###    test_types ./8.Strings/StringIndexOf
-###    test_types ./8.Strings/StringLength
-###    test_types ./8.Strings/StringLengthTrim
-###    test_types ./8.Strings/StringReplace
-###    test_types ./8.Strings/StringStartsWithEndsWith
-###    test_types ./8.Strings/StringSubstring
-###    test_types ./8.Strings/StringToInt
-###    test_types ./8.Strings/StringToIntRGB
-    echo
+}
+
+
+test_arduino_usb_examples()
+{
+
+    my_log test_types_usb "./09.USB(Leonardo)/KeyboardAndMouseControl"
+    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardLogout"
+    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardMessage"
+    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardReprogram"
+    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardSerial"
+    my_log test_types_usb "./09.USB(Leonardo)/Mouse/ButtonMouseControl"
+#    my_log test_types_usb "./09.USB(Leonardo)/Mouse/JoystickMouseControl"
+#    my_log test_types "./ArduinoISP"
 }
 
 
@@ -246,27 +274,6 @@ test_serial()
 }
 
 
-test_versions()
-{
-    #
-    # version
-    log_and_exec_no_print  cd ../verifications/ok-version
-
-    log_and_exec_no_print  make -f Makefile.ok-version clean all
-    inc_searduino_test
-
-    log_and_exec_no_print  cd ../nok-version
-
-    log_and_false_exec_no_print  make -f Makefile.nok-version clean all
-
-    cd ..
-
-    inc_searduino_test
-
-    return 0
-}
-
-
 
 test_examples()
 {
@@ -284,7 +291,6 @@ test_examples()
     log_and_exec test_hid
     log_and_exec test_digitalrw
     log_and_exec test_serial
-    log_and_exec test_versions
 
 
     cd $STORED_DIR
@@ -310,6 +316,7 @@ init_logging
 #
 test_examples
 test_arduino_examples
+test_arduino_usb_examples
 
 #
 #
