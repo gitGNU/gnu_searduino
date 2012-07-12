@@ -1,6 +1,7 @@
 #!/bin/bash
 
 TMP_INST=/tmp/TMP_INSTALL3
+BUILD_DIR=.
 
 LOG_FILE=build-and-test.log
 
@@ -14,6 +15,13 @@ then
 fi
 
 . $FUNC_FILE
+
+GIT_REPO=http://git.savannah.gnu.org/r/searduino.git
+
+get_git()
+{
+    git clone $GIT_REPO
+}
 
 
 prepare()
@@ -105,15 +113,60 @@ dist()
     exit_on_failure $? "make dist"
 }
 
+usage()
+{
+    echo "$0"
+    echo ""
+    echo "  --clean-clone  - build in temp dir, do a clean clone first"
+    echo "  --git <repo>   - get code from git repo <repo>. Defaults to searduino's git repo at savannah"
+    echo "  --coverage     - generate coverage reports"
+    echo "  --help        - prints this message"
+    echo ""
+    echo ""
+}
 
 log "Building and checking"
 
-if [ "$1" = "--coverage" ]
+while [ "$1" != "" ]
+do
+    if [ "$1" = "--clean-clone" ]
+    then
+	CLEAN_CLONE=true
+	BUILD_DIR=/tmp/searduino-build
+	rm -fr ${BUILD_DIR}
+    elif [ "$1" = "--coverage" ]
+    then
+	COV=true
+    elif [ "$1" = "--git" ]
+    then
+	GIT_REPO=$2
+	shift
+    elif [ "$1" = "--arduino-source" ]
+    then
+	export ARDUNIO_SRC=$2
+	shift
+    elif [ "$1" = "--help" ]
+    then
+	usage
+	exit
+   fi
+    shift
+done
+
+if [ ! -d $BUILD_DIR ]
 then
-    COV=true
+    mkdir -p $BUILD_DIR
 fi
 
+echo cd $BUILD_DIR
+cd $BUILD_DIR
 init_logging
+
+if [ "$CLEAN_CLONE" = "true" ]
+then
+    log_and_exec get_git
+    cd searduino
+fi
 
 log_and_exec prepare
 log_and_exec build
