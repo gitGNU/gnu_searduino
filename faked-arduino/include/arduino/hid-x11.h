@@ -24,6 +24,9 @@
 #ifndef HID_X11_H
 #define HID_X11_H
 
+
+#include "hid-generic.h"
+
 #ifdef USE_X11
 
 

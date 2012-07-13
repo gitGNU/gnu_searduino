@@ -22,11 +22,6 @@
  ****/
 
 
-/* TEMPORARILY WHILE DEVELOPING */
-#define  USE_X11
-/* EO TEMP */
-
-#include "hid-x11.h"
 
 #ifndef HID_GENERIC_H
 #define HID_GENERIC_H
