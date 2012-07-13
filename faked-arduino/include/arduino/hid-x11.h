@@ -24,10 +24,6 @@
 #ifndef HID_X11_H
 #define HID_X11_H
 
-/* TEMPORARILY WHILE DEVELOPING */
-#define  USE_X11
-/* EO TEMP */
-
 #ifdef USE_X11
 
 
