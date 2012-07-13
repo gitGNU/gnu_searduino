@@ -103,6 +103,29 @@ get_board_name(void)
 }
 
 
+char *
+get_supported_boards(void)
+{
+  static int i=0 ;
+  static char buf[1000];
+
+  if (i==0)
+    {
+      strcpy(buf,"");
+      for (i=1;i<SEARDUINO_BOARD_LAST;i++)
+	{
+	  if (i>1) 
+	    {
+	      strcat(buf,":");
+	    } 
+	  strcat(buf,searduino_boards[i].name);
+	}
+      i=1;
+    }
+  return buf;
+}
+
+
 int
 set_board_name(char *board)
 {

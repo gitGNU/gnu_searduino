@@ -39,4 +39,7 @@ board_setup_leonardo(void);
 char *
 get_board_name(void);
 
+char *
+get_supported_boards(void);
+
 #endif /*BOARDS_H*/
