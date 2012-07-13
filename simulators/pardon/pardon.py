@@ -274,13 +274,35 @@ class Pin(Gtk.Widget):
         relSem()
 
     def updateGenericMode(self, pin, mode):
-#        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
+        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
+
         getSem()
         if (mode==1):
+#            print "updateGenericMode       type: " + str(self.pin_type) + "   ? " + str(SEARDUINO_PIN_TYPE_DIGITAL)
+
             self.mode.set_text("OUTPUT")
+
+            if self.pin_type == SEARDUINO_PIN_TYPE_DIGITAL:
+                self.input.set_visible(False)
+
+            elif self.pin_type == SEARDUINO_PIN_TYPE_ANALOG:
+                self.wid.spinbuttonset_visibile(False)
+
+            elif self.pin_type == SEARDUINO_PIN_TYPE_PWM:
+                self.wid.inputset_visibile(False)
+
         else:
             self.mode.set_text("INPUT")
             self.output_label.set_text("")
+            if self.pin_type == SEARDUINO_PIN_TYPE_DIGITAL:
+                self.input.set_visible(True)
+
+            elif self.pin_type == SEARDUINO_PIN_TYPE_ANALOG:
+                self.wid.spinbuttonset_visibile(True)
+
+            elif self.pin_type == SEARDUINO_PIN_TYPE_PWM:
+                self.wid.inputset_visibile(True)
+
         relSem()
 
 
@@ -401,8 +423,6 @@ class MyWindow(Gtk.Window):
 #            wid = Pin(self,i%5, i, i)
             wid = Pin(self,pin_type, i, i)
             self.anas[i] = wid
-
-            
 
             pinTable.attach(wid.type_text,    1, 2, i+1, i+2)
             pinTable.attach(wid.pinLabel,     2, 3, i+1, i+2)
