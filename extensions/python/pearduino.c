@@ -551,6 +551,19 @@ c_get_searduino_name(PyObject *dummy, PyObject *args)
   return o;
 }
 
+static PyObject *
+c_get_supported_boards(PyObject *dummy, PyObject *args)
+{
+  const char * val;
+  PEARDUINO_PRINT_IN();
+
+  val= seasim_get_supported_boards();
+  PyObject* o = Py_BuildValue("s", val);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
 
 
 static PyObject *
@@ -614,6 +627,7 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_get_generic_pin_type",    (PyCFunction)c_get_generic_pin_type, METH_VARARGS, NULL},
   {"seasim_hid_enable_feedback",     (PyCFunction)c_hid_enable_feedback, METH_VARARGS, NULL},
   {"seasim_hid_disable_feedback",    (PyCFunction)c_hid_disable_feedback, METH_VARARGS, NULL},
+  {"seasim_get_supported_boards",    (PyCFunction)c_get_supported_boards, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
   /*  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
