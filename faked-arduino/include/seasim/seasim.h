@@ -134,7 +134,8 @@ seasim_hid_disable_feedback(void);
 uint8_t 
 seasim_hid_enable_feedback(void);
 
-
+char *
+seasim_get_supported_boards(void);
 
 
 #endif  /* SEASIM_SEASIM_H */

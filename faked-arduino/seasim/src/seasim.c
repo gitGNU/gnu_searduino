@@ -217,3 +217,9 @@ seasim_hid_enable_feedback(void)
   return hid_enable_faked_hid();
 }
 
+char *
+seasim_get_supported_boards(void)
+{
+  return get_supported_boards();
+}
+
