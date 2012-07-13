@@ -75,6 +75,7 @@ variable in the Makefile. The following values of that variable are implemented.
 @item mega - builds software for the Arduino Mega board
 @item mega2560 - builds software for the Arduino Mega 2560 board
 @item due - builds software for the Arduino Mega board
+@item due - builds software for the Arduino Leonardo board
 @item stub - builds software for the PC
 @end itemize
 
