@@ -99,30 +99,52 @@ def pardonResume():
     pause = 0
 
 
-class pauseButton(Gtk.HBox):
+class pauseButton(Gtk.Widget):
     def __init__(self, parent):
-        Gtk.HBox.__init__(self)
+        Gtk.Widget.__init__(self)
         self.par = parent
     
-        self.label = Gtk.Label("Pause")
-        self.label.set_width_chars(10);
-        self.pin = Gtk.ToggleButton()
-        self.pin.set_active(True)
+        self.header = Gtk.Label("Execution: Pause   ")
+        self.header.set_width_chars(10);
+        self.enable = Gtk.ToggleButton()
+        self.enable.set_active(True)
         
-        self.pack_start(self.label, False, True, 0)
-        self.pack_start(self.pin, False, True, 0)
+        self.enable.connect("clicked", self.on_enable_toggled, "1")
 
-        self.pin.connect("clicked", self.on_pin_toggled, "1")
-
-    def on_pin_toggled(self, widget, name):
-        if self.pin.get_active():
+    def on_enable_toggled(self, widget, name):
+        if self.enable.get_active():
             pardonResume()
             print "pause"
-            self.label.set_text("Pause  ")
+            self.label.set_text("Execution: Pause  ")
         else:
             pardonPause()
-            self.label.set_text("Resume ")
+            self.label.set_text("Execution: Resume ")
         
+class hidFeedback(Gtk.Widget):
+
+    def __init__(self, parent):
+        Gtk.Widget.__init__(self)
+        self.par = parent
+    
+        self.header = Gtk.Label("HID Feedback: disable")
+        self.header.set_width_chars(10);
+        self.enable = Gtk.ToggleButton()
+        self.enable.set_active(True)
+        
+        self.enable.connect("clicked", self.on_enable_toggled, "1")
+
+    def on_enable_toggled(self, widget, name):
+        if self.enable.get_active():
+            self.pardonEnableHidFeedback()
+        else:
+            self.pardonDisableHidFeedback()
+
+    def pardonDisableHidFeedback(self):
+            self.header.set_text("HID Feedback: enable ")
+
+    def pardonEnableHidFeedback(self):
+            self.header.set_text("HID Feedback: disable")
+
 
 class SpinButtonWindow(Gtk.Box):
     
@@ -291,10 +313,22 @@ class MyWindow(Gtk.Window):
         self.innerbox = Gtk.HBox(spacing=6)
 
         pinTable = Gtk.Table(10, 10, False)
+        settingsTable = Gtk.Table(10, 10, False)
 
         pause = pauseButton(self)
-        pause2 = pauseButton(self)
+        hid   = hidFeedback(self)
         spin = SpinButtonWindow(self)
+        #    left_attach, right_attach, top_attach, bottom_attach
+
+        # row 0
+        settingsTable.attach(Gtk.Label("Searduino feature"),  1, 2, 0, 1)
+        settingsTable.attach(Gtk.Label("on/off"),             2, 3, 0, 1)
+        # row 1
+        settingsTable.attach(hid.header,           1, 2, 1, 2)
+        settingsTable.attach(hid.enable,           2, 3, 1, 2)
+        # row 1
+        settingsTable.attach(pause.header,         1, 2, 2, 3)
+        settingsTable.attach(pause.enable,         2, 3, 2, 3)
 
         self.box = Gtk.VBox(spacing=6)
         self.add(self.box)
@@ -323,7 +357,9 @@ class MyWindow(Gtk.Window):
 
         self.extraslabel = Gtk.Label("General")
         self.extrasbox.pack_start(self.extraslabel,    False, True, 0)
-        self.extrasbox.pack_start(pause,    False, True, 0)
+        self.extrasbox.pack_start(settingsTable,       False, True, 0)
+#        self.extrasbox.pack_start(pause,    False, True, 0)
+#        self.extrasbox.pack_start(hid,    False, True, 0)
         self.extrasbox.pack_start(spin,    False, True, 0)
 
         # log window
