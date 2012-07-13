@@ -116,7 +116,7 @@ get_supported_boards(void)
 	{
 	  if (i>1) 
 	    {
-	      strcat(buf,":");
+	      strcat(buf,",");
 	    } 
 	  strcat(buf,searduino_boards[i].name);
 	}
