@@ -89,6 +89,19 @@ START_TEST (test_board)
 }
 END_TEST
 
+START_TEST (test_supported_boards)
+{
+  char *tmp;
+
+  tmp = get_supported_boards();
+  
+  fail_if (tmp == NULL );
+  
+  printf ("supported bords: %s\n", tmp);
+  
+}
+END_TEST
+
 
 Suite *
 buffer_suite(void) {
@@ -97,7 +110,7 @@ buffer_suite(void) {
   suite_add_tcase (s, tc_core);
 
   tcase_add_test(tc_core, test_board);
-
+  tcase_add_test(tc_core, test_supported_boards);
   return s;
 }
 
