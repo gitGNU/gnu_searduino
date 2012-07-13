@@ -117,11 +117,16 @@ usage()
 {
     echo "$0"
     echo ""
-    echo "  --clean-clone  - build in temp dir, do a clean clone first"
-    echo "  --git <repo>   - get code from git repo <repo>. Defaults to searduino's git repo at savannah"
-    echo "  --coverage     - generate coverage reports"
-    echo "  --help        - prints this message"
+    echo "OPTIONS:"
+    echo "  --clean-clone        - build in temp dir, do a clean clone first"
+    echo "  --git <repo>         - get code from git repo <repo>. Defaults to searduino's git repo at savannah"
+    echo "  --arduino-source <s> - don't download Arduino sources, use <s> instead"
+    echo "  --coverage           - generate coverage reports"
+    echo "  --help               - prints this message"
     echo ""
+    echo ""
+    echo "EXAMPLES:"
+    echo "  $0 --clean-clone --git /home/hesa/nongnu/searduino --arduino-source /home/hesa/nongnu/searduino/download-tmp/arduino-1.0.1-linux64.tgz"
     echo ""
 }
 
@@ -143,7 +148,7 @@ do
 	shift
     elif [ "$1" = "--arduino-source" ]
     then
-	export ARDUNIO_SRC=$2
+	export ARDUNIO_SOURCE=$2
 	shift
     elif [ "$1" = "--help" ]
     then
