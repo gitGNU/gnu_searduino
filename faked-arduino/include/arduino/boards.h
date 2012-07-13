@@ -33,6 +33,9 @@ board_setup_uno(void);
 int
 board_setup_mega2560(void);
 
+int
+board_setup_leonardo(void);
+
 char *
 get_board_name(void);
 

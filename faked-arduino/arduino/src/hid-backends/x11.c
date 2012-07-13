@@ -96,8 +96,10 @@ int hid_x11_hid_key(uint8_t k, uint8_t request )
 
 int hid_x11_enable_faked_hid(void)
 {
+  printf ("ENABLE 1\n");
   if (xtest_available != 0 )
     {
+  printf ("ENABLE 2\n");
       hid_x11_enabled = 1;
     }
   return 0;
@@ -105,6 +107,8 @@ int hid_x11_enable_faked_hid(void)
 
 int hid_x11_disable_faked_hid(void)
 {
+  printf ("DISABLE 1\n");
+
   hid_x11_enabled = 0;
   return 0;
 }

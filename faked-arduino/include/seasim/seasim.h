@@ -128,6 +128,12 @@ seasim_get_board_name(void);
 int 
 seasim_get_generic_pin_type(uint8_t pin);
 
+uint8_t 
+seasim_hid_disable_feedback(void);
+
+uint8_t 
+seasim_hid_enable_feedback(void);
+
 
 
 

@@ -204,3 +204,16 @@ seasim_get_generic_pin_type(uint8_t pin)
 {
   return get_generic_pin_type(pin);
 }
+
+uint8_t 
+seasim_hid_disable_feedback(void)
+{
+  return hid_disable_faked_hid();
+}
+
+uint8_t 
+seasim_hid_enable_feedback(void)
+{
+  return hid_enable_faked_hid();
+}
+

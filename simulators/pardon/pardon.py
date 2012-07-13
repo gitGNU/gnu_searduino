@@ -104,7 +104,7 @@ class pauseButton(Gtk.Widget):
         Gtk.Widget.__init__(self)
         self.par = parent
     
-        self.header = Gtk.Label("Execution: Pause   ")
+        self.header = Gtk.Label("Execution: Running  ")
         self.header.set_width_chars(10);
         self.enable = Gtk.ToggleButton()
         self.enable.set_active(True)
@@ -115,10 +115,10 @@ class pauseButton(Gtk.Widget):
         if self.enable.get_active():
             pardonResume()
             print "pause"
-            self.label.set_text("Execution: Pause  ")
+            self.header.set_text("Execution: Resumed  ")
         else:
             pardonPause()
-            self.label.set_text("Execution: Resume ")
+            self.header.set_text("Execution: Paused   ")
         
 class hidFeedback(Gtk.Widget):
 
@@ -126,7 +126,7 @@ class hidFeedback(Gtk.Widget):
         Gtk.Widget.__init__(self)
         self.par = parent
     
-        self.header = Gtk.Label("HID Feedback: disable")
+        self.header = Gtk.Label("HID Feedback: enabled  ")
         self.header.set_width_chars(10);
         self.enable = Gtk.ToggleButton()
         self.enable.set_active(True)
@@ -140,10 +140,12 @@ class hidFeedback(Gtk.Widget):
             self.pardonDisableHidFeedback()
 
     def pardonDisableHidFeedback(self):
-            self.header.set_text("HID Feedback: enable ")
+            self.header.set_text("HID Feedback: disabled ")
+            seasim_hid_disable_feedback()
 
     def pardonEnableHidFeedback(self):
-            self.header.set_text("HID Feedback: disable")
+            self.header.set_text("HID Feedback: enabled  ")
+            seasim_hid_enable_feedback()
 
 
 class SpinButtonWindow(Gtk.Box):

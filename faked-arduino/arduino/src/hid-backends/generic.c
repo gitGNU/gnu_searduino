@@ -43,7 +43,6 @@ int hid_disable_faked_hid(void)
 {
 #ifdef USE_X11
   hid_x11_disable_faked_hid();
-
 #endif  
 }
 

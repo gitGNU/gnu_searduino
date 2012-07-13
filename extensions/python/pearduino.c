@@ -305,6 +305,30 @@ static PyObject* c_enable_streamed_output(PyObject* self, PyObject* args)
   return o;
 }
 
+static PyObject* c_hid_enable_feedback(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  PEARDUINO_PRINT_IN();
+  
+  seasim_hid_enable_feedback();
+  PyObject* o = Py_BuildValue("i", 0);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+static PyObject* c_hid_disable_feedback(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  PEARDUINO_PRINT_IN();
+
+  seasim_hid_disable_feedback();
+  PyObject* o = Py_BuildValue("i", 0);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
 static PyObject* c_get_generic_pin_type(PyObject* self, PyObject* args)
 {
   unsigned int ret;
@@ -588,6 +612,8 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_set_board_name",          (PyCFunction)c_set_board_name, METH_VARARGS, NULL},
   {"seasim_get_board_name",          (PyCFunction)c_get_board_name, METH_VARARGS, NULL},
   {"seasim_get_generic_pin_type",    (PyCFunction)c_get_generic_pin_type, METH_VARARGS, NULL},
+  {"seasim_hid_enable_feedback",     (PyCFunction)c_hid_enable_feedback, METH_VARARGS, NULL},
+  {"seasim_hid_disable_feedback",    (PyCFunction)c_hid_disable_feedback, METH_VARARGS, NULL},
   {NULL, NULL, 0, NULL}
 };
   /*  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},

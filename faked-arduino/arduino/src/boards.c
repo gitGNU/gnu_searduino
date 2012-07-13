@@ -38,6 +38,7 @@ enum
     SEARDUINO_BOARD_UNO,
     SEARDUINO_BOARD_MEGA,
     SEARDUINO_BOARD_MEGA_2560,
+    SEARDUINO_BOARD_LEONARDO,
     SEARDUINO_BOARD_LAST
   };
 
@@ -68,6 +69,10 @@ static struct searduino_board_t searduino_boards[] =
     { SEARDUINO_BOARD_MEGA_2560, 
       "Mega2560",
       board_setup_mega2560
+    },
+    { SEARDUINO_BOARD_LEONARDO, 
+      "Leonardo",
+      board_setup_leonardo
     },
     { SEARDUINO_BOARD_LAST, 
       NULL,
@@ -376,7 +381,6 @@ board_setup_leonardo(void)
 
    [1] http://arduino.cc/en/Main/ArduinoBoardLeonardo
    */
-  
 
   return 0;
 }
