@@ -375,9 +375,27 @@ class MyWindow(Gtk.Window):
         self.serialscroll.add(self.serialio)
         self.serialbox.pack_start(self.serialscroll,    False, True, 0)
 
-
         # EXTRAS
+
+
         self.extrasbox=Gtk.VBox(spacing=6)
+        #  -- board
+        self.boards = Gtk.ListStore(str)
+        print "Supported boards:" + seasim_get_supported_boards()
+        print "+---------------------------------"
+        supported_boards=seasim_get_supported_boards().split(",")
+
+        for i in supported_boards:
+#            print "+---"+ str(i)
+            self.boards.append([str(i)])
+#            print "+---------------------------------"
+        self.board_combo = Gtk.ComboBox.new_with_model(self.boards)
+        renderer_text = Gtk.CellRendererText()
+        self.board_combo.pack_start(renderer_text, True)
+        self.board_combo.add_attribute(renderer_text, "text", 0)
+
+        self.extrasbox.pack_start(Gtk.Label("Arduino boards"),    False, True, 0)
+        self.extrasbox.pack_start(self.board_combo,    False, True, 0)
 
         self.extraslabel = Gtk.Label("General")
         self.extrasbox.pack_start(self.extraslabel,    False, True, 0)
@@ -579,9 +597,10 @@ def getArduinocodeLibrary():
 #print "Main - will parse"
 
 parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator " + seasim_get_searduino_version() + ")')
-parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac",   help='Arduino code to test')
-parser.add_argument('--i2c-code',     nargs=1, action="store", dest="ic",   help='I2C code for device')
-parser.add_argument('--pins',         nargs=1, action="store", dest="pins", help='Number of pins in GUI')
+parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac",    help='Arduino code to test')
+parser.add_argument('--i2c-code',     nargs=1, action="store", dest="ic",    help='I2C code for device')
+parser.add_argument('--pins',         nargs=1, action="store", dest="pins",  help='Number of pins in GUI')
+parser.add_argument('--board',        nargs=1, action="store", dest="board", help='Arduino Board')
 parser.add_argument('--version',      action='version', version=seasim_get_searduino_version())
 args = parser.parse_args()
 
@@ -590,6 +609,7 @@ args = parser.parse_args()
 
 ard_code=""
 i2c_code=""
+board=""
 if args.ac != None:
     ard_code=args.ac[0]
 else:
@@ -597,6 +617,9 @@ else:
 
 if args.ic != None:
     i2c_code=args.ic[0]
+
+if args.board != None:
+    board=args.board[0]
 
 if args.pins != None:
     size = int(args.pins[0])+2
@@ -633,12 +656,16 @@ else:
 #print "ard:  " + ard_code
 #print "i2c:  " + i2c_code
 
-seasim_set_board_name("Uno")
+if board == "":
+    board="Uno"
+
+seasim_set_board_name(board)
 print " ***** BOARD " + seasim_get_board_name()
 
 
 if i2c_code != "":
     seasim_add_i2c_device(50, i2c_code)
+
 
 #time.sleep(1)
 #time.sleep(10)
