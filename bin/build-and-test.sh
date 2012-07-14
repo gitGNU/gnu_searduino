@@ -148,7 +148,7 @@ do
 	shift
     elif [ "$1" = "--arduino-source" ]
     then
-	export ARDUNIO_SOURCE=$2
+	export ARDUINO_SOURCE=$2
 	shift
     elif [ "$1" = "--help" ]
     then
