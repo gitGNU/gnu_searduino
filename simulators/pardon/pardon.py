@@ -68,6 +68,7 @@ typeLabels[SEARDUINO_PIN_TYPE_END]     = "Unknown"
 
 paused = 0 
 size  = 20
+started=False
 
 redColor = Gdk.RGBA()
 redColor.red=1.0
@@ -98,25 +99,65 @@ def pardonResume():
     global pause 
     pause = 0
 
+def writeInfo(str):
+    newLogCallback(SEARDUINO_LOG_LEVEL_INFO, "SEARDUINO: " + str)
+
+
+def startSimulator():
+    global started
+    if board == "":
+        writeInfo("No board choosen, you must choose a board\n")
+        print "No board choosen, you must choose a board"
+    else:
+        seasim_set_board_name(board)
+        print " ***** BOARD " + seasim_get_board_name()
+        writeInfo("Starting simulation on " + seasim_get_board_name() + "\n")
+        seasim_start();
+        started=True
+        writeInfo("Simulation started\n")
+
 
 class pauseButton(Gtk.Widget):
+
     def __init__(self, parent):
         Gtk.Widget.__init__(self)
         self.par = parent
-    
-        self.header = Gtk.Label("Execution: Running  ")
+
+        self.header = Gtk.Label("Click to start: ")
         self.header.set_width_chars(10);
         self.enable = Gtk.ToggleButton()
-        self.enable.set_active(True)
+        self.enable.set_active(False)
         
         self.enable.connect("clicked", self.on_enable_toggled, "1")
 
+    def disable(self):
+        self.header.set_text("Pause/Resume is not available")
+        self.enable.set_visible(False)
+        
+
     def on_enable_toggled(self, widget, name):
+        global started
         if self.enable.get_active():
-            pardonResume()
-            print "pause"
-            self.header.set_text("Execution: Resumed  ")
+
+            if started==False:
+                startSimulator()
+                time.sleep(1)
+                if started==False:
+                    self.enable.set_active(False)
+                    return
+
+                self.header.set_text("Execution: Started")
+
+            if seasim_is_pausable():
+                pardonResume()
+                self.header.set_text("Execution: Resumed  ")
+            else:
+                win.pause.disable()
+
         else:
+            if started==False:
+                return
+
             pardonPause()
             self.header.set_text("Execution: Paused   ")
         
@@ -274,7 +315,7 @@ class Pin(Gtk.Widget):
         relSem()
 
     def updateGenericMode(self, pin, mode):
-        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
+#        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
 
         getSem()
         if (mode==1):
@@ -339,27 +380,27 @@ class MyWindow(Gtk.Window):
         pinTable = Gtk.Table(10, 10, False)
         settingsTable = Gtk.Table(10, 10, False)
 
-        pause = pauseButton(self)
+        self.pause = pauseButton(self)
         hid   = hidFeedback(self)
         spin = SpinButtonWindow(self)
         #    left_attach, right_attach, top_attach, bottom_attach
 
         # row 0
-        settingsTable.attach(Gtk.Label("Searduino feature"),  1, 2, 0, 1)
-        settingsTable.attach(Gtk.Label("on/off"),             2, 3, 0, 1)
+        settingsTable.attach(Gtk.Label("Searduino feature"),  1, 2, 1, 2)
+        settingsTable.attach(Gtk.Label("on/off"),             2, 3, 1, 2)
+
         # row 1
-        settingsTable.attach(hid.header,           1, 2, 1, 2)
-        settingsTable.attach(hid.enable,           2, 3, 1, 2)
-        # row 1
-        settingsTable.attach(pause.header,         1, 2, 2, 3)
-        settingsTable.attach(pause.enable,         2, 3, 2, 3)
+        settingsTable.attach(hid.header,           1, 2, 2, 3)
+        settingsTable.attach(hid.enable,           2, 3, 2, 3)
 
         self.box = Gtk.VBox(spacing=6)
         self.add(self.box)
 
         # Serial I/O
         self.serialbox=Gtk.VBox(spacing=6)
-        self.seriallabel = Gtk.Label("Serial Output")
+        self.seriallabel = Gtk.Label()
+        self.seriallabel.set_markup("<b>Serial Output</b>")
+
         self.seriallabel.set_width_chars(40);
         self.serialbox.pack_start(self.seriallabel,    False, True, 0)
         self.serialio = Gtk.TextView()
@@ -381,23 +422,48 @@ class MyWindow(Gtk.Window):
         self.extrasbox=Gtk.VBox(spacing=6)
         #  -- board
         self.boards = Gtk.ListStore(str)
-        print "Supported boards:" + seasim_get_supported_boards()
-        print "+---------------------------------"
+#        print "Supported boards:" + seasim_get_supported_boards()
+#        print "+---------------------------------"
         supported_boards=seasim_get_supported_boards().split(",")
 
         for i in supported_boards:
 #            print "+---"+ str(i)
             self.boards.append([str(i)])
-#            print "+---------------------------------"
+#                  print "+---------------------------------"
+
+
+
         self.board_combo = Gtk.ComboBox.new_with_model(self.boards)
+        self.board_combo.connect("changed", self.on_board_combo_changed)
         renderer_text = Gtk.CellRendererText()
         self.board_combo.pack_start(renderer_text, True)
         self.board_combo.add_attribute(renderer_text, "text", 0)
 
-        self.extrasbox.pack_start(Gtk.Label("Arduino boards"),    False, True, 0)
+        if board!="":
+            liststore = self.board_combo.get_model()
+            for i in xrange(len(liststore)):
+                row = liststore[i]
+                if row[0].lower() == board.lower():
+                    print "MATCH: " + board
+                    self.board_combo.set_active(i)
+
+        # row Start / Pause / Resume
+        self.execbox=Gtk.HBox(spacing=6)
+        self.execbox.pack_start(self.pause.header,              False, True, 0)
+        self.execbox.pack_start(self.pause.enable,              False, True, 0)
+        control_label = Gtk.Label()
+        control_label.set_markup("<b>Execution control</b>")
+        self.extrasbox.pack_start(control_label, False, True, 0)
+        self.extrasbox.pack_start(self.execbox,       False, True, 0)
+
+        # Arduino board setting
+        board_label = Gtk.Label()
+        board_label.set_markup("<b>Current Arduino board</b>")
+        self.extrasbox.pack_start(board_label,    False, True, 0)
         self.extrasbox.pack_start(self.board_combo,    False, True, 0)
 
-        self.extraslabel = Gtk.Label("General")
+        self.extraslabel = Gtk.Label()
+        self.extraslabel.set_markup("<b>Settings</b>")
         self.extrasbox.pack_start(self.extraslabel,    False, True, 0)
         self.extrasbox.pack_start(settingsTable,       False, True, 0)
 #        self.extrasbox.pack_start(pause,    False, True, 0)
@@ -405,6 +471,10 @@ class MyWindow(Gtk.Window):
         self.extrasbox.pack_start(spin,    False, True, 0)
 
         # log window
+        self.scroll_label=Gtk.Label()
+        self.scroll_label.set_markup("<b>Logging messages</b>")        
+        self.scroll_label.set_width_chars(40);
+
         self.log = Gtk.TextView()
         self.scroll = Gtk.ScrolledWindow()
         self.scroll.set_hexpand(True)
@@ -414,7 +484,8 @@ class MyWindow(Gtk.Window):
         self.log.set_cursor_visible(True)
         self.log.set_editable(True)
         self.scroll.add(self.log)
-        self.extrasbox.pack_start(self.scroll,    False, True, 0)
+        self.extrasbox.pack_start(self.scroll_label,  False, True, 0)
+        self.extrasbox.pack_start(self.scroll,        False, True, 0)
 
         self.innerbox.pack_start(pinTable,       False, True, 0)
         self.innerbox.pack_start(self.serialbox, False, True, 0)
@@ -457,7 +528,14 @@ class MyWindow(Gtk.Window):
                 pinTable.attach(wid.output_label, 5, 6, i+1, i+2)
 
 
-            
+    def on_board_combo_changed(self, combo):
+        global board
+        tree_iter = combo.get_active_iter()
+        if tree_iter != None:
+            mymodel = combo.get_model()
+            myboard = mymodel[tree_iter][0]
+#            print "Selected: board=%s" % myboard
+            board = myboard
 
 class FileChooserWindow(Gtk.Window):
 
@@ -594,6 +672,8 @@ def getArduinocodeLibrary():
     return file
     
 
+
+
 #print "Main - will parse"
 
 parser = argparse.ArgumentParser(prog='Pardon (Arduino Simulator " + seasim_get_searduino_version() + ")')
@@ -656,13 +736,6 @@ else:
 #print "ard:  " + ard_code
 #print "i2c:  " + i2c_code
 
-if board == "":
-    board="Uno"
-
-seasim_set_board_name(board)
-print " ***** BOARD " + seasim_get_board_name()
-
-
 if i2c_code != "":
     seasim_add_i2c_device(50, i2c_code)
 
@@ -685,8 +758,6 @@ seasim_set_log_callback(newLogCallback)
 win.show_all()
 
 #time.sleep(2)
-seasim_start();
-
 
 #sys.exit(1)
 
