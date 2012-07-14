@@ -1,5 +1,21 @@
-News in coming release
-  Only allow write on serial after a call to begin has been made
+News in 0.66
+
+  General changes:
+  ---------------------
+    Only allow write on serial after a call to begin has been made
+    Support for Leonardo when building for boards.
+    Rudimentary support for Leonardo in simulator
+      * USBDevice (Leonardo only) is faked using XTest on X11 based platforms
+      * board not properly configured, use at own risk in simulator
+      * twi works fine on Leonardo
+      * keep all objects on gcc based builds (--whole-archive)
+
+  Pardon changes:
+  ---------------------
+    Possible to choose board
+    Improved log window
+    Hid feedback can be switched on/off
+    Need to start simulation explicitly
 
 News in 0.63,64
 
