@@ -175,7 +175,7 @@ create_makefile()
 	TO_BUILD="SHLIB=lib$(echo $ARD_DIR | tr [A-Z] [a-z]).so"
 	BUILD_LD_FLAGS="\$(SHLIB_LIBS)"
 	SHLIB_LIBS=-lpthread
-    elif [ "$BUILD_TYPE" = "uno" ] || [ "$BUILD_TYPE" = "due" ] || [ "$BUILD_TYPE" = "mega" ]
+    elif [ "$BUILD_TYPE" = "uno" ] || [ "$BUILD_TYPE" = "due" ] || [ "$BUILD_TYPE" = "mega" ] || [ "$BUILD_TYPE" = "leonardo" ]
     then
 	ARDUINO_VALUE=$BUILD_TYPE
 	TO_BUILD_TARGET="\$(PROG)"
