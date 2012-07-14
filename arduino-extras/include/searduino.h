@@ -36,8 +36,8 @@
 #endif
 
 #ifdef  ENABLE_SLEEP
-#define   SEARDUINO_LOOP() for (;;)  \
-    if      (searduino_is_paused())  { fprintf (stderr, "z"); usleep(1000*200); } \
+#define   SEARDUINO_LOOP() searduino_exec_available = 1 ; for (;;)	\
+    if      ( searduino_is_paused()) { fprintf (stderr, "z"); usleep(1000*200); } \
     else if ( searduino_is_halted()) { fprintf (stderr, "Simulator halted, will return\n"); return 0; } \
     else  
 #else
