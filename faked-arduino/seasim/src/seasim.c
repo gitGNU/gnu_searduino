@@ -223,3 +223,8 @@ seasim_get_supported_boards(void)
   return get_supported_boards();
 }
 
+uint8_t
+seasim_is_pausable(void)
+{
+  return is_pausable();
+}
