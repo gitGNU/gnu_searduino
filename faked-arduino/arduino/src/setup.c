@@ -38,6 +38,7 @@
 #include "searduino_pin.h"
 
 int searduino_exec ;
+int searduino_exec_available = 0 ;
 
 
 /* global */
@@ -199,4 +200,10 @@ load_arduino_code(void)
       /* printf ("setup.c:  code at %p\n", searduino_main_entry); */
     }
   return 0;
+}
+
+int 
+is_pausable(void)
+{
+  return searduino_exec_available;
 }
