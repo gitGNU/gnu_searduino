@@ -24,15 +24,34 @@ mkdir -p $INO_EX
 cd       $INO_EX
 
 export ARDUINO_EX_CTR=0
+export ARDUINO_EX_CTR_FAIL=0
+export ARDUINO_EX_CTR_SUCC=0
+
 export SEARDUINO_EX_CTR=0
+export SEARDUINO_EX_CTR_FAIL=0
+export SEARDUINO_EX_CTR_SUCC=0
 
 inc_arduino_test()
 {
     ARDUINO_EX_CTR=$(( $ARDUINO_EX_CTR + 1 ))
+    ARDUINO_EX_CTR_SUCC=$(( $ARDUINO_EX_CTR_SUCC + 1 ))
+}
+
+inc_arduino_test_fail()
+{
+    ARDUINO_EX_CTR=$(( $ARDUINO_EX_CTR + 1 ))
+    ARDUINO_EX_CTR_FAIL=$(( $ARDUINO_EX_CTR_FAIL + 1 ))
 }
 
 inc_searduino_test()
 {
+    SEARDUINO_EX_CTR_SUCC=$(( $SEARDUINO_EX_CTR_SUCC + 1 ))
+    SEARDUINO_EX_CTR=$(( $SEARDUINO_EX_CTR + 1 ))
+}
+
+inc_searduino_test_fail()
+{
+    SEARDUINO_EX_CTR_FAIL=$(( $SEARDUINO_EX_CTR_FAIL + 1 ))
     SEARDUINO_EX_CTR=$(( $SEARDUINO_EX_CTR + 1 ))
 }
 
@@ -40,8 +59,17 @@ inc_searduino_test()
 test_report()
 {
     echo "Tests performed and passed:"
+    echo "================================================="
+    echo ""
     echo "   Arduino examples tested:   $ARDUINO_EX_CTR"
+    echo "   ----------------------------------------------"
+    echo "      Succeeded:              $ARDUINO_EX_CTR_SUCC"
+    echo "      Failed:                 $ARDUINO_EX_CTR_FAIL (probably indicates featuers not supported in Searduino's simulator)"
+    echo ""
     echo "   Searduino examples tested: $SEARDUINO_EX_CTR"
+    echo "   ----------------------------------------------"
+    echo "      Succeeded:              $SEARDUINO_EX_CTR_SUCC"
+    echo "      Failed:                 $SEARDUINO_EX_CTR_FAIL (if not 0, report it as a bug. Please attach the whole log file $REAL_LOG_FILE)"
     echo ""
 }
 
@@ -50,73 +78,132 @@ test_ex()
     TYPE=$1
     EXA=$2
 
-    echo "Test: type:$TYPE $EXA" > /tmp/wops1.txt
-    
-
     $SEARDUINO_PATH/bin/arduino-ex2c    \
        --searduino-path $SEARDUINO_PATH \
        --$TYPE                          \
        --yes                            \
        $EX_PATH/$EXA
-    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA
+    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA  
 )"
     cd $(basename $EXA)
 
     make clean 
-    exit_on_failure_no_print $? "Make clean in $(pwd)"
+    if [ "$?" != "0" ] ; then echo "  -------  1 "; cd .. ; return 1; fi
+#    exit_on_failure_no_print $? "Make clean in $(pwd)"
     
     make 
-    exit_on_failure_no_print $? "Make in $(pwd)"
+    if [ "$?" != "0" ] ; then echo "  -------  2 "; cd .. ; return 1; fi
+#    exit_on_failure_no_print $? "Make in $(pwd)"
   
     if [ "$TYPE" = "leonardo" ] && [ "$UPLOAD" = "true" ] 
     then
 	make upload 
-	exit_on_failure_no_print $? "Make in $(pwd)"
+	if [ "$?" != "0" ] ; then echo "  -------  3 "; cd .. ; return 1; fi
+#	exit_on_failure_no_print $? "Make in $(pwd)"
     fi
   
     if [ "$TYPE" = "shlib" ] && [ "$SIMULATE" = "true" ] 
     then
 	make simulate
-	exit_on_failure_no_print $? "Make in $(pwd)"
+	if [ "$?" != "0" ] ; then echo "  -------  4 "; cd .. ; return 1; fi
+#	exit_on_failure_no_print $? "Make in $(pwd)"
     fi
   
     cd ..
+
+    return 0
 }
 
 test_types()
 {
     DIR=$1
-    TYPES="shlib prog uno mega due leonardo"
+    TYPES="shlib prog uno mega due leonardo "
+
+    MY_LOG_FAILURES=""
+    MY_LOG_SUCCESSES=""
+    MY_LOG_TESTED=""
+    FAIL="false"
 
     for t in $TYPES
     do
+	MY_LOG_TESTED="$MY_LOG_TESTED, $t"
 	test_ex $t $DIR
-	exit_on_failure_no_print $?
+	export RET=$?
+	if [ "$RET" != "0" ] ; 
+	then 
+	    MY_LOG_FAILURES="$MY_LOG_FAILURES, $t"
+
+	    # if one build fails, it's a failure
+	    FAIL="true"
+	    inc_arduino_test_fail
+	else
+	    inc_arduino_test
+	    MY_LOG_SUCCESSES="$MY_LOG_SUCCESSES, $t"
+	fi
+	
     done
-    inc_arduino_test
+    
+    if [ "$FAIL" = "true" ]
+    then
+	return 1; 
+    else
+	return 0;
+    fi
+
 }
 
 test_types_usb()
 {
     DIR=$1
     TYPES="shlib prog leonardo"
+    FAIL="false"
 
+    MY_LOG_FAILURES=""
+    MY_LOG_SUCCESSES=""
+    MY_LOG_TESTED=""
     for t in $TYPES
     do
+	MY_LOG_TESTED="$MY_LOG_TESTED, $t"
 	test_ex $t $DIR
-	exit_on_failure_no_print $?
+	export RET=$?
+	if [ "$RET" != "0" ] ; 
+	then 
+	    inc_arduino_test_fail
+	    MY_LOG_FAILURES="$MY_LOG_FAILURES, $t"
+	    FAIL="true"
+	else
+	    inc_arduino_test
+	    MY_LOG_SUCCESSES="$MY_LOG_SUCCESSES, $t"
+	fi
+	
     done
-    inc_arduino_test
+    
+    if [ "$FAIL" = "true" ]
+    then
+	return 1; 
+    else
+	return 0;
+    fi
 }
 
 
 my_log()
 {
-    log_and_exec_comment "$2" $*
+    log_and_exec_comment_no_quit "$2" $*
+
+    if [ "$MY_LOG_FAILURES" != "" ]
+    then
+	echo "   failures:  $MY_LOG_FAILURES"
+	echo "   successes: $MY_LOG_SUCCESSES"
+#	echo "   all:       $MY_LOG_TESTED"
+    fi
 }
 
 test_arduino_examples()
 {
+    log ""
+    log "Arduino built in examples"
+    log "-----------------------------------------"
     my_log test_types "./01.Basics/AnalogReadSerial"
     my_log test_types "./01.Basics/BareMinimum"
     my_log test_types "./01.Basics/Blink"
@@ -128,60 +215,63 @@ test_arduino_examples()
     my_log test_types "./02.Digital/Debounce"
     my_log test_types "./02.Digital/DigitalIputPullup"
     my_log test_types "./02.Digital/StateChangeDetection"
-##    my_log test_types "./02.Digital/toneKeyboard"
-##    my_log test_types "./02.Digital/toneMelody"
-##    my_log test_types "./02.Digital/toneMultiple"
-##    my_log test_types "./02.Digital/tonePitchFollower"
+    my_log test_types "./02.Digital/toneKeyboard"
+    my_log test_types "./02.Digital/toneMelody"
+    my_log test_types "./02.Digital/toneMultiple"
+    my_log test_types "./02.Digital/tonePitchFollower"
     my_log test_types "./03.Analog/AnalogInOutSerial"
     my_log test_types "./03.Analog/AnalogInput"
     my_log test_types "./03.Analog/AnalogWriteMega"
     my_log test_types "./03.Analog/Calibration"
     my_log test_types "./03.Analog/Fading"
-##    my_log test_types "./03.Analog/Smoothing"
-##    my_log test_types "./04.Communication/ASCIITable"
+    my_log test_types "./03.Analog/Smoothing"
+    my_log test_types "./04.Communication/ASCIITable"
     my_log test_types "./04.Communication/Dimmer"
     my_log test_types "./04.Communication/Graph"
-##    my_log test_types "./04.Communication/MIDI"
-##    my_log test_types "./04.Communication/MultiSerialMega"
+    my_log test_types "./04.Communication/MIDI"
+    my_log test_types "./04.Communication/MultiSerialMega"
     my_log test_types "./04.Communication/PhysicalPixel"
-##    my_log test_types "./04.Communication/ReadASCIIString"
-##    my_log test_types "./04.Communication/SerialCallResponseASCII"
-##    my_log test_types "./04.Communication/SerialCallResponse"
-##    my_log test_types "./04.Communication/SerialEvent"
+    my_log test_types "./04.Communication/ReadASCIIString"
+    my_log test_types "./04.Communication/SerialCallResponseASCII"
+    my_log test_types "./04.Communication/SerialCallResponse"
+    my_log test_types "./04.Communication/SerialEvent"
     my_log test_types "./04.Communication/VirtualColorMixer"
     my_log test_types "./05.Control/Arrays"
     my_log test_types "./05.Control/ForLoopIteration"
     my_log test_types "./05.Control/IfStatementConditional"
     my_log test_types "./05.Control/switchCase2"
     my_log test_types "./05.Control/switchCase"
-##    my_log test_types "./05.Control/WhileStatementConditional"
+    my_log test_types "./05.Control/WhileStatementConditional"
     my_log test_types "./06.Sensors/ADXL3xx"
     my_log test_types "./06.Sensors/Knock"
     my_log test_types "./06.Sensors/Memsic2125"
-##    my_log test_types "./06.Sensors/Ping"
-   my_log test_types "./07.Display/barGraph"
-##   my_log test_types "./07.Display/RowColumnScanning"
-##    my_log test_types "./08.Strings/CharacterAnalysis"
-##    my_log test_types "./08.Strings/StringAdditionOperator"
-##    my_log test_types "./08.Strings/StringAppendOperator"
-##    my_log test_types "./08.Strings/StringCaseChanges"
-##    my_log test_types "./08.Strings/StringCharacters"
-##    my_log test_types "./08.Strings/StringComparisonOperators"
-##   my_log test_types "./08.Strings/StringConstructors"
-##    my_log test_types "./08.Strings/StringIndexOf"
-##    my_log test_types "./08.Strings/StringLength"
-##    my_log test_types "./08.Strings/StringLengthTrim"
-##    my_log test_types "./08.Strings/StringReplace"
-##    my_log test_types "./08.Strings/StringStartsWithEndsWith"
-##    my_log test_types "./08.Strings/StringSubstring"
-##    my_log test_types "./08.Strings/StringToIntRGB"
-##    my_log test_types "./08.Strings/StringToInt"
+    my_log test_types "./06.Sensors/Ping"
+    my_log test_types "./07.Display/barGraph"
+    my_log test_types "./07.Display/RowColumnScanning"
+    my_log test_types "./08.Strings/CharacterAnalysis"
+    my_log test_types "./08.Strings/StringAdditionOperator"
+    my_log test_types "./08.Strings/StringAppendOperator"
+    my_log test_types "./08.Strings/StringCaseChanges"
+    my_log test_types "./08.Strings/StringCharacters"
+    my_log test_types "./08.Strings/StringComparisonOperators"
+    my_log test_types "./08.Strings/StringConstructors"
+    my_log test_types "./08.Strings/StringIndexOf"
+    my_log test_types "./08.Strings/StringLength"
+    my_log test_types "./08.Strings/StringLengthTrim"
+    my_log test_types "./08.Strings/StringReplace"
+    my_log test_types "./08.Strings/StringStartsWithEndsWith"
+    my_log test_types "./08.Strings/StringSubstring"
+    my_log test_types "./08.Strings/StringToIntRGB"
+    my_log test_types "./08.Strings/StringToInt"
 
 }
 
 
 test_arduino_usb_examples()
 {
+    log ""
+    log "Arduino built in USB Device examples"
+    log "-----------------------------------------"
 
     my_log test_types_usb "./09.USB(Leonardo)/KeyboardAndMouseControl"
     my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardLogout"
@@ -189,8 +279,8 @@ test_arduino_usb_examples()
     my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardReprogram"
     my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardSerial"
     my_log test_types_usb "./09.USB(Leonardo)/Mouse/ButtonMouseControl"
-#    my_log test_types_usb "./09.USB(Leonardo)/Mouse/JoystickMouseControl"
-#    my_log test_types "./ArduinoISP"
+    my_log test_types_usb "./09.USB(Leonardo)/Mouse/JoystickMouseControl"
+    my_log test_types "./ArduinoISP"
 }
 
 
@@ -205,6 +295,7 @@ test_distance()
     log_and_exec_no_print ./distance
 
     inc_searduino_test
+
     return 0
 }
 
@@ -283,7 +374,11 @@ test_examples()
 
     log_and_exec_no_print cp -r $EXAMPLES_PATH/ .
 
-    log_and_exec_no_print cd $EXAMPLES_PATH/ 
+    log_and_exec_no_print cd example
+
+    log ""
+    log "Searduino examples"
+    log "-----------------------------------------"
 
     log_and_exec test_distance
     log_and_exec test_digpins
@@ -310,6 +405,8 @@ done
 
 
 init_logging
+echo "All logs will be stored in: $REAL_LOG_FILE"
+
 
 #
 #
