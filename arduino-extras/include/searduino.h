@@ -31,6 +31,8 @@
 #include "searduino_pin.h"
 #include "hid-generic.h"
 #include <stdio.h>
+extern int searduino_exec ;
+extern int searduino_exec_available ;
 #else
 #undef ENABLE_SLEEP
 #endif
