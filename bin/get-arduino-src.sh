@@ -77,7 +77,7 @@ get_sources()
     if [ "$ARDUINO_SOURCE" != "" ]
     then
 	ARD_FILE=$ARDUINO_SOURCE
-	exec_comm cp   $ARD_FILE download-tmp
+	exec_comm cp   $ARD_FILE download-tmp/
     else
 	exec_comm rm -f $ARD_FILE
 	wget $ARD_URL
