@@ -52,6 +52,9 @@ int
 seasim_get_output(uint8_t pin, uint8_t pin_type);
 
 uint8_t 
+seasim_is_pausable(void);
+
+uint8_t 
 seasim_is_paused(void);
 
 uint8_t 
