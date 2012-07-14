@@ -5,7 +5,7 @@ log()
 
 logn()
 {
-    printf "%40s:" "$(echo $* | awk '{ print $1}' )"
+    printf "%s:" "$(echo $* | awk '{ print $1}' )"
 }
 
 exit_on_failure()
@@ -14,11 +14,26 @@ exit_on_failure()
     if [ $1 -ne 0 ]
     then
 	echo "ERROR:  $2"
+	echo ""
 	exit $1
     else
        	  printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
     fi
 }
+
+
+warn_on_failure()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -ne 0 ]
+    then
+       	  printf " FAILED ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+    else
+       	  printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+    fi
+}
+
+
 
 exit_on_failure_no_print()
 {
@@ -26,6 +41,7 @@ exit_on_failure_no_print()
     if [ $1 -ne 0 ]
     then
 	echo "ERROR:  $2"
+	echo ""
 	exit $1
     fi
 }
@@ -56,6 +72,15 @@ log_and_exec_comment()
     shift
     $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
     exit_on_failure $? ""
+}
+
+log_and_exec_comment_no_quit()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    logn "$1"
+    shift
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    warn_on_failure "$?" ""
 }
 
 log_and_exec_no_print()
