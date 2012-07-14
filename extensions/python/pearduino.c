@@ -452,6 +452,19 @@ static PyObject* c_ext_set_input(PyObject* self, PyObject* args)
 }
 
 
+static PyObject* c_is_pausable(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+
+  PEARDUINO_PRINT_IN();
+  
+  ret = seasim_is_pausable();
+  PyObject* o = Py_BuildValue("i", ret);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
 
 
 PyObject * c_pause(void)
@@ -460,7 +473,7 @@ PyObject * c_pause(void)
 
   PyObject* res = Py_BuildValue("i", 0);
 
-  searduino_set_paused();
+  seasim_set_paused();
 
   PEARDUINO_PRINT_INSIDE_STR("in C: have paused\n");
   return res;
@@ -472,7 +485,7 @@ PyObject * c_resume(void)
   Py_INCREF(Py_None);
   PEARDUINO_PRINT_INSIDE_STR("in C wrapper: want to resume\n");
 
-  searduino_set_running();
+  seasim_set_running();
 
   PEARDUINO_PRINT_INSIDE_STR("in C: is resumed\n");
   return res;
@@ -628,6 +641,8 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_hid_enable_feedback",     (PyCFunction)c_hid_enable_feedback, METH_VARARGS, NULL},
   {"seasim_hid_disable_feedback",    (PyCFunction)c_hid_disable_feedback, METH_VARARGS, NULL},
   {"seasim_get_supported_boards",    (PyCFunction)c_get_supported_boards, METH_VARARGS, NULL},
+  {"seasim_is_pausable",             (PyCFunction)c_is_pausable, METH_VARARGS, NULL},
+
   {NULL, NULL, 0, NULL}
 };
   /*  {"seasim_set_dig_callback", (PyCFunction)c_my_set_dig_callback, METH_VARARGS, NULL},
