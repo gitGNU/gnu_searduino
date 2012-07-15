@@ -395,13 +395,32 @@ static PyObject* c_searduino_initialise(PyObject* self, PyObject* args)
 static PyObject* c_start(PyObject* self, PyObject* args)
 {
   uint8_t ret;
+  int retval;
   PEARDUINO_PRINT_IN();
   
+  printf ("joining thread....\n");
+  pthread_join(searduino_thread_impl, (void**)&retval);
+  printf ("joining thread....%p\n", retval);
+
   PEARDUINO_PRINT_INSIDE_STR("Starting thread for arduino code\n");
   pthread_create(searduino_thread, NULL, c_arduino_code, NULL);
 
   PEARDUINO_PRINT_OUT();
   PyObject* o = Py_BuildValue("i", 0);
+  return o;
+}
+
+
+static PyObject* c_stop(PyObject* self, PyObject* args)
+{
+  uint8_t ret;
+  PEARDUINO_PRINT_IN();
+  
+  PEARDUINO_PRINT_INSIDE_STR("Stoping thread for arduino code\n");
+  ret = pthread_cancel(searduino_thread_impl);
+
+  PEARDUINO_PRINT_OUT();
+  PyObject* o = Py_BuildValue("i", ret);
   return o;
 }
 
@@ -629,6 +648,7 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_add_i2c_device",          (PyCFunction)c_add_i2c_device, METH_VARARGS, NULL},
   {"seasim_initialise",              (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
   {"seasim_start",                   (PyCFunction)c_start, METH_VARARGS, NULL},
+  {"seasim_stop",                    (PyCFunction)c_stop, METH_VARARGS, NULL},
   {"seasim_set_Write_timelimit",     (PyCFunction)c_set_Write_timelimit, METH_VARARGS, NULL},
   {"seasim_get_Write_timelimit",     (PyCFunction)c_get_Write_timelimit, METH_VARARGS, NULL},
   {"seasim_disable_streamed_output", (PyCFunction)c_disable_streamed_output, METH_VARARGS, NULL},
@@ -662,7 +682,10 @@ void* c_arduino_code(void *in)
   usleep(1000*1000);
   fprintf (stderr, "Starting Arduino code\n");
   usleep(1000000);
+
   searduino_main_entry(NULL);
+
+  //  while(1) { printf ("ping \n"); usleep (500*1000); }
 
   return NULL;
 }
