@@ -30,33 +30,31 @@ first:
 	echo nothing to do for all
 
 check-stub: 
-	make -f ../mk/Makefile.generic clean
-	make -f ../mk/Makefile.generic prog
-	make -f ../mk/Makefile.generic clean
-	make -f ../mk/Makefile.generic shlib
+	make -f ../mk/Makefile-generic.mk clean
+	make -f ../mk/Makefile-generic.mk prog
+	make -f ../mk/Makefile-generic.mk clean
+	make -f ../mk/Makefile-generic.mk shlib
 
 check-simulator: 
 	../../simulators/stream/searduino-stream-sim --arduino-code ./$(SHLIB)
 
 check-board: 
-	make -f ../mk/Makefile.generic clean
-	make -f ../mk/Makefile.generic prog
+	make -f ../mk/Makefile-generic.mk clean
+	make -f ../mk/Makefile-generic.mk prog
 
 check-upload: 
 
 check-shlib: 
-	make -f ../mk/Makefile.generic clean
-	make -f ../mk/Makefile.generic shlib
+	make -f ../mk/Makefile-generic.mk clean
+	make -f ../mk/Makefile-generic.mk shlib
 
 check-lib: 
-	make -f ../mk/Makefile.generic clean
-	make -f ../mk/Makefile.generic lib
+	make -f ../mk/Makefile-generic.mk clean
+	make -f ../mk/Makefile-generic.mk lib
 
 check-prog:
-	echo "CLEAN--------------------------"
-	make -f ../mk/Makefile.generic clean
-	echo "PROG---------------------------"
-	make -f ../mk/Makefile.generic prog
+	make -f ../mk/Makefile-generic.mk clean
+	make -f ../mk/Makefile-generic.mk prog
 	LD_LIBRARY_PATH=../../faked-arduino/.libs/:../shared  ./$(PROG)
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk

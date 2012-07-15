@@ -1,3 +1,3 @@
 export ARDUINO=uno
 
-include ../mk/Makefile.generic
+include ../mk/Makefile-generic.mk

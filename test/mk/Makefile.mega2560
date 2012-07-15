@@ -1,3 +1,3 @@
 export ARDUINO=mega2560
 
-include ../mk/Makefile.generic
+include ../mk/Makefile-generic.mk
