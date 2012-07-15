@@ -105,11 +105,13 @@ def writeInfo(str):
 
 def startSimulator():
     global started
+    global win
     if board == "":
         writeInfo("No board choosen, you must choose a board\n")
         print "No board choosen, you must choose a board"
     else:
         seasim_set_board_name(board)
+        win.board_label.set_text(board)
         print " ***** BOARD " + seasim_get_board_name()
         writeInfo("Starting simulation on " + seasim_get_board_name() + "\n")
         seasim_start();
@@ -117,49 +119,85 @@ def startSimulator():
         writeInfo("Simulation started\n")
 
 
+class startButton(Gtk.Button):
+
+    def __init__(self, parent):
+        Gtk.Widget.__init__(self)
+        self.par = parent
+        self.button = Gtk.Button("Start")
+        self.button.connect("clicked", self.on_start_clicked, "1")
+
+    def on_start_clicked(self, widget, name):
+        global started
+        if started==False:
+            startSimulator()
+
+class stopButton(Gtk.Button):
+
+    def __init__(self, parent):
+        Gtk.Widget.__init__(self)
+        self.par = parent
+        self.button = Gtk.Button("Stop")
+        self.button.connect("clicked", self.on_stop_clicked, "1")
+
+    def on_stop_clicked(self, widget, name):
+        global started
+
+        if started==False:
+                return
+        else:
+            print "stoping"
+            writeInfo("Stopin simulation\n");
+            ret = seasim_stop()
+            if ret != 0:
+                print "stop returned " + str(ret)
+                writeInfo( "Failed stopping arduino code\n")
+                writeInfo( "   got " + str(ret) + "back when trying to stop :(\n")
+                writeInfo( "You may have to restart the simulator\n ... sorry\n")
+            else:
+                started=False
+
 class pauseButton(Gtk.Widget):
 
     def __init__(self, parent):
         Gtk.Widget.__init__(self)
         self.par = parent
 
-        self.header = Gtk.Label("Click to start: ")
-        self.header.set_width_chars(10);
-        self.enable = Gtk.ToggleButton()
+#        self.header = Gtk.Label("Click to start: ")
+#        self.header.set_width_chars(10);
+        self.enable = Gtk.ToggleButton("Pause")
         self.enable.set_active(False)
         
         self.enable.connect("clicked", self.on_enable_toggled, "1")
 
     def disable(self):
-        self.header.set_text("Pause/Resume is not available")
+#        self.header.set_text("Pause/Resume is not available")
         self.enable.set_visible(False)
         
 
     def on_enable_toggled(self, widget, name):
         global started
         if self.enable.get_active():
-
             if started==False:
-                startSimulator()
-                time.sleep(1)
-                if started==False:
-                    self.enable.set_active(False)
-                    return
-
-                self.header.set_text("Execution: Started")
+                writeInfo("Can't stop something that hasn't started ;)\n");
+                self.enable.set_active(False)
+                return
 
             if seasim_is_pausable():
-                pardonResume()
-                self.header.set_text("Execution: Resumed  ")
+                pardonPause()
+                writeInfo("Pausing simulation\n");
+#                self.enable.set_text("Pause")
             else:
-                win.pause.disable()
+#                self.pause.disable()
+                writeInfo("Pause is not available\n");
+                self.enable.set_active(False)
 
         else:
             if started==False:
                 return
-
-            pardonPause()
-            self.header.set_text("Execution: Paused   ")
+            writeInfo("Resuming simulation\n");
+            pardonResume()
+#            self.header.set_text("Execution: Paused   ")
         
 class hidFeedback(Gtk.Widget):
 
@@ -380,6 +418,8 @@ class MyWindow(Gtk.Window):
         pinTable = Gtk.Table(10, 10, False)
         settingsTable = Gtk.Table(10, 10, False)
 
+        self.start = startButton(self)
+        self.stop  = stopButton(self)
         self.pause = pauseButton(self)
         hid   = hidFeedback(self)
         spin = SpinButtonWindow(self)
@@ -449,17 +489,30 @@ class MyWindow(Gtk.Window):
 
         # row Start / Pause / Resume
         self.execbox=Gtk.HBox(spacing=6)
-        self.execbox.pack_start(self.pause.header,              False, True, 0)
+#        self.execbox.pack_start(self.pause.header,              False, True, 0)
+        self.execbox.pack_start(self.start.button,              False, True, 0)
+        self.execbox.pack_start(self.stop.button,               False, True, 0)
+        self.execbox.pack_start(self.pause.enable,              False, True, 0)
         self.execbox.pack_start(self.pause.enable,              False, True, 0)
         control_label = Gtk.Label()
         control_label.set_markup("<b>Execution control</b>")
         self.extrasbox.pack_start(control_label, False, True, 0)
         self.extrasbox.pack_start(self.execbox,       False, True, 0)
 
+
         # Arduino board setting
-        board_label = Gtk.Label()
-        board_label.set_markup("<b>Current Arduino board</b>")
-        self.extrasbox.pack_start(board_label,    False, True, 0)
+        boardbox = Gtk.HBox(spacing=6)
+        board_header = Gtk.Label()
+        board_header.set_markup("<b>Current Arduino board</b>:")
+        self.board_label = Gtk.Label("<no board>")
+
+        boardbox.pack_start(board_header,   False, True, 0)        
+        boardbox.pack_start(self.board_label,   False, True, 0)        
+
+        board_choose_label = Gtk.Label()
+        board_choose_label.set_markup("<b>Choose Arduino board</b>:")
+        self.extrasbox.pack_start(boardbox,            False, True, 0)
+        self.extrasbox.pack_start(board_choose_label,  False, True, 0)
         self.extrasbox.pack_start(self.board_combo,    False, True, 0)
 
         self.extraslabel = Gtk.Label()
