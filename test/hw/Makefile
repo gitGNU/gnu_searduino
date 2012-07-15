@@ -21,36 +21,10 @@
 #
 #
 
+include ../mk/Makefile.mk
 
-PROG=test
-SRC_C=test.c
-SRC_CXX=
-MAIN_SRC=
+# include clean target
 ARDUINO=stub
-SHLIB=libtest.so
 SEARDUINO_PATH=../../
-
-USER_LD_FLAGS=-ldl  -Wl,-rpath,$(SEARDUINO_PATH)/faked-arduino/.libs
-
-first:
-	echo nothing to do for all
-
-check: 
-	make clean
-	make prog
-	./$(PROG)
-	make clean
-	make shlib
-	../../simulators/stream/searduino-stream-sim --arduino-code ./$(SHLIB)
-
-check-upload:
-	BOARD=due
-	make upload
-
-install:
-	echo nothing to do in install
-
-distdir:
-	echo nothing to do in dist
-
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+
