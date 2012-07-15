@@ -21,13 +21,10 @@
 #
 #
 
-PROG=test
-SRC_C=test.c
-SRC_CXX=
-MAIN_SRC=
-#ARDUINO=$(ARDUINO)
-SHLIB=libtest.so
-SEARDUINO_PATH=../../
+export PROG=test
+export SEARDUINO_PATH=../../
+export LIB_PATH=.
+
 
 first:
 	echo nothing to do for all
@@ -47,5 +44,19 @@ check-board:
 
 check-upload: 
 
-include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+check-shlib: 
+	make -f ../mk/Makefile.generic clean
+	make -f ../mk/Makefile.generic shlib
 
+check-lib: 
+	make -f ../mk/Makefile.generic clean
+	make -f ../mk/Makefile.generic lib
+
+check-prog:
+	echo "CLEAN--------------------------"
+	make -f ../mk/Makefile.generic clean
+	echo "PROG---------------------------"
+	make -f ../mk/Makefile.generic prog
+	LD_LIBRARY_PATH=../../faked-arduino/.libs/:../shared  ./$(PROG)
+
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk

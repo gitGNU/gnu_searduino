@@ -1,10 +1,10 @@
 if SHAREDTEST
-SUBDIRS= arduino-lib hw stub searduino_loop shared shared-main 
+SUBDIRS= arduino-lib hw stub searduino_loop arduino-code-dynamic arduino-code-static shared shared-main 
 else
-SUBDIRS= arduino-lib hw stub searduino_loop
+SUBDIRS= arduino-lib hw stub searduino_loop arduino-code-dynamic arduino-code-static
 endif
 
-EXTRA_DIST = \
+EXTRA_DIST =           \
      ./stub/Makefile    \
      ./stub/test.c       \
      ./shared/Makefile    \

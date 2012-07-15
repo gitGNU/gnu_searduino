@@ -1,4 +1,3 @@
-
 #
 #       Searduino
 #
@@ -21,31 +20,23 @@
 # MA  02110-1301, USA.                                              
 #
 #
+include ../mk/Makefile-shlib.mk
 
-
-ARDUINO=stub
-BUILD_FROM_VCS=true
-SHLIB=libtest.so
-SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
-SRC_C=test.c
-PROG=tester
-
-SEARDUINO_PATH=../..
-
-USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
-USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS) -ldl
+export SRC_C=test.c
+export SRC_CXX=
+export MAIN_SRC=
+export SHLIB=libtest.so
+export LIB=libtest.a
+export USER_LIB_INSTALL_PATH=/tmp/searduino-lib-install
+export SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
+export USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
+export USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS) -ldl
 
 $(SHLIB):
 
+
+# include clean target
+ARDUINO=stub
+SEARDUINO_PATH=../../
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
-check: $(SHLIB)
-
-check2: check
-	./$(PROG)
-
-install:
-	echo nothing to do in install
-
-distdir:
-	echo nothing to do in dist

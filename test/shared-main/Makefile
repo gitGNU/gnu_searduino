@@ -21,31 +21,16 @@
 # MA  02110-1301, USA.                                              
 #
 #
+include ../mk/Makefile-prog.mk
 
+export ARDUINO=stub
+export SRC_C=test.c
+export LIBTEST_PATH=../shared/
+export LIBTEST=-ltest 
+export SEARDUINO_PATH=../..
 
-ARDUINO=stub
-
-PROG=test
-SRC_C=test.c
-
-LIBTEST_PATH=../shared/
-LIBTEST=-ltest 
-
-SEARDUINO_PATH=../..
-
-USER_C_FLAGS= -g -I../../faked-arduino/include/arduino -I../../faked-arduino/include/../../arduino-extras/include/
-SER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
-
-$(PROG): 
+export USER_C_FLAGS= -g -I../../faked-arduino/include/arduino -I../../faked-arduino/include/../../arduino-extras/include/
+export USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
-check: $(PROG)
-	cd ../shared && make clean shlib
-	LD_LIBRARY_PATH=../../faked-arduino/.libs/  ./$(PROG)
-
-install:
-	echo nothing to do in install
-
-distdir:
-	echo nothing to do in dist

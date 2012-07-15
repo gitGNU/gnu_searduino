@@ -21,7 +21,11 @@
 #
 #
 
-include ../mk/Makefile.mk
+include ../mk/Makefile-prog.mk
+
+export SRC_C=test.c
+SRC_CXX=
+MAIN_SRC=
 
 # include clean target
 ARDUINO=stub

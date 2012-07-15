@@ -42,6 +42,15 @@ int main(void)
       digitalWrite(13,i%2);
       delay(300); 
       i++;
+
+#ifdef  SEARDUINO_STUB
+      if (i>20)
+	{
+	  /* when testing locally, we can't run for ever and ever ! */
+	  break;
+	}
+#endif /*  SEARDUINO_STUB */
+
     }
   return 0;
 }
