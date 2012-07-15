@@ -10,12 +10,18 @@ News in 0.66
       * twi works fine on Leonardo
       * keep all objects on gcc based builds (--whole-archive)
 
+  Python extension changes:
+  ---------------------
+    Possible to stop arduino code (and afterwards start new)
+
   Pardon changes:
   ---------------------
     Possible to choose board
     Improved log window
     Hid feedback can be switched on/off
     Need to start simulation explicitly
+    Possible to stop arduino code (and afterwards start new)
+    More feedback to user on what's happening inside Searduino
 
 News in 0.63,64
 
