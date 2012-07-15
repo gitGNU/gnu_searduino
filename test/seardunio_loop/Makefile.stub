@@ -1,4 +1,0 @@
-export ARDUINO=stub
-USER_LD_FLAGS=-ldl
-
-include ./Makefile.generic
