@@ -144,6 +144,8 @@ GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
 GPROF_FLAG = "-pg -g"
 
 
+check-local:
+	bin/verify-install.sh --vcs 
 
 init-cov:
 	make clean
