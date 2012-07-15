@@ -21,24 +21,31 @@
 #
 #
 
-all:
-	@echo make love instead of all
-
-check: 
-	make -f Makefile.mega     clean check-board
-	make -f Makefile.mega2560 clean check-board
-	make -f Makefile.uno      clean check-board
-	make -f Makefile.leonardo clean check-board
-	make -f Makefile.stub     clean check-stub
-
-install:
-	echo nothing to do in install
-
-distdir:
-	echo nothing to do in dist
-
-# include clean target
-ARDUINO=stub
+PROG=test
+SRC_C=test.c
+SRC_CXX=
+MAIN_SRC=
+#ARDUINO=$(ARDUINO)
+SHLIB=libtest.so
 SEARDUINO_PATH=../../
+
+first:
+	echo nothing to do for all
+
+check-stub: 
+	make -f Makefile.generic clean
+	make -f Makefile.generic prog
+	make -f Makefile.generic clean
+	make -f Makefile.generic shlib
+
+check-simulator: 
+	../../simulators/stream/searduino-stream-sim --arduino-code ./$(SHLIB)
+
+check-board: 
+	make -f Makefile.generic clean
+	make -f Makefile.generic prog
+
+check-upload: 
+
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
