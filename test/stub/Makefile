@@ -1,4 +1,3 @@
-
 #
 #       Searduino
 #
@@ -22,31 +21,14 @@
 #
 #
 
+include ../mk/Makefile-prog.mk
 
+export SRC_C=test.c
+SRC_CXX=
+MAIN_SRC=
+
+# include clean target
 ARDUINO=stub
-
-PROG=test
-SRC_C=test.c
-
-SEARDUINO_PATH=../..
-
-
-
-USER_C_FLAGS=-DINTERVAL=$(INTERVAL) -I../../faked-arduino/include
-USER_LD_FLAGS= -L$(SEARDUINO_PATH)/faked-arduino/ -lpthread -ldl
-
-$(PROG):
-
+SEARDUINO_PATH=../../
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
-#include $(SEARDUINO_PATH)/mk/searduino_lib.mk
 
-check: $(PROG)
-
-check2: $(PROG)
-	export LD_LIBRARY_PATH=../../faked-arduino/.libs/  && ./$(PROG)
-
-install:
-	echo nothing to do in install
-
-distdir:
-	echo nothing to do in dist
