@@ -1,6 +1,18 @@
 #!/bin/bash
 
-SEARDUINO_PATH=__INSTALL_DIR__
+if [ "$1" = "--vcs" ]
+then
+    VCS=true
+    shift
+fi
+
+if [ "$VCS" = "true" ]
+then
+    SEARDUINO_PATH=$(pwd)
+else
+    SEARDUINO_PATH=__INSTALL_DIR__
+fi
+
 
 LOG_FILE=$(pwd)/verify-sh.log
 
@@ -16,9 +28,18 @@ fi
 
 INO_EX=/tmp/ino-example
 EX_EX=/tmp/seard-example
-EX_PATH=$SEARDUINO_PATH/share/examples/arduino
-EXAMPLES_PATH=$SEARDUINO_PATH/share/searduino/example
 
+if [ "$VCS" = "true" ]
+then
+    EX_PATH=$SEARDUINO_PATH/ard-ex
+    EXAMPLES_PATH=$SEARDUINO_PATH/example
+else
+    EX_PATH=$SEARDUINO_PATH/share/examples/arduino
+    EXAMPLES_PATH=$SEARDUINO_PATH/share/searduino/example
+fi
+
+rm -fr   $EX_EX/*
+rm -fr   $INO_EX/*
 mkdir -p $EX_EX
 mkdir -p $INO_EX
 cd       $INO_EX
@@ -78,10 +99,17 @@ test_ex()
     TYPE=$1
     EXA=$2
 
+if [ "$VCS" = "true" ]
+then
+    chmod a+x $SEARDUINO_PATH/bin/arduino-ex2c
+    ARDEX2C_ARGS="--vcs $SEARDUINO_PATH"
+fi
+
     $SEARDUINO_PATH/bin/arduino-ex2c    \
        --searduino-path $SEARDUINO_PATH \
        --$TYPE                          \
        --yes                            \
+       $ARDEX2C_ARGS                    \
        $EX_PATH/$EXA
     exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA  
 )"
@@ -288,7 +316,7 @@ test_distance()
 {
     #
     # DISTANCE 
-    log_and_exec_no_print cd verifications/distance
+    log_and_exec_no_print cd verification*/distance
 
     log_and_exec_no_print make -f Makefile.distance clean all prog
 
