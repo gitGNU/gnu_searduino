@@ -12,10 +12,14 @@
 GtkBuilder *builder;
 sem_t sem;
 
+int run = 0;
+
 pthread_t   searduino_thread_impl;
 pthread_t  *searduino_thread = &searduino_thread_impl;
 #define NR_OF_PINS 100
-#define PINS_TO_USE 10
+#define PINS_TO_USE 19
+
+void* c_arduino_code(void *in);
 
 struct general_pin
 {
@@ -56,6 +60,26 @@ struct general_pin pins[NR_OF_PINS];
 
 #define searduino_log(str)        searduino_log_general(str, LOG_OUTPUT_VIEW)
 #define searduino_serial_out(str) searduino_log_general(str, SERIAL_OUTPUT_VIEW)
+
+void searduino_statusbar_push(char *str)
+{
+  static GtkStatusbar  *statusbar=NULL;
+
+  if (str==NULL)
+    {
+      return;
+    }
+
+  printf ("status: %p\n", statusbar);
+  if (statusbar == NULL )
+    {
+      printf ("??\n");
+      statusbar = GTK_STATUSBAR( gtk_builder_get_object( builder, "status_label" ) );
+    }
+  
+  printf ("status: %p\n", statusbar);
+  gtk_statusbar_push(statusbar, 1, str);
+}
 
 void searduino_log_general(char *str, int view)
 {
@@ -146,43 +170,69 @@ void destroy (GtkWidget *widget, gpointer data)
   gtk_main_quit ();
 }
 
+#define SET_BUTTON_SENS_GENERIC(button, state) \
+      gtk_widget_set_sensitive(GTK_BUTTON( gtk_builder_get_object( builder, button)), state);
+#define SET_BUTTON_SENS(button)			\
+  SET_BUTTON_SENS_GENERIC(button, TRUE) 
+#define SET_BUTTON_INSENS(button)		\
+  SET_BUTTON_SENS_GENERIC(button, FALSE) 
+
+
+void set_playing(void)
+{
+      run = 1;
+      searduino_statusbar_push("Arduino program running");
+      SET_BUTTON_INSENS("play");
+      SET_BUTTON_SENS("pause");
+      SET_BUTTON_SENS("stop");
+}
+
+void set_pause(void)
+{
+  run = 2 ;
+  searduino_statusbar_push("Arduino program paused");
+  SET_BUTTON_SENS("play");
+  SET_BUTTON_INSENS("pause");
+  SET_BUTTON_SENS("stop");
+}
+
+void set_stop(void)
+{
+  run = 0 ;
+  searduino_statusbar_push("Arduino program stoped");
+  SET_BUTTON_SENS("play");
+  SET_BUTTON_INSENS("pause");
+  SET_BUTTON_INSENS("stop");
+}
 
 int play_clicked_cb(void)
 {
-  GtkLabel *label;
-  GtkEntry *entry;
-  GtkButton *button;
-  printf ("play\n");
-  int i ; 
-
-  label = GTK_LABEL(gtk_builder_get_object(builder, "label7" ) );
-  button = GTK_BUTTON(gtk_builder_get_object(builder, "button1" ) );
-  entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry1" ) );
-  
-  gdk_threads_enter ();
-  gtk_entry_set_text(entry, "annananananan");
-  gtk_label_set_label(label, "Ny text");
-  gdk_threads_leave ();
-  
+  if (run==2)
+    {
+      set_playing();
+    }
+  else if (run==0)
+    {
+      pthread_create(searduino_thread, NULL, c_arduino_code, NULL);
+      usleep(1000*100);
+      set_playing();
+    }
 }
 
 int pause_clicked_cb(void)
 {
-  GtkLabel *label;
-  GtkEntry *entry;
-  GtkButton *button;
-  printf ("pause\n");
-  int i ; 
+  if (run == 0 )
+    {
+      return;
+    }
+  set_pause();
+}
 
-  label = GTK_LABEL(gtk_builder_get_object(builder, "label7" ) );
-  button = GTK_BUTTON(gtk_builder_get_object(builder, "button1" ) );
-  entry = GTK_ENTRY(gtk_builder_get_object(builder, "entry1" ) );
-
-  /* get GTK thread lock */
-  gdk_threads_enter ();
-  gtk_entry_set_text(entry, "einar");
-  gtk_label_set_label(label, "Nystroem");
-  gdk_threads_leave ();
+int stop_clicked_cb(void)
+{
+  pthread_cancel(searduino_thread_impl);
+  usleep(1000*100);
+  set_stop();
 }
 
 int 
@@ -231,7 +281,6 @@ void* c_arduino_code(void *in)
   char buf[50];
 #define DELAY 10
 
-  usleep(1000*2000);
   printf ("starting thread\n");
 
   /*
@@ -247,6 +296,12 @@ void* c_arduino_code(void *in)
   */
   while(1)
     {
+      if (run == 2)
+	{
+	  usleep (1000*100);
+	  printf ("z");fflush(stdout);
+	  continue;
+	}
       for (i=1;i<=PINS_TO_USE;i++)
 	{
 	  ctr++;
@@ -297,7 +352,7 @@ int add_pins(void)
 	sprintf(buf,"%s%d", "pin_box", col);
 	pin_container = GTK_BOX( gtk_builder_get_object( builder, buf ) );
 
-	printf ("buf: %s\n", buf);
+	//	printf ("buf: %s\n", buf);
 
 	/* Create pin-widget */
 	pin_builder = gtk_builder_new();
@@ -317,8 +372,9 @@ int add_pins(void)
 	pins[i].analog_in = GTK_SPIN_BUTTON( gtk_builder_get_object( pin_builder, "analog_in" ));
 	pins[i].out  = GTK_LABEL( gtk_builder_get_object( pin_builder, "out" ) );
 
-	printf ("pin_box: %p\n", pin_box);
-	printf ("pin_con: %p\n", pin_container);
+
+	//	printf ("pin_box: %p\n", pin_box);
+	//printf ("pin_con: %p\n", pin_container);
 
 	gtk_widget_show_all(pin_box);
 	gtk_box_pack_start(pin_container, GTK_WIDGET(pin_box), FALSE, TRUE, 0);
@@ -337,7 +393,6 @@ main( int    argc,
 {
     GtkWidget     *window;
     GtkLabel      *top_label;
-    GtkStatusbar  *status;
     GError        *error = NULL;
     int i ; 
     int j ; 
@@ -348,7 +403,6 @@ main( int    argc,
     gdk_threads_enter ();
 
     sem_init(&sem, 0, 1);
-    pthread_create(searduino_thread, NULL, c_arduino_code, NULL);
 
     /* Init GTK+ */
     gtk_init( &argc, &argv );
@@ -365,11 +419,10 @@ main( int    argc,
     /* Get main window pointer from UI */
     window = GTK_WIDGET( gtk_builder_get_object( builder, "main_window" ) );
 
+    searduino_statusbar_push("Warming up");
+
     top_label = GTK_LABEL( gtk_builder_get_object( builder, "toplabel" ) );
     gtk_label_set_markup(top_label, "<b>Searduino 0.89</b>");
-
-    status = GTK_STATUSBAR( gtk_builder_get_object( builder, "status" ) );
-    gtk_statusbar_push(status, 1, "Warming up");
 
     /* Connect signals */
     gtk_builder_connect_signals( builder, NULL );
