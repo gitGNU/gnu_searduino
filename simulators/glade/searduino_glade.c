@@ -6,7 +6,8 @@
 #include <gtk/gtk.h>
 #include <pthread.h>
 #include <semaphore.h>
-
+#include <stdio.h>
+#include <string.h>
 
 GtkBuilder *builder;
 sem_t sem;
@@ -49,6 +50,61 @@ struct general_pin pins[NR_OF_PINS];
 #define SEMLOCK()     sem_wait(&sem);
 #define SEMREL()      sem_post(&sem);
 #endif
+
+#define SERIAL_OUTPUT_VIEW 0
+#define LOG_OUTPUT_VIEW    1
+
+#define searduino_log(str)        searduino_log_general(str, LOG_OUTPUT_VIEW)
+#define searduino_serial_out(str) searduino_log_general(str, SERIAL_OUTPUT_VIEW)
+
+void searduino_log_general(char *str, int view)
+{
+  GtkTextIter    iter;
+  GtkTextBuffer *text_buffer;
+  GtkTextView   *text_view ;
+
+  static GtkTextView   *log_text_view ;
+  static GtkTextView   *serial_text_view ;
+  static GtkTextBuffer *log_text_buffer    = NULL;
+  static GtkTextBuffer *serial_text_buffer = NULL;
+
+  if (str==NULL) 
+    {
+      return;
+    }
+
+  if (view == SERIAL_OUTPUT_VIEW)
+    {
+      if (serial_text_buffer == NULL)
+	{
+	  serial_text_view = GTK_TEXT_VIEW(gtk_builder_get_object(builder, "serial_out" ) );      
+	  serial_text_buffer =  gtk_text_view_get_buffer(serial_text_view);
+	}
+      text_buffer = serial_text_buffer;
+      text_view   = serial_text_view;
+    }
+  else if (view == LOG_OUTPUT_VIEW)
+    {
+      if (log_text_buffer == NULL)
+	{
+	  log_text_view = GTK_TEXT_VIEW(gtk_builder_get_object(builder, "log" ) );      
+	  log_text_buffer =  gtk_text_view_get_buffer(log_text_view);
+	}
+      text_buffer = log_text_buffer;
+      text_view   = log_text_view;
+    }
+  else
+    {
+      return ;
+    }
+
+  /* all ptrs now point to the correct view and buffer, so let's write */
+  SEMLOCK();
+  gtk_text_buffer_get_end_iter(text_buffer, &iter);
+  gtk_text_view_scroll_to_iter(text_view, &iter, 0.0, TRUE, 1.0, 1.0);
+  gtk_text_buffer_insert(text_buffer, &iter, str, strlen(str));
+  SEMREL();
+}
 
 void arduino_out(uint8_t pin, uint8_t type, int value)
 {
@@ -171,6 +227,8 @@ void* c_arduino_code(void *in)
 {
   int i;
   int ctr=0;
+  int idx = 0;
+  char buf[50];
 #define DELAY 10
 
   usleep(1000*2000);
@@ -204,6 +262,13 @@ void* c_arduino_code(void *in)
 	    }
 	}
       //      usleep(1000*20);
+      sprintf(buf,"#:   %d\n", idx++);
+      searduino_log("Liverpool FC\n");
+      searduino_log("AS Roma\n");
+      searduino_log(buf);
+      searduino_log("\n");
+      searduino_serial_out("To serial.... seria A\n");
+      searduino_serial_out(buf);
     }
   return NULL;
 }
