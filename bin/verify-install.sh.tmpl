@@ -439,7 +439,12 @@ echo "All logs will be stored in: $REAL_LOG_FILE"
 #
 #
 #
-test_examples
+if [ "$VCS" = "true" ]
+then
+    echo "Skipping internal examples, since they are checking an installed version of searduino"
+else
+    test_examples
+fi
 test_arduino_examples
 test_arduino_usb_examples
 
