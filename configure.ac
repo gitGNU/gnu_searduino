@@ -121,6 +121,7 @@ echo
    AC_SUBST(PYTHON_CPPFLAGS)
 fi
 
+
 if test "$ut_enabled" = "yes"; then
     PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 fi
@@ -220,6 +221,9 @@ exit_on_failure $? ./bin/get-arduino-src.sh
 
 prepare_examples()
 {
+    cat example/digital-rw/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digital-rw/Makefile.digitalrw
+    exit_on_failure $? "Prepared  digital-rw"
+
     cat example/digpins/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digpins/Makefile.digpins
     exit_on_failure $? "Prepared  digpins"
 
