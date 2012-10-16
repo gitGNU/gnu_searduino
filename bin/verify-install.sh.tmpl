@@ -102,7 +102,7 @@ test_ex()
 if [ "$VCS" = "true" ]
 then
     chmod a+x $SEARDUINO_PATH/bin/arduino-ex2c
-    ARDEX2C_ARGS="--vcs $SEARDUINO_PATH"
+    export ARDEX2C_ARGS="--vcs "
 fi
 
     $SEARDUINO_PATH/bin/arduino-ex2c    \
@@ -111,7 +111,7 @@ fi
        --yes                            \
        $ARDEX2C_ARGS                    \
        $EX_PATH/$EXA
-    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $EX_PATH/$EXA  
+    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $ARDEX2C_ARGS $EX_PATH/$EXA  
 )"
     cd $(basename $EXA)
 
