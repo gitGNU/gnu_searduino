@@ -192,6 +192,7 @@ create_makefile()
           sed "s,__ALL_DEP__,$TO_BUILD_TARGET,g" | \
           sed "s,__ARDUINO_VALUE__,$ARDUINO_VALUE,g"   | \
           sed "s,__SEARDUINO_PATH__,$SEARDUINO_PATH,g" | \
+          sed "s,__SEARDUINO_MK__,\$(SEARDUINO_PATH)//share/searduino/mk/searduino.mk,g" | \
 	  sed "s,__BUILD_LD_FLAGS__,$BUILD_LD_FLAGS,g" | 
 	  sed "s,__SHLIB_LIBS__,$SHLIB_LIBS,g"  \
           > $ARD_DIR/Makefile
