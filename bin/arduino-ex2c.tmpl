@@ -2,6 +2,7 @@
 
 EX_FILE=""
 EX_DIR=""
+VCS_BUILD="false"
 SEARDUINO_PATH=__INSTALL_DIR__
 
 export LD_LIBRARY_PATH=__INSTALL_DIR__/lib
@@ -60,6 +61,10 @@ parse_args()
 		;;
 	    "--yes")
 		YES=true
+		shift
+		;;
+	    "--vcs")
+		VCS_BUILD="true"
 		shift
 		;;
 	    *)
@@ -200,6 +205,12 @@ create_makefile()
           > $ARD_DIR/Makefile
     exit_on_failure $? "Creating Makefile "
 #          sed "s,__MAIN_FILE__,$MAIN_FILE,g" | \
+    if [ "$VCS_BUILD" = "true" ]
+    then
+	mv $ARD_DIR/Makefile $ARD_DIR/Makefile.tmp
+	cat $ARD_DIR/Makefile.tmp | \
+            sed "s,\/share\/searduino,,g" > $ARD_DIR/Makefile
+    fi
 
 }
 
