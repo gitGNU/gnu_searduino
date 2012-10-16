@@ -41,10 +41,38 @@ endif
 LIBSEARDUINO_CFLAGS=
 LIBSEARDUINO_CXXFLAGS=
 
-
+#
+#  C and C++ options
+#  
 override CFLAGS +=  $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CFLAGS) $(USER_C_FLAGS)  $(_CFLAGS) -DARDUINO=$(ARDUINO_VERSION)
 override CXXFLAGS += $(LIBSEARDUINO_C_CPP_FLAGS) $(LIBSEARDUINO_CXXFLAGS) $(USER_CXX_FLAGS) $(_CXXFLAGS) -DARDUINO=$(ARDUINO_VERSION)
-override LDFLAGS += $(_LDFLAGS) $(SEARDUINO_LIB_PATH) $(LIBRARIES_LIB) -Wl,-whole-archive $(SEARDUINO_LIB)  -Wl,-no-whole-archive $(USER_LD_FLAGS) $(_LDFLAGS) $(LIBRARIES_LIB) $(SEARDUINO_LIB) 
+
+#########################################
+#
+#   LD options
+#
+ifeq ($(uname_S),Linux)
+   # GNU/Linux
+   override LDFLAGS += $(_LDFLAGS) $(SEARDUINO_LIB_PATH) $(LIBRARIES_LIB) \
+                   -Wl,-whole-archive $(SEARDUINO_LIB) -Wl,-no-whole-archive \
+                    $(USER_LD_FLAGS) $(_LDFLAGS) $(LIBRARIES_LIB) $(SEARDUINO_LIB) 
+else 
+  ifeq ($(uname_S),Darwin)
+  # Mac / Darwin
+ override LDFLAGS += $(_LDFLAGS) $(SEARDUINO_LIB_PATH) $(LIBRARIES_LIB) \
+                   -Wl,-whole-archive $(SEARDUINO_LIB) -Wl,-no-whole-archive \
+                    $(USER_LD_FLAGS) $(_LDFLAGS) $(LIBRARIES_LIB) $(SEARDUINO_LIB) 
+  else
+  # Win....
+  override LDFLAGS += $(_LDFLAGS) $(SEARDUINO_LIB_PATH) $(LIBRARIES_LIB) \
+                   -Wl,-whole-archive $(SEARDUINO_LIB) -Wl,-no-whole-archive \
+                    $(USER_LD_FLAGS) $(_LDFLAGS) $(LIBRARIES_LIB) $(SEARDUINO_LIB) 
+  endif
+endif
+#
+#   LD options
+#
+#########################################
 
 
 $(OBJ_C): $(SRC_HEADERS) $(SRC_C) 
