@@ -221,6 +221,9 @@ exit_on_failure $? ./bin/get-arduino-src.sh
 
 prepare_examples()
 {
+    cat example/serial/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/serial/Makefile.digitalrw
+    exit_on_failure $? "Prepared  serial"
+
     cat example/digital-rw/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digital-rw/Makefile.digitalrw
     exit_on_failure $? "Prepared  digital-rw"
 
