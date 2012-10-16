@@ -26,52 +26,46 @@ parse_args()
 
     while [ "$1" != "" ]
     do
+	echo "Parsing \"$1\""
+
 	case $1 in
 	    "--shlib")
 		BUILD_TYPE=shlib
-		shift
 		;;
 	    "--prog")
 		BUILD_TYPE=prog
-		shift
 		;;
 	    "--uno")
 		BUILD_TYPE=uno
-		shift
 		;;
 	    "--leonardo")
 		BUILD_TYPE=leonardo
 		;;
 	    "--mega")
 		BUILD_TYPE=mega
-		shift
 		;;
 	    "--due")
 		BUILD_TYPE=due
-		shift
 		;;
 	    "--build")
 		BUILD=true
-		shift
 		;;
 	    "--searduino-path")
 		SEARDUINO_PATH=$2
 		shift
-		shift
 		;;
 	    "--yes")
 		YES=true
-		shift
 		;;
 	    "--vcs")
 		VCS_BUILD="true"
-		shift
 		;;
 	    *)
 #		echo "PARSE: $1"
 		break
 		;;
 	esac	
+	shift
     done
     
     if [ "$SEARDUINO_PATH" = "" ]
