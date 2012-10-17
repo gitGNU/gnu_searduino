@@ -52,8 +52,17 @@ enum BUTTON_REQUESTS
 
 
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 int hid_initialise_hid(void);
 int hid_enable_faked_hid(void);
 int hid_disable_faked_hid(void);
+
+#ifdef __cplusplus
+}
+#endif
+
 
 #endif /* HID_GENERIC_H */
