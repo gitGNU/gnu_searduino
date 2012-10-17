@@ -30,6 +30,10 @@ void
 setup_mouse()
 {
   pinMode(13, OUTPUT);
+  pinMode(8,  INPUT);
+  pinMode(9,  INPUT);
+  //  pinMode(10, INPUT);
+  pinMode(11, INPUT);
   Mouse.begin();
   delay(20);
 }
@@ -59,4 +63,27 @@ void click_mouse(uint8_t b)
   delay(100);
   digitalWrite(13,0);
 }
+
+void init_mouse()
+{  
+  searduino_usb_init();
+}
+
+void manage_mouse_pins(void)
+{
+  int hori  = 0;
+  int verti = 0;
+  
+  hori  = digitalRead(MOUSE_LEFT_PIN) - digitalRead(MOUSE_RIGHT_PIN) ;
+  verti = digitalRead(MOUSE_UP_PIN)   - digitalRead(MOUSE_DOWN_PIN)  ;
+
+  //  SEARDUINO_DEBUG(("    %d,%d\n",hori, verti));
+
+  if (hori||verti)
+    {
+      Mouse.move(verti,hori,0);
+      delay(5);
+    }
+}
+
 
