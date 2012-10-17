@@ -24,6 +24,10 @@
 #ifndef ARDUINO_EXTRAS_SETUP_H
 #define ARDUINO_EXTRAS_SETUP_H
 
+#include "Arduino.h"
+
+extern void serialEventRun(void) __attribute__((weak));
+
 
 #ifdef SEARDUINO_STUB
 #define ENABLE_SLEEP
@@ -48,25 +52,32 @@ extern int searduino_exec_available ;
 
 
 #ifdef  SEARDUINO_STUB
-#define SEARDUINO_DEBUG(a)  fprintf(stderr, "[SEARDUINO DEBUG %s:%d:%s]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
+#define SEARDUINO_DEBUG(a)  fprintf(stderr, "[SEARDUINO DEBUG %s:%d:%s()]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
 #else
 #define SEARDUINO_DEBUG(a)
 #endif  /* SEARDUINO_STUB */
- 
+
+
+/*
+ *  USB stuff
+ */
 #ifndef  SEARDUINO_STUB
   #if defined(USBCON)
     #define searduino_usb_init()   USBDevice.attach()
+    #define SEARDUINO_FLUSH_USB()  
   #else
     #define searduino_usb_init()   
+    #define SEARDUINO_FLUSH_USB()  
   #endif
 #else
   #if defined(USBCON)
-    #define searduino_usb_init()  hid_initialise_hid()
+    #define searduino_usb_init()  hid_initialise_hid();
+    #define SEARDUINO_FLUSH_USB()  if (serialEventRun) serialEventRun()
   #else
     #define searduino_usb_init()   
+    #define SEARDUINO_FLUSH_USB()  
   #endif
-#endif
-
+#endif  /* SEARDUINO_STUB */
 
 
 
