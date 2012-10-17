@@ -98,6 +98,13 @@ libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 lib_LTLIBRARIES = libsearduinostub.la
 
 
+if USE_XTEST
+XTEST_C_FLAGS = -DUSE_X11
+else
+XTEST_C_FLAGS =
+endif
+
+
 
 AM_CFLAGS= -I../arduino-sources/core           \
            -I../arduino-sources/libraries/Wire \
@@ -106,7 +113,7 @@ AM_CFLAGS= -I../arduino-sources/core           \
            -I../faked-arduino/include/         \
            -I../faked-arduino/include/avr      \
            -I../arduino-extras/include/        \
-           $(PEDANTIC_FLAGS) -DPACKAGE="\"$(PACKAGE)\"" -DVERSION="\"$(VERSION)\""
+           $(PEDANTIC_FLAGS) -DPACKAGE="\"$(PACKAGE)\"" -DVERSION="\"$(VERSION)\"" $(XTEST_C_FLAGS)
 
 
 
@@ -118,7 +125,7 @@ AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/avr       \
            -I../faked-arduino/include/          \
            -I../arduino-extras/include/         \
-           $(PEDANTIC_FLAGS)
+           $(PEDANTIC_FLAGS) $(XTEST_C_FLAGS)
 
 
 if USE_XTEST
