@@ -353,11 +353,9 @@ class Pin(Gtk.Widget):
         relSem()
 
     def updateGenericMode(self, pin, mode):
-#        print "updateGenericMode( " + str(pin) + " , " + str(mode) + ")"
 
         getSem()
         if (mode==1):
-#            print "updateGenericMode       type: " + str(self.pin_type) + "   ? " + str(SEARDUINO_PIN_TYPE_DIGITAL)
 
             self.mode.set_text("OUTPUT")
 
@@ -373,6 +371,7 @@ class Pin(Gtk.Widget):
         else:
             self.mode.set_text("INPUT")
             self.output_label.set_text("")
+
             if self.pin_type == SEARDUINO_PIN_TYPE_DIGITAL:
                 self.input.set_visible(True)
 
@@ -380,8 +379,8 @@ class Pin(Gtk.Widget):
                 self.wid.spinbuttonset_visibile(True)
 
             elif self.pin_type == SEARDUINO_PIN_TYPE_PWM:
-                self.wid.inputset_visibile(True)
-
+                print "will not update mode of PWN pin"
+#                self.wid.inputset_visibile(True)
         relSem()
 
 
@@ -470,8 +469,6 @@ class MyWindow(Gtk.Window):
 #            print "+---"+ str(i)
             self.boards.append([str(i)])
 #                  print "+---------------------------------"
-
-
 
         self.board_combo = Gtk.ComboBox.new_with_model(self.boards)
         self.board_combo.connect("changed", self.on_board_combo_changed)
@@ -697,8 +694,6 @@ def newDigModeCallback(pin, mode):
     else:
         global win
         win.anas[pin].updateGenericMode(pin,mode)
-#    print " done with new mode"
-#    print "<==================== in Py:  new Dig Mode: " + str(pin) + " = " + str(mode)
 
 
 
