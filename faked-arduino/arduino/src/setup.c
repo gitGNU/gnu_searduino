@@ -115,6 +115,10 @@ int searduino_setup(void)
 
   already_setup=1;
 
+#ifdef USE_X11
+  hid_enable_faked_hid();
+#endif
+  
   return 0;
 }
 
