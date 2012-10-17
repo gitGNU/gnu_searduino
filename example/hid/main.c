@@ -24,46 +24,31 @@
 #include <Arduino.h>
 #include "searduino.h"
 
+#include <seasim.h>
 #include <mouse.h>
 #include <kbd.h>
 
-#define STEPS 30
 
 void setup()
 {
-  searduino_usb_init();
-  init();
-
-#ifdef SEARDUINO_STUB
-  /* By default Searduino faked hid is *NOT* enabled */
-  hid_enable_faked_hid();
-#endif
+  init_mouse();
 
   setup_mouse();
-  setup_kbd();
+  //setup_kbd();
 }
 
 int main(void)
 {
+  init();
+
   setup();
 
-  while(1)
+  SEARDUINO_LOOP()
     {
-      move_mouse( 1,  0,  STEPS);
-      move_mouse( 0,  1,  STEPS);
-      move_mouse(-1,  0,  STEPS);
-      move_mouse( 0, -1,  STEPS);
-      move_mouse( 1,  1,  STEPS);
-      move_mouse(-1, -1,  STEPS);
+      // a delay so the mouse doesn't move too fast:
+      manage_mouse_pins();
 
-      press_key(38);
-      delay(100);
-      release_key(38);
-      delay(1000);
-
-      click_mouse(1);
-      delay(1000);
+      SEARDUINO_FLUSH_USB();
     }
-
 }
 
