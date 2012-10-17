@@ -159,6 +159,57 @@ To upload and run the program on the Arduino UNO board:
 You should now be able to see the built in led (pin 13) flash. If not,
 the author of this document need to his homework.
 
+@section Searduino Makefile variables 
+You can fine tune the compilation and linking of your Arduino programs
+using the Searduino Makefile variables. 
+
+@multitable  @columnfractions .0 .35 .65
+@item 
+@tab @b{Variable}
+@tab @b{Description}
+
+@item
+@tab @code{USER_C_FLAGS}
+@tab Adds the value of the variable to both Arduino and simulation C compilation
+
+@item
+@tab @code{USER_CXX_FLAGS}
+@tab Adds the value of the variable to both Arduino and simulation C++
+compilation
+
+@item
+@tab @code{USER_LD_FLAGS}
+@tab Adds the value of the variable to both Arduino and simulation C++
+linking
+
+@item
+@tab @code{USER_STUB_C_FLAGS}
+@tab Adds the value of the variable to simulation C compilation
+
+@item
+@tab @code{USER_STUB_CXX_FLAGS}
+@tab Adds the value of the variable to simulation C++ compilation
+
+@item
+@tab @code{USER_STUB_LD_FLAGS}
+@tab Adds the value of the variable to simulation linking
+
+@item
+@tab @code{USER_ARDUINO_C_FLAGS}
+@tab Adds the value of the variable to Arduino C compilation
+
+@item
+@tab @code{USER_ARDUINO_CXX_FLAGS}
+@tab Adds the value of the variable to Arduino C++ compilation
+
+@item
+@tab @code{USER_ARDUINO_LD_FLAGS}
+@tab Adds the value of the variable to Arduino linking
+
+@end multitable
+
+
+
 @section Setting the USB port to use for uploading to Arduino boards
 @*
 Searduino tries to find the USB port to use automatically for you. In some
