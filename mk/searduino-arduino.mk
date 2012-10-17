@@ -85,9 +85,20 @@ SEARDUINO_LIB=-lsearduino
 LIBRARIES_LIB=-llibraries
 
 
+_CFLAGS=   -g $(USER_C_FLAGS) \
+            $(MODULE_C_FLAGS) \
+            $(INC_FLAGS) $(USER_ARDUINO_C_FLAGS)
+
+_CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
+             $(MODULE_CXX_FLAGS) \
+             $(INC_FLAGS) $(USER_ARDUINO_CXX_FLAGS) -DSEARDUINO_STUB
+
+_LDFLAGS = $(USER_LD_FLAGS)  $(USER_ARDUINO_LD_FLAGS) -lpthread -Wl,-rpath,$(SEARDUINO_PATH)/lib 
+
+
 $(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
 	$(CXX) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) \
-                $(LIB)  -lm $(LDFLAGS) 
+                $(LIB)  -lm $(LDFLAGS) $(USER_ARDUINO_LDFLAGS) 
 
 $(PROG).hex: $(LIB) $(PROG).elf
 	$(OBJ_CP)  -O ihex -j .eeprom --set-section-flags=.eeprom=alloc,load --no-change-warnings --change-section-lma  .eeprom=0 $(PROG).elf $(PROG).eep 
@@ -103,7 +114,4 @@ upload: $(PROG).hex
 	@echo "Will upload to: $(ARDUINO)   $(BOARD)  (device: (" $(USB_DEV) ")"
 	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) \
                    -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
-
-
-
 
