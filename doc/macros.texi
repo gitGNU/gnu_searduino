@@ -25,11 +25,20 @@ that, but put simply, that's what it does.
 Example use: @code{SEARDUINO_DEBUG(("The variable x is:%d",x));}
 @*
 @i{Note: @b{You must use double paranthesises!}}
+
 @item 
 @tab @code{searduino_usb_init()}
 @tab If building for Arduino boards this macro initialises the
 USB Device (USBDevice). If building for simulator this macro is unused.
 Example use: @code{searduino_usb_init();}
+
+@item 
+@tab @code{SEARDUINO_FLUSH_USB}
+@tab Flushes the serial buffer. When using USB Devices you must use
+this every now and theh, typically in once per loop
+Example use: @code{SEARDUINO_FLUSH_USB();}
+
+
 @end multitable
 @*
 @*
