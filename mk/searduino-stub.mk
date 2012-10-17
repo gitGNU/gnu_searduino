@@ -59,13 +59,13 @@ LIBRARIES_LIB=
 _CFLAGS=   -g $(USER_C_FLAGS) -Wall -fPIC \
             $(LIB_FLAGS) \
             $(MODULE_C_FLAGS) \
-            $(INC_FLAGS) -DSEARDUINO_STUB
+            $(INC_FLAGS) $(USER_STUB_C_FLAGS)  -DSEARDUINO_STUB
 
 _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
              $(MODULE_CXX_FLAGS) \
-             $(INC_FLAGS) -DSEARDUINO_STUB
+             $(INC_FLAGS) $(USER_STUB_CXX_FLAGS) -DSEARDUINO_STUB
 
-_LDFLAGS = $(USER_LD_FLAGS) -lpthread -Wl,-rpath,$(SEARDUINO_PATH)/lib 
+_LDFLAGS = $(USER_LD_FLAGS)  $(USER_STUB_LD_FLAGS) -lpthread -Wl,-rpath,$(SEARDUINO_PATH)/lib 
 
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN)
 	$(CXX) $(LIB) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS)
