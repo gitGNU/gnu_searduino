@@ -87,7 +87,7 @@ test_report()
     echo "      Succeeded:              $ARDUINO_EX_CTR_SUCC"
     echo "      Failed:                 $ARDUINO_EX_CTR_FAIL (probably indicates featuers not supported in Searduino's simulator)"
     echo ""
-    if [ "$VCS" = "true" ]
+    if [ "$VCS" != "true" ]
     then
 	echo "   Searduino examples tested: $SEARDUINO_EX_CTR"
 	echo "   ----------------------------------------------"
