@@ -31,9 +31,16 @@
 extern "C"{
 #endif
 
-void setup_mouse();
-void move_mouse(uint8_t x, uint8_t y, uint8_t times);
-void click_mouse(uint8_t b);
+#define MOUSE_LEFT_PIN  8
+#define MOUSE_RIGHT_PIN 9
+#define MOUSE_UP_PIN    10
+#define MOUSE_DOWN_PIN  11
+
+  void setup_mouse();
+  void move_mouse(uint8_t x, uint8_t y, uint8_t times);
+  void click_mouse(uint8_t b);
+  void manage_mouse_pins(void);
+  void init_mouse();
 
 #ifdef __cplusplus
 }
