@@ -17,7 +17,7 @@ int run = 0;
 pthread_t   searduino_thread_impl;
 pthread_t  *searduino_thread = &searduino_thread_impl;
 #define NR_OF_PINS 100
-#define PINS_TO_USE 19
+#define PINS_TO_USE 5
 
 void* c_arduino_code(void *in);
 
@@ -46,8 +46,8 @@ struct general_pin pins[NR_OF_PINS];
 #endif
 
 #ifdef GDK_SEM
-#define SEMLOCK()     gdk_threads_enter ()
-#define SEMREL()      gdk_threads_leave ()
+#define SEMLOCK()     printf("---->ENTER\n"); fflush(stdout); gdk_threads_enter (); 
+#define SEMREL()      gdk_threads_leave (); printf("---->LEAVE\n"); fflush(stdout);
 #endif
 
 #ifdef PTHREAD_SEM
@@ -77,8 +77,13 @@ void searduino_statusbar_push(char *str)
       statusbar = GTK_STATUSBAR( gtk_builder_get_object( builder, "status_label" ) );
     }
   
-  printf ("status: %p\n", statusbar);
+  printf ("status getting sem\n");
+  //  SEMLOCK();
+  printf ("status got sem\n");
   gtk_statusbar_push(statusbar, 1, str);
+  printf ("status will rel sem\n");
+  //SEMREL();
+  printf ("status getting done\n");
 }
 
 void searduino_log_general(char *str, int view)
@@ -123,10 +128,15 @@ void searduino_log_general(char *str, int view)
     }
 
   /* all ptrs now point to the correct view and buffer, so let's write */
+  printf ("log get sem  %d\n", view);
   SEMLOCK();
+  printf ("log get sem a\n");
   gtk_text_buffer_get_end_iter(text_buffer, &iter);
+  printf ("log get sem b\n");
   gtk_text_view_scroll_to_iter(text_view, &iter, 0.0, TRUE, 1.0, 1.0);
+  printf ("log get sem c\n");
   gtk_text_buffer_insert(text_buffer, &iter, str, strlen(str));
+  printf ("log rel sem  %d\n", view);
   SEMREL();
 }
 
@@ -144,25 +154,31 @@ void arduino_out(uint8_t pin, uint8_t type, int value)
   pins[pin].value=value;
 
 
-  printf("Setting value: %d   on: %d   out:%p\n",
+  printf("<--- Setting value: %d   on: %d   out:%p\n",
   	 value, pin, pins[pin].out);
 
 
   if (type==DIGITAL)
     {
+      printf ("DIG get sem\n"); fflush(stdout);
       SEMLOCK();
       gtk_label_set_text(pins[pin].out, buf);
       //gtk_label_set_text(pins[pin].type, "Digital");
       SEMREL();
+      printf ("DIG rel sem\n"); fflush(stdout);
       
     }
   else if (type==ANALOG)
     {
+      printf ("ANA get sem\n"); fflush(stdout);
       SEMLOCK();
       gtk_label_set_text(pins[pin].out, buf);
       //gtk_label_set_text(pins[pin].type, "Analog");
       SEMREL();
+      printf ("ANA rel sem\n"); fflush(stdout);
     }
+  printf("---> Setting value: %d   on: %d   out:%p\n",
+  	 value, pin, pins[pin].out);
 }
 
 void destroy (GtkWidget *widget, gpointer data)
@@ -171,7 +187,8 @@ void destroy (GtkWidget *widget, gpointer data)
 }
 
 #define SET_BUTTON_SENS_GENERIC(button, state) \
-      gtk_widget_set_sensitive(GTK_BUTTON( gtk_builder_get_object( builder, button)), state);
+  printf("set %s\n", button);gtk_widget_set_sensitive(GTK_WIDGET( gtk_builder_get_object( builder, button)), state); printf("set %s done\n", button);
+//  printf("set %s\n", button);SEMLOCK(); gtk_widget_set_sensitive(GTK_BUTTON( gtk_builder_get_object( builder, button)), state); SEMREL();printf("set done\n");
 #define SET_BUTTON_SENS(button)			\
   SET_BUTTON_SENS_GENERIC(button, TRUE) 
 #define SET_BUTTON_INSENS(button)		\
@@ -180,16 +197,18 @@ void destroy (GtkWidget *widget, gpointer data)
 
 void set_playing(void)
 {
-      run = 1;
-      searduino_statusbar_push("Arduino program running");
-      SET_BUTTON_INSENS("play");
-      SET_BUTTON_SENS("pause");
-      SET_BUTTON_SENS("stop");
+  run = 1;
+  searduino_statusbar_push("Arduino program running");
+  usleep(1000);
+  SET_BUTTON_INSENS("play");
+  SET_BUTTON_SENS("pause");
+  SET_BUTTON_SENS("stop");
 }
 
 void set_pause(void)
 {
   run = 2 ;
+  usleep(1000);
   searduino_statusbar_push("Arduino program paused");
   SET_BUTTON_SENS("play");
   SET_BUTTON_INSENS("pause");
@@ -198,11 +217,12 @@ void set_pause(void)
 
 void set_stop(void)
 {
-  run = 0 ;
   searduino_statusbar_push("Arduino program stoped");
+  usleep(1000);
   SET_BUTTON_SENS("play");
   SET_BUTTON_INSENS("pause");
   SET_BUTTON_INSENS("stop");
+  printf(" done setting stop\n");
 }
 
 int play_clicked_cb(void)
@@ -213,9 +233,8 @@ int play_clicked_cb(void)
     }
   else if (run==0)
     {
-      pthread_create(searduino_thread, NULL, c_arduino_code, NULL);
-      usleep(1000*100);
       set_playing();
+      pthread_create(searduino_thread, NULL, c_arduino_code, NULL);
     }
 }
 
@@ -230,8 +249,13 @@ int pause_clicked_cb(void)
 
 int stop_clicked_cb(void)
 {
+  run = 0 ;
+  usleep(1000*1000);
   pthread_cancel(searduino_thread_impl);
-  usleep(1000*100);
+  printf ("stop get sem\n");
+  printf ("cancel thread\n");
+  printf ("stop rem sem\n");
+  printf ("stop tweak buttons\n");
   set_stop();
 }
 
@@ -294,7 +318,7 @@ void* c_arduino_code(void *in)
       usleep(1000*10);
     }
   */
-  while(1)
+  while(run!=0)
     {
       if (run == 2)
 	{
@@ -324,7 +348,8 @@ void* c_arduino_code(void *in)
       searduino_log("\n");
       searduino_serial_out("To serial.... seria A\n");
       searduino_serial_out(buf);
-    }
+      usleep(1000*10);
+   }
   return NULL;
 }
 
@@ -379,11 +404,6 @@ int add_pins(void)
 	gtk_widget_show_all(pin_box);
 	gtk_box_pack_start(pin_container, GTK_WIDGET(pin_box), FALSE, TRUE, 0);
     }
-
-  
-
-
-
 }
 
 
@@ -419,7 +439,7 @@ main( int    argc,
     /* Get main window pointer from UI */
     window = GTK_WIDGET( gtk_builder_get_object( builder, "main_window" ) );
 
-    searduino_statusbar_push("Warming up");
+    //    searduino_statusbar_push("Warming up");
 
     top_label = GTK_LABEL( gtk_builder_get_object( builder, "toplabel" ) );
     gtk_label_set_markup(top_label, "<b>Searduino 0.89</b>");
