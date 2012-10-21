@@ -27,8 +27,8 @@ lib_LTLIBRARIES = libi2c.la
 libi2c_la_SOURCES = i2c_setup.c
 AM_CFLAGS= -I../../include/arduino -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
 
-TESTS =  testtime testsetup  testi2c testcomm testdigio testwiring testboards 
-check_PROGRAMS = testtime testsetup testlimit testi2c  testcomm testdigio testwiring testboards 
+TESTS =  testtime testsetup  testi2c testcomm testdigio testwiring testboards testuno
+check_PROGRAMS = testtime testsetup testlimit testi2c  testcomm testdigio testwiring testboards testuno
 
 testtime_SOURCES = test_time.c 
 testtime_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core 
@@ -61,6 +61,10 @@ testboards_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 testwiring_SOURCES = test_wiring_digital.c 
 testwiring_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include -I../../../arduino-sources/core 
 testwiring_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
+
+testuno_SOURCES = test_uno.c 
+testuno_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I../../../arduino-sources/core   -I../../../arduino-extras/include
+testuno_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 
 endif
