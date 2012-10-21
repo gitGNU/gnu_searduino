@@ -64,11 +64,44 @@ analogRead(uint8_t pin)
 
 void analogWrite(uint8_t pin, int val)
 {
-  /* Arduino sets the pin mode to OUTPUT in the analogWrite function, ergo setting the pin mode here */
+  /* Arduino sets the pin mode to OUTPUT in the analogWrite function,
+     ergo setting the pin mode here */
   pinMode(pin, OUTPUT);
 
-  if (val > 255 ) { val = 255; }
-  return genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
+  if (val == 0)
+    {
+      digitalWrite(pin, LOW);
+    }
+  else if (val == 255)
+    {
+      digitalWrite(pin, HIGH);
+    }
+  else
+    {
+      if (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM))
+	{
+	  set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM);
+	  /* TODO: 
+	     check if this really should be done
+	     are some pins 10 bits???
+	  */
+	  if (val > 255 ) { val = 255; }
+	  genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
+	}
+      else if (has_generic_pin_type(pin,SEARDUINO_PIN_TYPE_DIGITAL))
+	{
+	  if (val < 128)
+	    {
+	      digitalWrite(pin, LOW);
+	    }
+	  else 
+	    {
+	      digitalWrite(pin, HIGH);
+	    }
+	}
+
+    }
+  
 }
 
 

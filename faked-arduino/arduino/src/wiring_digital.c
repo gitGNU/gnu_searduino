@@ -73,10 +73,9 @@ pinMode(uint8_t pin, uint8_t mode)
   PRINT_FUNCTION_NAME(("%d,%d",pin,mode));
   if (PIN_OUT_OF_RANGE(pin))
     {
-      SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
+      SEARD_WARNING(SEARD_ARDUINO_OUT_OF_BOUND);
       return;
     }
-
   set_digital_pin_mode(pin,mode);
   ext_digital_set_mode(pin,mode);
 
@@ -88,10 +87,26 @@ void turnOffPWM(uint8_t timer)
   PRINT_FUNCTION_NAME(("%d",timer));
 }
 
+
 void digitalWrite(uint8_t pin, uint8_t val)
 {
-  return genericWrite(pin, val, SEARDUINO_PIN_TYPE_DIGITAL);
+  if ( get_digital_pin_mode(pin) == INPUT )
+    {
+      log_error("You're writing (digitalWrite) to pin %d, which is an INPUT pin", pin);
+    }
+  
+  /* Turn off PWM */
+  if ( set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL) )
+    {
+      log_error("Could not set pin %d to digital (in digitalRead)", pin);
+    }
+  
+  /* Make sure we're only storing 1 or 0 
+   *   0 => 0
+   *  !0 => 1*/
+  return genericWrite(pin, (val!=0), SEARDUINO_PIN_TYPE_DIGITAL);
 }
+
 
 int digitalRead(uint8_t pin)
 {
@@ -106,6 +121,12 @@ int digitalRead(uint8_t pin)
   if ( get_digital_pin_mode(pin) != INPUT )
     {
       log_error("You're reading from pin %d, which is an OUTPUT pin", pin);
+    }
+  
+  /* Turn off PWM */
+  if ( set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL) )
+    {
+      log_error("Could not set pin %d to digital (in digitalRead)", pin);
     }
   
   /*

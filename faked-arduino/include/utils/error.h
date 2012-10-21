@@ -27,3 +27,8 @@
    fprintf(stderr, \
 	   "Error %d occured in %s at %s:%d\n",\
 	   a,__func__, __FILE__,__LINE__)
+
+#define SEARD_WARNING(a) \
+   fprintf(stderr, \
+	   "Warning %d occured in %s at %s:%d\n",\
+	   a,__func__, __FILE__,__LINE__)

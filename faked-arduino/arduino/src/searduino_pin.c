@@ -73,15 +73,19 @@ uint8_t A14 = 0;
 uint8_t A15 = 0;
 
 
+static void zero_pin(uint8_t pin)
+{
+  arduino_pins[pin].current_mode  = INPUT;
+  arduino_pins[pin].current_value = 0;
+  arduino_pins[pin].discard_ctr   = 0;
+}
 
 void init_arduino_pins(void)
 {
   int i ; 
   for (i=0;i<=NR_OF_ARDUINO_PINS;i++)
     {
-      arduino_pins[i].mode=INPUT;
-      arduino_pins[i].val=0;
-      arduino_pins[i].discard_ctr=0;
+      zero_pin(i);
     }
 
   board_setup();
@@ -90,6 +94,25 @@ void init_arduino_pins(void)
 }
 
 
+void define_arduino_pin(uint8_t pin, 
+			uint8_t analog_in, 
+			uint8_t digital_out, 
+			uint8_t digital_in, 
+			uint8_t pwm_out)
+{
+
+  zero_pin(pin);
+  
+  arduino_pins[pin].analog_in   = analog_in ;  
+  arduino_pins[pin].digital_out = digital_out;  
+  arduino_pins[pin].digital_in  = digital_in;  
+  arduino_pins[pin].pwm_out     = pwm_out;  
+  /*
+  arduino_pins[pin].output      = output;  
+  arduino_pins[pin].input       = input;  
+  */
+  return;
+}
 
 /*
  *  
@@ -197,15 +220,33 @@ anain_callback(uint8_t pin, unsigned int val)
 
 
 int 
-get_generic_pin_mode(uint8_t pin, uint8_t pin_type)
+get_generic_pin_mode(uint8_t pin)
 {
-  return arduino_pins[pin].mode;
+  return arduino_pins[pin].current_mode;
 }
 
 int 
-get_generic_pin_type(uint8_t pin)
+has_generic_pin_type(uint8_t pin, uint8_t type)
 {
-  return arduino_pins[pin].type ;
+  switch (type)
+    {
+    case SEARDUINO_PIN_TYPE_DIGITAL:
+      return arduino_pins[pin].digital_in && arduino_pins[pin].digital_out;
+      break;
+    case SEARDUINO_PIN_TYPE_PWM:
+      return arduino_pins[pin].pwm_out;
+      break;
+    case SEARDUINO_PIN_TYPE_ANALOG:
+      return arduino_pins[pin].analog_in;
+      break;
+    }
+  return 0;
+}
+
+int 
+get_current_pin_type(uint8_t pin)
+{
+  return arduino_pins[pin].current_type ;
 }
 
 int 
@@ -213,10 +254,10 @@ set_generic_pin_type(uint8_t pin, uint8_t pin_type)
 {
   if ( pin_type >= SEARDUINO_PIN_TYPE_END )
     {
-      arduino_pins[pin].type = SEARDUINO_PIN_TYPE_NONE;
+      arduino_pins[pin].current_type = SEARDUINO_PIN_TYPE_NONE;
       return 1;
     }
-  arduino_pins[pin].type = pin_type;
+  arduino_pins[pin].current_type = pin_type;
   return 0;
 }
 
@@ -234,17 +275,17 @@ get_generic_nr_of_pins(void)
 
 
 int 
-set_generic_pin_mode(uint8_t pin, uint8_t mode, uint8_t pin_type)
+set_generic_pin_mode(uint8_t pin, uint8_t mode)
 {
-  if ( (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL) ||
-       (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_PWM) )
+  if ( (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL)) ||
+       (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM) ))
     {
-      arduino_pins[pin].mode=mode; 
+      arduino_pins[pin].current_mode=mode; 
       return 0;
     }
   else
     {
-      printf ("Failed setting Mode of pin %d:   %d  (%d | %d)\n", pin, mode, pin_type, arduino_pins[pin].type);
+      printf ("Failed setting mode %d on pin %d\n", mode, pin);
       exit(0);
     }
   return  -1;
@@ -256,35 +297,29 @@ set_generic_pin_val_impl(uint8_t      pin,
 			 uint8_t pin_type, 
 			 uint8_t exp_inout)
 {
-  /*
-  if (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_NONE)
-    {
-      arduino_pins[pin].type=pin_type;
-    }
-  */
   if (pin_type == SEARDUINO_PIN_TYPE_DIGITAL)
-    /*  if ( (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL) ||
-	(arduino_pins[pin].type==SEARDUINO_PIN_TYPE_PWM) ) */
     {
       if (get_digital_pin_mode(pin) != exp_inout)
 	{
-	  SEARD_ERROR( SEARD_ARDUINO_WRONG_PIN_MODE);
-	  return SEARD_ARDUINO_WRONG_PIN_MODE;
+	  if ( get_digital_pin_mode(pin) == INPUT )
+	    {
+	      log_warning(("You're writing to a digital ping set to INPUT"));
+	    }
+	  SEARD_WARNING(SEARD_ARDUINO_WRONG_PIN_MODE);
 	}
-      arduino_pins[pin].val=val; 
+      arduino_pins[pin].current_value=val; 
       return 0;
     }
   else
     {
-      if (arduino_pins[pin].type==pin_type)
+      if (arduino_pins[pin].current_type==pin_type)
 	{
-	  arduino_pins[pin].val=val; 
+	  arduino_pins[pin].current_value=val; 
 	  return 0;
 	}
       else
 	{
-	  SEARD_ERROR( SEARD_ARDUINO_WRONG_PIN_TYPE);
-	  return SEARD_ARDUINO_WRONG_PIN_TYPE;
+	  SEARD_WARNING( SEARD_ARDUINO_WRONG_PIN_TYPE);
 	}
     }
   return  -1;
@@ -292,20 +327,15 @@ set_generic_pin_val_impl(uint8_t      pin,
 
 
 int 
-get_generic_pin_val(uint8_t pin, uint8_t pin_type)
+get_generic_pin_val(uint8_t pin)
 {
-  if( (pin_type == SEARDUINO_PIN_TYPE_ANALOG) && 
-      (arduino_pins[pin].type != SEARDUINO_PIN_TYPE_ANALOG) )
-    {
-      SEARD_ERROR( SEARD_ARDUINO_WRONG_PIN_TYPE);
-    }
-  return arduino_pins[pin].val; 
+  return arduino_pins[pin].current_value; 
 }
 
 int 
 get_pin_val(uint8_t pin)
 {
-  return arduino_pins[pin].val; 
+  return arduino_pins[pin].current_value; 
 }
 
 
@@ -316,6 +346,7 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
   struct timeval  cur_time;
   struct timezone zoneData;
   long time_diff = 0 ;
+  uint8_t current_pin_type;
 
   searduino_setup();
 
@@ -329,12 +360,11 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
       return;
     }
 
-  if (get_generic_pin_mode(pin, pin_type) != OUTPUT)
+  if (get_generic_pin_mode(pin) != OUTPUT)
     {
       log_warning("genericWrite: Pin (%d) is not set to OUTPUT\n", pin);
-      SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
-      return;
     }
+
 
   if( gettimeofday( &cur_time, &zoneData) == 0 )
     {
@@ -348,7 +378,7 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
 
   /*
    *
-   *  Only calling lower layer on chage
+   *  Only calling lower layer on change
    *
    */
   if ( get_pin_val(pin) != val)
@@ -394,7 +424,7 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
 
 /*
  *
- * Callback used to update in_pins
+x * Callback used to update in_pins
  * This fun is use (callbacked by) comm layer
  *
  */
@@ -428,7 +458,7 @@ output_callback(uint8_t pin, uint8_t pin_type)
       return 0;
     }
 
-  if ( (arduino_pins[pin].type==SEARDUINO_PIN_TYPE_DIGITAL) &&
+  if ( (arduino_pins[pin].current_type==SEARDUINO_PIN_TYPE_DIGITAL) &&
        (get_digital_pin_mode(pin) != INPUT))
     {
       SEARD_ERROR(SEARD_ARDUINO_WRONG_PIN_MODE);
@@ -436,6 +466,6 @@ output_callback(uint8_t pin, uint8_t pin_type)
     }
 
 /*   printf ("PYTHON (in C stub)   returning out[%d].val=%d     GUI\n", pin, arduino_out_pins[pin].val); */
-  return   get_generic_pin_val(pin, pin_type);
+  return   get_generic_pin_val(pin);
 }
 

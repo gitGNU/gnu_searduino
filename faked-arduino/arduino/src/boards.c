@@ -27,6 +27,23 @@
 #include "boards.h"
 #include "stdio.h"
 
+/* 
+ * Simple macros to make the use of define pin function easier to read
+ *  by humans
+ */
+#define ANALOG_IN      1
+#define NO_ANALOG_IN   0
+
+#define DIGITAL_IN     1
+#define NO_DIGITAL_IN  0
+#define DIGITAL_OUT    1
+#define NO_DIGITAL_OUT 0
+
+#define PWM_OUT        1
+#define NO_PWM_OUT     0
+
+
+
 typedef int   (*board_setup_ptr)(void); 
 static int board_index=0;
 
@@ -188,7 +205,7 @@ static void print_board_digital_pins(char *s, int type)
   printf ("%s", s);
   for (i=0;i<NR_OF_ARDUINO_PINS;i++)
     {
-      if ( get_generic_pin_type(i) == type)
+      if ( has_generic_pin_type(i, type))
 	{
 	  printf ("%d, ", i);
 	}
@@ -208,7 +225,7 @@ static void print_board_analog_pins(void)
   for (i=0;i<NR_OF_ARDUINO_PINS;i++)
     {
       /* printf (" *%d \n", i); */
-      if ( get_generic_pin_type(i) == SEARDUINO_PIN_TYPE_ANALOG )
+      if ( has_generic_pin_type(i,SEARDUINO_PIN_TYPE_ANALOG) )
 	{
 	  printf ("%d (A%d), ", i, i - A0);
 	  /*for (j=0;j<8;j++)
@@ -249,6 +266,8 @@ board_setup_uno(void)
 
     PWM: 3, 5, 6, 9, 10, and 11. Provide 8-bit PWM output with the analogWrite() function. 
 
+    Analog:  6 analog inputs, labeled A0 through A5
+
     LED: 13. There is a built-in LED connected to digital pin 13. When the pin is HIGH value, the LED is on, when the pin is LOW, it's off. 
 
    */
@@ -259,38 +278,30 @@ board_setup_uno(void)
   A4 = 18;
   A5 = 19;
 
-  /*
-   *    6 PWM pins
-   */
-  set_generic_pin_type(3,  SEARDUINO_PIN_TYPE_PWM);
-  set_generic_pin_type(5,  SEARDUINO_PIN_TYPE_PWM);
-  set_generic_pin_type(6,  SEARDUINO_PIN_TYPE_PWM);
-  set_generic_pin_type(9,  SEARDUINO_PIN_TYPE_PWM);
-  set_generic_pin_type(10, SEARDUINO_PIN_TYPE_PWM);
-  set_generic_pin_type(11, SEARDUINO_PIN_TYPE_PWM);
+  define_arduino_pin(1,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(2,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(3,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(4,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(5,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(6,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(7,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(8,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(9,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(10, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(11, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(12, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(13, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(14, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
 
-  /* 
-   *   Digital pins
-   */
-  set_generic_pin_type(1,  SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(2,  SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(4,  SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(7,  SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(8,  SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(12, SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(13, SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(0, SEARDUINO_PIN_TYPE_DIGITAL);
-
-  set_generic_pin_type(A0, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A1, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A2, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A3, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A4, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A5, SEARDUINO_PIN_TYPE_ANALOG);
-  
-  
+  define_arduino_pin(A0, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(A1, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(A2, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(A3, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(A4, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(A5, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
 
   printf ("\n\t*** UNO BOARD SETUP done\n\n");
+
   print_board_setup();
   return 0;
 }

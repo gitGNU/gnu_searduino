@@ -77,14 +77,123 @@ START_TEST (test_board)
   ret = set_generic_pin_type(11, SEARDUINO_PIN_TYPE_DIGITAL);
   fail_if (ret != 0 );
 
-  ret = get_generic_pin_type(11);
-  fail_if (ret != SEARDUINO_PIN_TYPE_DIGITAL );
+  ret = has_generic_pin_type(11, SEARDUINO_PIN_TYPE_DIGITAL);
+  fail_if (ret != 1 );
 
-  ret = set_generic_pin_type(11, 128);
-  fail_if (ret == 0 );
 
-  ret = get_generic_pin_type(11);
-  fail_if (ret != SEARDUINO_PIN_TYPE_NONE );
+}
+END_TEST
+
+
+START_TEST (test_uno_11)
+{
+  int ret;
+
+  set_board_name(MY_UNO);
+
+  board_setup();
+
+  #define TEST_DIG_PIN 11
+
+  /*
+   * PWM and Digital pin 11
+   *
+   */ 
+
+  /* Positive tests (as digital output pin) */
+  pinMode(TEST_DIG_PIN,OUTPUT);
+
+  digitalWrite(TEST_DIG_PIN, HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
+
+  digitalWrite(TEST_DIG_PIN, LOW);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);  
+
+  /* Positive tests (as digital input pin) */
+  pinMode(TEST_DIG_PIN,INPUT);
+
+  digitalWrite(TEST_DIG_PIN, HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
+
+  digitalWrite(TEST_DIG_PIN, LOW);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);  
+
+  /* Positive tests (as digital output pin) */
+  pinMode(TEST_DIG_PIN,OUTPUT);
+
+  /* According to spec, this should result in a digitalWrite (LOW) */
+  analogWrite(TEST_DIG_PIN, 0);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);  
+
+  /* According to spec, this should result in a digitalWrite (HIGH) */
+  analogWrite(TEST_DIG_PIN, 255);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);  
+
+  /* According to spec, this should result in value = 120 */
+  analogWrite(TEST_DIG_PIN, 120);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != 120);  
+
+}
+END_TEST
+
+START_TEST (test_uno_13)
+{
+  int ret;
+
+  set_board_name(MY_UNO);
+
+  board_setup();
+
+  #define TEST_DIG_PIN2 13
+
+  /*
+   * Digital pin 13 (no pwm)
+   *
+   */ 
+
+  /* Positive tests (as digital output pin) */
+  pinMode(TEST_DIG_PIN2,OUTPUT);
+
+  digitalWrite(TEST_DIG_PIN2, HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != HIGH);
+
+  digitalWrite(TEST_DIG_PIN2, LOW);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != LOW);  
+
+  /* Positive tests (as digital input pin) */
+  pinMode(TEST_DIG_PIN2,INPUT);
+
+  digitalWrite(TEST_DIG_PIN2, HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != HIGH);
+
+  digitalWrite(TEST_DIG_PIN2, LOW);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != LOW);  
+
+  /* Positive tests (as digital output pin) */
+  pinMode(TEST_DIG_PIN2,OUTPUT);
+
+  /* According to spec, this should result in a digitalWrite (LOW) */
+  analogWrite(TEST_DIG_PIN2, 0);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != LOW);  
+
+  /* According to spec, this should result in a digitalWrite (HIGH) */
+  analogWrite(TEST_DIG_PIN2, 255);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != HIGH);  
+
+  /* According to spec, this should result in value = 0 
+     (since this pin is not a pwm) */
+  analogWrite(TEST_DIG_PIN2, 120);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 0);  
+
+  /* According to spec, this should result in value = 1 
+     (since this pin is not a pwm) */
+  analogWrite(TEST_DIG_PIN2, 129);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 1);  
+
+  /* According to spec, this should result in value = 1 
+     (since this pin is not a pwm) */
+  analogWrite(TEST_DIG_PIN2, 255);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 1);  
 
 }
 END_TEST
@@ -111,6 +220,10 @@ buffer_suite(void) {
 
   tcase_add_test(tc_core, test_board);
   tcase_add_test(tc_core, test_supported_boards);
+
+  searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
+  tcase_add_test(tc_core, test_uno_11);
+  tcase_add_test(tc_core, test_uno_13);
   return s;
 }
 

@@ -102,6 +102,10 @@ log_warning(char* s, ...)
     {
       log_sim_callback(SEARDUINO_LOG_LEVEL_WARNING, buffer);
     }
+  else
+    {
+      fprintf (stderr, " WARNING: %s\n", buffer);
+    }
 }
 
 

@@ -103,6 +103,41 @@ START_TEST (test_dig_mode_callback_raw)
 }
 END_TEST
 
+START_TEST (test_dig_write)
+{
+  #define TEST_DIG_PIN 13
+
+  /* Positive tests (as output pin */
+
+  pinMode(TEST_DIG_PIN,OUTPUT);
+
+  digitalWrite(TEST_DIG_PIN, HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
+
+  digitalWrite(TEST_DIG_PIN, LOW);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);
+
+  analogWrite(TEST_DIG_PIN, LOW);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);
+
+  analogWrite(TEST_DIG_PIN, 120);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);
+
+  analogWrite(TEST_DIG_PIN, 130);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
+
+  analogWrite(TEST_DIG_PIN, 255);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
+
+  /* Negative tests (as output pin */
+
+  pinMode(TEST_DIG_PIN,INPUT);
+
+
+
+}
+END_TEST
+
 START_TEST (test_digout_callback_raw)
 {
   int i ;
@@ -152,10 +187,11 @@ buffer_suite(void) {
   Suite *s = suite_create("Time_Fuctions");
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
-
   tcase_add_test(tc_core, test_digin_callback_raw);
   tcase_add_test(tc_core, test_dig_mode_callback_raw);
   tcase_add_test(tc_core, test_digout_callback_raw);
+
+  tcase_add_test(tc_core, test_dig_write);
 
   return s;
 }
