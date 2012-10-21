@@ -166,7 +166,7 @@ void* command_reader(void* in)
 /*  	  printf ("will parse: '%s'\n", tmp);  */
 	  sscanf(tmp, "%d:%d:%d", &type, &pin, &val);
   	  printf ("SIM WILL SET pin:%d val:%d type:%d  \n", pin, val, type);  
-	  seasim_set_generic_input(pin,val, type);
+	  seasim_set_generic_input(pin, val, type);
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{
