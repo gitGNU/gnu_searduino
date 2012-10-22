@@ -312,15 +312,19 @@ set_generic_pin_val_impl(uint8_t      pin,
     }
   else
     {
-      if (arduino_pins[pin].current_type==pin_type)
+      /*      if (arduino_pins[pin].current_type==pin_type)
 	{
-	  arduino_pins[pin].current_value=val; 
+      */
+
+	arduino_pins[pin].current_value=val; 
 	  return 0;
+	  /*
 	}
       else
 	{
 	  SEARD_WARNING( SEARD_ARDUINO_WRONG_PIN_TYPE);
 	}
+	  */
     }
   return  -1;
 }
