@@ -65,6 +65,21 @@ analogRead(uint8_t pin)
 void analogWrite(uint8_t pin, int val)
 {
 
+  if (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG))
+    {
+      /* The following behaviour is based on the Leonardo board */
+      if (val < 255)
+	{
+	  genericWrite(pin, 0, SEARDUINO_PIN_TYPE_PWM);
+	}
+      else 
+	{
+	  genericWrite(pin, 1023, SEARDUINO_PIN_TYPE_PWM);
+	}
+      return ;
+    }
+
+
   /* Arduino sets the pin mode to OUTPUT in the analogWrite function,
      ergo setting the pin mode here */
   pinMode(pin, OUTPUT);
@@ -100,7 +115,6 @@ void analogWrite(uint8_t pin, int val)
 	      digitalWrite(pin, HIGH);
 	    }
 	}
-
     }
   
 }
