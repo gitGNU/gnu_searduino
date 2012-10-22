@@ -65,14 +65,6 @@ analogRead(uint8_t pin)
 void analogWrite(uint8_t pin, int val)
 {
 
-  /* Warn and then discard pwm writes to an analog input pin */
-  if ( ! has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG) )
-    {
-      log_error("Could not write an analog value to a non analog pin %d (in analogWrite)", pin);
-      return;
-    }
-  
-
   /* Arduino sets the pin mode to OUTPUT in the analogWrite function,
      ergo setting the pin mode here */
   pinMode(pin, OUTPUT);
