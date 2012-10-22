@@ -98,7 +98,15 @@ void digitalWrite(uint8_t pin, uint8_t val)
   /* Turn off PWM */
   if ( set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL) )
     {
-      log_error("Could not set pin %d to digital (in digitalRead)", pin);
+      log_error("Could not set pin %d to digital (in digitalWrite)", pin);
+    }
+  
+  /* Warn and then discard digital writes to an analog pin */
+  if ( has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG) &&
+       !has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL) )
+    {
+      log_error("Could not write a digital value to pin %d (in digitalWrite)", pin);
+      return;
     }
   
   /* Make sure we're only storing 1 or 0 
