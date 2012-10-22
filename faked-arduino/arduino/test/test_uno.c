@@ -204,6 +204,47 @@ START_TEST (test_uno_130)
 }
 END_TEST
 
+START_TEST (test_uno_A0)
+{
+  int ret;
+
+  set_board_name(MY_UNO);
+
+  board_setup();
+
+
+  /*
+   * Analog pin A0 (input)
+   *
+   */ 
+
+  digitalWrite(A0, LOW);
+  fail_if(get_generic_pin_val(A0) != LOW);
+
+  digitalWrite(A0, HIGH);
+  fail_if(get_generic_pin_val(A0) != LOW);
+
+  /* normal tests of analogWrite */
+  analogWrite(A0, 0);
+  fail_if(get_generic_pin_val(A0) != 0);  
+
+  analogWrite(A0, 120);
+  fail_if(get_generic_pin_val(A0) != 0);  
+
+  analogWrite(A0, 240);
+  fail_if(get_generic_pin_val(A0) != 0);  
+
+  analogWrite(A0, 255);
+  fail_if(get_generic_pin_val(A0) != 1023);  
+
+  analogWrite(A0, 500);
+  fail_if(get_generic_pin_val(A0) != 1023);  
+
+  analogWrite(A0, 1023);
+  fail_if(get_generic_pin_val(A0) != 1023);  
+}
+END_TEST
+
 
 Suite *
 buffer_suite(void) {
@@ -216,6 +257,7 @@ buffer_suite(void) {
   tcase_add_test(tc_core, test_uno_11);
   tcase_add_test(tc_core, test_uno_13);
   tcase_add_test(tc_core, test_uno_130);
+  tcase_add_test(tc_core, test_uno_A0);
   return s;
 }
 
@@ -227,9 +269,11 @@ int main(void)
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
 
+
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
   srunner_free(sr);
+
   return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
 
   /*   test_delay(); */
