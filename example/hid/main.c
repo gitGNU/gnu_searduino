@@ -24,7 +24,6 @@
 #include <Arduino.h>
 #include "searduino.h"
 
-#include <seasim.h>
 #include <mouse.h>
 #include <kbd.h>
 
