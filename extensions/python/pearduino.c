@@ -329,7 +329,26 @@ static PyObject* c_hid_disable_feedback(PyObject* self, PyObject* args)
   return o;
 }
 
-static PyObject* c_get_generic_pin_type(PyObject* self, PyObject* args)
+static PyObject* c_has_generic_pin_type(PyObject* self, PyObject* args)
+{
+  unsigned int ret;
+  unsigned int pin;
+  unsigned int type;
+  
+  PyArg_ParseTuple(args, "i", &pin);
+  PyArg_ParseTuple(args, "i", &type);
+
+  PEARDUINO_PRINT_IN();
+  
+  ret = seasim_has_generic_pin_type(pin, type);
+  PyObject* o = Py_BuildValue("i", ret);
+
+  PEARDUINO_PRINT_OUT();
+  return o;
+}
+
+
+static PyObject* c_get_current_pin_type(PyObject* self, PyObject* args)
 {
   unsigned int ret;
   unsigned int pin;
@@ -338,7 +357,7 @@ static PyObject* c_get_generic_pin_type(PyObject* self, PyObject* args)
 
   PEARDUINO_PRINT_IN();
   
-  ret = seasim_get_generic_pin_type(pin);
+  ret = seasim_get_current_pin_type(pin);
   PyObject* o = Py_BuildValue("i", ret);
 
   PEARDUINO_PRINT_OUT();
@@ -657,7 +676,8 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_get_searduino_name",      (PyCFunction)c_get_searduino_name, METH_VARARGS, NULL},
   {"seasim_set_board_name",          (PyCFunction)c_set_board_name, METH_VARARGS, NULL},
   {"seasim_get_board_name",          (PyCFunction)c_get_board_name, METH_VARARGS, NULL},
-  {"seasim_get_generic_pin_type",    (PyCFunction)c_get_generic_pin_type, METH_VARARGS, NULL},
+  {"seasim_has_generic_pin_type",    (PyCFunction)c_has_generic_pin_type, METH_VARARGS, NULL},
+  {"seasim_get_current_pin_type",    (PyCFunction)c_get_current_pin_type, METH_VARARGS, NULL},
   {"seasim_hid_enable_feedback",     (PyCFunction)c_hid_enable_feedback, METH_VARARGS, NULL},
   {"seasim_hid_disable_feedback",    (PyCFunction)c_hid_disable_feedback, METH_VARARGS, NULL},
   {"seasim_get_supported_boards",    (PyCFunction)c_get_supported_boards, METH_VARARGS, NULL},
