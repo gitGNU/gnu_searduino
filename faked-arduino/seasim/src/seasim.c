@@ -200,7 +200,7 @@ seasim_get_board_name(void)
 }
 
 int 
-seasim_get_generic_pin_type(uint8_t pin, uint8_t type)
+seasim_has_generic_pin_type(uint8_t pin, uint8_t type)
 {
   return has_generic_pin_type(pin, type);
 }
