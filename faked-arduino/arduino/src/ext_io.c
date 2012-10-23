@@ -236,6 +236,14 @@ ext_digital_set_mode(uint8_t pin, uint8_t mode)
   /* Make sure all is set up before continuing*/
   init_ext_io();
 
+  /* printf ("PIN %d has mode: %d\n", pin, get_generic_pin_mode(pin)); */
+
+  /* If no change, spare the listeners from being callbacked */
+  if ( get_generic_pin_mode(pin) == mode )
+    {
+      return SEARD_ARDUINO_OK;
+    }
+
   /* If output enabled, print info on pin/val to stream*/
   if ( stub_output_enabled ) 
     {
