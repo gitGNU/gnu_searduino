@@ -84,8 +84,13 @@ test_report()
     echo ""
     echo "   Arduino examples tested:   $ARDUINO_EX_CTR"
     echo "   ----------------------------------------------"
-    echo "      Succeeded:              $ARDUINO_EX_CTR_SUCC"
-    echo "      Failed:                 $ARDUINO_EX_CTR_FAIL (probably indicates featuers not supported in Searduino's simulator)"
+    echo -n "      Succeeded:              $ARDUINO_EX_CTR_SUCC "
+    printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_SUCC / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
+
+    echo -n "      Failed:                 $ARDUINO_EX_CTR_FAIL "
+    printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_FAIL / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
+
+    echo    "                              (failures indicates features not supported in Searduino's simulator)"
     echo ""
     if [ "$VCS" != "true" ]
     then
