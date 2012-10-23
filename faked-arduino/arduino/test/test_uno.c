@@ -134,12 +134,16 @@ START_TEST (test_uno_13)
 
   /* According to spec, this should result in value = 1 
      (since this pin is not a pwm) */
+
   analogWrite(TEST_DIG_PIN2, 129);
   fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 1);  
 
   /* According to spec, this should result in value = 1 
      (since this pin is not a pwm) */
   analogWrite(TEST_DIG_PIN2, 255);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 1);  
+
+  analogWrite(TEST_DIG_PIN2, 1023);
   fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 1);  
 
 }
