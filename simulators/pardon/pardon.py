@@ -105,18 +105,19 @@ def writeInfo(str):
 
 def startSimulator():
     global started
-    global win
-    if board == "":
-        writeInfo("No board choosen, you must choose a board\n")
-        print "No board choosen, you must choose a board"
-    else:
-        seasim_set_board_name(board)
-        win.board_label.set_text(board)
-        print " ***** BOARD " + seasim_get_board_name()
-        writeInfo("Starting simulation on " + seasim_get_board_name() + "\n")
-        seasim_start();
-        started=True
-        writeInfo("Simulation started\n")
+    if started==False:
+        global win
+        if board == "":
+            writeInfo("No board choosen, you must choose a board\n")
+            print "No board choosen, you must choose a board"
+        else:
+            seasim_set_board_name(board)
+            win.board_label.set_text(board)
+            print " ***** BOARD " + seasim_get_board_name()
+            writeInfo("Starting simulation on " + seasim_get_board_name() + "\n")
+            seasim_start();
+            started=True
+            writeInfo("Simulation started\n")
 
 
 class startButton(Gtk.Button):
@@ -128,9 +129,7 @@ class startButton(Gtk.Button):
         self.button.connect("clicked", self.on_start_clicked, "1")
 
     def on_start_clicked(self, widget, name):
-        global started
-        if started==False:
-            startSimulator()
+        startSimulator()
 
 class stopButton(Gtk.Button):
 
@@ -553,19 +552,23 @@ class MyWindow(Gtk.Window):
         pinTable.attach(Gtk.Label("Output"),  5, 6, 1, 2)
 
         for i in range(1,(size-1)):
-            pin_type = seasim_get_generic_pin_type(i)
-#            print "New pin: " + str(i) + " type: " + str(pin_type)
+            pin_type = seasim_get_current_pin_type(i)
+            print "New pin: " + str(i) + " type: " + str(pin_type)
+
+            pin_type = SEARDUINO_PIN_TYPE_DIGITAL
 
 #            self.digs[i] = digitalPin(self,i)
 #            digTable.attach(self.digs[i], 0, 1, i, i+1)
 
 #            wid = Pin(self,i%5, i, i)
+
             wid = Pin(self,pin_type, i, i)
             self.anas[i] = wid
 
             pinTable.attach(wid.type_text,    1, 2, i+1, i+2)
             pinTable.attach(wid.pinLabel,     2, 3, i+1, i+2)
             pinTable.attach(wid.mode,         3, 4, i+1, i+2)
+
             if pin_type == SEARDUINO_PIN_TYPE_DIGITAL:
                 pinTable.attach(wid.input,        4, 5, i+1, i+2)
                 pinTable.attach(wid.output_label, 5, 6, i+1, i+2)
@@ -729,6 +732,7 @@ parser.add_argument('--arduino-code', nargs=1, action="store", dest="ac",    hel
 parser.add_argument('--i2c-code',     nargs=1, action="store", dest="ic",    help='I2C code for device')
 parser.add_argument('--pins',         nargs=1, action="store", dest="pins",  help='Number of pins in GUI')
 parser.add_argument('--board',        nargs=1, action="store", dest="board", help='Arduino Board')
+parser.add_argument('--start',        dest="start_direct", action="store_true", help='Start simulator automatically')
 parser.add_argument('--version',      action='version', version=seasim_get_searduino_version())
 args = parser.parse_args()
 
@@ -738,6 +742,8 @@ args = parser.parse_args()
 ard_code=""
 i2c_code=""
 board=""
+start_directly=False
+
 if args.ac != None:
     ard_code=args.ac[0]
 else:
@@ -751,6 +757,9 @@ if args.board != None:
 
 if args.pins != None:
     size = int(args.pins[0])+2
+
+if args.start_direct != None:
+    start_directly=True
 
 if os.path.isdir(ard_code) == True:
     command = "arduino-ex2c --shlib  --build " + ard_code
@@ -790,6 +799,10 @@ if i2c_code != "":
 
 #time.sleep(1)
 #time.sleep(10)
+seasim_set_callback(newOutCallback)
+seasim_set_dig_mode_callback(newDigModeCallback)
+seasim_set_log_callback(newLogCallback)
+
 seasim_set_arduino_code(ard_code)
 seasim_initialise();
 
@@ -799,10 +812,6 @@ win = MyWindow(size)
 win.connect("delete-event", Gtk.main_quit)
 #parser.print_help()
 
-       
-seasim_set_callback(newOutCallback)
-seasim_set_dig_mode_callback(newDigModeCallback)
-seasim_set_log_callback(newLogCallback)
 win.show_all()
 
 #time.sleep(2)
@@ -811,9 +820,14 @@ win.show_all()
 
 
 #GObject.idle_add(newAnaOutCallback)
-GObject.idle_add(newOutCallback)
-GObject.idle_add(newDigModeCallback)
-GObject.idle_add(newLogCallback)
+
+#     TODO: can we remove these calls entirely????
+#GObject.idle_add(newOutCallback)
+#GObject.idle_add(newDigModeCallback)
+#GObject.idle_add(newLogCallback)
+
+if start_directly:
+    startSimulator();
 
 GObject.threads_init()
 Gdk.threads_init()
