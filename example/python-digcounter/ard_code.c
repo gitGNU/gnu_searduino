@@ -26,6 +26,7 @@
 
 void setup(void) {
   pinMode(3, OUTPUT);      
+  pinMode(7, OUTPUT);      
 }
 
 
@@ -38,7 +39,19 @@ int main(void)
   SEARDUINO_LOOP()
     {
       digitalWrite(3,digitalRead(2));
-      delay(100); 
+
+      if ( digitalRead(4) )
+	{
+	  DEBUG_INFO(("analogWrite(7..)"));
+	  analogWrite(7, 250);
+	}
+      else if ( digitalRead(6) )
+	{
+	  DEBUG_INFO(("digitalWrite(7..)"));
+	  digitalWrite(7,digitalRead(2));
+	}
+
+      delay(500); 
     }
 }
 
