@@ -64,6 +64,7 @@ analogRead(uint8_t pin)
 
 void analogWrite(uint8_t pin, int val)
 {
+  /* printf ("analogWrite(%d,%d) type=%d\n",pin,val,get_current_pin_type(pin)); */
 
   if (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG))
     {
@@ -86,11 +87,25 @@ void analogWrite(uint8_t pin, int val)
 
   if (val == 0)
     {
-      digitalWrite(pin, LOW);
+      if ( set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM) )
+	{
+	  log_error("Could not set pin %d to pwm (in analogWrite)", pin);
+	}
+      /* On the Arduino boards this is done via digitalWrite, 
+	 if we do this we set to digitalWrite and then set back to pwm
+	 all the time, 
+	 so we do a generic setting of the value and keep the pin as pwm */
+      /* Turn on PWM */
+      genericWrite(pin, LOW, SEARDUINO_PIN_TYPE_PWM);
     }
   else if (val == 255)
     {
-      digitalWrite(pin, HIGH);
+      if ( set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM) )
+	{
+	  log_error("Could not set pin %d to pwm (in analogWrite)", pin);
+	}
+      /* See comment on "val == 0" above */
+      genericWrite(pin, HIGH, SEARDUINO_PIN_TYPE_PWM);
     }
   else
     {
@@ -101,6 +116,10 @@ void analogWrite(uint8_t pin, int val)
 	     check if this really should be done
 	     are some pins 10 bits???
 	  */
+	  if ( set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM) )
+	    {
+	      log_error("Could not set pin %d to pwm (in analogWrite)", pin);
+	    }
 	  if (val > 255 ) { val = 255; }
 	  genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
 	}
@@ -112,7 +131,7 @@ void analogWrite(uint8_t pin, int val)
 	    }
 	  else 
 	    {
-	      digitalWrite(pin, HIGH);
+	      digitalWrite(pin, LOW);
 	    }
 	}
     }
