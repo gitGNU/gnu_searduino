@@ -94,6 +94,9 @@ check()
     make check
     exit_on_failure $? "make check"
 
+    make check-local
+    exit_on_failure $? "make check-local"
+
     SAVED_DIR=$(pwd)
 
     cd ${TMP_INST}/share/searduino/example/digpins/ && make -f Makefile.digpins clean all
