@@ -1,7 +1,7 @@
 if SHAREDTEST
-SUBDIRS= arduino-lib hw stub searduino_loop arduino-code-dynamic arduino-code-static shared shared-main 
+SUBDIRS= arduino-lib mk hw stub searduino_loop arduino-code-dynamic arduino-code-static shared shared-main 
 else
-SUBDIRS= arduino-lib hw stub searduino_loop arduino-code-dynamic arduino-code-static
+SUBDIRS= arduino-lib mk hw stub searduino_loop arduino-code-dynamic arduino-code-static
 endif
 
 EXTRA_DIST =           \
@@ -25,3 +25,4 @@ EXTRA_DIST =           \
     ./arduino-lib/functions.c \
     ./arduino-lib/functions.h \
     ./arduino-lib/include/functions.h 
+
