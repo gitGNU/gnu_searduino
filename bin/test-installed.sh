@@ -17,7 +17,7 @@ source $FUNC_FILE
 
 test_static()
 {
-    cd test/examples/arduino-code-static/
+    cd test/arduino-code-static/
     exit_on_failure $? "change dir"
     make clean
     make
@@ -28,7 +28,7 @@ test_static()
 test_static2()
 {
 #    log " * Execute static arduino code localy"
-    cd test/examples/arduino-code-static/
+    cd test/arduino-code-static/
     make clean
     make check
     exit_on_failure $? "make check"
@@ -38,7 +38,7 @@ test_static2()
 test_dynamic()
 {
 #log " * Compile dynamic arduino code for local execution"
-    cd test/examples/arduino-code-dynamic/
+    cd test/arduino-code-dynamic/
     exit_on_failure $? "change dir"
     make clean
     make
