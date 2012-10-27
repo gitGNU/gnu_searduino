@@ -284,7 +284,7 @@ board_setup_uno(void)
   define_arduino_pin(4,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(5,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(6,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
-  define_arduino_pin(7,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(7,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(8,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(9,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
   define_arduino_pin(10, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
@@ -300,7 +300,7 @@ board_setup_uno(void)
   define_arduino_pin(A4, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(A5, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
 
-  printf ("\n\t*** UNO BOARD SETUP done\n\n");
+  printf ("\n\t*** UNO board setup done\n\n");
 
   print_board_setup();
   return 0;
@@ -341,41 +341,35 @@ board_setup_mega2560(void)
   A14 = 68;
   A15 = 69;
 
-  /* Set Digital pin type */
-  set_generic_pin_type(0,  SEARDUINO_PIN_TYPE_DIGITAL);
-  set_generic_pin_type(1,  SEARDUINO_PIN_TYPE_DIGITAL);
-  for(i = 14; i < A0; i++) {
-    set_generic_pin_type(i,  SEARDUINO_PIN_TYPE_DIGITAL);
-  }
+  /* Pin 1 Digital only pin type*/
+  define_arduino_pin(1,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
 
-  /* Set PWM pin type */
+  /* Pin 2-13  PWM and Digital pin type */
   for(i = 2; i <= 13; i++) {
-    set_generic_pin_type(i,  SEARDUINO_PIN_TYPE_PWM);    
+    define_arduino_pin(i,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   }
-  set_generic_pin_type(44,  SEARDUINO_PIN_TYPE_PWM);
-  set_generic_pin_type(45,  SEARDUINO_PIN_TYPE_PWM);
-  set_generic_pin_type(46,  SEARDUINO_PIN_TYPE_PWM);
 
-  /* Set Analog pin type */
-  set_generic_pin_type(A0,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A1,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A2,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A3,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A4,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A5,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A6,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A7,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A8,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A9,  SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A10, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A11, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A12, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A13, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A14, SEARDUINO_PIN_TYPE_ANALOG);
-  set_generic_pin_type(A15, SEARDUINO_PIN_TYPE_ANALOG);
+  /* Pin 14-43 Digital only pin type */
+  for(i = 14; i <= 43; i++) {
+    define_arduino_pin(i,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  }
 
+  /* Pin 44-46  PWM and Digital pin type */
+  for(i = 44; i <= 46; i++) {
+    define_arduino_pin(i,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  }
 
-  printf ("\n\t*** MEGA2560 BOARD SETUP done\n\n");
+  /* Pin 47-54 Digital only pin type */
+  for(i = 47; i <= 54; i++) {
+    define_arduino_pin(i,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  }
+
+  /* 16 analog pins */
+  for(i = 14; i < A0; i++) {
+    define_arduino_pin(i, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
+  }
+
+  printf ("\n\t*** MEGA2560 board setup done\n\n");
   print_board_setup();
   return 0;
 }
@@ -416,5 +410,10 @@ board_setup_leonardo(void)
    [1] http://arduino.cc/en/Main/ArduinoBoardLeonardo
    */
 
+
+
+  printf ("\n\t*** Leanoard board setup done\n\n");
+
+  print_board_setup();
   return 0;
 }
