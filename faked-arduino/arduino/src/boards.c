@@ -410,7 +410,50 @@ board_setup_leonardo(void)
    [1] http://arduino.cc/en/Main/ArduinoBoardLeonardo
    */
 
+  A0  = 21;
+  A1  = 22;
+  A2  = 23;
+  A3  = 24;
+  A4  = 25;
+  A5  = 26;
+  A6  = 4;
+  A7  = 6;
+  A8  = 8;
+  A9  = 10;
+  A10 = 12;
 
+
+  /* PWM: 3, 5, 6, 9, 10, 11, and 13. 
+     Provide 8-bit PWM output with the analogWrite() function.  */
+  define_arduino_pin(3,   NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(5,   NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  /* 6 is also analog */
+  define_arduino_pin(6,   ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  /* 9, 10 is also analog */
+  define_arduino_pin(9,   ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(10,  ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(11,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+  define_arduino_pin(13,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
+
+  /*
+   * Rest of them are digital (somoe also analog 
+   */
+  define_arduino_pin(1,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(2,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  /* 4 is also analog */
+  define_arduino_pin(4,  ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(7,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  /* 8 is also analog */
+  define_arduino_pin(8,  ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  /* 12 is also analog */
+  define_arduino_pin(12, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(14, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(15, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(16, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(17, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(18, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(19, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(20, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
 
   printf ("\n\t*** Leanoard board setup done\n\n");
 
