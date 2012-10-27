@@ -46,6 +46,8 @@ void analogReference(uint8_t mode)
 int 
 analogRead(uint8_t pin)
 {
+  int ret_val;
+
   /* printf ("analogRead(%d)\n", pin); */
   searduino_setup();
   if (PIN_OUT_OF_RANGE(pin))
@@ -59,7 +61,20 @@ analogRead(uint8_t pin)
   /* printf ("analogRead(%d)=>%d\n", pin, get_analog_pin_val(pin) ); */
   /* printf ("analogRead(%d)=>%d\n", pin, get_generic_pin_val(pin, SEARDUINO_PIN_TYPE_ANALOG)); */
   
-  return get_analog_pin_val(pin);
+  ret_val = get_analog_pin_val(pin);
+
+  if (ret_val < 0 ) 
+    {
+      log_errror("Analog value to return to analogRead is less than 0, returning 0");
+      ret_val = 0 ;
+    }
+  else if (ret_val > 1024) 
+    {
+      log_errror("Analog value to return to analogRead is higher than 1024, returning 1024");
+      ret_val = 1024 ;
+    }
+
+  return ret_val;
 }
 
 void analogWrite(uint8_t pin, int val)
@@ -120,7 +135,11 @@ void analogWrite(uint8_t pin, int val)
 	    {
 	      log_error("Could not set pin %d to pwm (in analogWrite)", pin);
 	    }
-	  if (val > 255 ) { val = 255; }
+	  if (val > 255 ) 
+	    { 
+	      log_errror("You're writing a value bigger than 255 to analogWrite");
+	      val = 255; 
+	    }
 	  genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
 	}
       else if (has_generic_pin_type(pin,SEARDUINO_PIN_TYPE_DIGITAL))
