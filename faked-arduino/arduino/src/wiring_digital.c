@@ -99,6 +99,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
   if ( get_digital_pin_mode(pin) == INPUT )
     {
       log_error("You're writing (digitalWrite) to pin %d, which is an INPUT pin", pin);
+      return;
     }
   
   /* Turn off PWM */
