@@ -65,12 +65,12 @@ analogRead(uint8_t pin)
 
   if (ret_val < 0 ) 
     {
-      log_errror("Analog value to return to analogRead is less than 0, returning 0");
+      log_error("Analog value to return to analogRead is less than 0, returning 0");
       ret_val = 0 ;
     }
   else if (ret_val > 1024) 
     {
-      log_errror("Analog value to return to analogRead is higher than 1024, returning 1024");
+      log_error("Analog value to return to analogRead is higher than 1024, returning 1024");
       ret_val = 1024 ;
     }
 
@@ -137,7 +137,7 @@ void analogWrite(uint8_t pin, int val)
 	    }
 	  if (val > 255 ) 
 	    { 
-	      log_errror("You're writing a value bigger than 255 to analogWrite");
+	      log_error("You're writing a value bigger than 255 to analogWrite");
 	      val = 255; 
 	    }
 	  genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
