@@ -127,6 +127,8 @@ AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../arduino-extras/include/         \
            $(PEDANTIC_FLAGS) $(XTEST_C_FLAGS)
 
+tag:
+	find . -name "*.c" -o -name "*.h" -o -name "*.cpp" | xargs etags
 
 if USE_XTEST
 XTESTFLAGS = $(LIBXTST)
