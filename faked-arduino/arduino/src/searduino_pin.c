@@ -303,7 +303,7 @@ set_generic_pin_val_impl(uint8_t      pin,
 	{
 	  if ( get_digital_pin_mode(pin) == INPUT )
 	    {
-	      log_warning(("You're writing to a digital ping set to INPUT"));
+	      log_warning(("You're writing to a digital pin set to INPUT"));
 	    }
 	  SEARD_WARNING(SEARD_ARDUINO_WRONG_PIN_MODE);
 	}
