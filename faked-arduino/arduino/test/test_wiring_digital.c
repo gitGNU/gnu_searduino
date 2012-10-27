@@ -127,7 +127,7 @@ START_TEST (test_dig_write)
   fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
 
   analogWrite(TEST_DIG_PIN, 255);
-  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != 255);
 
   /* Negative tests (as output pin */
 

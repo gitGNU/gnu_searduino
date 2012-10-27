@@ -81,24 +81,28 @@ void analogWrite(uint8_t pin, int val)
 {
   /* printf ("analogWrite(%d,%d) type=%d\n",pin,val,get_current_pin_type(pin)); */
 
-  if (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG))
-    {
-      /* The following behaviour is based on the Leonardo board */
-      if (val < 255)
-	{
-	  genericWrite(pin, 0, SEARDUINO_PIN_TYPE_PWM);
-	}
-      else 
-	{
-	  genericWrite(pin, 1023, SEARDUINO_PIN_TYPE_PWM);
-	}
-      return ;
-    }
-
-
   /* Arduino sets the pin mode to OUTPUT in the analogWrite function,
      ergo setting the pin mode here */
   pinMode(pin, OUTPUT);
+
+  if (val>255)
+    {
+      log_error("Too high value (%d) in analogWrite in pin %d", val, pin);
+      val=255;
+    }
+  else if (val<0)
+    {
+      log_error("Too small value (%d) in analogWrite in pin %d", val, pin);
+      val=0;
+    }
+  
+  /* if neither digital or pwm: return */ 
+  if (!( (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL)) ||
+	 (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM))))
+    {
+      return;
+    }
+    
 
   if (val == 0)
     {
@@ -120,17 +124,16 @@ void analogWrite(uint8_t pin, int val)
 	  log_error("Could not set pin %d to pwm (in analogWrite)", pin);
 	}
       /* See comment on "val == 0" above */
-      genericWrite(pin, HIGH, SEARDUINO_PIN_TYPE_PWM);
+      /*   we need to write 255 (instead of HIGH) since there's
+           no timer do determine pwm or digital*/
+      genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);
     }
   else
     {
       if (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM))
 	{
 	  set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM);
-	  /* TODO: 
-	     check if this really should be done
-	     are some pins 10 bits???
-	  */
+
 	  if ( set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM) )
 	    {
 	      log_error("Could not set pin %d to pwm (in analogWrite)", pin);

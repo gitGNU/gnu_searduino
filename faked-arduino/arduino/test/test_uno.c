@@ -60,7 +60,7 @@ START_TEST (test_uno_11)
   pinMode(TEST_DIG_PIN,INPUT);
 
   digitalWrite(TEST_DIG_PIN, HIGH);
-  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);
 
   digitalWrite(TEST_DIG_PIN, LOW);
   fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);  
@@ -72,9 +72,10 @@ START_TEST (test_uno_11)
   analogWrite(TEST_DIG_PIN, 0);
   fail_if(get_generic_pin_val(TEST_DIG_PIN) != LOW);  
 
-  /* According to spec, this should result in a digitalWrite (HIGH) */
+  /* According to spec, this should result in a digitalWrite (HIGH), 
+     but Seardino stores this as 255 since there's no timer in searduino */
   analogWrite(TEST_DIG_PIN, 255);
-  fail_if(get_generic_pin_val(TEST_DIG_PIN) != HIGH);  
+  fail_if(get_generic_pin_val(TEST_DIG_PIN) != 255);  
 
   /* According to spec, this should result in value = 120 */
   analogWrite(TEST_DIG_PIN, 120);
@@ -111,7 +112,7 @@ START_TEST (test_uno_13)
   pinMode(TEST_DIG_PIN2,INPUT);
 
   digitalWrite(TEST_DIG_PIN2, HIGH);
-  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != HIGH);
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != LOW);
 
   digitalWrite(TEST_DIG_PIN2, LOW);
   fail_if(get_generic_pin_val(TEST_DIG_PIN2) != LOW);  
@@ -125,7 +126,7 @@ START_TEST (test_uno_13)
 
   /* According to spec, this should result in a digitalWrite (HIGH) */
   analogWrite(TEST_DIG_PIN2, 255);
-  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != HIGH);  
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 255);  
 
   /* According to spec, this should result in value = 0 
      (since this pin is not a pwm) */
@@ -141,10 +142,10 @@ START_TEST (test_uno_13)
   /* According to spec, this should result in value = 1 
      (since this pin is not a pwm) */
   analogWrite(TEST_DIG_PIN2, 255);
-  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 1);  
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 255);  
 
   analogWrite(TEST_DIG_PIN2, 1023);
-  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 1);  
+  fail_if(get_generic_pin_val(TEST_DIG_PIN2) != 255);  
 
 }
 END_TEST
