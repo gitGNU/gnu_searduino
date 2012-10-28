@@ -58,7 +58,6 @@ START_TEST (test_digin_callback_raw)
 
       // call callback to set pin (which should not work)
       digin_callback(i,1);
-     
       fail_if(digitalRead(i)==1, "Reading from pin %d was 1", i);
     }
 
@@ -69,6 +68,7 @@ START_TEST (test_digin_callback_raw)
   
   fail_if(digitalRead(1000)==1);
 
+  /* Make sure Searduino does not crash when getting stupid values */
   pinMode(1, 250);
   pinMode(250, 1);
 
@@ -78,10 +78,12 @@ START_TEST (test_digin_callback_raw)
       // set pin mode INPUT
       pinMode(i, INPUT);
 
-      // call callback to set pin (which should not work)
       sim_set_digital_pin_val(i,1);
-     
-      fail_if(digitalRead(i)==1, "");
+      fail_if(digitalRead(i)!=1, "  Setting pin:%d to 1", i);
+
+      sim_set_digital_pin_val(i,0);
+      fail_if(digitalRead(i)!=0, "  Setting pin:%d to 0", i);
+
     }
 }
 END_TEST
@@ -148,29 +150,53 @@ START_TEST (test_digout_callback_raw)
 
   for (i=0;i<10;i++)
     {
-     // set pin mode OUTPUT, to after set pin to 1
+      /*
+       * 
+       *         OUTPUT
+       *
+       */
+
+      // set pin mode OUTPUT,
       pinMode(i, 1);
+      // after set pin to 1 
       digitalWrite(i,1);
 
       // Make sure pin is 1
-      fail_if(digout_callback(i)==0);
+      fail_if(digout_callback(i)!=1);
+
+
+      /*
+       * 
+       *         INPUT
+       *
+       */
 
      // set pin mode INPUT
       pinMode(i, 0);
 
       // try to set pin to 0 (should not work)
       digitalWrite(i,0);
-      // try to set pin to 0 (should not work)
-      digitalWrite(i,0);
 
       // Make sure pin is 1
-      fail_if(digout_callback(i)==1);
+      fail_if(get_digital_pin_val(i)!=1);
+
+      // try to set pin to 1 (should not work)
+      digitalWrite(i,1);
+
+      // Make sure pin is 1
+      fail_if(get_digital_pin_val(i)!=1);
     }
 
-
   // try to set pin to 250 (should not work)
+  printf ("Seems ok 1 \n");
+
   digitalWrite(250,0);
+  printf ("Seems ok 2\n");
+
   digitalWrite(1,123);
+
+  printf ("Seems ok 3\n");
+
 
   digout_callback(250);
 
