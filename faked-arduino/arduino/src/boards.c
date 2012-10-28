@@ -278,6 +278,7 @@ board_setup_uno(void)
   A4 = 18;
   A5 = 19;
 
+  define_arduino_pin(0,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(1,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(2,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(3,  NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
@@ -291,7 +292,6 @@ board_setup_uno(void)
   define_arduino_pin(11, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
   define_arduino_pin(12, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(13, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(14, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
 
   define_arduino_pin(A0, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(A1, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
@@ -365,7 +365,7 @@ board_setup_mega2560(void)
   }
 
   /* 16 analog pins */
-  for(i = 14; i < A0; i++) {
+  for(i = A0; i < A15; i++) {
     define_arduino_pin(i, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
   }
 
@@ -410,12 +410,12 @@ board_setup_leonardo(void)
    [1] http://arduino.cc/en/Main/ArduinoBoardLeonardo
    */
 
-  A0  = 21;
-  A1  = 22;
-  A2  = 23;
-  A3  = 24;
-  A4  = 25;
-  A5  = 26;
+  A0  = 14;
+  A1  = 15;
+  A2  = 16;
+  A3  = 17;
+  A4  = 18;
+  A5  = 19;
   A6  = 4;
   A7  = 6;
   A8  = 8;
@@ -447,12 +447,12 @@ board_setup_leonardo(void)
   define_arduino_pin(8,  ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   /* 12 is also analog */
   define_arduino_pin(12, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(14, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(15, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(16, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(17, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(18, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(19, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(14, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(15, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(16, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(17, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(18, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  define_arduino_pin(19, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(20, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
 
   printf ("\n\t*** Leanoard board setup done\n\n");
