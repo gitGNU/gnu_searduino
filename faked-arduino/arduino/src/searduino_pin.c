@@ -182,7 +182,6 @@ digout_callback(uint8_t pin)
       return 0;
     }
 
-/*   printf ("PYTHON (in C stub)   returning out[%d].val=%d     GUI\n", pin, arduino_out_pins[pin].val); */
   return   get_digital_pin_val(pin);
 }
 
