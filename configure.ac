@@ -211,6 +211,15 @@ set_lversion()
     fi
 
  #   echo "VERSION_LONG is now:     $VERSION_LONG  / $VERSION"
+
+
+    if test "x${prefix}" = "xNONE" ;
+    then 
+        SEARD_PREFIX=.
+    else	
+        SEARD_PREFIX=${prefix}
+    fi
+    export SEARD_PREFIX
 }
 
 
@@ -221,31 +230,32 @@ exit_on_failure $? ./bin/get-arduino-src.sh
 
 prepare_examples()
 {
-    cat example/serial/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/serial/Makefile.serial
+
+    cat example/serial/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/serial/Makefile.serial
     exit_on_failure $? "Prepared  serial"
 
-    cat example/digital-rw/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digital-rw/Makefile.digitalrw
+    cat example/digital-rw/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/digital-rw/Makefile.digitalrw
     exit_on_failure $? "Prepared  digital-rw"
 
-    cat example/digpins/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/digpins/Makefile.digpins
+    cat example/digpins/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/digpins/Makefile.digpins
     exit_on_failure $? "Prepared  digpins"
 
-    cat example/hid/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/hid/Makefile.hid
+    cat example/hid/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/hid/Makefile.hid
     exit_on_failure $? "Prepared  hid"
 
-    cat example/python-digcounter/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/Makefile.digcounter
+    cat example/python-digcounter/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/python-digcounter/Makefile.digcounter
     exit_on_failure $? "Prepared  python-digcounter"
 
-    cat example/python-digcounter/simple-hw.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > example/python-digcounter/simple-hw.sh
+    cat example/python-digcounter/simple-hw.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/python-digcounter/simple-hw.sh
     exit_on_failure $? "Prepared  python-digcounter"
 
-    cat example/verification/distance/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/verification/distance/Makefile.distance
+    cat example/verification/distance/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/verification/distance/Makefile.distance
     exit_on_failure $? "Prepared  verification/distance"
 
-    cat example/verification/ok-version/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/verification/ok-version/Makefile.ok-version
+    cat example/verification/ok-version/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/verification/ok-version/Makefile.ok-version
     exit_on_failure $? "Prepared  verification/ok-version"
 
-    cat example/verification/nok-version/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > example/verification/nok-version/Makefile.nok-version
+    cat example/verification/nok-version/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/verification/nok-version/Makefile.nok-version
     exit_on_failure $? "Prepared  verification/nok-version"
 
 
@@ -261,7 +271,7 @@ prepare_searduino_mk()
     export VERSION_LONG=""
     set_lversion
     cat mk/searduino.mk.tmpl                | \
-        sed "s,__INSTALL_DIR__,${prefix},g" | \
+        sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" | \
         sed "s,__CYGWIN__,${CYGWIN},g"      | \
         sed "s,__SEARDUINO_VERSION_MAJOR__,${VERSION_LONG_MAJOR},g"     | \
         sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
@@ -271,29 +281,29 @@ prepare_searduino_mk()
         mk/searduino.mk
     exit_on_failure $? "Prepared searduino.mk "
 
-    cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > arduino-sources/Makefile
+    cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > arduino-sources/Makefile
     exit_on_failure $? "Prepared arduino-sources Makefile"
 
     mkdir -p arduino-sources/libraries/	 
-    cat mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > arduino-sources/libraries/Makefile
+    cat mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > arduino-sources/libraries/Makefile
     exit_on_failure $? "Prepared libraries Makefile"
 }
 
-cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > doc/Makefile
+cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
 exit_on_failure $? "Prepared doc Makefile"
 
 
 prepare_examples
 prepare_searduino_mk
 
-cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > simulators/pardon/searduino-pardon.sh
+cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/pardon/searduino-pardon.sh
 exit_on_failure $? "Prepared python simulator wrapper script"
 
-cat bin/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${prefix},g" > bin/verify-install.sh
+cat bin/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/verify-install.sh
 exit_on_failure $? "Prepared installation verification script"
 chmod a+x bin/verify-install.sh
 
-cat bin/arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${prefix},g" > bin/arduino-ex2c
+cat bin/arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/arduino-ex2c
 exit_on_failure $? "Prepared Arduino examples to C translator"
 
 
