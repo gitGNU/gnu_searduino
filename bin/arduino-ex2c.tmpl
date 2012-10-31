@@ -200,9 +200,12 @@ create_makefile()
 #          sed "s,__MAIN_FILE__,$MAIN_FILE,g" | \
     if [ "$VCS_BUILD" = "true" ]
     then
-	mv $ARD_DIR/Makefile $ARD_DIR/Makefile.tmp
+	mv  $ARD_DIR/Makefile $ARD_DIR/Makefile.tmp
 	cat $ARD_DIR/Makefile.tmp | \
             sed "s,\/share\/searduino,,g" > $ARD_DIR/Makefile
+	mv  $ARD_DIR/Makefile $ARD_DIR/Makefile.tmp
+	cat $ARD_DIR/Makefile.tmp | \
+            sed "s,searduino\.mk,searduino\-vcs\.mk,g" > $ARD_DIR/Makefile
     fi
 
 }
