@@ -51,8 +51,9 @@ extern int searduino_exec_available ;
 #endif
 
 
+#define SEARDUINO_STUB_DEBUG(a)  fprintf(stderr, "[SEARDUINO DEBUG %s:%d:%s()]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
 #ifdef  SEARDUINO_STUB
-#define SEARDUINO_DEBUG(a)  fprintf(stderr, "[SEARDUINO DEBUG %s:%d:%s()]:  ",__FILE__,__LINE__,__func__); printf a; printf ("\n");
+#define SEARDUINO_DEBUG(a)  SEARDUINO_STUB_DEBUG(a)
 #else
 #define SEARDUINO_DEBUG(a)
 #endif  /* SEARDUINO_STUB */
@@ -79,6 +80,27 @@ extern int searduino_exec_available ;
   #endif
 #endif  /* SEARDUINO_STUB */
 
+#define SEARDUINO_LOG_NONE    0
+#define SEARDUINO_LOG_ERROR   1
+#define SEARDUINO_LOG_WARNING 2
+#define SEARDUINO_LOG_DEBUG   3
+#define SEARDUINO_LOG_INFO    4
+
+/*
+ *
+ *  Logging functions 
+ *
+ *  API for simulator usage:
+ *     void searduino_log_impl(int level, char *msg, ...)
+ *  API for Arduinos:
+ *     no implementation - this functions is intended for debugging 
+ */
+#ifndef  SEARDUINO_STUB
+#define searduino_log(a) 
+#else
+#include "searduino_log.h"
+#define searduino_log(a) searduino_log_impl a
+#endif
 
 
 #endif /* ARDUINO_EXTRAS_SETUP_H*/
