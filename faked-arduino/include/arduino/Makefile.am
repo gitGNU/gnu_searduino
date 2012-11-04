@@ -6,6 +6,7 @@ library_include_HEADERS =  \
 	wiring_private.h \
 	pins_arduino.h \
 	searduino_pin.h \
+	searduino_log.h \
 	ext_io.h \
 	twi_mock.h \
 	i2c_loader.h \
