@@ -213,13 +213,6 @@ set_lversion()
  #   echo "VERSION_LONG is now:     $VERSION_LONG  / $VERSION"
 
 
-    if test "x${prefix}" = "xNONE" ;
-    then 
-        SEARD_PREFIX=.
-    else	
-        SEARD_PREFIX=${prefix}
-    fi
-    export SEARD_PREFIX
 }
 
 
@@ -288,6 +281,17 @@ prepare_searduino_mk()
     cat mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > arduino-sources/libraries/Makefile
     exit_on_failure $? "Prepared libraries Makefile"
 }
+
+if test "x${prefix}" = "xNONE" ;
+then 
+    SEARD_PREFIX=.
+else	
+    SEARD_PREFIX=${prefix}
+fi
+
+echo "prefix: ${prefix}   SEARD_PREFIX=${SEARD_PREFIX}"
+export SEARD_PREFIX
+
 
 cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
 exit_on_failure $? "Prepared doc Makefile"
