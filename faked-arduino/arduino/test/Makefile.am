@@ -25,10 +25,10 @@ if UNITTEST
 
 lib_LTLIBRARIES = libi2c.la
 libi2c_la_SOURCES = i2c_setup.c
-AM_CFLAGS= -I../../include/arduino -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
+AM_CFLAGS= -I../../include/arduino -I../../include/arduino/ -I../../../arduino-sources/core -I../../include -DSEARDUINO_STUB
 
-TESTS =  testtime testsetup  testi2c testcomm testdigio testwiring testboards testuno testleonardo
-check_PROGRAMS = testtime testsetup testlimit testi2c  testcomm testdigio testwiring testboards testuno testleonardo
+TESTS =  testtime testsetup  testi2c testcomm testdigio testwiring testboards testuno testleonardo testlog
+check_PROGRAMS = testtime testsetup testlimit testi2c  testcomm testdigio testwiring testboards testuno testleonardo testlog
 
 testtime_SOURCES = test_time.c 
 testtime_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core 
@@ -69,6 +69,10 @@ testuno_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 testleonardo_SOURCES = test_leonardo.c 
 testleonardo_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I../../../arduino-sources/core   -I../../../arduino-extras/include
 testleonardo_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
+
+testlog_SOURCES = test_log.c 
+testlog_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I../../../arduino-sources/core   -I../../../arduino-extras/include  -DSEARDUINO_STUB
+testlog_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 
 endif

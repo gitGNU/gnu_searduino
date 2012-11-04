@@ -45,6 +45,7 @@ LIB_SEARDUINO_H_FILES=\
        ./include/utils/print.h \
        ./include/arduino/time_stuff.h \
        ./include/arduino/searduino_pin.h \
+       ./include/arduino/searduino_log.h \
        ./include/arduino/setup.h \
        ./include/arduino/i2c_loader.h \
        ./include/arduino/hid-x11.h \
@@ -72,6 +73,7 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/time_stuff.c \
        ./arduino/src/setup.c \
        ./arduino/src/searduino_pin.c \
+       ./arduino/src/searduino_log.c \
        ./arduino/src/WString.cpp \
        ./arduino/src/WMath.cpp \
        ./arduino/src/wiring_digital.c \
