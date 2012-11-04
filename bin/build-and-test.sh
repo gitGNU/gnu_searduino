@@ -26,7 +26,7 @@ get_git()
 
 prepare()
 {
-    rm -fr ${TMP_INSTALL}
+    rm -fr ${TMP_INST}
     make -f Makefile.git 
     exit_on_failure $? "make -f Makefile.git"
 
@@ -64,7 +64,7 @@ cov_prepare()
 {
     make clean
 
-    rm -fr ${TMP_INSTALL}
+    rm -fr ${TMP_INST}
     make -f Makefile.git 
     exit_on_failure $? "make -f Makefile.git"
 
@@ -89,8 +89,9 @@ cov()
     export CFLAGS="" 
 }
 
-check()
+checker()
 {
+
     make check
     exit_on_failure $? "make check"
 
@@ -179,8 +180,9 @@ fi
 log_and_exec prepare
 log_and_exec build
 log_and_exec doc
-log_and_exec check
+log_and_exec checker
 log_and_exec dist
+
 if [ "$COV" = "true" ]
 then
     log_and_exec cov_prepare
