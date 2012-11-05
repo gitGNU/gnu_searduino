@@ -236,6 +236,9 @@ prepare_examples()
     cat example/hid/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/hid/Makefile.hid
     exit_on_failure $? "Prepared  hid"
 
+    cat example/log/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/log/Makefile.log
+    exit_on_failure $? "Prepared  log"
+
     cat example/python-digcounter/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/python-digcounter/Makefile.digcounter
     exit_on_failure $? "Prepared  python-digcounter"
 
