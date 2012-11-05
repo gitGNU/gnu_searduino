@@ -109,8 +109,23 @@ $(PROG): $(PROG).hex
 
 prog: $(PROG).hex
 
+check-objects: $(PROG).hex
+	@echo "--> Scanning for objects known to cause errors on the Arduino boards -- "
+	@echo -n "   ** Looking for references to printf: " && export REFS="$(nm *.o $(PROG).hex 2>/dev/null | grep -c printf)" && if [ "$(REFS)" != "0" ] ; then echo " fail  ($REFS)"; return 1 ; else echo "ok" ; fi
+	@echo -n "   ** Looking for references to searduino_log: " && export REFS="$(nm *.o $(PROG).hex 2>/dev/null | grep -c searduino_log)" && if [ "$(REFS)" != "0" ] ; then echo " fail  ($REFS)"; return 1 ; else echo "ok" ; fi
+	@echo "<-- done scanning --"
 
-upload: $(PROG).hex
+upload: $(PROG).hex 
+	@echo "Will upload to: $(ARDUINO)   $(BOARD)  (device: (" $(USB_DEV) ")"
+	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) \
+                   -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
+
+safe-upload: $(PROG).hex check-objects
+	@echo "Will upload to: $(ARDUINO)   $(BOARD)  (device: (" $(USB_DEV) ")"
+	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) \
+                   -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
+
+
 	@echo "Will upload to: $(ARDUINO)   $(BOARD)  (device: (" $(USB_DEV) ")"
 	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) \
                    -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
