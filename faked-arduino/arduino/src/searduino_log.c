@@ -27,6 +27,9 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifndef  SEARDUINO_STUB
+/* No implementation needed */
+#else
 static int   current_log_level = 0 ;
 static FILE *logfile           = NULL ;
 
@@ -124,3 +127,5 @@ int searduino_log_impl(int level, char *msg, ...)
     }
   return ret;
 }
+
+#endif /* SEARDUINO_STUB */
