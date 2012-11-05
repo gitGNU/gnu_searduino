@@ -115,7 +115,9 @@ AM_CFLAGS= -I../arduino-sources/core           \
            -I../faked-arduino/include/         \
            -I../faked-arduino/include/avr      \
            -I../arduino-extras/include/        \
-           $(PEDANTIC_FLAGS) -DPACKAGE="\"$(PACKAGE)\"" -DVERSION="\"$(VERSION)\"" $(XTEST_C_FLAGS)
+           $(PEDANTIC_FLAGS) -DPACKAGE="\"$(PACKAGE)\"" \
+           -DVERSION="\"$(VERSION)\"" $(XTEST_C_FLAGS)  \
+           -DSEARDUINO_STUB
 
 
 
@@ -127,7 +129,7 @@ AM_CXXFLAGS= -I../arduino-sources/core          \
            -I../faked-arduino/include/avr       \
            -I../faked-arduino/include/          \
            -I../arduino-extras/include/         \
-           $(PEDANTIC_FLAGS) $(XTEST_C_FLAGS)
+           $(PEDANTIC_FLAGS) $(XTEST_C_FLAGS) -DSEARDUINO_STUB
 
 tag:
 	find . -name "*.c" -o -name "*.h" -o -name "*.cpp" | xargs etags
