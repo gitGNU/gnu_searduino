@@ -27,6 +27,8 @@
 
 #ifndef  SEARDUINO_STUB
 /* No implementation needed */
+#error Should not reach this place when compiling for Arduino 
+
 #else
 int  searduino_log_impl(int , char *, ...);
 int  searduino_log_set_file(char *);
