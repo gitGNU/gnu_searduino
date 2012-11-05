@@ -25,6 +25,8 @@
 #include <check.h>
 #include "Arduino.h"
 #include "searduino.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
 START_TEST (test_inc_log)
 {
@@ -176,6 +178,63 @@ START_TEST (test_log_msg)
 }
 END_TEST
 
+START_TEST (test_log_file)
+{
+  int level ;
+  int ret; 
+  struct stat buf;
+
+  ret = searduino_set_log_level(SEARDUINO_LOG_INFO);
+  fail_if(ret!=0);
+
+  /*
+   *   stderr and NULL
+   */
+  ret = searduino_log_set_file("stderr");
+  fail_if(ret!=0);
+
+  ret = searduino_log((SEARDUINO_LOG_DEBUG, 
+		 "Using stderr\n"));
+  fail_if(ret==0);
+
+  ret = searduino_log_set_file(NULL);
+  fail_if(ret!=0);
+
+  ret = searduino_log((SEARDUINO_LOG_DEBUG, 
+		 "Using NULL\n"));
+  fail_if(ret==0);
+
+
+  /*
+   *   File with existing path
+   */
+  ret = searduino_log_set_file("/tmp/searduino-logtest.log");
+  fail_if(ret!=0);
+
+  ret = searduino_log((SEARDUINO_LOG_DEBUG, 
+		 "Using file *** THIS SHOULD NOT BE SEEN IN WHEN RUNNING THE TESTS\n"));
+  fail_if(ret==0);
+
+  ret = stat("/tmp/searduino-logtest.log", &buf);
+  fail_if(ret!=0);
+
+
+  /*
+   *   File with non ecisting path
+   */
+  ret = searduino_log_set_file("/nonexistingpath/searduino-logtest.log");
+  fail_if(ret==0);
+
+  ret = searduino_log((SEARDUINO_LOG_DEBUG, 
+		 "Using crappy path, so should be sent to stderr\n"));
+  fail_if(ret==0);
+
+  ret = stat("/nonexistingpath/searduino-logtest.log", &buf);
+  fail_if(ret==0);
+
+}
+END_TEST
+
 
 
 Suite *
@@ -190,6 +249,7 @@ buffer_suite(void) {
   tcase_add_test(tc_core, test_inc_log);
   tcase_add_test(tc_core, test_dec_log);
   tcase_add_test(tc_core, test_log_msg);
+  tcase_add_test(tc_core, test_log_file);
 
   return s;
 }
