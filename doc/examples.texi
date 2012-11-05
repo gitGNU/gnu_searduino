@@ -73,3 +73,6 @@ And to run the upload the program to the board, type
 @*
 @code{make upload}
 @*
+@i{You can also upload to the board with the safe-upload makefile
+target. Searduino scans your program for objects known to cause
+problems on the Arduino boards before uploading to the board.}
