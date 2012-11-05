@@ -182,7 +182,9 @@ START_TEST (test_log_file)
 {
   int level ;
   int ret; 
-  struct stat buf;
+  struct stat statbuf;
+  char buf[100];
+  FILE *fp;
 
   ret = searduino_set_log_level(SEARDUINO_LOG_INFO);
   fail_if(ret!=0);
@@ -206,17 +208,44 @@ START_TEST (test_log_file)
 
 
   /*
+   *   stdout
+   */
+  ret = searduino_log_set_file("stdout");
+  fail_if(ret!=0);
+
+  ret = searduino_log((SEARDUINO_LOG_DEBUG, 
+		 "Using stdout\n"));
+  fail_if(ret==0);
+
+
+
+  usleep(1000*1000);
+  /*
    *   File with existing path
    */
   ret = searduino_log_set_file("/tmp/searduino-logtest.log");
   fail_if(ret!=0);
 
   ret = searduino_log((SEARDUINO_LOG_DEBUG, 
-		 "Using file *** THIS SHOULD NOT BE SEEN IN WHEN RUNNING THE TESTS\n"));
+		 "Using file *** THIS SHOULD NOT BE SEEN IN THE TERMINAL WHEN RUNNING THE TESTS\n"));
   fail_if(ret==0);
 
-  ret = stat("/tmp/searduino-logtest.log", &buf);
+  usleep(1000*1000);
+
+  ret = stat("/tmp/searduino-logtest.log", &statbuf);
   fail_if(ret!=0);
+
+  fp = fopen("/tmp/searduino-logtest.log", "r");
+  fail_if(fp==0);
+
+  ret = fgets(buf, 100, fp);
+  /* printf ("string read from logfile:  %s\n", buf); */
+  ret = fgets(buf, 100, fp);
+  /* printf ("string read from logfile:  %s\n", buf); */
+  fail_if( (strstr(buf, "THIS SHOULD NOT BE SEEN") == NULL ));
+  printf ("  logfile seemd to be ok\n");
+  usleep(1000*1000);
+  unlink("/tmp/searduino-logtest.log");
 
 
   /*
