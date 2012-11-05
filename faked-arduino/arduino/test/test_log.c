@@ -238,13 +238,14 @@ START_TEST (test_log_file)
   fp = fopen("/tmp/searduino-logtest.log", "r");
   fail_if(fp==0);
 
+  usleep(1000*1000);
+
   ret = fgets(buf, 100, fp);
   /* printf ("string read from logfile:  %s\n", buf); */
   ret = fgets(buf, 100, fp);
   /* printf ("string read from logfile:  %s\n", buf); */
   fail_if( (strstr(buf, "THIS SHOULD NOT BE SEEN") == NULL ));
   printf ("  logfile seemd to be ok\n");
-  usleep(1000*1000);
   unlink("/tmp/searduino-logtest.log");
 
 
