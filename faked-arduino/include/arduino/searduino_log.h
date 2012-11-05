@@ -26,6 +26,7 @@
 #define SEARDUINO_LOG_H
 
 int  searduino_log_impl(int level, char *msg, ...);
+int  searduino_log_set_file(char *fname);
 int  searduino_get_log_level(void);
 int  searduino_set_log_level(int level);
 int  searduino_inc_log_level(void);
