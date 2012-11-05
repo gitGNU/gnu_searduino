@@ -32,6 +32,7 @@
 #else
 int  searduino_log_impl(int , char *, ...);
 int  searduino_log_set_file(char *);
+int  searduino_log_close_file(void);
 int  searduino_get_log_level(void);
 int  searduino_set_log_level(int);
 int  searduino_inc_log_level(void);

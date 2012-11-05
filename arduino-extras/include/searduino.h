@@ -102,6 +102,7 @@ extern int searduino_exec_available ;
 #define searduino_set_log_level(a)
 #define searduino_inc_log_level()
 #define searduino_dec_log_level()
+#define searduino_log_close_file()
 #else
 #include "searduino_log.h"
 #define searduino_log(a) searduino_log_impl a

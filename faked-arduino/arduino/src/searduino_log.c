@@ -40,13 +40,8 @@ static FILE *logfile           = NULL ;
 
 int searduino_log_set_file(char *fname)
 {
-  if (logfile!=NULL)
-    {
-      if ( (logfile!=stderr) && (logfile!=stdout) )
-	{
-	  fclose(logfile);
-	}
-    }
+  /* Gracefully close previous log file if any */
+  searduino_log_close_file();
 
   if ( (fname==NULL) || strncmp(fname, "stderr", strlen("stderr"))==0)
     {
@@ -131,6 +126,18 @@ int searduino_log_impl(int level, char *msg, ...)
       fflush(stderr);
     }
   return ret;
+}
+
+
+void searduino_log_close_file(void)
+{
+  if (logfile!=NULL)
+    {
+      if ( (logfile!=stderr) && (logfile!=stdout) )
+	{
+	  fclose(logfile);
+	}
+    }
 }
 
 #endif /* SEARDUINO_STUB */
