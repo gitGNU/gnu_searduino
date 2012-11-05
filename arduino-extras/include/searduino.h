@@ -97,10 +97,18 @@ extern int searduino_exec_available ;
  */
 #ifndef  SEARDUINO_STUB
 #define searduino_log(a) 
+#define searduino_log_set_file(a)
+#define searduino_get_log_level()
+#define searduino_set_log_level(a)
+#define searduino_inc_log_level()
+#define searduino_dec_log_level()
 #else
 #include "searduino_log.h"
 #define searduino_log(a) searduino_log_impl a
-#endif
+#endif /* SEARDUINO_STUB */
+
+
+
 
 
 #endif /* ARDUINO_EXTRAS_SETUP_H*/
