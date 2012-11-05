@@ -129,6 +129,9 @@ START_TEST (test_log_msg)
 {
   int level ;
   int ret; 
+  int a; 
+  int b; 
+  int c; 
 
   ret = searduino_set_log_level(SEARDUINO_LOG_NONE);
   fail_if(ret!=0);
@@ -161,6 +164,13 @@ START_TEST (test_log_msg)
 
   ret = searduino_log((SEARDUINO_LOG_ERROR, 
 		 "\t\t\t *** This should be seen during tests ****   :) \n"));
+  fail_if(ret==0);
+
+  a=3;
+  b=4;
+  c=-1;
+  ret = searduino_log_impl(SEARDUINO_LOG_ERROR, 
+		       "\t\t\t *** This should be seen during tests a(3):%d b(4):%d c(-1):%d  ****   :) \n", a, b, c);
   fail_if(ret==0);
 
 }
