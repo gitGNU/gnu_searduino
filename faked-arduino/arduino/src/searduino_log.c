@@ -29,7 +29,12 @@
 
 #ifndef  SEARDUINO_STUB
 /* No implementation needed */
+
 #else
+
+
+/* Stub only */
+
 static int   current_log_level = 0 ;
 static FILE *logfile           = NULL ;
 
