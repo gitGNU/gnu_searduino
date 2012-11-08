@@ -55,6 +55,6 @@ check-lib:
 check-prog:
 	make -f ../mk/Makefile-generic.mk clean
 	make -f ../mk/Makefile-generic.mk prog
-	LD_LIBRARY_PATH=../../faked-arduino/.libs/:../shared  ./$(PROG)
+	LD_LIBRARY_PATH=../../faked-arduino/.libs/:../shared DYLD_LIBRARY_PATH=../../faked-arduino/.libs/:../shared  ./$(PROG)
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
