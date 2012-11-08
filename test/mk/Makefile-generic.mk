@@ -24,7 +24,7 @@
 export PROG=test
 export SEARDUINO_PATH=../../
 export LIB_PATH=.
-
+export DYN_PATH=../../faked-arduino/.libs/:../shared
 
 first:
 	echo nothing to do for all
@@ -55,6 +55,6 @@ check-lib:
 check-prog:
 	make -f ../mk/Makefile-generic.mk clean
 	make -f ../mk/Makefile-generic.mk prog
-	LD_LIBRARY_PATH=../../faked-arduino/.libs/:../shared DYLD_LIBRARY_PATH=../../faked-arduino/.libs/:../shared  ./$(PROG)
+	LD_LIBRARY_PATH=$(DYN_PATH) DYLD_LIBRARY_PATH=$(DYN_PATH) ./$(PROG)
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
