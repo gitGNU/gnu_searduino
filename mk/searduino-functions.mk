@@ -60,7 +60,7 @@ else
   ifeq ($(uname_S),Darwin)
   # Mac / Darwin
  override LDFLAGS += $(_LDFLAGS) $(SEARDUINO_LIB_PATH) $(LIBRARIES_LIB) \
-                   -Wl,-whole-archive $(SEARDUINO_LIB) -Wl,-no-whole-archive \
+                    $(SEARDUINO_LIB)  \
                     $(USER_LD_FLAGS) $(_LDFLAGS) $(LIBRARIES_LIB) $(SEARDUINO_LIB) 
   else
   # Win....
