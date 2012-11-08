@@ -26,7 +26,7 @@ $(error Variables not set correctly ARDUINO='${ARDUINO}')
 endif		
 
 
-#uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
+uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
 
 ifndef BOARD
 $(error Variables not set correctly BOARD='$(BOARD)' (ARDUINO='${ARDUINO}'))
