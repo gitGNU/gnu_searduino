@@ -28,14 +28,16 @@ endif
 ARDUINO_VERSION=101
 SEARDUINO_MK_PATH=$(SEARDUINO_PATH)/
 SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
+
+ifeq (${ARDUINO},stub)
+SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/faked-arduino/.libs 
+else
 SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD) \
-                     -L$(SEARDUINO_PATH)/arduino-sources/libraries/libs/$(BOARD) \
-                     -L$(SEARDUINO_PATH)/faked-arduino/.libs 
+                     -L$(SEARDUINO_PATH)/arduino-sources/libraries/libs/$(BOARD) 
+endif
 
 VCS_IFLAGS= -I$(SEARDUINO_INC_PATH)/arduino-extras/include \
             -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino
-
-
 
 ifeq (${ARDUINO},stub)
 include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
