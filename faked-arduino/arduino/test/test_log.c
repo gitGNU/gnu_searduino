@@ -219,7 +219,7 @@ START_TEST (test_log_file)
 
 
 
-  usleep(1000*1000);
+  usleep(1000*100);
   /*
    *   File with existing path
    */
@@ -230,6 +230,8 @@ START_TEST (test_log_file)
 		 "Using file *** THIS SHOULD NOT BE SEEN IN THE TERMINAL WHEN RUNNING THE TESTS\n"));
   fail_if(ret==0);
 
+  searduino_log_close_file();
+
   usleep(1000*1000);
 
   ret = stat("/tmp/searduino-logtest.log", &statbuf);
@@ -238,7 +240,7 @@ START_TEST (test_log_file)
   fp = fopen("/tmp/searduino-logtest.log", "r");
   fail_if(fp==0);
 
-  usleep(1000*1000);
+  usleep(1000*100);
 
   ret = fgets(buf, 100, fp);
   /* printf ("string read from logfile:  %s\n", buf); */
