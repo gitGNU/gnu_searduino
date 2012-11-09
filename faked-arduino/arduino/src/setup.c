@@ -36,10 +36,11 @@
 #include "utils/error.h"
 #include "ext_io.h"
 #include "searduino_pin.h"
+#include "searduino_log_impl.h"
+#include "searduino_internal_log.h"
 
 int searduino_exec ;
 int searduino_exec_available = 0 ;
-
 
 /* global */
 searduino_main_ptr_ptr searduino_main_entry = NULL;
@@ -91,13 +92,16 @@ int searduino_setup(void)
   static int already_setup = 0;
   int ret;
 
-
   if (already_setup)
     {
       return 0;
     }
   PRINT_FUNCTION_NAME_NOARGS();
+  searduino_internal_init_log(NULL);
 
+  searduino_internal_log_i("Setting up Searduino\n");
+
+  searduino_internal_log_i("Loading Arduino code\n");
   ret = load_arduino_code();
   if (ret!=0)
     {
@@ -105,17 +109,22 @@ int searduino_setup(void)
       return 1;
     }
 
+  searduino_internal_log_i("Initialising external IO module\n");
   init_ext_io();
 
+  searduino_internal_log_i("Initialising time module\n");
   init_time();
 
+  searduino_internal_log_i("Initialising arduino pins module\n");
   init_arduino_pins();
 
+  searduino_internal_log_i("Setting program as running\n");
   searduino_set_running();
 
   already_setup=1;
 
 #ifdef USE_X11
+  searduino_internal_log_i("Enabling faked hid\n");
   hid_enable_faked_hid();
 #endif
   
