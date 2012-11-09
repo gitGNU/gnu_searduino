@@ -23,6 +23,7 @@
 
 #include "searduino.h"
 #include "searduino_log.h"
+#include "searduino_log_impl.h"
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -35,70 +36,32 @@
 
 /* Stub only */
 
-static int   current_log_level = 0 ;
-static FILE *logfile           = NULL ;
+static searduino_logger logger;
 
 int searduino_log_set_file(char *fname)
 {
-  /* Gracefully close previous log file if any */
-  searduino_log_close_file();
-
-  if ( (fname==NULL) || strncmp(fname, "stderr", strlen("stderr"))==0)
-    {
-      logfile = stderr;
-    }
-  else if (strncmp(fname, "stdout", strlen("stdout"))==0)
-    {
-      logfile = stdout;
-    }
-  else
-    {
-      logfile = fopen (fname,"a");
-      if (logfile==NULL)
-	{
-	  return 1;
-	}
-      searduino_log_impl(SEARDUINO_LOG_INFO, "Log started\n");
-    }
-  return 0;
+  return searduino_logger_set_file(&logger, fname);
 }
 
 
 int searduino_get_log_level(void)
 {
-  return current_log_level;
+  return searduino_logger_get_log_level(&logger);
 }
 
 int searduino_set_log_level(int level)
 {
-  if (level < 0 )
-    {
-      fprintf (stderr, "Can't set log level lower than 0\n");
-      return -1;
-    }
-  else if (level > 10 )
-    {
-      fprintf (stderr, "Can't set log level higher than 10\n");
-      return -1;
-    }
-  current_log_level = level;
-  return 0;
+  return searduino_logger_set_log_level(&logger, level);
 }
 
 int searduino_inc_log_level(void)
 {
-  current_log_level++;
-  return current_log_level;
+  return searduino_logger_inc_log_level(&logger);
 }
 
 int searduino_dec_log_level(void)
 {
-  current_log_level--;
-  if ( current_log_level < 0 ) 
-    {
-      current_log_level = 0 ;
-    }
-  return current_log_level;
+  return searduino_logger_dec_log_level(&logger);
 }
 
 
@@ -106,38 +69,17 @@ int searduino_log_impl(int level, char *msg, ...)
 {
   va_list ap;
   int ret ; 
-  FILE *fp;
 
-  if (logfile==NULL)
-    {
-      fp = stderr;
-    }
-  else
-    {
-      fp = logfile;
-    }
-
-  ret = 0 ;
-  if ( level <= current_log_level )
-    {
-      va_start(ap, msg);
-      ret = vfprintf(fp, msg, ap );
-      va_end(ap);
-      fflush(stderr);
-    }
+  va_start(ap, msg);
+  ret = searduino_logger_log_impl(&logger, level, msg, ap );
+  va_end(ap);
   return ret;
 }
 
 
 void searduino_log_close_file(void)
 {
-  if (logfile!=NULL)
-    {
-      if ( (logfile!=stderr) && (logfile!=stdout) )
-	{
-	  fclose(logfile);
-	}
-    }
+  return searduino_logger_log_close_file(&logger);
 }
 
 #endif /* SEARDUINO_STUB */
