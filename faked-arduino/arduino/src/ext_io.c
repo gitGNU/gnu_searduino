@@ -26,6 +26,7 @@
 #include "utils/print.h"
 
 #include "searduino_pin.h"
+#include "searduino_internal_log.h"
 #include "setup.h"
 #include "error.h"
 #include "ext_io.h"
@@ -69,6 +70,7 @@ uint8_t
 ext_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   printf ("%s (%d,%d)\n", __func__, pin, val);
+  LOG_PIN_VAL_FUNCTION(pin, val);
   input_callback(pin, val, pin_type);
 
   DEBUG_INFO(("ext_set_generic_input  %d,%d,%d",pin,val, pin_type));
@@ -80,6 +82,7 @@ int
 ext_get_generic_output(uint8_t pin, uint8_t pin_type)
 {
   DEBUG_INFO(("%d,%d",pin, pin_type));
+  LOG_PIN_FUNCTION(pin);
   return output_callback(pin, pin_type);
 }
 
@@ -87,6 +90,7 @@ uint8_t
 ext_set_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   PRINT_FUNCTION_NAME(("%d,%d,%d",pin,val, pin_type));
+  LOG_PIN_VAL_FUNCTION(pin, val);
 
   input_callback(pin,val, pin_type);
 
@@ -99,6 +103,7 @@ ext_get_dig_output(uint8_t pin)
 {
   uint8_t val ;
   PRINT_FUNCTION_NAME(("%d",pin));
+  LOG_PIN_VAL_FUNCTION(pin, val);
 
   val = digout_callback(pin);
 
@@ -114,6 +119,7 @@ ext_get_ana_output(uint8_t pin)
 {
   unsigned int val ;
   PRINT_FUNCTION_NAME(("%d",pin));
+  LOG_PIN_VAL_FUNCTION(pin, val);
 
   val = anaout_callback(pin);
 
@@ -128,6 +134,7 @@ ext_get_dig_mode(uint8_t pin)
 {
   uint8_t mode ;
   PRINT_FUNCTION_NAME(("%d",pin));
+  LOG_PIN_FUNCTION(pin);
 
   mode = dig_mode_callback(pin);
 
@@ -173,7 +180,7 @@ uint8_t
 ext_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)
 {
   PRINT_FUNCTION_NAME(("%d",(int)cb));
-
+  LOG_FUNCTION();
   if (cb==NULL)
     {
       return SEARD_SEARDUINO_NULL_CALLBACK;
@@ -235,6 +242,8 @@ ext_digital_set_mode(uint8_t pin, uint8_t mode)
 {
   /* Make sure all is set up before continuing*/
   init_ext_io();
+
+  LOG_PIN_VAL_FUNCTION(pin, mode);
 
   /* printf ("PIN %d has mode: %d\n", pin, get_generic_pin_mode(pin)); */
 
