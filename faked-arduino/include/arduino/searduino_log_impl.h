@@ -21,26 +21,32 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#ifndef SEARDUINO_LOG_IMPL_H
+#define SEARDUINO_LOG_IMPL_H
 
-#ifndef SEARDUINO_LOG_H
-#define SEARDUINO_LOG_H
+#include "searduino.h"
+#include <stdarg.h>
+#include <stdio.h>
+#include <string.h>
 
-#ifndef  SEARDUINO_STUB
-/* No implementation needed */
-#error Should not reach this place when compiling for Arduino 
-
-#else
-
-int  searduino_log_impl(int , char *, ...);
-int  searduino_log_set_file(char *);
-void searduino_log_close_file(void);
-int  searduino_get_log_level(void);
-int  searduino_set_log_level(int);
-int  searduino_inc_log_level(void);
-int  searduino_dec_log_level(void);
-#endif /* SEARDUINO_STUB */
+typedef struct {
+  int   current_log_level;
+  FILE *logfile;
+  int   counter;
+  int   initialised;
+} searduino_logger ;
 
 
+int searduino_internal_init_log(char * name);
+/* int searduino_logger_set_file(searduino_logger *logger, char *fname); */
+/* int searduino_logger_get_log_level(searduino_logger *logger); */
+/* int searduino_logger_set_log_level(searduino_logger *logger, int level); */
+/* int searduino_logger_inc_log_level(searduino_logger *logger); */
+/* int searduino_logger_dec_log_level(searduino_logger *logger); */
+int searduino_logger_log_impl(searduino_logger *logger, 
+			      int level, 
+			      char *msg,   va_list ap);
+void searduino_logger_log_close_file(searduino_logger *logger);
 
 
-#endif /* SEARDUINO_LOG_H */
+#endif /* SEARDUINO_LOG_IMPL_H */
