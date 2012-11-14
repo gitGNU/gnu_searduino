@@ -50,7 +50,8 @@ int hid_x11_initilise_hid(void)
     }
 
   /* fprintf(stderr, "Dpy at: %p\n", dpy); */
-  
+
+  /* Check if XTest is available */
   if( XTestQueryExtension(dpy,
                           &xtest_event_basep,
                           &xtest_error_basep,
