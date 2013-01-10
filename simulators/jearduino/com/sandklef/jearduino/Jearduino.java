@@ -1,4 +1,4 @@
-package com.sandklef.searduino;
+package com.sandklef.jearduino;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,6 +16,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JLabel;
 
+import com.sandklef.searduino.Searduino;
+import com.sandklef.searduino.SearduinoObserver;
 
 public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, PinEvent, BoardEvent, ActionListener {
 

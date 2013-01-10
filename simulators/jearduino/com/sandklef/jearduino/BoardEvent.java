@@ -1,4 +1,4 @@
-package com.sandklef.searduino;
+package com.sandklef.jearduino;
 
 public interface BoardEvent
 {
