@@ -151,7 +151,8 @@ void* arduino_code(void *in)
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setWriteTimelimit
 (JNIEnv *env, jobject o, jint limit)
 {
-  seasim_set_Write_timelimit(limit);
+  //seasim_set_Write_timelimit(limit);
+  return 0;
 }
 
 
@@ -184,7 +185,8 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
   //  seasim_set_arduino_code_name("../../test/arduino-code-dynamic/libard_code.so");
 
   printf (" ----------------------------------------->  loading code\n");
-  seasim_set_arduino_code_name("./test/fast-digital-out/fastdigio.so");
+  ret = seasim_set_arduino_code_name("./test/fast-digital-out/fastdigio.so");
+  printf (" ----------------------------------------->  loading code returned: %d\n", ret);
 
   printf ("setup\n");
   ret = seasim_setup();
@@ -397,7 +399,7 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getBoardName
 
   if (src==NULL)
     {
-      src = "<none>";
+      src = (char*) "<none>";
     }
 
   JNIEnv * g_env;

@@ -1,7 +1,5 @@
 package com.sandklef.searduino;
 
-
-
 public class Searduino
 {
     public  native int  getWriteTimelimit();
