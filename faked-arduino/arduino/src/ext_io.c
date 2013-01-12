@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -148,7 +148,7 @@ ext_get_dig_mode(uint8_t pin)
 out_to_sim_callback_ptr out_sim_callback = NULL;
 dm_to_sim_callback_ptr  dm_sim_callback = NULL ;
 log_to_sim_callback_ptr log_sim_callback = NULL ;
-
+pintype_to_sim_callback_ptr  pintype_sim_callback = NULL;
 
 
 void 
@@ -189,6 +189,42 @@ ext_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb)
 
   return SEARD_SEARDUINO_OK;
 }
+
+uint8_t
+ext_register_pin_type_sim_cb(pintype_to_sim_callback_ptr cb)
+{
+  PRINT_FUNCTION_NAME(("%d",(int)cb));
+  LOG_FUNCTION();
+  if (cb==NULL)
+    {
+      return SEARD_SEARDUINO_NULL_CALLBACK;
+    }
+
+  printf ("TYPE CB AT %p\n", cb); 
+  pintype_sim_callback = cb;
+
+  return SEARD_SEARDUINO_OK;
+}
+
+uint8_t
+ext_inform_pin_type(int pin, int type)
+{
+  PRINT_FUNCTION_NAME(("%d,%d",(int)pin, (int)type));
+  LOG_FUNCTION();
+  if (pintype_sim_callback==NULL)
+    {
+      printf ("EXTERNALLY INFORM no cb\n");
+      return SEARD_SEARDUINO_NULL_CALLBACK;
+    }
+
+  printf ("EXTERNALLY INFORM %d %d\n", pin, type);
+  pintype_sim_callback(pin, type);
+
+  return SEARD_SEARDUINO_OK;
+}
+
+
+
 
 uint8_t
 ext_register_log_cb(log_to_sim_callback_ptr cb)
@@ -301,11 +337,10 @@ ext_analog_set_mode(uint8_t pin, uint8_t mode)
 }
 
 
-
-
 int 
 ext_generic_write_outpin(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
+
   /* Make sure all is set up before continuing*/
   init_ext_io();
 
@@ -326,6 +361,7 @@ ext_generic_write_outpin(uint8_t pin, unsigned int val, uint8_t pin_type)
 	 so let's call it */
       out_sim_callback(pin, val, pin_type);
     }
+
   return SEARD_ARDUINO_OK;
 }
 
