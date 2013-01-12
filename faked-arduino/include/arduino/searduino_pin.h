@@ -71,6 +71,9 @@ typedef struct arduino_pin
 
   /* How many updates to same/current value have we discarded? */
   int             discard_ctr;
+
+  int             in_use;
+
 } arduino_pin;
 
 
@@ -167,7 +170,7 @@ int
 has_generic_pin_type(uint8_t pin, uint8_t type);
 
 int 
-set_generic_nr_of_pins(uint8_t pins);
+set_generic_nr_of_pins(void);
 
 uint8_t
 get_generic_nr_of_pins(void);
