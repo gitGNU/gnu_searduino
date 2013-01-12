@@ -37,13 +37,21 @@
 
 extern searduino_main_ptr_ptr searduino_main_entry;
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+  
+uint8_t 
+seasim_fake_digital_input (uint8_t pin, uint8_t val);
+
+uint8_t 
+seasim_fake_analog_input (uint8_t pin, unsigned int val);
 
 uint8_t 
 seasim_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type);
 
 unsigned int
 seasim_get_generic_output(uint8_t pin, uint8_t pin_type);
-
 
 uint8_t
 seasim_set_input(uint8_t pin, unsigned int val, uint8_t pin_type);
@@ -75,13 +83,14 @@ seasim_set_halted(void);
 uint8_t 
 seasim_get_dig_mode(uint8_t pin);
 
+char *
+seasim_get_arduino_code_name(void);
+
 int 
 seasim_set_arduino_code_name(const char* libname);
 
 uint8_t
 seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb);
-
-
 
 uint8_t 
 seasim_register_out_sim_cb(out_to_sim_callback_ptr cb);
@@ -91,6 +100,9 @@ seasim_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb);
 
 uint8_t
 seasim_register_log_cb(log_to_sim_callback_ptr cb);
+
+uint8_t
+seasim_register_type_cb(pintype_to_sim_callback_ptr cb);
 
 int 
 seasim_setup(void);
@@ -142,6 +154,14 @@ seasim_hid_enable_feedback(void);
 
 char *
 seasim_get_supported_boards(void);
+
+uint8_t
+seasim_get_nr_of_pins(void);
+
+
+#ifdef __cplusplus
+} /* extern "C" */
+#endif
 
 
 #endif  /* SEASIM_SEASIM_H */

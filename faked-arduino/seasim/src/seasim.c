@@ -35,6 +35,19 @@ const char* seasim_get_searduino_name(void)
   return PACKAGE;
 }
 
+  
+uint8_t 
+seasim_fake_digital_input (uint8_t pin, uint8_t val)
+{
+  return ext_set_generic_input(pin, val, SEARDUINO_PIN_TYPE_DIGITAL);
+}
+
+
+uint8_t 
+seasim_fake_analog_input (uint8_t pin, unsigned int val)
+{
+  return ext_set_generic_input(pin, val, SEARDUINO_PIN_TYPE_ANALOG);
+}
 
 unsigned int
 seasim_get_generic_output(uint8_t pin, uint8_t pin_type)
@@ -58,6 +71,12 @@ uint8_t
 seasim_register_log_cb(log_to_sim_callback_ptr cb)
 {
   return ext_register_log_cb(cb);
+}
+
+uint8_t
+seasim_register_type_cb(pintype_to_sim_callback_ptr cb)
+{
+  return ext_register_pin_type_sim_cb(cb);
 }
 
 
@@ -119,11 +138,16 @@ seasim_get_dig_mode(uint8_t pin)
   return ext_get_dig_mode(pin);
 }
 
-
 int 
 seasim_set_arduino_code_name(const char* libname)
 {
   return searduino_set_arduino_code_name(libname);
+}
+
+char *
+seasim_get_arduino_code_name(void)
+{
+  return get_arduino_code_name();
 }
 
 uint8_t
@@ -234,3 +258,10 @@ seasim_is_pausable(void)
 {
   return is_pausable();
 }
+
+uint8_t
+seasim_get_nr_of_pins(void)
+{
+  return get_generic_nr_of_pins();
+}
+
