@@ -1,3 +1,26 @@
+/*****
+ *                                                                   
+ *                   Searduino
+ *                      
+ *   Copyright (C) 2013 Henrik Sandklef 
+ *                                                                   
+ * This program is free software; you can redistribute it and/or     
+ * modify it under the terms of the GNU General Public License       
+ * as published by the Free Software Foundation; either version 3    
+ * of the License, or any later version.                             
+ *                                                                   
+ *                                                                   
+ * This program is distributed in the hope that it will be useful,   
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     
+ * GNU General Public License for more details.                      
+ *                                                                   
+ * You should have received a copy of the GNU General Public License 
+ * along with this program; if not, write to the Free Software       
+ * Foundation, Inc., 51 Franklin Street, Boston,            
+ * MA  02110-1301, USA.                                              
+ ****/
+
 package com.sandklef.jearduino;
 
 import javax.swing.JButton;
@@ -20,6 +43,7 @@ import java.awt.event.ActionListener;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 
+import com.sandklef.searduino.Searduino;
 
 public class PinTable extends JPanel implements ActionListener, ChangeListener
 {
@@ -101,17 +125,31 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
     
     public void setDigitalInputPin(int pin)
     {
+
+	if (pins==null)
+	    {
+		return ;
+	    }
+
 	JToggleButton input;
 	input = new JToggleButton("");
 	input.addActionListener(this);
 	input.setEnabled(true);
 	
 	input.setVisible(true);
+
+
+	
+	System.out.println("SET DIGITAL PIN AT: " + pin);
+	System.out.println("SET DIGITAL PIN ON: " + pins);
+	System.out.println("SET DIGITAL PIN   : " + pins[pin][TABLE_INPUT_POS]);
+	
+
 	if (pins[pin][TABLE_INPUT_POS]!=null)
 	    {
 		this.remove(pin*5+TABLE_INPUT_POS+1);
 	    }
-	System.out.println("ADD DIGITAL PIN AT: " + pin + " " + (pin*5+TABLE_INPUT_POS+1));
+	System.out.println("SET DIGITAL PIN AT: " + pin + " " + (pin*5+TABLE_INPUT_POS+1));
 	this.add(input, pin*5+TABLE_INPUT_POS+1);
 	pins[pin][TABLE_INPUT_POS]=input;
 	JLabel lab = ((JLabel)pins[pin][TABLE_TYPE_POS]);
@@ -149,17 +187,17 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public void actionPerformed(ActionEvent e) {
 	
-	for (int i=1; i<nrPins;i++)
+	for (char i=1; i<nrPins;i++)
 	    {
 		if (e.getSource() == pins[i][TABLE_INPUT_POS]) 
 		    {
 			if (((JToggleButton)pins[i][TABLE_INPUT_POS]).isSelected())
 			    {
-				pe.inputValueEvent(i, 1);
+				pe.inputValueEvent(i, (char)1);
 			    }
 			else
 			    {
-				pe.inputValueEvent(i, 0);
+				pe.inputValueEvent(i, (char)0);
 			    }
 		    }  
 	    }  
@@ -168,11 +206,11 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public void stateChanged(ChangeEvent e) {
 	 
-	for (int i=1; i<nrPins;i++)
+	for (char i=1; i<nrPins;i++)
 	    {
 		if (e.getSource() == pins[i][TABLE_INPUT_POS]) 
 		    {
-			Integer val = (Integer)((JSpinner)pins[i][TABLE_INPUT_POS]).getValue();
+			Character val = (Character)((JSpinner)pins[i][TABLE_INPUT_POS]).getValue();
 			pe.inputValueEvent(i, val);
 		    }  
 	    }  

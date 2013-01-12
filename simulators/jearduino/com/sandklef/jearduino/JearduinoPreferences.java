@@ -23,28 +23,40 @@
 
 package com.sandklef.jearduino;
 
-import javax.swing.JTextArea;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import java.awt.Dimension;
+import java.util.prefs.Preferences;
 
-class Logger extends JPanel {
-    private JTextArea textArea = new JTextArea();
+public class JearduinoPreferences {
 
-    public Logger(String str) {
+    private Preferences jearduinoPrefs;
 
-	super(new GridLayout(1, 2));    
-	setBorder(BorderFactory.createTitledBorder(str));
+    private String boardId = "board";
 
-	add(new JScrollPane(textArea));
-	setVisible(true);
+    private String arduinoCodeIdPrefix = "arduinoCode";
+
+    public JearduinoPreferences()
+    {
+	jearduinoPrefs = Preferences.userRoot().node("Jearduino");
     }
 
-    public void addLog(String data) {
-	textArea.append(data);
-	this.validate();
-	textArea.setCaretPosition(textArea.getDocument().getLength());
+    public String getBoard()
+    {
+	return jearduinoPrefs.get(boardId, "Uno");
     }
-}
+
+    public void setBoard(String board)
+    {
+	jearduinoPrefs.put(boardId, board);
+    }
+
+    public String getArduinoCodeName(int nr)
+    {
+	return jearduinoPrefs.get(arduinoCodeIdPrefix+nr, "");
+    }
+
+    public void setArduinoCodeName(int nr, String ac)
+    {
+	jearduinoPrefs.put(arduinoCodeIdPrefix+nr, ac);
+    }
+    
+
+} 

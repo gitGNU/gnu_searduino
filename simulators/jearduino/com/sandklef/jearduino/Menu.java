@@ -23,28 +23,50 @@
 
 package com.sandklef.jearduino;
 
-import javax.swing.JTextArea;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import java.awt.Dimension;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JRadioButtonMenuItem;
+import javax.swing.ButtonGroup;
 
-class Logger extends JPanel {
-    private JTextArea textArea = new JTextArea();
+public class JearduinoMenu extends JMenuBar {
 
-    public Logger(String str) {
+    public Menu()
+    {
+	JMenuBar menuBar = new JMenuBar();
+	JMenu menu = new JMenu("Board");
+	ButtonGroup boardGroup = new ButtonGroup();
 
-	super(new GridLayout(1, 2));    
-	setBorder(BorderFactory.createTitledBorder(str));
 
-	add(new JScrollPane(textArea));
-	setVisible(true);
+	menuBar.add(menu);
+	JRadioButtonMenuItem leoItem = new JRadioButtonMenuItem("Leonardo");
+	JRadioButtonMenuItem unoItem = new JRadioButtonMenuItem ("Uno");
+	JRadioButtonMenuItem megaItem = new JRadioButtonMenuItem ("Mega");
+	JRadioButtonMenuItem mega2560Item = new JRadioButtonMenuItem("Mega 2560");
+
+	menu.add(leoItem);
+	leoItem.addActionListener(this);
+	unoItem.addActionListener(this);
+	megaItem.addActionListener(this);
+	mega2560Item.addActionListener(this);
+	
+	boardGroup.add(unoItem);
+	boardGroup.add(megaItem);
+	boardGroup.add(mega2560Item);
+
+	menu.add(unoItem);
+	menu.add(megaItem);
+	menu.add(mega2560Item);
+
     }
 
-    public void addLog(String data) {
-	textArea.append(data);
-	this.validate();
-	textArea.setCaretPosition(textArea.getDocument().getLength());
+
+    public void actionPerformed(ActionEvent e) {
+	System.out.println("MENU click " + e.getActionCommand());
+	setupBoard(e.getActionCommand());
     }
+
+
+
 }

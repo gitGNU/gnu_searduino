@@ -1,3 +1,26 @@
+/*****
+ *                                                                   
+ *                   Searduino
+ *                      
+ *   Copyright (C) 2013 Henrik Sandklef 
+ *                                                                   
+ * This program is free software; you can redistribute it and/or     
+ * modify it under the terms of the GNU General Public License       
+ * as published by the Free Software Foundation; either version 3    
+ * of the License, or any later version.                             
+ *                                                                   
+ *                                                                   
+ * This program is distributed in the hope that it will be useful,   
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     
+ * GNU General Public License for more details.                      
+ *                                                                   
+ * You should have received a copy of the GNU General Public License 
+ * along with this program; if not, write to the Free Software       
+ * Foundation, Inc., 51 Franklin Street, Boston,            
+ * MA  02110-1301, USA.                                              
+ ****/
+
 package com.sandklef.jearduino;
 
 import javax.swing.JButton;
@@ -5,29 +28,32 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
 import javax.swing.SwingUtilities;
-import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
 import java.awt.FlowLayout;
 import javax.swing.JScrollPane;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JRadioButtonMenuItem;
 import javax.swing.JLabel;
 
 import com.sandklef.searduino.Searduino;
 import com.sandklef.searduino.SearduinoObserver;
 
-public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, PinEvent, BoardEvent, ActionListener {
+import java.io.File;
+
+
+public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, PinEvent, BoardEvent, FileEvent, ArduinoCodeNameEvent {
 
     Searduino searduino ;
+    
+    JearduinoPreferences jpref;
+    JearduinoMenu        jmenu;
+    GridBagConstraints c;
+
     PinTable pins;
     Logger serial ;
     Logger logger ;
-    JPanel infoPanel;
+    InfoPanel infoPanel;
     Container pane; 
 
+    private int codeNamesToStore = 10;
     private int nrpins = 0;
     public String version;
     public String boardname;
@@ -39,53 +65,28 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     ExecControl ec;
     Board board;
+    
 
-
-    static int appSizeHeight = 1200;
-    static int appSizeWidth  = 1500;
+    static int appSizeHeight = 700;
+    static int appSizeWidth  = 800;
 
     static int infoSizeHeight = 20;
     static int infoSizeWidth  = 800;
 
-    JLabel infoLabel;
-
     public Jearduino() {
+
+	jpref = new JearduinoPreferences();
 
 	pane = getContentPane();
 
+	System.out.println("BOARD: " + jpref.getBoard());
+
 	pane.setLayout(new GridBagLayout());
 
-	GridBagConstraints c;
 	c = new GridBagConstraints();
 
-	/* Menu */
-
-	JMenuBar menuBar = new JMenuBar();
-	JMenu menu = new JMenu("Board");
-	menuBar.add(menu);
-	JRadioButtonMenuItem leoItem = new JRadioButtonMenuItem("Leonardo");
-	JRadioButtonMenuItem unoItem = new JRadioButtonMenuItem ("Uno");
-	JRadioButtonMenuItem megaItem = new JRadioButtonMenuItem ("Mega");
-	JRadioButtonMenuItem mega2560Item = new JRadioButtonMenuItem("Mega 2560");
-
-	menu.add(leoItem);
-	leoItem.addActionListener(this);
-
-	menu.add(unoItem);
-	menu.add(megaItem);
-	menu.add(mega2560Item);
-	setJMenuBar(menuBar);
-
-	//	add(topmostPanel);
 
 	/*  info */
-
-	infoPanel = new JPanel();
-	
-	infoLabel = new JLabel("Crappy crap");
-	infoPanel.add(infoLabel);
-	infoPanel.setMaximumSize(new Dimension(infoSizeWidth, infoSizeHeight ));
-	infoPanel.add(infoLabel);
 
 	setSize(appSizeHeight, appSizeWidth);
 
@@ -106,10 +107,15 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	ec = new ExecControl(this);
 	controlPanel.add(ec);
 
+	jmenu = new JearduinoMenu(this, this, this);
+	setJMenuBar(jmenu);
+
 	board = new Board(this);
+	
 	//	controlPanel.add(board);
 
 	searduino = new Searduino();
+	infoPanel = new InfoPanel();
 
 	logger = new Logger( "Log");
 	serial = new Logger( "Serial");
@@ -125,6 +131,30 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	//	pinPanel.removeAll();
 	pinPanel.add(pins);
 
+        setTitle("Jearduino - Searduino's Java frontend for Arduino simulation");
+
+        setLocationRelativeTo(null);
+	setDefaultCloseOperation(EXIT_ON_CLOSE);
+
+	
+
+		
+	searduino.setWriteTimelimit(0);
+	searduino.disableStreamedOutput();
+
+	searduino.registerPinModeCallback(this);
+	searduino.registerPinOutCallback(this);
+	searduino.registerPinTypeCallback(this);
+	searduino.registerLogCallback(this);
+
+	infoPanel.setArduinoCodeName(searduino.getArduinoCodeName());
+	infoPanel.setSearduinoVersion(searduino.getSearduinoVersion());
+
+	setupSizes();
+    }
+
+    public void setupSizes()
+    {
 	/*
 	logger.setMaximumSize(new Dimension(200, 400));
 	logger.setMinimumSize(new Dimension(200, 400));
@@ -200,47 +230,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 
 
-        setTitle("Jearduino - Searduino's Java frontend for Arduino simulation");
-
-        setLocationRelativeTo(null);
-	setDefaultCloseOperation(EXIT_ON_CLOSE);
-
-	
-
-		
-	searduino.setWriteTimelimit(0);
-	searduino.disableStreamedOutput();
-
-	searduino.registerPinModeCallback(this);
-	searduino.registerPinOutCallback(this);
-	searduino.registerPinTypeCallback(this);
-	searduino.registerLogCallback(this);
-
-
-    }
-
-    public void setup()
-    {
-	/*
-	JScrollPane pinScroller = new JScrollPane(pins);
-	pinScroller.setPreferredSize(new Dimension(1000,1000)); 
-	pinScroller.setVisible(true);
-	*/
-
-	/*
-	pinScroller.revalidate();
-	pinScroller.repaint();
-	pane.validate();
-	*/
-
-	/*
-	pinScroller.setMaximumSize(new Dimension(900, 1000));
-	pinScroller.setMinimumSize(new Dimension(900, 100));
-	*/
-
-	/* 2nd row */
-
-
     }
 
 
@@ -248,24 +237,16 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     {
 
 	String ver = searduino.getSearduinoVersion();
-	System.out.println("---------------------------------- SETUP BOARD \"" + ver + "\"  0\n"); 
-	System.out.println("---------------------------------- SETUP BOARD \"" + boardName + "\"  1\n"); 
-	searduino.setBoardName(""+boardName);
-	System.out.println("---------------------------------- SETUP BOARD \"" + boardName + "\"  2\n"); 
+	searduino.setBoardName(boardName);
+	jpref.setBoard(boardName);
+	infoPanel.setBoardName(boardName);
+
 	nrpins = searduino.getNrOfPins();
-	System.out.println("---------------------------------- SETUP BOARD \"" + boardName + "\"  3   pins=\n" + nrpins); 
 
 	version = searduino.getSearduinoVersion();
 	boardname = searduino.getBoardName();
 
-	System.out.println("---------------------------------- SETUP BOARD \"" + boardName + "\"  4\n"); 
 	pins.setupPins(nrpins);
-
-	for (int i=1;i<nrpins;i++)
-	    {
-		System.out.println("Pin: " + i  + " " + searduino.getCurrentPinType(i) + "(" +  searduino.getCurrentPinTypeString(i)  + ")\n");
-	    }
-	
     }
 
 
@@ -286,8 +267,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void handleBoardChoiceEvent(String boardName)
     {
-	// System.out.println("EVENT: Board choice -------------> BOARD: " + board );
-	setupBoard(""+boardName);
+	System.out.println("EVENT: Board choice -------------> BOARD: " + board );
+	setupBoard(boardName);
     }
 
     public void handlePinModeEvent(int pin, int mode) {
@@ -295,7 +276,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	// HESA HESA HESA
 	logger.addLog("EVENT: PIN MODE JAVA (really) pin[" + pin + "]: mode=" + mode +"\n");
-
 
 	// System.out.println("JAVA (really) pin[" + pin + "]: mode=" + mode );
 	pins.setMode(pin,mode);
@@ -308,7 +288,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }
 
 
-    public void inputValueEvent(int pin, int val)
+    public void inputValueEvent(char pin, char val)
     {
 	// System.out.println("PIN: " + pin + "  VALUE: " + val);
 	searduino.setInputPinValue(pin, 
@@ -318,6 +298,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void ExecEvent(int type)
     {
+		System.out.println("---> ExecEvent" );
+	
 	if (type==ExecControl.EXEC_CONTROL_PAUSE)
 	    {
 		System.out.println("PAUSE");
@@ -332,30 +314,99 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    {
 		System.out.println("HALT");
 		searduino.haltArduinoCode();
+		System.out.println("HALTED");
 	    }
 	else if (type==ExecControl.EXEC_CONTROL_START)
 	    {
 		System.out.println("START");
 		searduino.startArduinoCode();
 	    }
+	System.out.println("<--- ExecEvent" );
     }
 
+    public void getAndUseArduinoCodeName()
+    {
+	String codeName = jpref.getArduinoCodeName(1);
+	System.out.println("getAndUseArduinoCodeName: code -------------> CODe: " + codeName );
+	
+	infoPanel.setArduinoCodeName(codeName);
+	searduino.setArduinoCodeName(codeName);
+    }
     
-    public void actionPerformed(ActionEvent e) {
-	System.out.println("MENU");
+    public void showArduinoCodeNameMenu()
+    {
+	jmenu.removeCodeItems();
+	for (int i=0;i<codeNamesToStore;i++)
+	    {
+		System.out.println("UPDATE MENU (" + i + ") WITH: code -------------> CODe: " +  jpref.getArduinoCodeName(i));
+		
+		jmenu.updateCodeItem(i, 
+				     jpref.getArduinoCodeName(i));
+	    }
     }
 
 
+    public void saveArduinoCodeName(String canonName, String shortName)
+    {
+	for (int i=(codeNamesToStore-1);i>-1;i--)
+	    {
+		System.out.println("CURRENT MENU["+(i+1)+"]"  + jpref.getArduinoCodeName(i+1) );  
+	    }
+	for (int i=(codeNamesToStore-1);i>-1;i--)
+	    {
+		System.out.println("UPDATE MENU["+(i+1)+"]  " + jpref.getArduinoCodeName(i) + " prev: [ " + i + "]" + jpref.getArduinoCodeName(i+1));  
+		jpref.setArduinoCodeName(i+1, 
+					 jpref.getArduinoCodeName(i));
+	    }
+
+	System.out.println("UPDATE MENU["+(0)+"]  " + canonName);  
+	jpref.setArduinoCodeName(0, canonName);
+	
+	infoPanel.setArduinoCodeName(shortName);
+	searduino.setArduinoCodeName(canonName);
+	showArduinoCodeNameMenu();
+    }
+
+    public void handleArduinoFileEvent(File f)
+    {
+	String boardCode = "";
+	try {
+	    boardCode = f.getCanonicalPath();
+	}
+	catch (java.io.IOException e)
+	    {
+		System.out.println("Uh oh... could not get file name" );
+	    }
+
+	System.out.println("EVENT: Board code choice -------------> BOARD: " + boardCode );
+	int ret = 0;
+	try {
+	    ret = searduino.setArduinoCodeName(boardCode);
+	}
+	catch (java.lang.UnsatisfiedLinkError e)
+	    {
+		System.out.println("EXCEPTION!  - FAILED SETTING arduino code -------------> BOARD: " + boardCode );
+		infoPanel.setArduinoCodeName("");
+		return ;
+	    }
+	System.out.println("New board code seems fine: " + f.getName() );
+	saveArduinoCodeName(boardCode, f.getName());
+    }
+
+    public void handleArduinoCodeNameEvent(int codeIdx)
+    {
+	infoPanel.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
+	searduino.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
+    }
+    
     public static void main(String[] args) {
 
 	final Jearduino jearduino ;
 	jearduino = new Jearduino();
-	jearduino.setupBoard("Leonardo");
-	//	jearduino.setup();
 
-	jearduino.infoLabel.setText("Searduino: "      + jearduino.version + 
-				    "  Board: "        + jearduino.boardname + 
-				    "  Arduino code: " + jearduino.searduino.getArduinoCodeName());
+	jearduino.setupBoard(jearduino.jpref.getBoard());
+	jearduino.getAndUseArduinoCodeName();
+	jearduino.showArduinoCodeNameMenu();
 
 	System.out.println("Searduino version: " + jearduino.version);
 	System.out.println("Searduino board:   " + jearduino.boardname);

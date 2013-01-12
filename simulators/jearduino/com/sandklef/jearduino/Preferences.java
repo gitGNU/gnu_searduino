@@ -23,28 +23,51 @@
 
 package com.sandklef.jearduino;
 
-import javax.swing.JTextArea;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import java.awt.Dimension;
 
-class Logger extends JPanel {
-    private JTextArea textArea = new JTextArea();
+public class PreferenceTest {
 
-    public Logger(String str) {
+    private Preferences seardunoPrefs;
 
-	super(new GridLayout(1, 2));    
-	setBorder(BorderFactory.createTitledBorder(str));
+    private String boardId = "board";
 
-	add(new JScrollPane(textArea));
-	setVisible(true);
+    public String getBoard()
+    {
+	prefs.get(boardId, "Uno"))
     }
 
-    public void addLog(String data) {
-	textArea.append(data);
-	this.validate();
-	textArea.setCaretPosition(textArea.getDocument().getLength());
+    public void getBoard(String board)
+    {
+	prefs.put(boardId, board))
     }
-}
+
+    public void setPreference() {
+
+	prefs = Preferences.userRoot().node("Jearduino");
+
+	String ID1 = "Test1";
+	String ID2 = "Test2";
+	String ID3 = "Test3";
+
+	// First we will get the values
+	// Define a boolean value
+	System.out.println(prefs.getBoolean(ID1, true));
+	// Define a string with default "Hello World
+	System.out.println(prefs.get(ID2, "Hello World"));
+	// Define a integer with default 50
+	System.out.println(prefs.getInt(ID3, 50));
+
+	// Now set the values
+	prefs.putBoolean(ID1, false);
+	prefs.put(ID2, "Hello Europa");
+	prefs.putInt(ID3, 45);
+
+	// Delete the preference settings for the first value
+	prefs.remove(ID1);
+
+    }
+
+    public static void main(String[] args) {
+	PreferenceTest test = new PreferenceTest();
+	test.setPreference();
+    }
+} 

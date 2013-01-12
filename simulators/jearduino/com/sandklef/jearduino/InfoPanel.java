@@ -23,28 +23,56 @@
 
 package com.sandklef.jearduino;
 
-import javax.swing.JTextArea;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import java.awt.GridLayout;
-import javax.swing.BorderFactory;
-import java.awt.Dimension;
+import javax.swing.JLabel;
 
-class Logger extends JPanel {
-    private JTextArea textArea = new JTextArea();
+public class InfoPanel extends JPanel 
+{
 
-    public Logger(String str) {
+    JLabel infoLabel;
+    String boardName;
+    String searduinoVersion;
+    String arduinoCodeName;
+    
+    public void updateText()
+    {
+	String text = "Searduino: "      + searduinoVersion + 
+	    "  Board: "        + boardName + 
+	    "  Arduino code: " + arduinoCodeName;
+	System.out.println("UPDATING INFO TEXT TO: " + text );
+	infoLabel.setText(text);
 
-	super(new GridLayout(1, 2));    
-	setBorder(BorderFactory.createTitledBorder(str));
-
-	add(new JScrollPane(textArea));
-	setVisible(true);
     }
 
-    public void addLog(String data) {
-	textArea.append(data);
-	this.validate();
-	textArea.setCaretPosition(textArea.getDocument().getLength());
+    public void setBoardName(String b)
+    {
+	boardName = b;
+	updateText();
     }
+
+    public void setSearduinoVersion(String v)
+    {
+	searduinoVersion = v;
+	updateText();
+    }
+
+    public void setArduinoCodeName(String c)
+    {
+	arduinoCodeName = c;
+	updateText();
+    }
+
+    public InfoPanel()
+    {
+	infoLabel = new JLabel();
+
+	setArduinoCodeName("none");
+	setSearduinoVersion("0");
+	setBoardName("none");
+
+	add(infoLabel);
+
+	updateText();
+    }
+
 }
