@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -65,8 +65,8 @@ print_dummy_function_implementation (FILE* stream,
 #define PRINT_DUMMY_FUNCTION_IMPLEMENTATION()  print_dummy_function_implementation(ERR_STREAM, __FILE__, __LINE__, __func__);
 
 
-/* #define ENANLE_DEBUG_PRINTOUTS */
-#ifdef ENANLE_DEBUG_PRINTOUTS
+/* #define ENABLE_DEBUG_PRINTOUTS */
+#ifdef ENABLE_DEBUG_PRINTOUTS
 #define PRINT_FUNCTION_NAME_NOARGS() printf( "function: %s (",__func__); printf (")\n");
 #define PRINT_FUNCTION_NAME(a)       printf( "function: %s (",__func__); printf a; printf (")\n");
 #define DEBUG_INFO(a)                printf( "info:     %s (",__func__); printf a; printf (")\n");
@@ -74,7 +74,7 @@ print_dummy_function_implementation (FILE* stream,
 #define PRINT_FUNCTION_NAME_NOARGS() 
 #define PRINT_FUNCTION_NAME(a)       
 #define DEBUG_INFO(a)                
-#endif /* ENANLE_FUNCTION_PRINT_NAME */
+#endif /* ENABLE_FUNCTION_PRINT_NAME */
 
 
 #ifdef __cplusplus
