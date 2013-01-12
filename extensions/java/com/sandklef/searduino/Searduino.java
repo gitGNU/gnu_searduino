@@ -1,3 +1,26 @@
+/*****
+ *                                                                   
+ *                   Searduino
+ *                      
+ *   Copyright (C) 2013 Henrik Sandklef 
+ *                                                                   
+ * This program is free software; you can redistribute it and/or     
+ * modify it under the terms of the GNU General Public License       
+ * as published by the Free Software Foundation; either version 3    
+ * of the License, or any later version.                             
+ *                                                                   
+ *                                                                   
+ * This program is distributed in the hope that it will be useful,   
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     
+ * GNU General Public License for more details.                      
+ *                                                                   
+ * You should have received a copy of the GNU General Public License 
+ * along with this program; if not, write to the Free Software       
+ * Foundation, Inc., 51 Franklin Street, Boston,            
+ * MA  02110-1301, USA.                                              
+ ****/
+
 package com.sandklef.searduino;
 
 public class Searduino
@@ -27,7 +50,11 @@ public class Searduino
     public  native int setArduinoCodeName(String ac);
     public  native int getCurrentPinType(int pin);
     private native int registerPinCallback(SearduinoObserver o, int type);
-    public  native int setGenericInput(int pin, int val, int pin_type);
+
+    public native  int fakeAnalogInput(char pin, char val);
+    public native  int fakeDigitalInput(char pin, char val);
+
+    // OBSOLETE    public  native int setGenericInput(int pin, int val, int pin_type);
 
     // private stuff
     private static final int SEARDUINO_PIN_MODE  = 1;
@@ -99,10 +126,17 @@ public class Searduino
     }
 
 
-    public int setInputPinValue(int pin, int val, int pin_type)
+    public int setInputPinValue(char pin, char val, int pin_type)
     {
-	System.out.println("SETTING === PIN: " + pin + "  VALUE: " + val + "  TYPE: " + pin_type);	
-	return setGenericInput(pin, val, pin_type);
+	if (pin_type==SEARDUINO_PINTYPE_DIGITAL)
+	    {
+		return fakeDigitalInput(pin, val);
+	    }
+	else if (pin_type==SEARDUINO_PINTYPE_ANALOG)
+	    {
+		return fakeAnalogInput(pin, val);
+	    }
+	return -1;
     }
     
     public String getCurrentPinTypeString(int pin)
