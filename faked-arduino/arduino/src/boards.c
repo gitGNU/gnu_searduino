@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2012 Henrik Sandklef 
+ *   Copyright (C) 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -147,7 +147,21 @@ int
 set_board_name(char *board)
 {
   int i ;
+
+  if ( board_index > SEARDUINO_BOARD_UNSET )
+    {
+      if (strncmp(searduino_boards[board_index].name, 
+		  board, strlen(board))==0)
+	{
+	  printf ("Same board (%s) as before, not reloading\n", 
+		  board);
+	  return 0;
+	}
+    }
+
   board_index = 0;
+
+  printf ("Invalid board name (NULL)\n");
 
   if (board==NULL)
     {
@@ -155,9 +169,11 @@ set_board_name(char *board)
       return 0;
     }
   
+  
+
   for (i=1;i<SEARDUINO_BOARD_LAST;i++)
     {
-      printf ("   checking %d '%s' for settings\n", i, searduino_boards[i].name);
+      /* printf ("   checking %d '%s' == '%s' for settings\n", i, board, searduino_boards[i].name); */
       if (searduino_boards[i].name==NULL)
 	{
 	  fprintf(stderr, "Major internal error: %s:%d (%s) when setting board to '%s'\n", 
@@ -169,7 +185,10 @@ set_board_name(char *board)
 		      strlen(searduino_boards[i].name))==0)
 	   && (strlen(searduino_boards[i].name) == strlen(board)))
 	{
+	  /* printf ("   checking %d '%s' is our choice :) \n", i, searduino_boards[i].name); */
 	  board_index = i;
+	  board_setup();
+
 	  return i;
 	}
     }
@@ -182,6 +201,14 @@ set_board_name(char *board)
 int
 board_setup(void)
 {
+  int ret;
+
+
+  printf (" =================== BOARD SETUP (boards.c) ==========================");
+
+  /* Set all pins to zero */
+  init_arduino_pins();
+
   if ( ( board_index <= SEARDUINO_BOARD_UNSET ) ||
        ( board_index >= SEARDUINO_BOARD_LAST ) )    
     {
@@ -189,6 +216,7 @@ board_setup(void)
       board_index = SEARDUINO_BOARD_UNO;
     }
   
+  printf ("SETTING UP BOARD: %s\n", searduino_boards[board_index].name);
   if ( searduino_boards[board_index].setup == NULL )
     {
       fprintf(stderr, "Missing setup function for '%s'\n", 
@@ -196,7 +224,14 @@ board_setup(void)
       return 1;
     }
 
-  return searduino_boards[board_index].setup();
+  ret = searduino_boards[board_index].setup();
+
+  if (set_generic_nr_of_pins() == 0 )
+    {
+      return -1;
+    }
+
+  return ret;
 }
 
 static void print_board_digital_pins(char *s, int type)
