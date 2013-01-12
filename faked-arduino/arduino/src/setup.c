@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -20,6 +20,7 @@
  * Foundation, Inc., 51 Franklin Street, Boston,            
  * MA  02110-1301, USA.                                              
  ****/
+
 #include <dlfcn.h>
 #include <stdlib.h>
 #include <string.h>
@@ -92,32 +93,34 @@ int searduino_setup(void)
   static int already_setup = 0;
   int ret;
 
+  printf("searduino_setup(void)\n");
+
   if (already_setup)
     {
+      printf("searduino_setup(void) returning since already setup\n");
       return 0;
     }
   PRINT_FUNCTION_NAME_NOARGS();
+  printf("searduino_setup(void) init log\n");
   searduino_internal_init_log(NULL);
-
+  
   searduino_internal_log_i("Setting up Searduino\n");
-
+  
   searduino_internal_log_i("Loading Arduino code\n");
-  ret = load_arduino_code();
-  if (ret!=0)
-    {
-      /* printf ("Setting up arduino code: %d\n", 	      ret); */
-      return 1;
-    }
 
+  printf("searduino_setup(void) init ext io\n");
   searduino_internal_log_i("Initialising external IO module\n");
   init_ext_io();
-
+  
+  printf("searduino_setup(void) init time\n");
   searduino_internal_log_i("Initialising time module\n");
   init_time();
 
+  printf("searduino_setup(void) init pins\n");
   searduino_internal_log_i("Initialising arduino pins module\n");
   init_arduino_pins();
 
+  printf("searduino_setup(void) set running\n");
   searduino_internal_log_i("Setting program as running\n");
   searduino_set_running();
 
@@ -128,20 +131,22 @@ int searduino_setup(void)
   hid_enable_faked_hid();
 #endif
   
+  printf("searduino_setup(void) returning\n");
   return 0;
 }
 
 
 
-static char * 
+char * 
 get_arduino_code_name(void)
 {
   char *ret = NULL;
+
   /* printf ("Getting arduino lib name\n"); */
   if ((arduino_code==NULL) || 
       (arduino_code[0]=='\0'))
     {
-      printf ("Could not set arduino library to use\n");
+      printf ("Could not get the name of the arduino library to use\n");
     }
   else
     {
@@ -157,6 +162,7 @@ get_arduino_code_name(void)
 int 
 searduino_set_arduino_code_name(const char* libname)
 {
+  int ret;
   
   if (libname==NULL)
     {
@@ -171,8 +177,23 @@ searduino_set_arduino_code_name(const char* libname)
       return 1;
     }
 
-  printf("Setting arduino code name: %s\n", libname);
+  if (strncmp(arduino_code, libname, strlen(libname)==0))
+    {
+      printf("Not setting arduino code name: %s to the same thing   (setup.c)\n", libname);
+      return 0;
+    }
+
+  printf("Setting arduino code name: %s   (setup.c)\n", libname);
   strncpy (arduino_code, libname, 1024);
+
+  ret = load_arduino_code();
+  if (ret!=0)
+    {
+      printf ("Setting up arduino code failed: %d\n", 	      ret);
+      return 1;
+    }
+
+  
 
   return 0;
 }
@@ -185,7 +206,8 @@ load_arduino_code(void)
   char *ard_lib_name;
 
   ard_lib_name = get_arduino_code_name();
-  
+
+  printf ("Trying to load code from %s\n", ard_lib_name);
 
   if (ard_lib_name == NULL)
     {
@@ -212,6 +234,7 @@ load_arduino_code(void)
 	}
       /* printf ("setup.c:  code at %p\n", searduino_main_entry); */
     }
+  printf ("Successfully loaded code from %s\n", ard_lib_name);
   return 0;
 }
 
