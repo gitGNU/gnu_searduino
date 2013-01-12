@@ -47,6 +47,7 @@
 typedef void    (*dm_to_sim_callback_ptr)(uint8_t pin, uint8_t mode); 
 typedef void    (*out_to_sim_callback_ptr)(uint8_t pin, unsigned int val, uint8_t pin_type); 
 typedef void    (*log_to_sim_callback_ptr)(uint8_t level, const char*);
+typedef void    (*pintype_to_sim_callback_ptr)(uint8_t pin, uint8_t type); 
 
 
 /*
