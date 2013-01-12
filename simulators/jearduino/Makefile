@@ -1,8 +1,22 @@
 
-#com/sandklef/searduino/SearduinoMain.java
-JAVA_SOURCE=   com/sandklef/jearduino/Jearduino.java com/sandklef/jearduino/PinTable.java com/sandklef/jearduino/Pin.java com/sandklef/jearduino/PinEvent.java com/sandklef/jearduino/ExecControl.java com/sandklef/jearduino/ExecEvent.java com/sandklef/jearduino/Logger.java com/sandklef/jearduino/Board.java com/sandklef/jearduino/BoardEvent.java
-#com/sandklef/jearduino/SearduinoMain.class  
-JAVA_CLASSES= com/sandklef/jearduino/Jearduino.class com/sandklef/jearduino/PinTable.class com/sandklef/jearduino/Pin.class com/sandklef/jearduino/ExecControl.class com/sandklef/jearduino/ExecEvent.class com/sandklef/jearduino/Logger.class  com/sandklef/jearduino/PinEvent.class  com/sandklef/jearduino/Board.class com/sandklef/jearduino/BoardEvent.class
+PKG_PATH=com/sandklef/jearduino/
+JAVA_SOURCE= \
+	$(PKG_PATH)/Jearduino.java \
+	$(PKG_PATH)/PinTable.java  \
+	$(PKG_PATH)/PinEvent.java \
+	$(PKG_PATH)/ExecControl.java \
+	$(PKG_PATH)/ExecEvent.java \
+	$(PKG_PATH)/Logger.java \
+	$(PKG_PATH)/Board.java \
+	$(PKG_PATH)/BoardEvent.java \
+	$(PKG_PATH)/JearduinoPreferences.java \
+	$(PKG_PATH)/InfoPanel.java    \
+	$(PKG_PATH)/JearduinoMenu.java   \
+	$(PKG_PATH)/JearduinoAbout.java   \
+	$(PKG_PATH)/ArduinoCodeNameEvent.java   \
+	$(PKG_PATH)/FileEvent.java 
+
+#	$(PKG_PATH)/CodeEvent.java \
 
 LIB_PATHS=./:../../faked-arduino/.libs/:../../extensions/java
 
@@ -21,4 +35,4 @@ run:
 #	LD_LIBRARY_PATH=./c/ java -cp  .:/./c/ -Djava.class.library=.:/./c/ com.sandklef.searduino.SearduinoMain
 
 clean:
-	rm -f $(JAVA_CLASSES) 
+	rm -f $(PKG_PATH)/*.class
