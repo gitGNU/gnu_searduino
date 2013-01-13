@@ -21,6 +21,16 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+/**
+ * @file   seasim.h
+ * @Author Henrik Sandklef
+ * @date   January 2013
+ * @brief  API for simulators and test code. Provides functions to simulate Arduino pin input and means to check Arduino output pins.
+ *
+ * 
+ */
+
+
 #include "searduino.h"
 #include "searduino_pin.h"
 #include "setup.h"
@@ -41,15 +51,67 @@ extern searduino_main_ptr_ptr searduino_main_entry;
 extern "C"{
 #endif
   
+
+  
+/**
+ * @name    seasim_fake_digital_input
+ * @brief   Fakes input on an Arduino digital pin
+ *
+ * This function should be used if you want to simulate input on the
+ * Arduino boards. The coresponds to actually setting the input
+ * manually (e.g using power supply) an input pin on the Arduino.
+ *
+ * @param [uint8_t] pin Digital pin to fake input on
+ * @param [uint8_t] value Value (0 or 1) to fake
+ *
+ * @retval 0 on success
+ * @retval !0 on failure
+ *
+ * Example Usage:
+ * @code
+ *    seasim_fake_digital_input (7,0);
+ * @endcode
+ */
 uint8_t 
 seasim_fake_digital_input (uint8_t pin, uint8_t val);
 
+  
+/**
+ * @name    seasim_fake_analog_input
+ * @brief   Fakes input on an Arduino digital pin
+ *
+ * This function should be used if you want to simulate input on the
+ * Arduino boards. The coresponds to actually setting the input
+ * manually (e.g using power supply) an input pin on the Arduino.
+ *
+ * @param [uint8_t] pin Analog pin to fake input on
+ * @param [uint8_t] value Value (0 - 1024) to fake
+ *
+ * @retval 0 on success
+ * @retval !0 on failure
+ *
+ * Example Usage:
+ * @code
+ *    seasim_fake_digital_input (8,786);
+ * @endcode
+ */
 uint8_t 
 seasim_fake_analog_input (uint8_t pin, unsigned int val);
 
+
+  /*
+   * This functions will be obsoleted.
+   * It is replaced by the easier to use: 
+   *   seasim_fake_digital_input (uint8_t pin, uint8_t val);
+   *   seasim_fake_analog_input (uint8_t pin, unsigned int val);
+   */
 uint8_t 
 seasim_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type);
 
+  /*
+   * This functions will be obsoleted.
+   * It is replaced by the easier to use: 
+   */
 unsigned int
 seasim_get_generic_output(uint8_t pin, uint8_t pin_type);
 
