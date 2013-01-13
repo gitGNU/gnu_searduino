@@ -80,13 +80,28 @@ public class ExecControl extends JPanel implements ActionListener
 	resume.addActionListener(this);
 	halt.addActionListener(this);
 
-	start.setEnabled(true);
+	start.setEnabled(false);
 	pause.setEnabled(false);
 	resume.setEnabled(false);
 	halt.setEnabled(false);
     }
 
-
+    public void setStates(Boolean startState, 
+			  Boolean pauseState, 
+			  Boolean resumeState, 
+			  Boolean haltState)
+    {
+	start.setEnabled(startState);
+	pause.setEnabled(pauseState);
+	resume.setEnabled(resumeState);
+	halt.setEnabled(haltState);
+    }
+			  
+    public void setStartable()
+    {
+	start.setEnabled(true);
+    }
+			  
 
     public void actionPerformed(ActionEvent e) {
 	int type = 0 ; 
