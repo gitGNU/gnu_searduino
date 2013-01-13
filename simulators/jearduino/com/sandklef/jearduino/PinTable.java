@@ -206,12 +206,11 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public void stateChanged(ChangeEvent e) {
 	 
-	for (char i=1; i<nrPins;i++)
+	for (int i=1; i<nrPins;i++)
 	    {
 		if (e.getSource() == pins[i][TABLE_INPUT_POS]) 
 		    {
-			Character val = (Character)((JSpinner)pins[i][TABLE_INPUT_POS]).getValue();
-			pe.inputValueEvent(i, val);
+			pe.inputValueEvent(i, (Integer)((JSpinner)pins[i][TABLE_INPUT_POS]).getValue());
 		    }  
 	    }  
     }
