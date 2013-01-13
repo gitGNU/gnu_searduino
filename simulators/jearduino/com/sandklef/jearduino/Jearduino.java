@@ -288,7 +288,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }
 
 
-    public void inputValueEvent(char pin, char val)
+    public void inputValueEvent(int pin, int val)
     {
 	// System.out.println("PIN: " + pin + "  VALUE: " + val);
 	searduino.setInputPinValue(pin, 
@@ -326,11 +326,16 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void getAndUseArduinoCodeName()
     {
+	int ret;
 	String codeName = jpref.getArduinoCodeName(1);
 	System.out.println("getAndUseArduinoCodeName: code -------------> CODe: " + codeName );
 	
+	ret = searduino.setArduinoCodeName(codeName);
+	if (ret!=0)
+	    {
+		return ;
+	    }
 	infoPanel.setArduinoCodeName(codeName);
-	searduino.setArduinoCodeName(codeName);
     }
     
     public void showArduinoCodeNameMenu()
@@ -348,6 +353,13 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void saveArduinoCodeName(String canonName, String shortName)
     {
+	int ret;
+	ret = searduino.setArduinoCodeName(canonName);
+	if (ret!=0)
+	    {
+		return ;
+	    }
+
 	for (int i=(codeNamesToStore-1);i>-1;i--)
 	    {
 		System.out.println("CURRENT MENU["+(i+1)+"]"  + jpref.getArduinoCodeName(i+1) );  
@@ -391,12 +403,14 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    }
 	System.out.println("New board code seems fine: " + f.getName() );
 	saveArduinoCodeName(boardCode, f.getName());
+	ec.setStartable();
     }
 
     public void handleArduinoCodeNameEvent(int codeIdx)
     {
 	infoPanel.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
 	searduino.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
+	ec.setStartable();
     }
     
     public static void main(String[] args) {
