@@ -78,7 +78,7 @@ START_TEST (test_limit)
 {
   int i ;
 
-  fail_if(get_Write_timelimit()!=20);
+  fail_if(get_write_timelimit()!=20);
 
   test_do_to_sim_callback_ctr=0;
   seasim_register_out_sim_cb(test_do_to_sim_callback);
@@ -92,7 +92,7 @@ START_TEST (test_limit)
   digitalWrite(1,1);  
   fail_if(test_do_to_sim_callback_ctr!=0);
 
-  set_Write_timelimit(0);
+  set_write_timelimit(0);
   test_do_to_sim_callback_ctr=0;
   usleep(1000);
   digitalWrite(1,0);
@@ -102,7 +102,7 @@ START_TEST (test_limit)
   digitalWrite(1,0);
   fail_if(test_do_to_sim_callback_ctr!=3);
 
-  set_Write_timelimit(200000);
+  set_write_timelimit(200000);
   test_do_to_sim_callback_ctr=0;
   usleep(1000);
   digitalWrite(1,0);
