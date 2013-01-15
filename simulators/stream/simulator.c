@@ -200,12 +200,12 @@ void* command_reader(void* in)
       else if (strncmp(buf,"limit",5)==0)
 	{
 	  printf ("setting limit\n");
-	  set_Write_timelimit(100000);
+	  set_write_timelimit(100000);
 	}
       else if (strncmp(buf,"ulimit",5)==0)
 	{
 	  printf ("setting limit\n");
-	  set_Write_timelimit(10);
+	  set_write_timelimit(10);
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{
