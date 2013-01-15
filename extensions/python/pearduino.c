@@ -264,7 +264,7 @@ static PyObject* c_set_arduino_code(PyObject* self, PyObject* args)
   return o;
 }
 
-static PyObject* c_set_Write_timelimit(PyObject* self, PyObject* args)
+static PyObject* c_set_write_timelimit(PyObject* self, PyObject* args)
 {
   unsigned int ret;
   unsigned int val;
@@ -273,7 +273,7 @@ static PyObject* c_set_Write_timelimit(PyObject* self, PyObject* args)
   PyArg_ParseTuple(args, "i", &val);
 
   /* printf ("pear: before %d\n", get_digitalWrite_timelimit()); */
-  seasim_set_Write_timelimit(val);
+  seasim_set_write_timelimit(val);
   /* printf ("pear: after  %d\n", get_digitalWrite_timelimit()); */
   PyObject* o = Py_BuildValue("i", val);
 
@@ -365,12 +365,12 @@ static PyObject* c_get_current_pin_type(PyObject* self, PyObject* args)
 }
 
 
-static PyObject* c_get_Write_timelimit(PyObject* self, PyObject* args)
+static PyObject* c_get_write_timelimit(PyObject* self, PyObject* args)
 {
   unsigned int ret;
   PEARDUINO_PRINT_IN();
   
-  ret = seasim_get_Write_timelimit();
+  ret = seasim_get_write_timelimit();
   PyObject* o = Py_BuildValue("i", ret);
 
   PEARDUINO_PRINT_OUT();
@@ -668,8 +668,8 @@ static PyMethodDef myModule_methods[] = {
   {"seasim_initialise",              (PyCFunction)c_searduino_initialise, METH_VARARGS, NULL},
   {"seasim_start",                   (PyCFunction)c_start, METH_VARARGS, NULL},
   {"seasim_stop",                    (PyCFunction)c_stop, METH_VARARGS, NULL},
-  {"seasim_set_Write_timelimit",     (PyCFunction)c_set_Write_timelimit, METH_VARARGS, NULL},
-  {"seasim_get_Write_timelimit",     (PyCFunction)c_get_Write_timelimit, METH_VARARGS, NULL},
+  {"seasim_set_write_timelimit",     (PyCFunction)c_set_write_timelimit, METH_VARARGS, NULL},
+  {"seasim_get_write_timelimit",     (PyCFunction)c_get_write_timelimit, METH_VARARGS, NULL},
   {"seasim_disable_streamed_output", (PyCFunction)c_disable_streamed_output, METH_VARARGS, NULL},
   {"seasim_enable_streamed_output",  (PyCFunction)c_enable_streamed_output, METH_VARARGS, NULL},
   {"seasim_get_searduino_version",   (PyCFunction)c_get_searduino_version, METH_VARARGS, NULL},
