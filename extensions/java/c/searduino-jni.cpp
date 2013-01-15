@@ -188,7 +188,7 @@ Java_com_sandklef_searduino_Searduino_getWriteTimelimit(JNIEnv *env, jobject obj
 {
   int ret;
 
-  return seasim_get_Write_timelimit();
+  return seasim_get_write_timelimit();
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
