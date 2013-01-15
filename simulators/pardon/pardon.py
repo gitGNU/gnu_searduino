@@ -239,7 +239,7 @@ class SpinButtonWindow(Gtk.Box):
         self.spinbutton = Gtk.SpinButton()
         self.spinbutton.set_adjustment(adjustment)
         self.spinbutton.set_numeric(True)
-        self.spinbutton.set_value(seasim_get_Write_timelimit())
+        self.spinbutton.set_value(seasim_get_write_timelimit())
         self.increment=0
         self.setIncrement()
         self.spinbutton.connect("value-changed", self.on_update)
@@ -268,7 +268,7 @@ class SpinButtonWindow(Gtk.Box):
         self.setIncrement()
 
 #        print "===========================================  " +         str(self.spinbutton.get_value_as_int())
-        seasim_set_Write_timelimit(int(self.spinbutton.get_value_as_int()))
+        seasim_set_write_timelimit(int(self.spinbutton.get_value_as_int()))
 #        print "======= set to: " + str(searduino_get_digitalWrite_timelimit())
 
 
@@ -806,7 +806,7 @@ seasim_set_log_callback(newLogCallback)
 seasim_set_arduino_code(ard_code)
 seasim_initialise();
 
-seasim_set_Write_timelimit(0)
+seasim_set_write_timelimit(0)
 time.sleep(1)
 win = MyWindow(size)
 win.connect("delete-event", Gtk.main_quit)
