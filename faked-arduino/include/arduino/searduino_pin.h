@@ -136,10 +136,10 @@ get_pin_val(uint8_t pin);
 
 
 void 
-set_Write_timelimit(unsigned int lim);
+set_write_timelimit(unsigned int lim);
 
 unsigned int 
-get_Write_timelimit(void);
+get_write_timelimit(void);
 
 int
 output_callback(uint8_t pin, uint8_t pin_type);

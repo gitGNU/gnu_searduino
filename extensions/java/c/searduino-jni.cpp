@@ -1,3 +1,26 @@
+/*****
+ *                                                                   
+ *                   Searduino
+ *                      
+ *   Copyright (C) 2013 Henrik Sandklef 
+ *                                                                   
+ * This program is free software; you can redistribute it and/or     
+ * modify it under the terms of the GNU General Public License       
+ * as published by the Free Software Foundation; either version 3    
+ * of the License, or any later version.                             
+ *                                                                   
+ *                                                                   
+ * This program is distributed in the hope that it will be useful,   
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of    
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the     
+ * GNU General Public License for more details.                      
+ *                                                                   
+ * You should have received a copy of the GNU General Public License 
+ * along with this program; if not, write to the Free Software       
+ * Foundation, Inc., 51 Franklin Street, Boston,            
+ * MA  02110-1301, USA.                                              
+ ****/
+
 #include "../com_sandklef_searduino_Searduino.h"
 
 #include "searduino-jni.h"
@@ -6,7 +29,8 @@
 #include <stdio.h>
 #include <pthread.h>
 
-pthread_t arduino_thread;
+pthread_t arduino_thread[10];
+int thread_index=0;
 
 jmethodID pin_mode_callback;
 jmethodID out_callback;
@@ -138,6 +162,8 @@ my_type_sim_callback(uint8_t pin, uint8_t pin_type)
 
 void* arduino_code(void *in)
 {
+  printf ("arduino_code:    %p\n", searduino_main_entry); fflush(stdout);
+
   if (searduino_main_entry!=NULL)
     {
       searduino_main_entry(NULL);
@@ -146,6 +172,7 @@ void* arduino_code(void *in)
     {
       fprintf (stderr, "Couldn't find an entry point for the Arduino code.\n");
     }
+  return NULL;
 }
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setWriteTimelimit
@@ -181,24 +208,6 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
 
   seasim_enable_streamed_output();
 
-  //  seasim_set_arduino_code_name("../../test/shared/libtest.so");
-  //  seasim_set_arduino_code_name("../../test/arduino-code-dynamic/libard_code.so");
-
-  printf (" ----------------------------------------->  loading code\n");
-  ret = seasim_set_arduino_code_name("./test/fast-digital-out/fastdigio.so");
-  printf (" ----------------------------------------->  loading code returned: %d\n", ret);
-
-  printf ("setup\n");
-  ret = seasim_setup();
-  if (ret!=0)
-    {
-      printf (" ----------------------------------------->  seasim setup failed\n");
-      return ret;
-    }
-
-
-  //  my_dm_sim_callback(4,5);
-  
   printf ("onload: return %d\n", JNI_VERSION_1_4);
   return JNI_VERSION_1_4;
 }
@@ -315,7 +324,17 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_resumeArduinoCode
 JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
   (JNIEnv *, jobject)
 {
-  return seasim_set_halted();
+  int ret;
+
+  printf ("cancel thread\n");
+
+  //  seasim_set_halted();
+
+  ret = pthread_cancel(arduino_thread[thread_index]);
+  printf ("cancel thread %d\n", ret);
+
+  printf ("cancel thread returning\n");
+  return ;
 }
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_isPausedArduinoCode
@@ -360,11 +379,17 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
   (JNIEnv *, jobject)
 {
   int retval;
+  
   printf ("joining thread....\n");
-  pthread_join(arduino_thread, (void**)&retval);
+  //  pthread_join(arduino_thread[thread_index], (void**)&retval);
 
-  printf ("joining thread....%p\n", retval);
-  pthread_create(&arduino_thread, NULL, arduino_code, NULL);
+  //  thread_index++;
+
+  printf ("starting thread....join returned: %d\n", retval);
+  printf ("starting thread....thread: %p\n", arduino_thread);
+  printf ("starting thread....thread: %p\n", &arduino_thread);
+  seasim_set_running();
+  pthread_create(&arduino_thread[thread_index], NULL, arduino_code, NULL);
 }
 
 
@@ -413,18 +438,17 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setBoardName
   (JNIEnv *env, jobject obj, jstring board)
 {
   JNIEnv * g_env;
+  int ret;
+
   int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   CHECK_JNI(getEnvStat, g_env, g_vm);
 
-  printf ("Java_com_sandklef_searduino_Searduino_setBoardName 3  g_m:%p env:%p ge:%p   => str=%p\n", g_vm, env, g_env, board);
-  fflush(stdout);
+  const char* strCIn = (env)->GetStringUTFChars(board , 0);
+  printf ("board: %s\n", strCIn);
 
-  const char *cstr= (g_env)->GetStringUTFChars(board,0);
-  printf ("Java_com_sandklef_searduino_Searduino_setBoardName 4\n");
-  fflush(stdout);
-
-
-  return seasim_set_board_name((char*)cstr);
+  ret = seasim_set_board_name((char*)strCIn);
+  
+  
 }
 
 
@@ -442,7 +466,7 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getCurrentPinType
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setGenericInput
   (JNIEnv *env, jobject obj, jint pin, jint val, jint pin_type)
 {
-  seasim_set_input(pin, val, pin_type);
+  seasim_fake_input(pin, val, pin_type);
 }
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getNrOfPins
@@ -456,10 +480,61 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getArduinoCodeNa
   (JNIEnv *enc, jobject obj)
 {
   JNIEnv * g_env;
+  char *str;
+
   int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
-  jstring jstrBuf = (g_env)->NewStringUTF("dummy.so");
+
+  str = seasim_get_arduino_code_name();
+  jstring jstrBuf = (g_env)->NewStringUTF(str);
 
   return jstrBuf;
 }
 
+JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setArduinoCodeName
+  (JNIEnv *env, jobject obj, jstring str)
+{
+  JNIEnv * g_env;
+  int ret;
+  int getEnvStat;
+  static int is_setup = 0 ;
+  
 
+  getEnvStat  = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  CHECK_JNI(getEnvStat, g_env, g_vm);
+
+  const char* strCIn = (env)->GetStringUTFChars(str , 0);
+  printf ("board code: %s\n", strCIn);
+
+  printf (" ----------------------------------------->  loading code %s\n", strCIn);
+  ret = seasim_set_arduino_code_name(strCIn);
+  printf (" <-----------------------------------------  loading code returned: %d\n", ret); fflush(stdout); 
+  
+  if (ret==1)
+    {
+      printf (" -----------------------------------------  loading code failed (1)\n", ret); fflush(stdout); 
+    }
+  else if (is_setup!=3)
+    {
+      printf ("setup\n");
+      ret = seasim_setup();
+      if (ret!=0)
+	{
+	  printf (" ----------------------------------------->  seasim setup failed\n");
+	}
+      is_setup=1;
+    }
+  return ret;
+}
+
+
+JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_fakeAnalogInput
+  (JNIEnv *env, jobject obj, jint pin, jint val)
+{
+  return seasim_fake_analog_input (pin, val);
+}
+
+JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_fakeDigitalInput
+  (JNIEnv *env, jobject obj, jint pin, jint val)
+{
+  return seasim_fake_digital_input (pin, val);
+}

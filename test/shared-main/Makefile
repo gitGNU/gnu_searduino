@@ -34,3 +34,6 @@ export USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST)
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
+# dummy target for internal searduino devel
+distclean:
+	@echo

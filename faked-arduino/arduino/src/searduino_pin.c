@@ -136,7 +136,7 @@ void define_arduino_pin(uint8_t pin,
  *
  */
 void 
-set_Write_timelimit(unsigned int lim)
+set_write_timelimit(unsigned int lim)
 {
   digitalWrite_timelimit = lim*1000;
 }
@@ -147,7 +147,7 @@ set_Write_timelimit(unsigned int lim)
  *
  */
 unsigned int 
-get_Write_timelimit(void)
+get_write_timelimit(void)
 {
   return (digitalWrite_timelimit/1000) ;
 }

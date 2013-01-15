@@ -42,7 +42,7 @@ static struct pin pins[100];
  * This function will be called every time the Arduino program updates a digital output pin (on change only!)
  */
 void 
-my_out_sim_callback(uint8_t pin, uint8_t val, uint8_t pin_type)
+my_out_sim_callback(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   
 #ifdef DEBUG
@@ -73,18 +73,14 @@ my_out_sim_callback(uint8_t pin, uint8_t val, uint8_t pin_type)
   if (pin_type == SEARDUINO_PIN_TYPE_ANALOG)
     {
       pins[pin].val = val+1;
+      seasim_fake_analog_input (pin-1, pins[pin].val);
     }
   else
     {
       pins[pin].val = !val;
+      seasim_fake_digital_input (pin-1, pins[pin].val);
     }
 
-#ifdef DEBUG
-  printf ("set pin %d to %d\n", pin-1, pins[pin].val); 
-#endif
-  seasim_set_generic_input(pin-1, pins[pin].val, pin_type);
-  //  seasim_set_generic_input(A0, 253, SEARDUINO_PIN_TYPE_ANALOG);
-  
   if (pins[pin].callbacks > 5 )
     {
       printf("Time to quit\n");
@@ -184,10 +180,10 @@ main(int argc, char **argv)
 
   sim_setup("../arduino-code/arduino-code.so");
 
-  seasim_set_generic_input(2, 0,   SEARDUINO_PIN_TYPE_DIGITAL);
-  seasim_set_generic_input(A1, 0,   SEARDUINO_PIN_TYPE_ANALOG);
-  seasim_set_generic_input(2, 1,   SEARDUINO_PIN_TYPE_DIGITAL);
-  seasim_set_generic_input(A1, 3, SEARDUINO_PIN_TYPE_ANALOG);
+  seasim_fake_digital_input(2, 0);
+  seasim_fake_analog_input(A1, 0);
+  seasim_fake_digital_input(2, 1);
+  seasim_fake_analog_input(A1, 3);
 
   if (searduino_main_entry!=NULL)
     {

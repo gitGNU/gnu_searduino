@@ -54,6 +54,7 @@ START_TEST (test_setup)
 END_TEST
 
 
+
 Suite *
 buffer_suite(void) {
   Suite *s = suite_create("Setup_Fuctions");

@@ -389,12 +389,12 @@ class Pin(Gtk.Widget):
             val = 1
             
 #      print "Pin toggle " + str(self.pin_nr) + ", " + str(val) + ", " + str(self.pin_type)
-        seasim_set_input(self.pin_nr, 
+        seasim_fake_input(self.pin_nr, 
                          val, 
                          self.pin_type )
         
     def on_update(self,disc):
-        seasim_set_input(self.pin_nr,
+        seasim_fake_input(self.pin_nr,
                          self.spinbutton.get_value_as_int(), 
                          self.pin_type)
 

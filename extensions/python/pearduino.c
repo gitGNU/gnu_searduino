@@ -467,7 +467,7 @@ static PyObject* c_Read(PyObject* self, PyObject* args)
 /*
  * Function to be called from Python
  */
-static PyObject* c_ext_set_input(PyObject* self, PyObject* args)
+static PyObject* c_ext_fake_input(PyObject* self, PyObject* args)
 {
   unsigned int pin;
   unsigned int val;
@@ -481,7 +481,7 @@ static PyObject* c_ext_set_input(PyObject* self, PyObject* args)
 
   PEARDUINO_PRINT_INSIDE_STR("wrapper code sets input pin\n");
 
-  val= seasim_set_input(pin, val, pin_type);
+  val= seasim_fake_input(pin, val, pin_type);
 
   PyObject* o = Py_BuildValue("i", val);
 
@@ -654,7 +654,7 @@ static PyObject* c_set_board_name(PyObject* self, PyObject* args)
  */
 static PyMethodDef myModule_methods[] = {
   {"seasim_Read",                    (PyCFunction)c_Read, METH_VARARGS, NULL},
-  {"seasim_set_input",               (PyCFunction)c_ext_set_input, METH_VARARGS, NULL},
+  {"seasim_fake_input",              (PyCFunction)c_ext_fake_input, METH_VARARGS, NULL},
   {"seasim_set_dig_mode_callback",   (PyCFunction)c_my_set_dig_mode_callback, METH_VARARGS, NULL},
   {"seasim_set_callback",            (PyCFunction)c_my_set_callback, METH_VARARGS, NULL},
   {"seasim_set_log_callback",        (PyCFunction)c_my_set_log_callback, METH_VARARGS, NULL},

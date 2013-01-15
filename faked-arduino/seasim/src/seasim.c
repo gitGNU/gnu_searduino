@@ -49,6 +49,10 @@ seasim_fake_analog_input (uint8_t pin, unsigned int val)
   return ext_set_generic_input(pin, val, SEARDUINO_PIN_TYPE_ANALOG);
 }
 
+/*
+
+ * OBSOLETED
+
 unsigned int
 seasim_get_generic_output(uint8_t pin, uint8_t pin_type)
 {
@@ -60,6 +64,7 @@ seasim_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   return ext_set_generic_input(pin, val, pin_type);
 }
+*/
 
 uint8_t 
 seasim_register_out_sim_cb(out_to_sim_callback_ptr cb)
@@ -82,7 +87,7 @@ seasim_register_type_cb(pintype_to_sim_callback_ptr cb)
 
 
 uint8_t
-seasim_set_input(uint8_t pin, unsigned int val, uint8_t pin_type)
+seasim_fake_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   return sim_set_generic_pin_val(pin, val, pin_type);
 }

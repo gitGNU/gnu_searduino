@@ -93,11 +93,11 @@ int searduino_setup(void)
   static int already_setup = 0;
   int ret;
 
-  printf("searduino_setup(void)\n");
+  /* printf("searduino_setup(void)\n"); */
 
   if (already_setup)
     {
-      printf("searduino_setup(void) returning since already setup\n");
+      /*      printf("searduino_setup(void) returning since already setup\n"); */
       return 0;
     }
   PRINT_FUNCTION_NAME_NOARGS();
@@ -187,13 +187,13 @@ searduino_set_arduino_code_name(const char* libname)
   strncpy (arduino_code, libname, 1024);
 
   ret = load_arduino_code();
+  printf("Loading of code %s returned %d    (setup.c)\n", libname, ret);
+  fflush(stdout);
   if (ret!=0)
     {
       printf ("Setting up arduino code failed: %d\n", 	      ret);
       return 1;
     }
-
-  
 
   return 0;
 }
@@ -217,11 +217,11 @@ load_arduino_code(void)
   else
     {
       /* If we have been given a library name, load it */
-      /* printf ("Dynamically linked code\n"); */
+      printf ("Dynamically linked code, will call dlopen(%s)\n", ard_lib_name); 
       arduino_lib = dlopen ((const char*)ard_lib_name, RTLD_LAZY);
       if ( arduino_lib == NULL)
 	{
-	  fprintf (stderr, "Couldn't open dyn lib\n");
+	  fprintf (stderr, "Couldn't open dyn lib (%s)\n", dlerror());
 	  return 1;
 	}
       /* printf ("setup.c:  code at %p\n", arduino_lib); */

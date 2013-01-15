@@ -43,7 +43,7 @@ pthread_t arduino_thread;
  * This function will be called every time the Arduino program updates a digital output pin (on change only!)
  */
 void 
-my_out_sim_callback(uint8_t pin, uint8_t val, uint8_t pin_type)
+my_out_sim_callback(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
   fprintf (stdout,"SIM:%d:%d:%d\n",pin_type, pin, val);
 }
@@ -166,7 +166,14 @@ void* command_reader(void* in)
 /*  	  printf ("will parse: '%s'\n", tmp);  */
 	  sscanf(tmp, "%d:%d:%d", &type, &pin, &val);
   	  printf ("SIM WILL SET pin:%d val:%d type:%d  \n", pin, val, type);  
-	  seasim_set_generic_input(pin, val, type);
+	  if (type == SEARDUINO_PIN_TYPE_ANALOG)
+	    {
+	      seasim_fake_analog_input (pin, val);
+	    }
+	  else
+	    {
+	      seasim_fake_digital_input (pin, val);
+	    }
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{
@@ -183,7 +190,7 @@ void* command_reader(void* in)
 	  static int a=255;
 	  printf ("\n\tSETTING %d\n", a);
 	  printf ("%s (%d,%d)\n", __func__, 14, a);
-	  seasim_set_generic_input(14, (unsigned int)a++, SEARDUINO_PIN_TYPE_ANALOG);
+	  seasim_fake_analog_input (14, (unsigned int)a++);
 	}
       else if (strncmp(buf,"resume",5)==0)
 	{

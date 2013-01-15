@@ -250,7 +250,6 @@ START_TEST (test_log_file)
   printf ("  logfile seemd to be ok\n");
   unlink("/tmp/searduino-logtest.log");
 
-
   /*
    *   File with non ecisting path
    */

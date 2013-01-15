@@ -25,5 +25,5 @@ package com.sandklef.jearduino;
 
 public interface PinEvent
 {
-    public void inputValueEvent(char pin, char val);
+    public void inputValueEvent(int pin, int val);
 }

@@ -95,7 +95,6 @@ void turnOffPWM(uint8_t timer)
 
 void digitalWrite(uint8_t pin, uint8_t val)
 {
-
   if (PIN_OUT_OF_RANGE(pin))
     {
       SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);

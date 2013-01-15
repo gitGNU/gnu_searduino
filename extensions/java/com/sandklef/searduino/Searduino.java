@@ -51,10 +51,8 @@ public class Searduino
     public  native int getCurrentPinType(int pin);
     private native int registerPinCallback(SearduinoObserver o, int type);
 
-    public native  int fakeAnalogInput(char pin, char val);
-    public native  int fakeDigitalInput(char pin, char val);
-
-    // OBSOLETE    public  native int setGenericInput(int pin, int val, int pin_type);
+    public native  int fakeAnalogInput(int pin, int val);
+    public native  int fakeDigitalInput(int pin, int val);
 
     // private stuff
     private static final int SEARDUINO_PIN_MODE  = 1;
@@ -126,7 +124,7 @@ public class Searduino
     }
 
 
-    public int setInputPinValue(char pin, char val, int pin_type)
+    public int setInputPinValue(int pin, int val, int pin_type)
     {
 	if (pin_type==SEARDUINO_PINTYPE_DIGITAL)
 	    {
