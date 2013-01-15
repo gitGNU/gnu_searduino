@@ -187,15 +187,15 @@ void seasim_enable_streamed_output(void)
 }
 
 void 
-seasim_set_Write_timelimit(unsigned int lim)
+seasim_set_write_timelimit(unsigned int lim)
 {
-  set_Write_timelimit(lim);
+  set_write_timelimit(lim);
 }
 
 unsigned int
-seasim_get_Write_timelimit(void)
+seasim_get_write_timelimit(void)
 {
-  return get_Write_timelimit();
+  return get_write_timelimit();
 }
 
 int  
