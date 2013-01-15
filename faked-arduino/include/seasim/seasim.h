@@ -476,44 +476,171 @@ seasim_is_enable_streamed_output(void);
 void 
 seasim_enable_streamed_output(void);
 
-void 
-seasim_set_Write_timelimit(unsigned int lim);
 
+/**
+ * @name    seasim_set_write_timelimit
+ * @brief   Set the maximum update frequency for a pin
+ *
+ * If pins get updated to fast you can limit the speed with
+ * this functions.
+ * 
+ * @param [uint8_t] lim The limit in milli seconds
+ *
+ * 
+ */
+void 
+seasim_set_write_timelimit(unsigned int lim);
+
+/**
+ * @name    seasim_set_write_timelimit
+ * @brief   Get the maximum update frequency for a pin
+ *
+ * If pins get updated to fast you can limit the speed.
+ * This function returns the current update limit.
+ * 
+ * @retval [uint8_t] lim The current limit.
+ *
+ * 
+ */
 unsigned int
-seasim_get_Write_timelimit(void);
+seasim_get_write_timelimit(void);
 
 int  
 seasim_i2c_add_device (unsigned int device_nr, 
 		       const char  *setup_fun);
 
 
+/**
+ * @name    seasim_get_searduino_version
+ * @brief   Returns the version of Searduino (as a string)
+ *
+ * @retval [char*] the version of Searduino
+ *
+ */
 const char* 
 seasim_get_searduino_version(void);
 
+
+/**
+ * @name    seasim_get_searduino_name
+ * @brief   Returns the name of Searduino (as a string)
+ *
+ * @retval [char*] the name of Searduino
+ *
+ */
 const char* 
 seasim_get_searduino_name(void);
 
+/**
+ * @name    seasim_set_board_name
+ * @brief   Sets the name of board to use
+ *
+ * If you're setting the name to a board not supported by Searduino
+ * the last set board will be kept.
+ *
+ * @param [char*] the name of board to use. If NULL Searduino sets no board in use.
+ *
+ * @retval 0 on success
+ * @retval !0 on failure
+ *
+ */
 int
 seasim_set_board_name(char *board);
 
+
+/**
+ * @name    seasim_get_board_name
+ * @brief   Returns the name of currently used board
+ *
+ * @retval [char*] the name of board in use. NULL if no board has been set.
+ *
+ */
 char *
 seasim_get_board_name(void);
 
+/**
+ * @name    seasim_get_current_pin_type
+ * @brief   Returns the pin type of a pin
+ *
+ * @param [uint8_t] pin Pin to check
+ *
+ * @retval [int] the type of the pin
+ *
+ */
 int 
 seasim_get_current_pin_type(uint8_t pin);
 
+/**
+ * @name    seasim_has_generic_pin_type
+ * @brief   Checks if a pin can be of a certain type
+ *
+ * @param [uint8_t] pin Pin to check
+ *
+ * @retval 0 if it can not
+ * @retval !0 if it can
+ *
+ */
 int 
 seasim_has_generic_pin_type(uint8_t pin, uint8_t type);
 
+
+/**
+ * @name    seasim_hid_disable_feedback
+ * @brief   Turn off faked hid
+ *
+ * Searduino can on some platforms move the mouse and keyboard
+ * just as Arduino code connected to a computer would do.
+ * This functions disables that feature.
+ * 
+ * @retval 0 on success
+ * @retval !0 on failure
+ *
+ */
 uint8_t 
 seasim_hid_disable_feedback(void);
 
+
+/**
+ * @name    seasim_hid_enable_feedback
+ * @brief   Turn off faked hid
+ *
+ * Searduino can on some platforms move the mouse and keyboard
+ * just as Arduino code connected to a computer would do.
+ * This functions enables that feature.
+ * 
+ * @retval 0 on success
+ * @retval !0 on failure
+ *
+ */
 uint8_t 
 seasim_hid_enable_feedback(void);
 
+
+/**
+ * @name    seasim_get_supported_boards
+ * @brief   Returns a string with all boards supported by Searduino
+ *
+ * @retval [char*] Returns an empty string if no boards are supported. Otherwise it returns a comma separated list of boards
+ *
+ * Example Usage:
+ * @code
+ *    seasim_get_supported_boards(void);
+ * @endcode
+ * would typically give you a string like this:
+ *     "Uno, Leonardo, Mega"
+ *  and so on.
+ */
 char *
 seasim_get_supported_boards(void);
 
+
+/**
+ * @name    seasim_get_nr_of_pins
+ * @brief   Returns the number of pins of the current board
+ *
+ * @retval [uint8_t] The number of pins on the currently chose board.
+ *
+ */
 uint8_t
 seasim_get_nr_of_pins(void);
 
