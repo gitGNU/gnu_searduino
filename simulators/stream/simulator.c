@@ -178,7 +178,7 @@ void* command_reader(void* in)
       else if (strncmp(buf,"quit",4)==0)
 	{
 	  seasim_set_halted();
-	  return ;
+	  return NULL;
 	}
       else if (strncmp(buf,"pause",5)==0)
 	{
@@ -209,7 +209,7 @@ void* command_reader(void* in)
 	}
       else if (strncmp(buf,"quit",4)==0)
 	{
-	  return ;
+	  return NULL;
 	}
       usleep (100);
     }
