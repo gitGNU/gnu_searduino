@@ -23,18 +23,18 @@
 
 AUTOMAKE_OPTIONS = gnu
 
-if PYTHON_SUPPORT
+if PYTHON_EXT_SUPPORT
 
 lib_LTLIBRARIES = libpearduino.la
 libpearduino_la_SOURCES = pearduino.c
 
 AM_CFLAGS=@PYTHON_CPPFLAGS@ -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ 
-AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/   -lsearduinostub   
+AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/.libs   -lsearduinostub   
 #-L../arduino-lib/
 #-larduino-code 
 
 install-exec-hook:
-	-rm $(DESTDIR)$(libdir)/pearduino$(SHLIB_EXT)
+	@-rm $(DESTDIR)$(libdir)/pearduino$(SHLIB_EXT)
 	ln -s $(DESTDIR)$(libdir)/libpearduino$(SHLIB_EXT) \
               $(DESTDIR)$(libdir)/pearduino$(SHLIB_EXT)
 
