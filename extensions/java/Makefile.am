@@ -43,6 +43,7 @@ JAVACFLAGS=-cp $(LIB_PATHS)
 
 $(SEARDUINO_JAR): $(SEARDUINO_JAVA_SOURCES)
 	javac $(JAVACFLAGS) $(SEARDUINO_JAVA_SOURCES)
+	javah com.sandklef.searduino.Searduino
 	jar cf $(SEARDUINO_JAR) $(SEARDUINO_PATH)/*.class
 
 install-exec-hook: $(SEARDUINO_JAR)
