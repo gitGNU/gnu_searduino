@@ -23,7 +23,7 @@
 
 /**
  * @file   seasim.h
- * @Author Henrik Sandklef
+ * @author Henrik Sandklef
  * @date   January 2013
  * @brief  API for simulators and test code. Provides functions to simulate Arduino pin input and means to check Arduino output pins.
  *
@@ -31,6 +31,7 @@
  */
 
 
+#ifndef DOXYGEN_SHOULD_SKIP_THIS
 #include "searduino.h"
 #include "searduino_pin.h"
 #include "setup.h"
@@ -40,7 +41,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <signal.h>
-
+#endif /* DOXYGEN_SHOULD_SKIP_THIS */
 
 #ifndef SEASIM_SEASIM_H
 #define SEASIM_SEASIM_H
@@ -651,3 +652,4 @@ seasim_get_nr_of_pins(void);
 
 
 #endif  /* SEASIM_SEASIM_H */
+

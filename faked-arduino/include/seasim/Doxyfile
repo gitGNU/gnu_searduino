@@ -1562,6 +1562,8 @@ EXPAND_AS_DEFINED      =
 
 SKIP_FUNCTION_MACROS   = YES
 
+PREDEFINED = DOXYGEN_SHOULD_SKIP_THIS
+
 #---------------------------------------------------------------------------
 # Configuration::additions related to external references
 #---------------------------------------------------------------------------
