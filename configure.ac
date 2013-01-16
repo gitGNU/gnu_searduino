@@ -73,15 +73,50 @@ if test "$pedantic_warnings" = yes; then
    AC_SUBST([PEDANTIC_FLAGS])
 fi
 
-AC_ARG_ENABLE([python],
-  [AS_HELP_STRING([--enable-python],
+AC_ARG_ENABLE([python-extension],
+  [AS_HELP_STRING([--enable-python-extension],
 	  [Enable python extension to Searduino])],
   [case $enableval in
      yes|no) ;;
-     *)      AC_MSG_ERROR([bad value $enableval for enable-pedantic option]) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for enable-python-extension option]) ;;
    esac
-   python_enabled=$enableval],
-  [python_enabled=yes]
+   python_ext_enabled=$enableval],
+  [python_ext_enabled=yes]
+)
+
+
+AC_ARG_ENABLE([java-extension],
+  [AS_HELP_STRING([--enable-java-extension],
+	  [Enable Java extension to Searduino])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for enable-java-extension option]) ;;
+   esac
+   java_ext_enabled=$enableval],
+  [java_ext_enabled=yes]
+)
+
+
+AC_ARG_ENABLE([pearduino],
+  [AS_HELP_STRING([--enable-pearduino],
+	  [Enable the Python/Gtk Simulator])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for enable-pearduino option]) ;;
+   esac
+   pearduino_enabled=$enableval],
+  [pearduino_enabled=yes]
+)
+
+AC_ARG_ENABLE([jearduino],
+  [AS_HELP_STRING([--enable-jearduino],
+	  [Enable the Java Simulator])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for enable-jearduino option]) ;;
+   esac
+   jearduino_enabled=$enableval],
+  [jearduino_enabled=yes]
 )
 
 
@@ -107,7 +142,7 @@ AC_ARG_ENABLE([shared-test],
   [st_enabled=yes]
 )
 
-if test "$python_enabled" = "yes"; then
+if test "$python_ext_enabled" = "yes"; then
 # Check for program
 # Keep this echo, it's needed on cygwin
 echo
@@ -137,7 +172,11 @@ fi
 # GNULIB 
 gl_PTHREAD_CHECK
 
-AM_CONDITIONAL(PYTHON_SUPPORT, test "x$python_enabled" = "xyes")
+AM_CONDITIONAL(PYTHON_EXT_SUPPORT, test "x$python_ext_enabled" = "xyes")
+AM_CONDITIONAL(PEARDUINO_SUPPORT,  test "x$pearduino_enabled" = "xyes")
+AM_CONDITIONAL(JAVA_EXT_SUPPORT,   test "x$java_ext_enabled" = "xyes")
+AM_CONDITIONAL(JEARDUINO_SUPPORT,  test "x$jearduino_enabled" = "xyes")
+
 AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
 AM_CONDITIONAL(SHAREDTEST,     test "x$st_enabled"     = "xyes")
 AM_CONDITIONAL(CYGWIN_USED,    test "x$CYGWIN"         = "xtrue")
@@ -306,6 +345,9 @@ prepare_searduino_mk
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/pardon/searduino-pardon.sh
 exit_on_failure $? "Prepared python simulator wrapper script"
 
+cat simulators/jearduino/searduino-jearduino.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/jearduino/searduino-jearduino.sh
+exit_on_failure $? "Prepared Java simulator wrapper script"
+
 cat bin/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/verify-install.sh
 exit_on_failure $? "Prepared installation verification script"
 chmod a+x bin/verify-install.sh
@@ -314,7 +356,7 @@ cat bin/arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/ardu
 exit_on_failure $? "Prepared Arduino examples to C translator"
 
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile example/hid/Makefile example/log/Makefile example/digital-rw/Makefile example/serial/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile  test/mk/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile example/verification/ok-version/Makefile  example/verification/nok-version/Makefile tools/Makefile ])
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/java/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile  simulators/jearduino/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile example/hid/Makefile example/log/Makefile example/digital-rw/Makefile example/serial/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile  test/mk/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile example/verification/ok-version/Makefile  example/verification/nok-version/Makefile tools/Makefile ])
 
 LIBXTST=""
 AC_CHECK_LIB(Xtst, XTestFakeMotionEvent, LIBXTST="-lXtst",[AC_CHECK_LIB(Xext,XTestFakeMotionEvent , LIBXTST="-lXext")])
@@ -337,21 +379,25 @@ AC_SUBST(USE_XTEST)
 AC_SUBST(LIBXTST)	
 
 AC_MSG_NOTICE([summary of build options:
-  package:          ${PACKAGE} 
-  version:          ${VERSION} 
-  Host type:        ${host}
-  Target:           ${target}
-  Install prefix:   ${prefix}
-  Compiler:         ${CC}
-  Warning flags:    ${WARN_CFLAGS}
-  Library types:    Shared=${enable_shared}, Static=${enable_static}
-  Python:           $python_enabled
-  Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
-  Unit test:        $ut_enabled
-  Unit test flags:  C: '$CHECK_CFLAGS'   LD: '$CHECK_LIBS'
-  Shared lib test:  $st_enabled
-  Pedantic flags:   $PEDANTIC_FLAGS
-  Pthreads:         $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
+  package:           ${PACKAGE} 
+  version:           ${VERSION} 
+  Host type:         ${host}
+  Target:            ${target}
+  Install prefix:    ${prefix}
+  Compiler:          ${CC}
+  Warning flags:     ${WARN_CFLAGS}
+  Library types:     Shared=${enable_shared}, Static=${enable_static}
+  Java extension:    $java_ext_enabled
+  Python extension:  $python_ext_enabled
+  Python flags:      $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+  Jearduino enabled: $jearduino_enabled
+  Pearduino enabled: $jearduino_enabled
+  Unit test:         $ut_enabled
+  Unit test cflags:  $CHECK_CFLAGS
+  Unit test ldflags: $CHECK_LIBS
+  Shared lib test:   $st_enabled
+  Pedantic flags:    $PEDANTIC_FLAGS
+  Pthreads:          $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
   HID backends:     
   ------------------
     X11:             $USE_XTEST ($LIBXTST)
