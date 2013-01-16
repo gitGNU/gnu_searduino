@@ -1,2 +1,2 @@
 
-SUBDIRS = stream pardon
+SUBDIRS = stream pardon jearduino
