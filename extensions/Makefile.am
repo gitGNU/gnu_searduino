@@ -1,2 +1,2 @@
 
-SUBDIRS= arduino-lib python
+SUBDIRS= arduino-lib python java
