@@ -40,7 +40,7 @@ $(JEARDUINO_JAR):
 
 bin_SCRIPTS = searduino-jearduino.sh 
 
-EXTRA_DIST = searduino-jearduino.sh.tmpl $(bin_SCRIPTS)
+EXTRA_DIST = searduino-jearduino.sh.tmpl $(bin_SCRIPTS) $(JAVA_SOURCES)
 
 
 
