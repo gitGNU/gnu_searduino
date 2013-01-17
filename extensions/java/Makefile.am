@@ -37,8 +37,10 @@ $(SEARDUINO_JAR): $(SEARDUINO_JAVA_SOURCES)
 	javah com.sandklef.searduino.Searduino
 	jar cf $(SEARDUINO_JAR) $(SEARDUINO_PATH)/*.class
 
+
+SEARD_JNI_SRC=c/searduino-jni.cpp
 lib_LTLIBRARIES = libsearduinojni.la 
-libsearduinojni_la_SOURCES = c/searduino-jni.cpp
+libsearduinojni_la_SOURCES = $(SEARD_JNI_SRC)
 
 #libsearduinojni.la: $(SEARDUINO_JAR)
 #$(lib_LTLIBRARIES): $(SEARDUINO_JAR)
@@ -60,6 +62,9 @@ AM_LDFLAGS= -L../../faked-arduino/.libs   -lsearduinostub
 LIB_PATHS=./:../../faked-arduino/.libs/
 
 JAVACFLAGS=-cp $(LIB_PATHS)  
+
+EXTRA_DIST = $(SEARD_JNI_SRC) $(SEARDUINO_JAVA_SOURCES)
+
 
 install-exec-hook: $(SEARDUINO_JAR) $(libsearduinojni.la)
 	-rm $(DESTDIR)$(libdir)/jearduino$(SHLIB_EXT)
