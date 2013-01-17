@@ -21,7 +21,7 @@
 #
 #
 
-export DEBIANSOURCES=true
+export DEBIANSOURCES=false
 
 include ../mk/Makefile-prog.mk
 

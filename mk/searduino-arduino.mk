@@ -57,6 +57,7 @@ INC_FLAGS=  \
             -I$(SEARDUINO_INC_PATH)/arduino-extras/include   \
             -I$(ARDUINO_INC_PATH)/variants/$(VARIANT)	      \
             -I$(ARDUINO_INC_PATH)/cores/arduino/               \
+            -I$(ARDUINO_INC_PATH)/core/                         \
             -I$(ARDUINO_LIB_INC_PATH)/libraries/Ethernet/utility    \
             -I$(ARDUINO_LIB_INC_PATH)/libraries/Ethernet/        \
             -I$(ARDUINO_LIB_INC_PATH)/libraries/SPI       	 \

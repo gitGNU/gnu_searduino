@@ -23,7 +23,7 @@
 #
 
 
-export DEBIANSOURCES=true
+export DEBIANSOURCES=false
 
 
 ARDUINO=uno

@@ -32,8 +32,8 @@ if DEBIANSOURCES
 SEARDUINO_INC_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
 SEARDUINO_LIB_INC_PATH=/usr/share/arduino/libraries
 else
-SEARDUINO_INC_PATH=../arduino-sources/core
-SEARDUINO_LIB_INC_PATH=../arduino-sources/libraries
+SEARDUINO_INC_PATH=../../arduino-sources/core
+SEARDUINO_LIB_INC_PATH=../../arduino-sources/libraries
 endif
 
 

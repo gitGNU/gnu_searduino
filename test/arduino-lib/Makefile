@@ -36,7 +36,7 @@ export USER_LD_FLAGS= -fPIC  -Wl,-rpath,$(SEARDUINO_PATH)/faked-arduino/.libs
 ARDUINO=stub
 SEARDUINO_PATH=../../
 
-export DEBIANSOURCES=true
+export DEBIANSOURCES=false
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 

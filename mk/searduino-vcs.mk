@@ -1,7 +1,7 @@
 #
 #       Searduino
 #
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#  Copyright (C) 2011, 2012, 2013 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -47,9 +47,9 @@ ifeq (${DEBIANSOURCES},true)
 
   endif
 else
-  ARDUINO_INC_PATH=$(SEARDUINO_INC_PATH)
-  ARDUINO_MK_PATH=$(ARDUINO_MK_PATH)
-  ARDUINO_LIB_INC_PATH=$(SEARDUINO_PATH)
+  ARDUINO_INC_PATH=$(SEARDUINO_INC_PATH)/arduino-sources/
+  ARDUINO_MK_PATH=$(ARDUINO_MK_PATH)/
+  ARDUINO_LIB_INC_PATH=$(SEARDUINO_PATH)/arduino-sources/
 
   ifeq (${ARDUINO},stub)
     SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/faked-arduino/.libs 
