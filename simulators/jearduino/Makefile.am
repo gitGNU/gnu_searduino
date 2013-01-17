@@ -51,4 +51,12 @@ install-exec-hook: $(JEARDUINO_JAR)
 
 CLEAN_FILES=jearduino.sh
 
+all: $(JEARDUINO_JAR) 
+
+else
+
+all:
+	echo doing nothin in jearduino
+
 endif
+
