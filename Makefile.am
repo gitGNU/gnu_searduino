@@ -1,4 +1,8 @@
-SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
+if DEBIAN_SOURCES
+   SUBDIRS =   arduino-extras faked-arduino extensions simulators mk example test tools
+else
+   SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
+endif
 # lib
 
 SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 
@@ -145,8 +149,13 @@ GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
 GPROF_FLAG = "-pg -g"
 
 
+if DEBIANSOURCES
+check-local:
+	echo "No local check when using Debian's Arduino sources"
+else
 check-local:
 	bin/verify-install.sh --vcs 
+endif
 
 init-cov:
 	make clean

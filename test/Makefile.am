@@ -21,7 +21,7 @@ EXTRA_DIST =           \
     ./arduino-code-static/ard_code.c \
     ./hw/Makefile \
     ./hw/test.c \
-    ./arduino-lib/Makefile \
+    ./arduino-lib/Makefile.tmpl \
     ./arduino-lib/functions.c \
     ./arduino-lib/functions.h \
     ./arduino-lib/include/functions.h 

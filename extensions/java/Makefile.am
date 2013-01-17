@@ -43,7 +43,18 @@ libsearduinojni_la_SOURCES = c/searduino-jni.cpp
 #libsearduinojni.la: $(SEARDUINO_JAR)
 #$(lib_LTLIBRARIES): $(SEARDUINO_JAR)
 
-AM_CXXFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ 
+
+if DEBIANSOURCES
+SEARDUINO_INC_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
+SEARDUINO_LIB_INC_PATH=/usr/share/arduino/libraries
+else
+SEARDUINO_INC_PATH=../arduino-sources/core
+SEARDUINO_LIB_INC_PATH=../arduino-sources/libraries
+endif
+
+
+
+AM_CXXFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ 
 AM_LDFLAGS= -L../../faked-arduino/.libs   -lsearduinostub
 
 LIB_PATHS=./:../../faked-arduino/.libs/

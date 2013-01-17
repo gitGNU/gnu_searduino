@@ -23,6 +23,9 @@
 #
 
 
+export DEBIANSOURCES=true
+
+
 ARDUINO=uno
 BUILD_FROM_VCS=true
 LIB=libfunctions.a

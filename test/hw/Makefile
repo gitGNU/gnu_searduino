@@ -30,5 +30,8 @@ MAIN_SRC=
 # include clean target
 ARDUINO=stub
 SEARDUINO_PATH=../../
+
+export DEBIANSOURCES=true
+
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 

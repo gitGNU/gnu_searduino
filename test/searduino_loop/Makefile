@@ -21,6 +21,8 @@
 #
 #
 
+export DEBIANSOURCES=true
+
 include ../mk/Makefile-prog.mk
 
 export SRC_C=test.c

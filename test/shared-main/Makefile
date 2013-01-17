@@ -21,6 +21,10 @@
 # MA  02110-1301, USA.                                              
 #
 #
+
+export DEBIANSOURCES=true
+
+
 include ../mk/Makefile-prog.mk
 
 export ARDUINO=stub

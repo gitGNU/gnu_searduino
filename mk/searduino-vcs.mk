@@ -29,11 +29,36 @@ ARDUINO_VERSION=101
 SEARDUINO_MK_PATH=$(SEARDUINO_PATH)/
 SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
 
-ifeq (${ARDUINO},stub)
-SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/faked-arduino/.libs 
+
+ifeq (${DEBIANSOURCES},true)
+#ARDUINO_SOURCE_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
+  ARDUINO_PATH=/usr/share/arduino/hardware/arduino/
+#ARDUINO_LIBS_SOURCE_PATH=/usr/share/arduino/libraries
+  #Debian build only
+  ARDUINO_INC_PATH=$(ARDUINO_PATH)
+  ARDUINO_LIB_PATH=$(ARDUINO_PATH)
+  ARDUINO_LIB_INC_PATH=$(ARDUINO_LIBS_SOURCE_PATH)/../
+
+  ifeq (${ARDUINO},stub)
+    SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/faked-arduino/.libs
+  else
+    SEARDUINO_LIB_PATH=  -L$(ARDUINO_LIB_PATH)/arduino-sources/libs/$(BOARD) \
+                         -L$(ARDUINO_LIB_PATH)/arduino-sources/libraries/libs/$(BOARD)
+
+  endif
 else
-SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD) \
-                     -L$(SEARDUINO_PATH)/arduino-sources/libraries/libs/$(BOARD) 
+  ARDUINO_INC_PATH=$(SEARDUINO_INC_PATH)
+  ARDUINO_MK_PATH=$(ARDUINO_MK_PATH)
+  ARDUINO_LIB_INC_PATH=$(SEARDUINO_PATH)
+
+  ifeq (${ARDUINO},stub)
+    SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/faked-arduino/.libs 
+  else
+    SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD) \
+                         -L$(SEARDUINO_PATH)/arduino-sources/libraries/libs/$(BOARD) 
+  endif
+
+
 endif
 
 VCS_IFLAGS= -I$(SEARDUINO_INC_PATH)/arduino-extras/include \

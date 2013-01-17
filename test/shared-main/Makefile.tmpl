@@ -1,3 +1,4 @@
+
 #
 #       Searduino
 #
@@ -21,25 +22,22 @@
 #
 #
 
-export DEBIANSOURCES=true
+export DEBIANSOURCES=__DEBIANSOURCES__
 
-include ../mk/Makefile-shlib.mk
 
+include ../mk/Makefile-prog.mk
+
+export ARDUINO=stub
 export SRC_C=test.c
-export SRC_CXX=
-export MAIN_SRC=
-export SHLIB=libtest.so
-export LIB=libtest.a
-export USER_LIB_INSTALL_PATH=/tmp/searduino-lib-install
-export SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
-export USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
-export USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS) -ldl
+export LIBTEST_PATH=../shared/
+export LIBTEST=-ltest 
+export SEARDUINO_PATH=../..
 
-$(SHLIB):
+export USER_C_FLAGS= -g -I../../faked-arduino/include/arduino -I../../faked-arduino/include/../../arduino-extras/include/
+export USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
 
-
-# include clean target
-ARDUINO=stub
-SEARDUINO_PATH=../../
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
+# dummy target for internal searduino devel
+distclean:
+	@echo

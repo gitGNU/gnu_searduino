@@ -21,6 +21,8 @@
 #
 #
 
+export DEBIANSOURCES=true
+
 include ../mk/Makefile-shlib.mk
 
 export SRC_C=ard_code.c

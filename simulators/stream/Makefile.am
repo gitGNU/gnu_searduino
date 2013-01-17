@@ -34,7 +34,18 @@ searduino_stream_sim_SOURCES=simulator.c
 #  GNULIB_PTHREAD_A= -lpthread 
 #endif
 
-AM_CFLAGS= -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../arduino-extras/include/ $(GNULIB_PTHREAD_I) --std=c99
+
+if DEBIANSOURCES
+SEARDUINO_INC_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
+SEARDUINO_LIB_INC_PATH=/usr/share/arduino/libraries
+else
+SEARDUINO_INC_PATH=../arduino-sources/core
+SEARDUINO_LIB_INC_PATH=../arduino-sources/libraries
+endif
+
+
+
+AM_CFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../arduino-extras/include/ $(GNULIB_PTHREAD_I) --std=c99
 
 if USE_XTEST
 XTESTFLAGS = $(LIBXTST)
