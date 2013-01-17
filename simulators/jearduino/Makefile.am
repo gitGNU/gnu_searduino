@@ -1,5 +1,5 @@
 
-if PEARDUINO_SUPPORT
+if JEARDUINO_SUPPORT
 
 LIB_PATHS=./:../../faked-arduino/.libs/:../../extensions/java
 
