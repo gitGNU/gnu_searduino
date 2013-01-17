@@ -150,7 +150,7 @@ AC_ARG_ENABLE([debian-sources],
      *)      AC_MSG_ERROR([bad value $enableval for debian-sources option]) ;;
    esac
    debian_sources=$enableval],
-  [debian_sources=yes]
+  [debian_sources=no]
 )
 
 if test "$python_ext_enabled" = "yes"; then
