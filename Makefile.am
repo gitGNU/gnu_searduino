@@ -126,8 +126,9 @@ dist_pkgdataexample_DATA = \
   tmpl/pre_c.tmpl      \
   tmpl/Makefile.tmpl
 
-EXTRA_DIST =  ${ARD_SRC} ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl
+EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl
 #m4/gnulib-cache.m4
+#  ${ARD_SRC}
 
 .PHONY: doc
 doc:
