@@ -1,5 +1,5 @@
 if DEBIAN_SOURCES
-   SUBDIRS =   arduino-extras faked-arduino extensions simulators mk example test tools
+   SUBDIRS =         debian-mk arduino-extras faked-arduino extensions simulators mk example test tools
 else
    SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
 endif
