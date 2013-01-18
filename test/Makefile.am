@@ -5,21 +5,21 @@ SUBDIRS= arduino-lib mk hw stub searduino_loop arduino-code-dynamic arduino-code
 endif
 
 EXTRA_DIST =           \
-    ./stub/Makefile \
+    ./stub/Makefile.tmpl \
     ./stub/test.c \
-    ./shared/Makefile \
+    ./shared/Makefile.tmpl \
     ./shared/test.c \
-    ./static/Makefile \
+    ./static/Makefile.tmpl \
     ./static/test.c \
-    ./arduino-code-dynamic/Makefile \
+    ./arduino-code-dynamic/Makefile.tmpl \
     ./arduino-code-dynamic/ard_code.c \
-    ./shared-main/Makefile \
+    ./shared-main/Makefile.tmpl \
     ./shared-main/test.c \
-    ./searduino_loop/Makefile \
+    ./searduino_loop/Makefile.tmpl \
     ./searduino_loop/test.c \
-    ./arduino-code-static/Makefile \
+    ./arduino-code-static/Makefile.tmpl \
     ./arduino-code-static/ard_code.c \
-    ./hw/Makefile \
+    ./hw/Makefile.tmpl \
     ./hw/test.c \
     ./arduino-lib/Makefile.tmpl \
     ./arduino-lib/functions.c \
