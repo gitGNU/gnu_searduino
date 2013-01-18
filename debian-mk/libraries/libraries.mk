@@ -25,6 +25,7 @@
 #
 SEARDUINO_PATH=../..
 DEBIAN_BUILD=true
+DEBIANSOURCES=true
 
 ARDUINO_SOURCE_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
 ARDUINO_PATH=/usr/share/arduino/hardware/arduino/
