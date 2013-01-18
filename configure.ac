@@ -1,6 +1,6 @@
 dnl Process this file with autoconf to produce a configure script.
 
-dnl Copyright (C) 2012 Henrik Sandklef
+dnl Copyright (C) 2012, 2013 Henrik Sandklef
 dnl
 dnl This file is part of Searduino
 dnl
@@ -165,6 +165,17 @@ export CYGWIN=""
 if test "$(uname -s | grep -i -c cygwin)" != "0" ;
 then   
   CYGWIN="true"
+fi
+
+if test "x$jearduino_enabled" = "xyes" ; then
+  if test "x$java_ext_enabled" != "xyes" ; then
+     echo "Jearduino enabled, enabling Java extension"
+     java_ext_enabled="yes"   
+  fi
+fi
+
+if test "x$java_ext_enabled" = "xyes" ; then
+  AC_PATH_PROG(JAVA,java)
 fi
 
 
@@ -379,28 +390,34 @@ AC_SUBST(USE_XTEST)
 AC_SUBST(LIBXTST)	
 
 AC_MSG_NOTICE([summary of build options:
-  package:           ${PACKAGE} 
-  version:           ${VERSION} 
-  Host type:         ${host}
-  Target:            ${target}
-  Install prefix:    ${prefix}
-  Compiler:          ${CC}
-  Warning flags:     ${WARN_CFLAGS}
-  Library types:     Shared=${enable_shared}, Static=${enable_static}
-  Java extension:    $java_ext_enabled
-  Python extension:  $python_ext_enabled
-  Python flags:      $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
-  Jearduino enabled: $jearduino_enabled
-  Pearduino enabled: $jearduino_enabled
-  Unit test:         $ut_enabled
-  Unit test cflags:  $CHECK_CFLAGS
-  Unit test ldflags: $CHECK_LIBS
-  Shared lib test:   $st_enabled
-  Pedantic flags:    $PEDANTIC_FLAGS
-  Pthreads:          $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
+  package:              ${PACKAGE} 
+  version:              ${VERSION} 
+  Host type:            ${host}
+  Target:               ${target}
+  Install prefix:       ${prefix}
+  Compiler:             ${CC}
+  Warning flags:        ${WARN_CFLAGS}
+  Library types:        Shared=${enable_shared}, Static=${enable_static}
+  Unit test:            $ut_enabled
+  Unit test cflags:     $CHECK_CFLAGS
+  Unit test ldflags:    $CHECK_LIBS
+  Shared lib test:      $st_enabled
+  Pedantic flags:       $PEDANTIC_FLAGS
+  Pthreads:             $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
+
+  Python:
+  ------------------
+     Python flags:      $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+     Pearduino enabled: $jearduino_enabled
+     Python extension:  $python_ext_enabled
+  Python:
+  ------------------
+     Java:              $JAVA 
+     Java extension:    $java_ext_enabled
+     Jearduino enabled: $jearduino_enabled
   HID backends:     
   ------------------
-    X11:             $USE_XTEST ($LIBXTST)
+     X11:               $USE_XTEST ($LIBXTST)
                     
 ])
 
