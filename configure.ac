@@ -274,6 +274,9 @@ set_lversion()
 
 setup_debianized()
 {
+    mkdir -p debian-mk/libraries/	
+    mkdir -p debian-mk/arduino-source/	
+
     cp mk/arduino-sources/Makefile.*           debian-mk/
     cp mk/libraries/Makefile.*                 debian-mk/libraries/
 
