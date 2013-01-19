@@ -183,13 +183,16 @@ fi
 # GNULIB 
 gl_PTHREAD_CHECK
 
+
+#
 AM_CONDITIONAL(PYTHON_EXT_SUPPORT, test "x$python_ext_enabled" = "xyes")
 AM_CONDITIONAL(PEARDUINO_SUPPORT,  test "x$pearduino_enabled" = "xyes")
 AM_CONDITIONAL(JAVA_EXT_SUPPORT,   test "x$java_ext_enabled" = "xyes")
 AM_CONDITIONAL(JEARDUINO_SUPPORT,  test "x$jearduino_enabled" = "xyes")
 
 AM_CONDITIONAL(DEBIAN_SOURCES,     test "x$debian_sources" = "xyes")
-AM_CONDITIONAL(DEBIANSOURCES,     test "x$debian_sources" = "xyes")
+#AM_CONDITIONAL(DEBIANSOURCES,     test "x$debian_sources" = "xyes")
+AM_CONDITIONAL([DEBIANSOURCES],     [test x = x])
 
 AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
 AM_CONDITIONAL(SHAREDTEST,     test "x$st_enabled"     = "xyes")
@@ -269,13 +272,23 @@ set_lversion()
 }
 
 
-if test "x$debian_sources"  != "xyes"  ;
-then
- ./bin/get-arduino-src.sh
- exit_on_failure $? ./bin/get-arduino-src.sh
-else
- echo "Not downloading Arduino sources from internet"
-fi
+setup_debianized()
+{
+    cp mk/arduino-sources/Makefile.*           debian-mk/
+    cp mk/libraries/Makefile.*                 debian-mk/libraries/
+
+    cp mk/debian-mk/arduino-sources/arduino-sources.mk         debian-mk/
+    cp mk/debian-mk/libraries/libraries.mk               debian-mk/libraries/
+
+    cat mk/debian-mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
+                 debian-mk/libraries/Makefile
+    exit_on_failure $? "Prepared libraries Makefile (debian)"
+    
+    cat mk/debian-mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
+                 debian-mk/arduino-sources/Makefile
+    exit_on_failure $? "Prepared arduino-sources Makefile (debian)"
+
+}
 
 prepare_examples()
 {
@@ -389,6 +402,16 @@ fi
 echo "prefix: ${prefix}   SEARD_PREFIX=${SEARD_PREFIX}"
 export SEARD_PREFIX
 
+if test "x$debian_sources"  != "xyes"  ;
+then
+ ./bin/get-arduino-src.sh
+ exit_on_failure $? ./bin/get-arduino-src.sh
+else
+ echo "Not downloading Arduino sources from internet"
+ setup_debianized
+fi
+
+
 
 cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
 exit_on_failure $? "Prepared doc Makefile"
@@ -433,6 +456,14 @@ AC_SUBST(INCLTDL)
 AC_SUBST(LIBLTDL)	
 AC_SUBST(USE_XTEST)
 AC_SUBST(LIBXTST)	
+AC_SUBST(PYTHON_EXT_SUPPORT)
+AC_SUBST(PEARDUINO_SUPPORT)
+AC_SUBST(JAVA_EXT_SUPPORT)
+AC_SUBST(JEARDUINO_SUPPORT)
+AC_SUBST(DEBIAN_SOURCES)
+AC_SUBST(DEBIANSOURCES)
+
+
 
 AC_MSG_NOTICE([summary of build options:
   package:            ${PACKAGE} 
@@ -457,7 +488,7 @@ AC_MSG_NOTICE([summary of build options:
   HID backends:     
   ------------------
     X11:              $USE_XTEST ($LIBXTST)
-  Use Debian Arduino: $debian_sources
+  Use Debian Arduino: $debian_sources ($DEBIANSOURCES) ($DEBIAN_SOURCES)
                     
 ])
 
