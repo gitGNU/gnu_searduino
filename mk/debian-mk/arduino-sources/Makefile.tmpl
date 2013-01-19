@@ -24,8 +24,10 @@
 #
 #
 
+INSTALLATION_DIR=__INSTALL_DIR__
+
 all: uno mega due mega2560 leonardo
-	cd libraries && make all
+
 
 uno:
 #	make -f Makefile.uno light-clean
@@ -48,28 +50,14 @@ leonardo:
 
 clean:
 	make -f Makefile.uno clean
-	cd libraries && make clean
 
 check:
 	@echo "Nothing to do in arduino-sources"
 
 install: due uno mega mega2560
-	 @echo "installing to __INSTALL_DIR__"
-	 mkdir -p  __INSTALL_DIR__/libs/searduino/arduino-libs 
-	 @cp -r ../../arduino-sources/libs/*     __INSTALL_DIR__/libs/searduino/arduino-libs/
-
-	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/core
-	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/variants
-	 @mkdir -p         __INSTALL_DIR__/share/examples/arduino
-
-	 @cp -r core/*.h   __INSTALL_DIR__/include/searduino/arduino-sources/core/
-	 @cp -r variants/* __INSTALL_DIR__/include/searduino/arduino-sources/variants/
-#
-# This is an ugly hack to get around the problem of 99 chars max length in tar
-#	 
-	 @cp -r ../../ard-ex/*  __INSTALL_DIR__/share/examples/arduino/
-
-	cd libraries && make install
+	 @echo "installing to $(INSTALLATION_DIR)"
+	 mkdir -p  $(INSTALLATION_DIR)/libs/searduino/arduino-libs 
+	 @cp -r ../../arduino-sources/libs/*     $(INSTALLATION_DIR)/libs/searduino/arduino-libs/
 
 
 distdir:

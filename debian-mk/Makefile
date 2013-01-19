@@ -4,7 +4,7 @@
 # Basically a couple of Makefile wrapping the Ardunio
 # C and C++ files
 #                                                                   
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#  Copyright (C) 2013 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -25,53 +25,24 @@
 #
 
 
-all: uno mega due mega2560 leonardo
+all: 
+	cd arduino-sources && make all
 	cd libraries && make all
 
-uno:
-#	make -f Makefile.uno light-clean
-	make -f Makefile.uno lib
-
-due:
-#	make -f Makefile.due light-clean
-	make -f Makefile.due lib
-
-mega:
-#	make -f Makefile.mega light-clean
-	make -f Makefile.mega lib
-
-mega2560:
-#	make -f Makefile.mega2560 light-clean
-	make -f Makefile.mega2560 lib
-
-leonardo:
-	make -f Makefile.leonardo lib
-
 clean:
-	make -f Makefile.uno clean
+	cd arduino-sources && make clean
 	cd libraries && make clean
 
 check:
 	@echo "Nothing to do in arduino-sources"
 
-install: due uno mega mega2560
-	 @echo "installing to /tmp/TRY"
-	 mkdir -p  /tmp/TRY/libs/searduino/arduino-libs 
-	 cp -r ../arduino-sources/libs/*     /tmp/TRY/libs/searduino/arduino-libs/
+clean:
+	cd arduino-sources && make clean
+	cd libraries && make clean
 
-	 mkdir -p         /tmp/TRY/include/searduino/arduino-sources/core
-	 mkdir -p         /tmp/TRY/include/searduino/arduino-sources/variants
-	 mkdir -p         /tmp/TRY/share/examples/arduino
-
-#	 cp -r core/*.h   /tmp/TRY/include/searduino/arduino-sources/core/
-#	 cp -r variants/* /tmp/TRY/include/searduino/arduino-sources/variants/
-#
-# This is an ugly hack to get around the problem of 99 chars max length in tar
-#	 
-#	 @cp -r ../ard-ex/*  /tmp/TRY/share/examples/arduino/
-
+install: 
+	cd arduino-sources && make install
 	cd libraries && make install
-
 
 distdir:
 	echo dummy impl

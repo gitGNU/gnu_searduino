@@ -275,14 +275,18 @@ set_lversion()
 setup_debianized()
 {
     mkdir -p debian-mk/libraries/	
-    mkdir -p debian-mk/arduino-source/	
+    mkdir -p debian-mk/arduino-sources/	
 
-    cp mk/arduino-sources/Makefile.*           debian-mk/
-    cp mk/libraries/Makefile.*                 debian-mk/libraries/
+    cp -r mk/arduino-sources           debian-mk/
+    cp -r mk/libraries                 debian-mk/
 
-    cp mk/debian-mk/arduino-sources/arduino-sources.mk         debian-mk/
+    cp mk/debian-mk/arduino-sources/arduino-sources.mk   debian-mk/arduino-sources/
     cp mk/debian-mk/libraries/libraries.mk               debian-mk/libraries/
 
+    cat mk/debian-mk/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
+                 debian-mk/Makefile
+    exit_on_failure $? "Prepared top level Makefile (debian)"
+    
     cat mk/debian-mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
                  debian-mk/libraries/Makefile
     exit_on_failure $? "Prepared libraries Makefile (debian)"

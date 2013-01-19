@@ -23,7 +23,7 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=..
+SEARDUINO_PATH=../../
 DEBIAN_BUILD=true
 DEBIANSOURCES=true
 
@@ -38,7 +38,7 @@ LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD)/
 LIB=$(LIB_PATH)/libsearduino.a
 
 
-SEARDUINO_MK=../mk/searduino-vcs.mk
+SEARDUINO_MK=../../mk/searduino-vcs.mk
 #SEARDUINO_FUNC=../mk/searduino-functions.mk
 
 lib: $(LIB)
