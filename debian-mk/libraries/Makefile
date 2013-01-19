@@ -24,7 +24,7 @@
 #
 #
 
-INSTALLATION_DIR=/tmp/TRY
+INSTALLATION_DIR=/tmp/conf-test
 
 all: uno mega due mega2560 leonardo
 
@@ -56,7 +56,7 @@ check:
 install: due uno mega mega2560
 	 @echo "installing to $(INSTALLATION_DIR)"
 	 mkdir -p  $(INSTALLATION_DIR)/libs/searduino/arduino-libs 
-	 cp -r ../../arduino-sources/libraries/libs/*     $(INSTALLATION_DIR)/libs/searduino/arduino-libs/
+	 @cp -r ../../arduino-sources/libs/*     $(INSTALLATION_DIR)/libs/searduino/arduino-libs/
 
 distdir:
 	echo dummy impl
