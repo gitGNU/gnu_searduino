@@ -24,8 +24,11 @@ AVRDUDE=
 AR=ar
 JAVAC=gcj
 
+VARIANT=standard
+
 INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-extras/             \
            -I$(SEARDUINO_INC_PATH)/                             \
+           -I$(SEARDUINO_INC_PATH)/arduino                       \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include         \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include/avr         \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino  \
