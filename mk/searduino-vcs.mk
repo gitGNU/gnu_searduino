@@ -33,7 +33,7 @@ SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
 ifeq (${DEBIANSOURCES},true)
 #ARDUINO_SOURCE_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
   ARDUINO_PATH=/usr/share/arduino/hardware/arduino/
-#ARDUINO_LIBS_SOURCE_PATH=/usr/share/arduino/libraries
+  ARDUINO_LIBS_SOURCE_PATH=/usr/share/arduino/libraries
   #Debian build only
   ARDUINO_INC_PATH=$(ARDUINO_PATH)
   ARDUINO_LIB_PATH=$(ARDUINO_PATH)
@@ -47,8 +47,8 @@ ifeq (${DEBIANSOURCES},true)
 
   endif
 else
-  ARDUINO_INC_PATH=$(SEARDUINO_INC_PATH)/arduino-sources/
-  ARDUINO_MK_PATH=$(ARDUINO_MK_PATH)/
+  ARDUINO_INC_PATH=$(ARDUINO_PATH)/arduino-sources/
+#  ARDUINO_MK_PATH=$(ARDUINO_MK_PATH)/
   ARDUINO_LIB_INC_PATH=$(SEARDUINO_PATH)/arduino-sources/
 
   ifeq (${ARDUINO},stub)

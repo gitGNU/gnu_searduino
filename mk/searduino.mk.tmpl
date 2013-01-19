@@ -26,6 +26,23 @@ $(error Variables not set correctly ARDUINO='${ARDUINO}')
 endif		
 
 #
+#
+#
+#
+ARDUINO_SOURCES_FROM=__ARDUINO_SOURCES_FROM__
+ARDUINO_PATH=__ARDUINO_PATH__
+
+ifeq (${ARDUINO_SOURCES_FROM},Debian)
+   #Debian build only
+   ARDUINO_INC_PATH=$(ARDUINO_PATH)
+   ARDUINO_LIB_PATH=$(ARDUINO_PATH)
+   ARDUINO_LIB_INC_PATH=$(ARDUINO_LIBS_SOURCE_PATH)/../
+else
+  ARDUINO_INC_PATH=$(ARDUINO_PATH)/arduino-sources/
+  ARDUINO_LIB_INC_PATH=$(SEARDUINO_PATH)/arduino-sources/
+endif
+
+#
 # Searduino version
 # 
 SEARDUINO_VERSION=__SEARDUINO_VERSION__
