@@ -42,7 +42,7 @@ arduino-sources/libraries/Ethernet/EthernetUdp.h arduino-sources/libraries/Ether
 #    arduino-sources/variants/micro/pins_arduino.h 
 
 
-
+if DEBIANSOURCES
 ARD_EXAMPLES = \
   ./ard-ex/01.Basics/AnalogReadSerial/AnalogReadSerial.ino \
   ./ard-ex/01.Basics/BareMinimum/BareMinimum.ino \
@@ -111,6 +111,9 @@ ARD_EXAMPLES = \
   ./ard-ex/09.USB(Leonardo)/Mouse/ButtonMouseControl/ButtonMouseControl.ino \
   ./ard-ex/09.USB(Leonardo)/Mouse/JoystickMouseControl/JoystickMouseControl.ino \
   ./ard-ex/ArduinoISP/ArduinoISP.ino 
+else
+ARD_EXAMPLES = 
+endif
 
 
 bin_SCRIPTS = bin/arduino-ex2c bin/functions bin/verify-install.sh bin/find_port.sh
