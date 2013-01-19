@@ -377,12 +377,15 @@ prepare_searduino_mk()
 #  CYGWIN_NT-6.1
 #  CYGWIN_NT-6.1-WOW64
 #  CYGWIN_NT-5.1
+
 	
     export VERSION_LONG=""
     set_lversion
-    cat mk/searduino.mk.tmpl                | \
-        sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" | \
-        sed "s,__CYGWIN__,${CYGWIN},g"      | \
+    cat mk/searduino.mk.tmpl                           | \
+        sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g"      | \
+        sed "s,__CYGWIN__,${CYGWIN},g"                 | \
+        sed "s,__ARDUINO_PATH__,${ARDUINO_PATH},g"     | \
+        sed "s,__ARDUINO_SOURCES_FROM__,${ARDUINO_SOURCES_FROM},g"      | \
         sed "s,__SEARDUINO_VERSION_MAJOR__,${VERSION_LONG_MAJOR},g"     | \
         sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
         sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
@@ -409,13 +412,22 @@ fi
 echo "prefix: ${prefix}   SEARD_PREFIX=${SEARD_PREFIX}"
 export SEARD_PREFIX
 
+
+
+#
+#  DEBIAN or not
+# 
 if test "x$debian_sources"  != "xyes"  ;
 then
- ./bin/get-arduino-src.sh
- exit_on_failure $? ./bin/get-arduino-src.sh
+  ./bin/get-arduino-src.sh
+  exit_on_failure $? ./bin/get-arduino-src.sh
+  export ARDUINO_PATH=${SEARD_PREFIX}/arduino-sources
+  export ARDUINO_SOURCES_FROM=Arduino
 else
- echo "Not downloading Arduino sources from internet"
- setup_debianized
+  echo "Not downloading Arduino sources from internet"
+  setup_debianized
+  export ARDUINO_PATH=/usr/share/arduino/hardware/arduino/	
+  export ARDUINO_SOURCES_FROM=Debian
 fi
 
 
