@@ -32,6 +32,8 @@ export SRC_C=test.c
 export LIBTEST_PATH=../shared/
 export LIBTEST=-ltest 
 export SEARDUINO_PATH=../..
+ARDUINO_PATH=../../arduino-sources
+
 
 export USER_C_FLAGS= -g -I../../faked-arduino/include/arduino -I../../faked-arduino/include/../../arduino-extras/include/
 export USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
