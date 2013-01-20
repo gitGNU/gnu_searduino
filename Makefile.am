@@ -1,7 +1,9 @@
 if DEBIAN_SOURCES
    SUBDIRS =         debian-mk arduino-extras faked-arduino extensions simulators mk example test tools
+   DIST_SUBDIRS = $(SUBDIRS)
 else
    SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
+   DIST_SUBDIRS = $(SUBDIRS)
 endif
 # lib
 
