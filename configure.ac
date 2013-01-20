@@ -421,7 +421,7 @@ if test "x$debian_sources"  != "xyes"  ;
 then
   ./bin/get-arduino-src.sh
   exit_on_failure $? ./bin/get-arduino-src.sh
-  export ARDUINO_PATH=${SEARD_PREFIX}/arduino-sources
+  export ARDUINO_PATH=${SEARD_PREFIX}/
   export ARDUINO_SOURCES_FROM=Arduino
 else
   echo "Not downloading Arduino sources from internet"
