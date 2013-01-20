@@ -47,8 +47,8 @@ ifeq (${DEBIANSOURCES},true)
 
   endif
 else
-  ARDUINO_INC_PATH=$(ARDUINO_PATH)/arduino-sources/
-#  ARDUINO_MK_PATH=$(ARDUINO_MK_PATH)/
+  ARDUINO_INC_PATH=$(SEARDUINO_PATH)/arduino-sources
+  ARDUINO_MK_PATH=$(ARDUINO_MK_PATH)/
   ARDUINO_LIB_INC_PATH=$(SEARDUINO_PATH)/arduino-sources/
 
   ifeq (${ARDUINO},stub)

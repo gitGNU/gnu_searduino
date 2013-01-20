@@ -23,7 +23,9 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=..
+SEARDUINO_PATH=../
+ARDUINO_PATH=./
+
 
 SRC_C=core/WInterrupts.c  core/wiring_analog.c  core/wiring.c  core/wiring_digital.c  core/wiring_pulse.c  core/wiring_shift.c
 SRC_CXX=core/CDC.cpp core/HID.cpp  core/Print.cpp   core/Tone.cpp     core/WMath.cpp core/HardwareSerial.cpp  core/IPAddress.cpp  core/new.cpp   core/Stream.cpp  core/USBCore.cpp  core/WString.cpp

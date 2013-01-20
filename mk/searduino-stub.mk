@@ -33,7 +33,7 @@ INC_FLAGS= -I$(SEARDUINO_INC_PATH)/arduino-extras/             \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include/avr         \
            -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino  \
            -I$(ARDUINO_INC_PATH)/variants/$(VARIANT)	      \
-           -I$(ARDUINO_INC_PATH)/core/               \
+           -I$(ARDUINO_INC_PATH)/core/                        \
            -I$(ARDUINO_INC_PATH)/cores/arduino/               \
            -I$(ARDUINO_LIB_INC_PATH)/libraries/Ethernet/utility    \
            -I$(ARDUINO_LIB_INC_PATH)/libraries/Ethernet/        \

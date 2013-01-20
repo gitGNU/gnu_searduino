@@ -23,7 +23,8 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=../..
+SEARDUINO_PATH=../../
+ARDUINO_PATH=../
 
 SRC_C= ./Wire/utility/twi.c
 SRC_CXX=./Ethernet/Ethernet.cpp ./Ethernet/EthernetServer.cpp ./Ethernet/Dhcp.cpp ./Ethernet/utility/w5100.cpp ./Ethernet/utility/socket.cpp ./Ethernet/EthernetUdp.cpp ./Ethernet/Dns.cpp ./Ethernet/EthernetClient.cpp  ./Wire/Wire.cpp ./SPI/SPI.cpp ./LiquidCrystal/LiquidCrystal.cpp ./SoftwareSerial/SoftwareSerial.cpp ./SD/SD.cpp ./SD/utility/SdVolume.cpp ./SD/utility/SdFile.cpp ./SD/utility/Sd2Card.cpp ./SD/File.cpp ./Stepper/Stepper.cpp ./EEPROM/EEPROM.cpp ./Servo/Servo.cpp 
