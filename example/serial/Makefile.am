@@ -2,6 +2,7 @@ pkgdataexampledir = $(pkgdatadir)/example/serial/
 dist_pkgdataexample_DATA = \
  main.c \
  Makefile.serial \
+ Makefile.tmpl \
  serial.cpp
 
 
