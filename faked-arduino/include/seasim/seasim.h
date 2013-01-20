@@ -93,7 +93,7 @@ seasim_fake_digital_input (uint8_t pin, uint8_t val);
  *
  * Example Usage:
  * @code
- *    seasim_fake_digital_input (8,786);
+ *    seasim_fake_analog_input (8,786);
  * @endcode
  */
 uint8_t 
