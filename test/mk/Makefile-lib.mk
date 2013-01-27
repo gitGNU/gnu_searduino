@@ -3,6 +3,9 @@ dummy:
 
 all:
 
+clean: 
+	make -f ../mk/Makefile.mega     clean 
+
 check: 
 	make -f ../mk/Makefile.mega     clean check-lib lib-install
 	make -f ../mk/Makefile.mega2560 clean check-lib lib-install
