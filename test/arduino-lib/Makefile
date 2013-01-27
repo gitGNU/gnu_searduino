@@ -21,8 +21,6 @@
 #
 #
 
-include ../mk/Makefile-lib.mk
-
 export SRC_C=functions.c
 export SRC_CXX=
 export MAIN_SRC=
@@ -31,9 +29,12 @@ export LIB_H=functions.h
 export USER_C_FLAGS=-fPIC 
 export USER_LD_FLAGS= -fPIC  -Wl,-rpath,$(SEARDUINO_PATH)/faked-arduino/.libs
 
+export LIB=arduino-lib.a
 
 # include clean target
-ARDUINO=stub
-SEARDUINO_PATH=../../
-include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+#ARDUINO=stub
+#SEARDUINO_PATH=../../
+include ../mk/Makefile-lib.mk
+
+#include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
