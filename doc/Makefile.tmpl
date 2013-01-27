@@ -112,6 +112,11 @@ check2:
 #	cat example_m_02.m | sed 's,ARDUINO=[a-z]*,ARDUINO=uno,g' > tmp-test2/Makefile
 #	cd tmp-test2/ && make clean prog
 
+
+seasim.pdf: 
+	cd faked-arduino/include/seasim/ && make seasim.pdf
+	cp faked-arduino/include/seasim/seasim.pdf .
+
 install:
 	mkdir        $(DOC_PATH)
 	cp    $(DOC) $(DOC_PATH)/
