@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -104,7 +104,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
   /* printf ("digitalWrite(%d,%d) type=%d\n",pin,val,get_current_pin_type(pin)); */
   if ( get_digital_pin_mode(pin) == INPUT )
     {
-      log_error("You're writing (digitalWrite) to pin %d, which is an INPUT pin", pin);
+      log_error("You're writing (digitalWrite) to pin %d, which is an INPUT pin\n", pin);
       return;
     }
   
