@@ -157,9 +157,9 @@ echo
 fi
 
 
-if test "$ut_enabled" = "yes"; then
-    PKG_CHECK_MODULES([CHECK])
-fi
+#if test "$ut_enabled" = "yes"; then
+#    PKG_CHECK_MODULES([CHECK])
+#fi
 
 export CYGWIN=""
 if test "$(uname -s | grep -i -c cygwin)" != "0" ;
