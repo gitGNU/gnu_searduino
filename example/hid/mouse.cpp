@@ -30,8 +30,11 @@ void
 setup_mouse()
 {
   pinMode(13, OUTPUT);
+  pinMode(12, OUTPUT);
+  digitalWrite(12,HIGH);
   pinMode(8,  INPUT);
   pinMode(9,  INPUT);
+  pinMode(A0,  INPUT);
   //  pinMode(10, INPUT);
   pinMode(11, INPUT);
   Mouse.begin();
@@ -74,14 +77,41 @@ void manage_mouse_pins(void)
   int hori  = 0;
   int verti = 0;
   
-  hori  = digitalRead(MOUSE_LEFT_PIN) - digitalRead(MOUSE_RIGHT_PIN) ;
-  verti = digitalRead(MOUSE_UP_PIN)   - digitalRead(MOUSE_DOWN_PIN)  ;
+  //hori  = digitalRead(MOUSE_RIGHT_PIN) - digitalRead(MOUSE_LEFT_PIN) ;
+  //  verti = digitalRead(MOUSE_UP_PIN)   - digitalRead(MOUSE_DOWN_PIN)  ;
+  if ( ( analogRead(MOUSE_UP_PIN) ) > 600 )
+    {
+      verti = 1;
+    }
+  else if ( ( analogRead(MOUSE_UP_PIN) ) < 400 )
+    {
+      verti = -1;
+    }
+  else 
+    {
+      verti = 0;
+    }
+    
+
+  if ( ( analogRead(MOUSE_RIGHT_PIN) ) > 600 )
+    {
+      hori = 1;
+    }
+  else if ( ( analogRead(MOUSE_RIGHT_PIN) ) < 400 )
+    {
+      hori = -1;
+    }
+  else 
+    {
+      hori = 0;
+    }
+    
 
   //  SEARDUINO_DEBUG(("    %d,%d\n",hori, verti));
 
   if (hori||verti)
     {
-      Mouse.move(verti,hori,0);
+      Mouse.move(hori, verti,0);
       delay(5);
     }
 }

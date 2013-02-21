@@ -56,7 +56,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     private int codeNamesToStore = 10;
     private int nrpins = 0;
     public String version;
-    public String boardname;
+    //    public String boardName;
 
     JPanel topPanel;
     JPanel controlPanel;
@@ -233,18 +233,19 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }
 
 
-    private void setupBoard(String boardName)
+    private void setupBoard(String bName)
     {
 
 	String ver = searduino.getSearduinoVersion();
-	searduino.setBoardName(boardName);
-	jpref.setBoard(boardName);
-	infoPanel.setBoardName(boardName);
+
+	searduino.setBoardName(bName);
+	jpref.setBoard(bName);
+	infoPanel.setBoardName(bName);
 
 	nrpins = searduino.getNrOfPins();
 
 	version = searduino.getSearduinoVersion();
-	boardname = searduino.getBoardName();
+	//	boardName = searduino.getBoardName();
 
 	pins.setupPins(nrpins);
     }
@@ -265,10 +266,10 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }
     
 
-    public void handleBoardChoiceEvent(String boardName)
+    public void handleBoardChoiceEvent(String bName)
     {
-	System.out.println("EVENT: Board choice -------------> BOARD: " + board );
-	setupBoard(boardName);
+	System.out.println("EVENT: Board choice -------------> BOARD: " + bName );
+	setupBoard(bName);
     }
 
     public void handlePinModeEvent(int pin, int mode) {
@@ -423,7 +424,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	jearduino.showArduinoCodeNameMenu();
 
 	System.out.println("Searduino version: " + jearduino.version);
-	System.out.println("Searduino board:   " + jearduino.boardname);
+	System.out.println("Searduino board:   " + jearduino.searduino.getBoardName());
 
         SwingUtilities.invokeLater(new Runnable() {
 		public void run() {

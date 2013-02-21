@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -151,7 +151,7 @@ void analogWrite(uint8_t pin, int val)
 	    }
 	  if (val > 255 ) 
 	    { 
-	      log_error("You're writing a value bigger than 255 to analogWrite");
+	      log_error("You're writing a value bigger than 255 to analogWrite\n");
 	      val = 255; 
 	    }
 	  genericWrite(pin, val, SEARDUINO_PIN_TYPE_PWM);

@@ -1,7 +1,7 @@
 /***** *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2012 Henrik Sandklef 
+ *   Copyright (C) 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -276,7 +276,6 @@ set_generic_pin_type(uint8_t pin, uint8_t pin_type)
   if (pin_type != arduino_pins[pin].current_type )
     {
       arduino_pins[pin].current_type = pin_type;
-      printf ("CALL EXTERNALLY INFORM %d %d \n", pin, pin_type);
       ext_inform_pin_type(pin, pin_type);
     }
 
@@ -288,12 +287,10 @@ set_generic_nr_of_pins(void)
 {
   int i ;
 
-  printf ("set_generic_nr_of_pins(void)\n");
   for (i=1;i<NR_OF_ARDUINO_PINS+1;i++)
     {
       if (arduino_pins[i].in_use != 0)
 	{
-	  printf ("set_generic_nr_of_pins(void) %d\n", i);
 	  nr_of_pins = i;
 	}
     }
@@ -324,7 +321,6 @@ set_generic_pin_mode(uint8_t pin, uint8_t mode)
 	}
 
       printf ("Failed setting mode %d on pin %d\n", mode, pin);
-      exit(0);
     }
   return  -1;
 }
@@ -341,7 +337,7 @@ set_generic_pin_val_impl(uint8_t      pin,
 	{
 	  if ( get_digital_pin_mode(pin) == INPUT )
 	    {
-	      log_warning(("You're writing to a digital pin set to INPUT"));
+	      log_warning(("You're writing to a digital pin set to INPUT\n"));
 	    }
 	  SEARD_WARNING(SEARD_ARDUINO_WRONG_PIN_MODE);
 	}

@@ -32,8 +32,10 @@ extern "C"{
 #endif
 
 #define MOUSE_LEFT_PIN  8
-#define MOUSE_RIGHT_PIN 9
-#define MOUSE_UP_PIN    10
+#define MOUSE_RIGHT_PIN A1
+  //9
+#define MOUSE_UP_PIN    A0
+  //10
 #define MOUSE_DOWN_PIN  11
 
   void setup_mouse();
