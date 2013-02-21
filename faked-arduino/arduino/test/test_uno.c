@@ -209,47 +209,6 @@ START_TEST (test_uno_130)
 }
 END_TEST
 
-START_TEST (test_uno_A0)
-{
-  int ret;
-
-  set_board_name(MY_UNO);
-
-  board_setup();
-
-
-  /*
-   * Analog pin A0 (input)
-   *
-   */ 
-
-  digitalWrite(A0, LOW);
-  fail_if(get_generic_pin_val(A0) != LOW);
-
-  digitalWrite(A0, HIGH);
-  fail_if(get_generic_pin_val(A0) != LOW);
-
-  /* normal tests of analogWrite */
-  analogWrite(A0, 0);
-  fail_if(get_generic_pin_val(A0) != 0);  
-
-  analogWrite(A0, 120);
-  fail_if(get_generic_pin_val(A0) != 0);  
-
-  analogWrite(A0, 240);
-  fail_if(get_generic_pin_val(A0) != 0);  
-
-  analogWrite(A0, 255);
-  fail_if(get_generic_pin_val(A0) != 1023);  
-
-  analogWrite(A0, 500);
-  fail_if(get_generic_pin_val(A0) != 1023);  
-
-  analogWrite(A0, 1023);
-  fail_if(get_generic_pin_val(A0) != 1023);  
-}
-END_TEST
-
 
 Suite *
 buffer_suite(void) {
@@ -257,12 +216,12 @@ buffer_suite(void) {
   TCase *tc_core = tcase_create("Core");
   suite_add_tcase (s, tc_core);
 
-
+  seasim_set_board_name("uno");
   searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
+
   tcase_add_test(tc_core, test_uno_11);
   tcase_add_test(tc_core, test_uno_13);
   tcase_add_test(tc_core, test_uno_130);
-  tcase_add_test(tc_core, test_uno_A0);
   return s;
 }
 

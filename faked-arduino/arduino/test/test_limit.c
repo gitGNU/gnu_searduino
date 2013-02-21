@@ -59,6 +59,8 @@ START_TEST (test_discard)
   
   for (i=PINS_TO_TEST_FIRST;i<PINS_TO_TEST_LAST;i++)
     {
+      printf ("Discard ctr pin %d: %d ? %d\n", 
+	      i, get_discard_ctr(i), (2+(i+1)%2));
       fail_if(get_discard_ctr(i)!=(2+(i+1)%2));
     }
 }
@@ -90,7 +92,7 @@ START_TEST (test_limit)
   digitalWrite(1,1);
   digitalWrite(1,0);
   digitalWrite(1,1);  
-  fail_if(test_do_to_sim_callback_ctr!=0);
+  fail_if(test_do_to_sim_callback_ctr!=1);
 
   set_write_timelimit(0);
   test_do_to_sim_callback_ctr=0;
@@ -136,6 +138,7 @@ int main(void)
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
 
+  seasim_set_board_name("uno");
   searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
 
 

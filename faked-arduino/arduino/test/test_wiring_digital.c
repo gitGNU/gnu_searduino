@@ -41,26 +41,21 @@ START_TEST (test_digin_callback_raw)
 	  "\t*** from layers below\n"
 	  "\t <start>\n");
 
-  for (i=0;i<10;i++)
-    {
-      /*
-       * Make sure we have a known state
-       *
-       *  set pin mode OUTPUT
-       */
-      pinMode(i, INPUT);
-      digitalWrite(i, 0);
-      fail_if(digitalRead(i)==1);
 
-      // set pin mode OUTPUT
-      pinMode(i, OUTPUT);
+#define TEST_DIG_PIN_FUN(i) \
+      pinMode(i, INPUT); \
+      digitalWrite(i, 0); \
+      fail_if(digitalRead(i)==1); \
+      pinMode(i, OUTPUT);         \
+      fail_if(digitalRead(i)==1, "Reading from pin %d was 1", i); \
+      digin_callback(i,1);        \
       fail_if(digitalRead(i)==1, "Reading from pin %d was 1", i);
 
-      // call callback to set pin (which should not work)
-      digin_callback(i,1);
-      fail_if(digitalRead(i)==1, "Reading from pin %d was 1", i);
-    }
 
+  TEST_DIG_PIN_FUN(1);
+  TEST_DIG_PIN_FUN(3);
+  TEST_DIG_PIN_FUN(7);
+  
 
   // call callback to set an illegal pin (which should not work)
   digin_callback(250, 1);
@@ -228,15 +223,28 @@ int main(void)
 
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
+
+  seasim_set_board_name("uno");
+  seasim_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
+
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
-  searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
+
 
   //  srunner_print(sr, CK_VERBOSE);
 
   srunner_free(sr);
-  return (num_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;
-
+  if (num_failed != 0) 
+    {
+      printf ("FAIL: %d\n", num_failed);
+      return EXIT_FAILURE;
+    }
+  else
+    {
+      printf ("OK: %d\n", num_failed);
+      return EXIT_SUCCESS;
+    }
+  
   /*   test_delay(); */
 
   return 0;
