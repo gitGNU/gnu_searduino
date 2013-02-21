@@ -33,6 +33,12 @@ prepare()
     export CFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
     export CXXFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
 
+    if [ "$DATE_VERSION" = "true" ]
+    then
+	TODAY=$(date +%Y%m%d); 
+	mv configure.ac configure.tmp
+	cat configure.tmp  | sed "s,\[[0-9\.]*\],$TODAY,g" >  configure.ac
+    fi
     ./configure --prefix=${TMP_INST}  --enable-unittest
     exit_on_failure $? "configure"
 }
@@ -129,6 +135,7 @@ usage()
     echo "  --git <repo>         - get code from git repo <repo>. Defaults to searduino's git repo at savannah"
     echo "  --arduino-source <s> - don't download Arduino sources, use <s> instead"
     echo "  --coverage           - generate coverage reports"
+    echo "  --date-version       - using date as version"
     echo "  --help               - prints this message"
     echo ""
     echo ""
@@ -138,6 +145,7 @@ usage()
 }
 
 log "Building and checking"
+COV=false
 
 while [ "$1" != "" ]
 do
@@ -157,6 +165,9 @@ do
     then
 	export ARDUINO_SOURCE=$2
 	shift
+    elif [ "$1" = "--date-version" ]
+    then
+	export DATE_VERSION=true
     elif [ "$1" = "--help" ]
     then
 	usage
