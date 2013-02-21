@@ -21,24 +21,12 @@
  * MA  02110-1301, USA.                                              
  ****/
 
-/*
- *
- * This code is just a dummy lib to make the linker happy when building
- * the python extension. When using the Python extension you should provide
- * a dynamic library called "arduino_code" to the dynamic linker.
- * 
- *
- */
-
 #include <Arduino.h>
 #include "searduino.h"
 
 
 void setup() {
-  pinMode(13,1);
-  pinMode(6,1);
   pinMode(7,1);
-  pinMode(8,1);
 }
 
 int main(void)
@@ -49,12 +37,13 @@ int main(void)
   
   SEARDUINO_LOOP()
     {
-      //      digitalWrite(7,1);
-      analogWrite(7,1);
+      digitalWrite(7,1);
+      delay(200);
+      //analogWrite(7,1);
       /* Simulator should not get this extra write, 
        * we should only send on change */
-      //digitalWrite(7,0);
-      analogWrite(7,120);
+      digitalWrite(7,0);
+      //analogWrite(7,120);
       delay(200);
     }
   return 0;
