@@ -200,7 +200,7 @@ ext_register_pin_type_sim_cb(pintype_to_sim_callback_ptr cb)
       return SEARD_SEARDUINO_NULL_CALLBACK;
     }
 
-  printf ("TYPE CB AT %p\n", cb); 
+  //printf ("TYPE CB AT %p\n", cb); 
   pintype_sim_callback = cb;
 
   return SEARD_SEARDUINO_OK;
@@ -213,11 +213,11 @@ ext_inform_pin_type(int pin, int type)
   LOG_FUNCTION();
   if (pintype_sim_callback==NULL)
     {
-      printf ("EXTERNALLY INFORM no cb\n");
+      //      printf ("EXTERNALLY INFORM no cb\n");
       return SEARD_SEARDUINO_NULL_CALLBACK;
     }
 
-  printf ("EXTERNALLY INFORM %d %d\n", pin, type);
+  //  printf ("EXTERNALLY INFORM %d %d\n", pin, type);
   pintype_sim_callback(pin, type);
 
   return SEARD_SEARDUINO_OK;

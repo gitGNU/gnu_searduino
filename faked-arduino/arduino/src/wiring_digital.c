@@ -71,8 +71,8 @@ pinMode(uint8_t pin, uint8_t mode)
 {
   searduino_setup();
   
-  /* printf (" ====>  pinMode(%d,%d)   was:%d\n",  */
-  /* 	  pin, mode , get_generic_pin_mode(pin)	  ); */
+   /* printf (" ====>  pinMode(%d,%d)   was:%d\n",     */
+   /*  	  pin, mode , get_generic_pin_mode(pin)	  );    */
 
   PRINT_FUNCTION_NAME(("%d,%d",pin,mode));
   if (PIN_OUT_OF_RANGE(pin))
@@ -95,13 +95,14 @@ void turnOffPWM(uint8_t timer)
 
 void digitalWrite(uint8_t pin, uint8_t val)
 {
+
   if (PIN_OUT_OF_RANGE(pin))
     {
       SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
       return 0;
     }
 
-  /* printf ("digitalWrite(%d,%d) type=%d\n",pin,val,get_current_pin_type(pin)); */
+
   if ( get_digital_pin_mode(pin) == INPUT )
     {
       log_error("You're writing (digitalWrite) to pin %d, which is an INPUT pin\n", pin);
@@ -113,7 +114,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
     {
       log_error("Could not set pin %d to digital (in digitalWrite)", pin);
     }
-  
+ 
   /* Warn and then discard digital writes to an analog pin */
   if ( has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG) &&
        !has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL) )

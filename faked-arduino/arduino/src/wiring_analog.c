@@ -85,11 +85,12 @@ analogRead(uint8_t pin)
 
 void analogWrite(uint8_t pin, int val)
 {
-  /* 
-     printf ("analogWrite(%d,%d) type=%d\n",pin,val,get_current_pin_type(pin)); 
+  /* printf ("analogWrite(%d,%d) type=%d\n",pin, val, get_current_pin_type(pin)); */
+
+  /*
      printf ("    digital?: %d\n",has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL)); 
      printf ("    pwm?:     %d\n",has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM)); 
-  printf ("    analog?:  %d\n",has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG)); 
+     printf ("    analog?:  %d\n",has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG)); 
   */
 
   /* Arduino sets the pin mode to OUTPUT in the analogWrite function,
@@ -111,6 +112,7 @@ void analogWrite(uint8_t pin, int val)
   if (!( (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL)) ||
 	 (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM))))
     {
+      log_error("Can't analogWrite (%d) to in pin %d since the pin is neither digital or pwm", val, pin);
       return;
     }
     
@@ -134,6 +136,7 @@ void analogWrite(uint8_t pin, int val)
 	{
 	  log_error("Could not set pin %d to pwm (in analogWrite)", pin);
 	}
+
       /* See comment on "val == 0" above */
       /*   we need to write 255 (instead of HIGH) since there's
            no timer do determine pwm or digital*/
