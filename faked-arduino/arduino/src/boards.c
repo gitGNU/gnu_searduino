@@ -204,7 +204,7 @@ board_setup(void)
   int ret;
 
 
-  printf (" =================== BOARD SETUP (boards.c) ==========================");
+  //  printf (" =================== BOARD SETUP (boards.c) ==========================");
 
   /* Set all pins to zero */
   init_arduino_pins();
@@ -216,7 +216,9 @@ board_setup(void)
       board_index = SEARDUINO_BOARD_UNO;
     }
   
-  printf ("SETTING UP BOARD: %s\n", searduino_boards[board_index].name);
+  /*  printf ("SETTING UP BOARD: %s\n", searduino_boards[board_index].name);
+   */
+
   if ( searduino_boards[board_index].setup == NULL )
     {
       fprintf(stderr, "Missing setup function for '%s'\n", 
