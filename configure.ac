@@ -158,7 +158,7 @@ fi
 
 
 if test "$ut_enabled" = "yes"; then
-    PKG_CHECK_MODULES([CHECK])
+    PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 fi
 
 export CYGWIN=""
