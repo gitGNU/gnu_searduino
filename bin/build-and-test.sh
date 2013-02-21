@@ -37,7 +37,7 @@ prepare()
     then
 	TODAY=$(date +%Y%m%d); 
 	mv configure.ac configure.tmp
-	cat configure.tmp  | sed "s/Searduino\],[ ]*\[[0-9\.]*\]/$TODAY/g" >  configure.ac
+	cat configure.tmp  | sed "s/Searduino\],[ ]*\[[0-9\.]*\]/git-$TODAY/g" >  configure.ac
     fi
     ./configure --prefix=${TMP_INST}  --enable-unittest
     exit_on_failure $? "configure"
