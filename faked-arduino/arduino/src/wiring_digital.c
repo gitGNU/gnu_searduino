@@ -104,7 +104,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
   /* printf ("digitalWrite(%d,%d) type=%d\n",pin,val,get_current_pin_type(pin)); */
   if ( get_digital_pin_mode(pin) == INPUT )
     {
-      log_error("You're writing (digitalWrite) to pin %d, which is an INPUT pin", pin);
+      log_error("You're writing (digitalWrite) to pin %d, which is an INPUT pin\n", pin);
       return;
     }
   
@@ -141,7 +141,7 @@ int digitalRead(uint8_t pin)
 
   if ( get_digital_pin_mode(pin) != INPUT )
     {
-      log_error("You're reading from pin %d, which is an OUTPUT pin", pin);
+      log_error("You're reading from pin %d, which is an OUTPUT pin\n", pin);
     }
   
   /* Turn off PWM */
