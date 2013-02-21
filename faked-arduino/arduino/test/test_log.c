@@ -47,7 +47,6 @@ START_TEST (test_dec_log)
 
   /* reset to 0 */
   searduino_set_log_level(0);
-  fail_if(ret!=0);
   level = searduino_get_log_level();
   fail_if(level!=0);
 
