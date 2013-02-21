@@ -24,7 +24,10 @@ prepare()
     make -f Makefile.git 
     exit_on_failure $? "make -f Makefile.git"
 
-    ./configure --prefix=${TMP_INST}  --enable-unittest
+    export CFLAGS=/usr/lib/jvm/java-6-sun-1.6.0.26/include/
+    export CXXFLAGS=/usr/lib/jvm/java-6-sun-1.6.0.26/include/
+
+    ./configure --prefix=${TMP_INST}  --enable-unittest 
     exit_on_failure $? "configure"
 }
 
