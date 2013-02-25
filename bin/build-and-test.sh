@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TMP_INST=/tmp/TMP_INSTALL3
+TMP_INST=/tmp/$USER/TMP_INSTALL3
 BUILD_DIR=.
 
 LOG_FILE=build-and-test.log
@@ -152,7 +152,7 @@ do
     if [ "$1" = "--clean-clone" ]
     then
 	CLEAN_CLONE=true
-	BUILD_DIR=/tmp/searduino-build
+	BUILD_DIR=/tmp/$USER/searduino-build
 	rm -fr ${BUILD_DIR}
     elif [ "$1" = "--coverage" ]
     then
