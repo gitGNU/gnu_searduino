@@ -201,7 +201,10 @@ fi
 
 log_and_exec prepare
 log_and_exec build
-log_and_exec doc
+if [ "$BUILD_DOC" != "false" ]
+then
+    log_and_exec doc
+fi
 log_and_exec checker
 log_and_exec dist
 
