@@ -1,8 +1,10 @@
-
 #
 #       Searduino
-#
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#                                                                   
+# Basically a couple of Makefile wrapping the Ardunio
+# C and C++ files
+#                                                                   
+#  Copyright (C) 2012 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -21,19 +23,40 @@
 # MA  02110-1301, USA.                                              
 #
 #
-include ../mk/Makefile-prog.mk
 
-export ARDUINO=stub
-export SRC_C=test.c
-export LIBTEST_PATH=../shared/
-export LIBTEST=-ltest 
-export SEARDUINO_PATH=../..
+INSTALLATION_DIR=__INSTALL_DIR__
 
-export USER_C_FLAGS= -g -I../../faked-arduino/include/arduino -I../../faked-arduino/include/../../arduino-extras/include/
-export USER_LD_FLAGS= -ldl -L$(LIBTEST_PATH) $(LIBTEST) 
+all: uno mega due mega2560 leonardo
 
-include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+uno:
+#	make -f Makefile.uno light-clean
+	make -f Makefile.uno lib
 
-# dummy target for internal searduino devel
-distclean:
-	@echo
+due:
+#	make -f Makefile.due light-clean
+	make -f Makefile.due lib
+
+mega:
+#	make -f Makefile.mega light-clean
+	make -f Makefile.mega lib
+
+mega2560:
+#	make -f Makefile.mega2560 light-clean
+	make -f Makefile.mega2560 lib
+
+leonardo:
+	make -f Makefile.leonardo lib
+
+clean:
+	make -f Makefile.uno clean
+
+check:
+	@echo "Nothing to do in libraries"
+
+install: due uno mega mega2560
+	 @echo "installing to $(INSTALLATION_DIR)"
+	 mkdir -p  $(INSTALLATION_DIR)/libs/searduino/arduino-libs 
+	 @cp -r ../../arduino-sources/libs/*     $(INSTALLATION_DIR)/libs/searduino/arduino-libs/
+
+distdir:
+	echo dummy impl

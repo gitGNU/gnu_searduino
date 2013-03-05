@@ -21,11 +21,27 @@
 #
 #
 
-include ../mk/Makefile-lib.mk
+export DEBIANSOURCES=__DEBIANSOURCES__
 
-export SRC_C=ard_code.c
-export LIB=libard_code.a
+include ../mk/Makefile-shlib.mk
 
-clean:
-	rm -fr lib *.o $(PROG) include *.so
+export SRC_C=test.c
+export SRC_CXX=
+export MAIN_SRC=
+export SHLIB=libtest.so
+export LIB=libtest.a
+export USER_LIB_INSTALL_PATH=/tmp/searduino-lib-install
+export SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
+export USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
+export USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS) -ldl
+
+$(SHLIB):
+
+
+# include clean target
+ARDUINO=stub
+SEARDUINO_PATH=../../
+ARDUINO_PATH=../../arduino-sources
+
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 

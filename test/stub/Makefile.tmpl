@@ -21,44 +21,18 @@
 #
 #
 
-AUTOMAKE_OPTIONS = gnu
-SIMULATOR=searduino-stream-sim
-bin_PROGRAMS= $(SIMULATOR)
-searduino_stream_sim_SOURCES=simulator.c
+export DEBIANSOURCES=__DEBIANSOURCES__
 
-#if GL_GENERATE_PTHREAD_H
-#  GNULIB_PTHREAD_I=-I../../lib
-#  GNULIB_PTHREAD_A=lib/libgnu.a
-#else
-#  GNULIB_PTHREAD_I=
-#  GNULIB_PTHREAD_A= -lpthread 
-#endif
+include ../mk/Makefile-prog.mk
 
+export SRC_C=test.c
+SRC_CXX=
+MAIN_SRC=
 
-if DEBIANSOURCES
-SEARDUINO_INC_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
-SEARDUINO_LIB_INC_PATH=/usr/share/arduino/libraries
-else
-SEARDUINO_INC_PATH=../../arduino-sources/core
-SEARDUINO_LIB_INC_PATH=../../arduino-sources/libraries
-endif
+# include clean target
+ARDUINO=stub
+SEARDUINO_PATH=../../
+ARDUINO_PATH=../../arduino-sources
 
-
-
-AM_CFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../arduino-extras/include/ $(GNULIB_PTHREAD_I) --std=c99
-
-if USE_XTEST
-XTESTFLAGS = $(LIBXTST)
-else
-XTESTFLAGS = 
-endif
-
-
-
-AM_LDFLAGS= -L../../faked-arduino/.libs  -lsearduinostub  -lpthread $(LIBXTST)
-#$(GNULIB_PTHREAD_I) 
-
-
-
-
+include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 

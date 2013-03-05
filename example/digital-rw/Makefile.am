@@ -1,7 +1,8 @@
 pkgdataexampledir = $(pkgdatadir)/example/digital-rw/
 dist_pkgdataexample_DATA = \
   main.c                   \
-  Makefile.digitalrw
+  Makefile.digitalrw       \
+  Makefile.tmpl
 
 
 

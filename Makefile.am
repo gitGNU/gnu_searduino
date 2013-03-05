@@ -1,4 +1,10 @@
-SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
+if DEBIAN_SOURCES
+   SUBDIRS =         debian-mk arduino-extras faked-arduino extensions simulators mk example test tools
+   DIST_SUBDIRS = $(SUBDIRS)
+else
+   SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
+   DIST_SUBDIRS = $(SUBDIRS)
+endif
 # lib
 
 SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 
@@ -38,7 +44,7 @@ arduino-sources/libraries/Ethernet/EthernetUdp.h arduino-sources/libraries/Ether
 #    arduino-sources/variants/micro/pins_arduino.h 
 
 
-
+if DEBIANSOURCES
 ARD_EXAMPLES = \
   ./ard-ex/01.Basics/AnalogReadSerial/AnalogReadSerial.ino \
   ./ard-ex/01.Basics/BareMinimum/BareMinimum.ino \
@@ -107,6 +113,9 @@ ARD_EXAMPLES = \
   ./ard-ex/09.USB(Leonardo)/Mouse/ButtonMouseControl/ButtonMouseControl.ino \
   ./ard-ex/09.USB(Leonardo)/Mouse/JoystickMouseControl/JoystickMouseControl.ino \
   ./ard-ex/ArduinoISP/ArduinoISP.ino 
+else
+ARD_EXAMPLES = 
+endif
 
 
 bin_SCRIPTS = bin/arduino-ex2c bin/functions bin/verify-install.sh bin/find_port.sh
@@ -122,8 +131,9 @@ dist_pkgdataexample_DATA = \
   tmpl/pre_c.tmpl      \
   tmpl/Makefile.tmpl
 
-EXTRA_DIST =  ${ARD_SRC} ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl
+EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git
 #m4/gnulib-cache.m4
+#  ${ARD_SRC}
 
 .PHONY: doc
 doc:
@@ -145,8 +155,13 @@ GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
 GPROF_FLAG = "-pg -g"
 
 
+if DEBIANSOURCES
+check-local:
+	echo "No local check when using Debian's Arduino sources"
+else
 check-local:
 	bin/verify-install.sh --vcs 
+endif
 
 init-cov:
 	make clean

@@ -1,5 +1,5 @@
 
-if PEARDUINO_SUPPORT
+if JEARDUINO_SUPPORT
 
 LIB_PATHS=./:../../faked-arduino/.libs/:../../extensions/java
 
@@ -51,4 +51,12 @@ install-exec-hook: $(JEARDUINO_JAR)
 
 CLEAN_FILES=jearduino.sh
 
+all: $(JEARDUINO_JAR) 
+
+else
+
+all:
+	echo doing nothin in jearduino
+
 endif
+

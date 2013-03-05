@@ -1,10 +1,17 @@
 #!/bin/bash
 
-if [ "$1" = "--vcs" ]
-then
-    VCS=true
-    shift
-fi
+while  [ "$1" != "" ]
+do
+    if [ "$1" = "--vcs" ]
+    then
+	VCS=true
+	shift
+    elif [ "$1" = "--arduino-examples" ]
+    then
+	ARD_EX=true
+	shift
+    fi
+done
 
 if [ "$VCS" = "true" ]
 then
@@ -453,8 +460,12 @@ then
 else
     test_examples
 fi
-test_arduino_examples
-test_arduino_usb_examples
+
+if [ "$ARD_EX" = "true" ]
+then
+    test_arduino_examples
+    test_arduino_usb_examples
+fi
 
 #
 #
