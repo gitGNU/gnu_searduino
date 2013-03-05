@@ -1,4 +1,3 @@
-
 #
 #       Searduino
 #
@@ -22,33 +21,18 @@
 #
 #
 
+include ../mk/Makefile-prog.mk
 
-ARDUINO=uno
-BUILD_FROM_VCS=true
-LIB=libfunctions.a
-SRC_C=test.c
-USER_LIB_INSTALL_PATH=/tmp/searduino-lib-install
+export SRC_C=test.c
+SRC_CXX=
+MAIN_SRC=
 
-all: $(SHLIB) 
+# include clean target
+ARDUINO=stub
+SEARDUINO_PATH=../../
+ARDUINO_PATH=../../arduino-sources
 
-SEARDUINO_PATH=../..
-
-USER_C_FLAGS=-fPIC 
-USER_LD_FLAGS= -fPIC  -Wl,-rpath,$(SEARDUINO_PATH)/faked-arduino/.libs
-
-$(LIB):
-
-install: lib-install
-
-check:
-	make clean
-	make lib
-
-distdir:
-	echo nothing to do in dist
-
-all:
-	make check
+export DEBIANSOURCES=__DEBIANSOURCES__
 
 include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
 

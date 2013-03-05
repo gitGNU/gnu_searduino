@@ -110,11 +110,18 @@ else
 XTEST_C_FLAGS =
 endif
 
+if DEBIANSOURCES
+SEARDUINO_INC_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
+SEARDUINO_LIB_INC_PATH=/usr/share/arduino/libraries
+else
+SEARDUINO_INC_PATH=../arduino-sources/core
+SEARDUINO_LIB_INC_PATH=../arduino-sources/libraries
+endif
 
-
-AM_CFLAGS= -I../arduino-sources/core           \
-           -I../arduino-sources/libraries/Wire \
-           -I../arduino-sources/libraries/Wire/utility \
+AM_CFLAGS= \
+           -I$(SEARDUINO_INC_PATH)/           \
+           -I$(SEARDUINO_LIB_INC_PATH)/Wire \
+           -I$(SEARDUINO_LIB_INC_PATH)/Wire/utility \
            -I../faked-arduino/include/arduino  \
            -I../faked-arduino/include/         \
            -I../faked-arduino/include/avr      \
@@ -125,10 +132,11 @@ AM_CFLAGS= -I../arduino-sources/core           \
 
 
 
-AM_CXXFLAGS= -I../arduino-sources/core          \
-           -I../arduino-sources/libraries/Wire  \
-           -I../arduino-sources/libraries/Wire/utility \
-           -I../arduino-sources/libraries/Servo \
+AM_CXXFLAGS= \
+           -I$(SEARDUINO_INC_PATH)/           \
+           -I$(SEARDUINO_LIB_INC_PATH)/Wire \
+           -I$(SEARDUINO_LIB_INC_PATH)/Wire/utility \
+           -I$(SEARDUINO_LIB_INC_PATH)/Servo \
            -I../faked-arduino/include/arduino   \
            -I../faked-arduino/include/avr       \
            -I../faked-arduino/include/          \

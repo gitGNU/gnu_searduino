@@ -52,24 +52,26 @@ AVRDUDE=avrdude
 F_CPU=$(board_build.f_cpu)
 
 
-INC_FLAGS=  -I$(SEARDUINO_INC_PATH)/arduino-sources/core 		   \
-            -I$(SEARDUINO_INC_PATH)/arduino-extras/ 			    \
-            -I$(SEARDUINO_INC_PATH)/arduino-extras/include    		     \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/variants/$(VARIANT)	      \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/utility \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Ethernet/ 	\
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SPI       	 \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Firmata   	  \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/utility	   \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Wire/	            \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/       	     \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/utility	      \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/EEPROM     	       \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SD/EEPROM 	        \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/LiquidCrystal	         \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Servo        	          \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/SoftwareSerial	           \
-            -I$(SEARDUINO_INC_PATH)/arduino-sources/libraries/Stepper
+INC_FLAGS=  \
+            -I$(SEARDUINO_INC_PATH)/arduino-extras/ 	    \
+            -I$(SEARDUINO_INC_PATH)/arduino-extras/include   \
+            -I$(ARDUINO_INC_PATH)/variants/$(VARIANT)	      \
+            -I$(ARDUINO_INC_PATH)/cores/arduino/               \
+            -I$(ARDUINO_INC_PATH)/core/                         \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/Ethernet/utility    \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/Ethernet/        \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/SPI       	 \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/Firmata   	  \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/Wire/utility   \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/Wire/	    \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/SD/       	     \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/SD/utility	      \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/EEPROM     	       \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/SD/EEPROM 	        \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/LiquidCrystal        \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/Servo                 \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/SoftwareSerial         \
+            -I$(ARDUINO_LIB_INC_PATH)/libraries/Stepper
 
 
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \

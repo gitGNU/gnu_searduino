@@ -1,7 +1,10 @@
 #
 #       Searduino
-#
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#                                                                   
+# Basically a couple of Makefile wrapping the Ardunio
+# C and C++ files
+#                                                                   
+#  Copyright (C) 2013 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -21,12 +24,25 @@
 #
 #
 
-include ../mk/Makefile-prog.mk
 
-export SRC_C=test.c
+all: 
+	cd arduino-sources && make all
+	cd libraries && make all
 
-# include clean target
-ARDUINO=stub
-SEARDUINO_PATH=../../
-include $(SEARDUINO_PATH)/mk/searduino-vcs.mk
+clean:
+	cd arduino-sources && make clean
+	cd libraries && make clean
 
+check:
+	@echo "Nothing to do in arduino-sources"
+
+clean:
+	cd arduino-sources && make clean
+	cd libraries && make clean
+
+install: 
+	cd arduino-sources && make install
+	cd libraries && make install
+
+distdir:
+	echo dummy impl

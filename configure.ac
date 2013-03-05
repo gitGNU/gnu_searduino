@@ -142,6 +142,17 @@ AC_ARG_ENABLE([shared-test],
   [st_enabled=yes]
 )
 
+AC_ARG_ENABLE([debian-sources],
+  [AS_HELP_STRING([--enable-debian-sources],
+	  [Use Arduino source code from Debian packages)])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for debian-sources option]) ;;
+   esac
+   debian_sources=$enableval],
+  [debian_sources=no]
+)
+
 if test "$python_ext_enabled" = "yes"; then
 # Check for program
 # Keep this echo, it's needed on cygwin
@@ -182,10 +193,16 @@ fi
 # GNULIB 
 gl_PTHREAD_CHECK
 
+
+#
 AM_CONDITIONAL(PYTHON_EXT_SUPPORT, test "x$python_ext_enabled" = "xyes")
 AM_CONDITIONAL(PEARDUINO_SUPPORT,  test "x$pearduino_enabled" = "xyes")
 AM_CONDITIONAL(JAVA_EXT_SUPPORT,   test "x$java_ext_enabled" = "xyes")
 AM_CONDITIONAL(JEARDUINO_SUPPORT,  test "x$jearduino_enabled" = "xyes")
+
+AM_CONDITIONAL(DEBIAN_SOURCES,     test "x$debian_sources" = "xyes")
+#AM_CONDITIONAL(DEBIANSOURCES,     test "x$debian_sources" = "xyes")
+AM_CONDITIONAL([DEBIANSOURCES],     [test x = x])
 
 AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
 AM_CONDITIONAL(SHAREDTEST,     test "x$st_enabled"     = "xyes")
@@ -265,10 +282,30 @@ set_lversion()
 }
 
 
+setup_debianized()
+{
+    mkdir -p debian-mk/libraries/	
+    mkdir -p debian-mk/arduino-sources/	
 
-./bin/get-arduino-src.sh
-exit_on_failure $? ./bin/get-arduino-src.sh
+    cp -r mk/arduino-sources           debian-mk/
+    cp -r mk/libraries                 debian-mk/
 
+    cp mk/debian-mk/arduino-sources/arduino-sources.mk   debian-mk/arduino-sources/
+    cp mk/debian-mk/libraries/libraries.mk               debian-mk/libraries/
+
+    cat mk/debian-mk/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
+                 debian-mk/Makefile
+    exit_on_failure $? "Prepared top level Makefile (debian)"
+    
+    cat mk/debian-mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
+                 debian-mk/libraries/Makefile
+    exit_on_failure $? "Prepared libraries Makefile (debian)"
+    
+    cat mk/debian-mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
+                 debian-mk/arduino-sources/Makefile
+    exit_on_failure $? "Prepared arduino-sources Makefile (debian)"
+
+}
 
 prepare_examples()
 {
@@ -307,17 +344,58 @@ prepare_examples()
 }
 
 
+prepare_test_mk()
+{
+  if test "x$debian_sources"  != "xyes"  ;
+  then
+     export DEBIAN_SOURCE_SUBST="false"
+  else
+     export DEBIAN_SOURCE_SUBST="true"
+  fi
+
+    cat test/arduino-lib/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/arduino-lib/Makefile
+    exit_on_failure $? "Prepared  test/arduino-lib"
+
+    cat test/hw/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/hw/Makefile
+    exit_on_failure $? "Prepared  test/hw"
+
+    cat test/arduino-code-dynamic/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/arduino-code-dynamic/Makefile
+    exit_on_failure $? "Prepared  test/arduino-code-dynamic"
+
+    cat test/arduino-code-static/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/arduino-code-static/Makefile
+    exit_on_failure $? "Prepared  test/arduino-code-static"
+
+    cat test/stub/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/stub/Makefile
+    exit_on_failure $? "Prepared  test/stub"
+
+    cat test/searduino_loop/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/searduino_loop/Makefile
+    exit_on_failure $? "Prepared  test/searduino_loop"
+
+    cat test/shared/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/shared/Makefile
+    exit_on_failure $? "Prepared  test/shared"
+
+    cat test/shared-main/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/shared-main/Makefile
+    exit_on_failure $? "Prepared  test/shared-main"
+
+    cat test/static/Makefile.tmpl  | sed "s,__DEBIANSOURCES__,$DEBIAN_SOURCE_SUBST,g" > test/static/Makefile
+    exit_on_failure $? "Prepared  test/static"
+
+}
+
 prepare_searduino_mk()
 {
 #  CYGWIN_NT-6.1
 #  CYGWIN_NT-6.1-WOW64
 #  CYGWIN_NT-5.1
+
 	
     export VERSION_LONG=""
     set_lversion
-    cat mk/searduino.mk.tmpl                | \
-        sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" | \
-        sed "s,__CYGWIN__,${CYGWIN},g"      | \
+    cat mk/searduino.mk.tmpl                           | \
+        sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g"      | \
+        sed "s,__CYGWIN__,${CYGWIN},g"                 | \
+        sed "s,__ARDUINO_PATH__,${ARDUINO_PATH},g"     | \
+        sed "s,__ARDUINO_SOURCES_FROM__,${ARDUINO_SOURCES_FROM},g"      | \
         sed "s,__SEARDUINO_VERSION_MAJOR__,${VERSION_LONG_MAJOR},g"     | \
         sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
         sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
@@ -345,12 +423,32 @@ echo "prefix: ${prefix}   SEARD_PREFIX=${SEARD_PREFIX}"
 export SEARD_PREFIX
 
 
+
+#
+#  DEBIAN or not
+# 
+if test "x$debian_sources"  != "xyes"  ;
+then
+  ./bin/get-arduino-src.sh
+  exit_on_failure $? ./bin/get-arduino-src.sh
+  export ARDUINO_PATH=${SEARD_PREFIX}/
+  export ARDUINO_SOURCES_FROM=Arduino
+else
+  echo "Not downloading Arduino sources from internet"
+  setup_debianized
+  export ARDUINO_PATH=/usr/share/arduino/hardware/arduino/	
+  export ARDUINO_SOURCES_FROM=Debian
+fi
+
+
+
 cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
 exit_on_failure $? "Prepared doc Makefile"
 
 
 prepare_examples
 prepare_searduino_mk
+prepare_test_mk
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/pardon/searduino-pardon.sh
 exit_on_failure $? "Prepared python simulator wrapper script"
@@ -387,36 +485,40 @@ AC_SUBST(INCLTDL)
 AC_SUBST(LIBLTDL)	
 AC_SUBST(USE_XTEST)
 AC_SUBST(LIBXTST)	
+AC_SUBST(PYTHON_EXT_SUPPORT)
+AC_SUBST(PEARDUINO_SUPPORT)
+AC_SUBST(JAVA_EXT_SUPPORT)
+AC_SUBST(JEARDUINO_SUPPORT)
+AC_SUBST(DEBIAN_SOURCES)
+AC_SUBST(DEBIANSOURCES)
+
+
 
 AC_MSG_NOTICE([summary of build options:
-  package:              ${PACKAGE} 
-  version:              ${VERSION} 
-  Host type:            ${host}
-  Target:               ${target}
-  Install prefix:       ${prefix}
-  Compiler:             ${CC}
-  Warning flags:        ${WARN_CFLAGS}
-  Library types:        Shared=${enable_shared}, Static=${enable_static}
-  Unit test:            $ut_enabled
-  Unit test cflags:     $CHECK_CFLAGS
-  Unit test ldflags:    $CHECK_LIBS
-  Shared lib test:      $st_enabled
-  Pedantic flags:       $PEDANTIC_FLAGS
-  Pthreads:             $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
-
-  Python:
-  ------------------
-     Python flags:      $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
-     Pearduino enabled: $jearduino_enabled
-     Python extension:  $python_ext_enabled
-  Python:
-  ------------------
-     Java:              $JAVA 
-     Java extension:    $java_ext_enabled
-     Jearduino enabled: $jearduino_enabled
+  package:            ${PACKAGE} 
+  version:            ${VERSION} 
+  Host type:          ${host}
+  Target:             ${target}
+  Install prefix:     ${prefix}
+  Compiler:           ${CC}
+  Warning flags:      ${WARN_CFLAGS}
+  Library types:      Shared=${enable_shared}, Static=${enable_static}
+  Java extension:     $java_ext_enabled
+  Python extension:   $python_ext_enabled
+  Python flags:       $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+  Jearduino enabled:  $jearduino_enabled
+  Pearduino enabled:  $jearduino_enabled
+  Unit test:          $ut_enabled
+  Unit test cflags:   $CHECK_CFLAGS
+  Unit test ldflags:  $CHECK_LIBS
+  Shared lib test:    $st_enabled
+  Pedantic flags:     $PEDANTIC_FLAGS
+  Pthreads:           $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
   HID backends:     
   ------------------
-     X11:               $USE_XTEST ($LIBXTST)
+    X11:              $USE_XTEST ($LIBXTST)
+  Use Debian Arduino: $debian_sources ($DEBIANSOURCES) ($DEBIAN_SOURCES)
                     
 ])
+
 

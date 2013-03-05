@@ -4,7 +4,7 @@
 # Basically a couple of Makefile wrapping the Ardunio
 # C and C++ files
 #                                                                   
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#  Copyright (C) 2012 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -23,20 +23,47 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=../
-ARDUINO_PATH=./
+SEARDUINO_PATH=../..
+DEBIAN_BUILD=true
+DEBIANSOURCES=true
 
-
-SRC_C=core/WInterrupts.c  core/wiring_analog.c  core/wiring.c  core/wiring_digital.c  core/wiring_pulse.c  core/wiring_shift.c
-SRC_CXX=core/CDC.cpp core/HID.cpp  core/Print.cpp   core/Tone.cpp     core/WMath.cpp core/HardwareSerial.cpp  core/IPAddress.cpp  core/new.cpp   core/Stream.cpp  core/USBCore.cpp  core/WString.cpp
-
-LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD)/
-LIB=$(LIB_PATH)/libsearduino.a
+ARDUINO_SOURCE_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
+ARDUINO_PATH=/usr/share/arduino/hardware/arduino/
+ARDUINO_LIBS_SOURCE_PATH=/usr/share/arduino/libraries
 
 
 
-SEARDUINO_MK=../mk/searduino-vcs.mk
-#SEARDUINO_FUNC=../mk/searduino-functions.mk
+SRC_C= $(ARDUINO_LIBS_SOURCE_PATH)/Wire/utility/twi.c
+SRC_CXX= \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/Ethernet.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/EthernetServer.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/Dhcp.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/utility/w5100.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/utility/socket.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/EthernetUdp.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/Dns.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Ethernet/EthernetClient.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Wire/Wire.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/SPI/SPI.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/LiquidCrystal/LiquidCrystal.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/SoftwareSerial/SoftwareSerial.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/SD/SD.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/SD/utility/SdVolume.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/SD/utility/SdFile.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/SD/utility/Sd2Card.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/SD/File.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Stepper/Stepper.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/EEPROM/EEPROM.cpp \
+	$(ARDUINO_LIBS_SOURCE_PATH)/Servo/Servo.cpp 
+
+#./Firmata/Firmata.cpp
+
+LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libraries/libs/$(BOARD)/
+LIB=$(LIB_PATH)/liblibraries.a
+
+
+
+SEARDUINO_MK=$(SEARDUINO_PATH)/mk/searduino-vcs.mk
 
 lib: $(LIB)
 $(LIB): $(OBJ_C)  $(OBJ_CXX) 
@@ -66,4 +93,7 @@ mega2560: ARDUINO=mega2560
 mega2560:
 	make lib
 
+leonardo: ARDUINO=leonardo
+leonardo:
+	make lib
 
