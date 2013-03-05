@@ -29,7 +29,7 @@ lib_LTLIBRARIES = libpearduino.la
 libpearduino_la_SOURCES = pearduino.c
 
 AM_CFLAGS=@PYTHON_CPPFLAGS@ -I../../arduino-sources/core  -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ 
-AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/.libs   -lsearduinostub   
+AM_LDFLAGS=@PYTHON_LDFLAGS@   -L../../faked-arduino/.libs  -L../../faked-arduino/.libs   -lsearduinostub   
 #-L../arduino-lib/
 #-larduino-code 
 
