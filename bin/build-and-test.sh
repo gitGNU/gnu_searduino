@@ -30,8 +30,16 @@ prepare()
     make -f Makefile.git 
     exit_on_failure $? "make -f Makefile.git"
 
-    export CFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
-    export CXXFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
+
+    if [ "$CFLAGS" = "" ]
+    then
+	export CFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
+    fi
+
+    if [ "$CXXFLAGS" = "" ]
+    then
+	export CXXFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
+    fi
 
     if [ "$DATE_VERSION" = "true" ]
     then
@@ -193,7 +201,10 @@ fi
 
 log_and_exec prepare
 log_and_exec build
-log_and_exec doc
+if [ "$BUILD_DOC" != "false" ]
+then
+    log_and_exec doc
+fi
 log_and_exec checker
 log_and_exec dist
 
