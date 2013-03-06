@@ -153,6 +153,7 @@ AC_ARG_ENABLE([debian-sources],
   [debian_sources=no]
 )
 
+
 if test "$python_ext_enabled" = "yes"; then
 # Check for program
 # Keep this echo, it's needed on cygwin
@@ -200,9 +201,9 @@ AM_CONDITIONAL(PEARDUINO_SUPPORT,  test "x$pearduino_enabled" = "xyes")
 AM_CONDITIONAL(JAVA_EXT_SUPPORT,   test "x$java_ext_enabled" = "xyes")
 AM_CONDITIONAL(JEARDUINO_SUPPORT,  test "x$jearduino_enabled" = "xyes")
 
-AM_CONDITIONAL(DEBIAN_SOURCES,     test "x$debian_sources" = "xyes")
+AM_CONDITIONAL(DEBIAN_SOURCES,     test x$debian_sources = xyes)
 #AM_CONDITIONAL(DEBIANSOURCES,     test "x$debian_sources" = "xyes")
-AM_CONDITIONAL([DEBIANSOURCES],     [test x = x])
+AM_CONDITIONAL(DEBIANSOURCES,      test x$debian_sources = xyes)
 
 AM_CONDITIONAL(UNITTEST,       test "x$ut_enabled"     = "xyes")
 AM_CONDITIONAL(SHAREDTEST,     test "x$st_enabled"     = "xyes")
@@ -517,7 +518,8 @@ AC_MSG_NOTICE([summary of build options:
   HID backends:     
   ------------------
     X11:              $USE_XTEST ($LIBXTST)
-  Use Debian Arduino: $debian_sources ($DEBIANSOURCES) ($DEBIAN_SOURCES)
+
+  Use Debian Arduino: $debian_sources
                     
 ])
 
