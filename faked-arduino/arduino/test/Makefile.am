@@ -23,27 +23,36 @@
 
 if UNITTEST
 
+
+if DEBIANSOURCES
+SEARDUINO_INC_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
+SEARDUINO_LIB_INC_PATH=/usr/share/arduino/libraries
+else
+SEARDUINO_INC_PATH=../../../arduino-sources/core
+SEARDUINO_LIB_INC_PATH=../../../arduino-sources/libraries
+endif
+
 lib_LTLIBRARIES = libi2c.la
 libi2c_la_SOURCES = i2c_setup.c
-AM_CFLAGS= -I../../include/arduino -I../../include/arduino/ -I../../../arduino-sources/core -I../../include -DSEARDUINO_STUB
+AM_CFLAGS= -I../../include/arduino -I../../include/arduino/ -I$(SEARDUINO_INC_PATH)/ -I../../include -DSEARDUINO_STUB
 
 TESTS =  testtime testsetup  testi2c testcomm testdigio testwiring testboards testuno testleonardo testlog
 check_PROGRAMS = testtime testsetup testlimit testi2c  testcomm testdigio testwiring testboards testuno testleonardo testlog
 
 testtime_SOURCES = test_time.c 
-testtime_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core 
+testtime_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I$(SEARDUINO_INC_PATH)/ 
 testtime_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testsetup_SOURCES = test_setup.c 
-testsetup_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include -I../../../arduino-sources/core 
+testsetup_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include -I$(SEARDUINO_INC_PATH)/ 
 testsetup_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testlimit_SOURCES = test_limit.c 
-testlimit_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
+testlimit_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I$(SEARDUINO_INC_PATH)/ -I../../include
 testlimit_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testi2c_SOURCES = test_i2cload.c 
-testi2c_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../../arduino-sources/core -I../../include
+testi2c_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I$(SEARDUINO_INC_PATH)/ -I../../include
 testi2c_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testcomm_SOURCES = test_comm.c 
@@ -55,23 +64,23 @@ testdigio_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils
 testdigio_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testboards_SOURCES = test_boards.c 
-testboards_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I../../../arduino-sources/core   -I../../../arduino-extras/include
+testboards_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I$(SEARDUINO_INC_PATH)/   -I../../../arduino-extras/include
 testboards_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testwiring_SOURCES = test_wiring_digital.c 
-testwiring_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include -I../../../arduino-sources/core 
+testwiring_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include -I$(SEARDUINO_INC_PATH)/ 
 testwiring_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testuno_SOURCES = test_uno.c 
-testuno_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I../../../arduino-sources/core   -I../../../arduino-extras/include
+testuno_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I$(SEARDUINO_INC_PATH)/   -I../../../arduino-extras/include
 testuno_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testleonardo_SOURCES = test_leonardo.c 
-testleonardo_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I../../../arduino-sources/core   -I../../../arduino-extras/include
+testleonardo_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I$(SEARDUINO_INC_PATH)/   -I../../../arduino-extras/include
 testleonardo_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 testlog_SOURCES = test_log.c 
-testlog_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I../../../arduino-sources/core   -I../../../arduino-extras/include  -DSEARDUINO_STUB
+testlog_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I../../include/utils -I../../include  -I$(SEARDUINO_INC_PATH)/   -I../../../arduino-extras/include  -DSEARDUINO_STUB
 testlog_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
 
 
