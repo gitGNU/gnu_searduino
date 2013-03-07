@@ -131,7 +131,8 @@ dist_pkgdataexample_DATA = \
   tmpl/pre_c.tmpl      \
   tmpl/Makefile.tmpl
 
-EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git
+EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile
+
 #m4/gnulib-cache.m4
 #  ${ARD_SRC}
 
