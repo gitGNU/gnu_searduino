@@ -34,7 +34,7 @@ SEARDUINO_LIB_INC_PATH=../../../arduino-sources/libraries
 endif
 
 testbegin_SOURCES = test_begin.cpp
-testbegin_CXXFLAGS = @CHECK_CFLAGS@  -DSEARDUINO_STUB -I../../include/utils -I../../include -I../../../arduino-sources/libraries/Wire/ -I$(SEARDUINO_INC_PATH)
+testbegin_CXXFLAGS = @CHECK_CFLAGS@  -DSEARDUINO_STUB -I../../include/utils -I../../include -I$(SEARDUINO_LIB_INC_PATH)/Wire/ -I$(SEARDUINO_INC_PATH)
 testbegin_LDADD = ../../.libs/libsearduinostub.a @CHECK_LIBS@ -ldl $(LIBXTST)
 
 endif
