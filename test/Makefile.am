@@ -23,6 +23,8 @@ EXTRA_DIST =           \
     ./hw/test.c \
     ./arduino-lib/Makefile.tmpl \
     ./arduino-lib/functions.c \
-    ./arduino-lib/functions.h \
-    ./arduino-lib/include/functions.h 
+    ./arduino-lib/functions.h 
+
+#\
+#    ./arduino-lib/include/functions.h 
 

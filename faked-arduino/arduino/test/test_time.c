@@ -119,7 +119,7 @@ START_TEST (test_delayMicroseconds)
       
       printf ("Loop: %d  diff: %.6ld     \n", 
 	      i, diff);
-      fail_if(diff  > 15000, "Sleeping DELAY1 failed");
+      fail_if(diff  > 20000, "Sleeping DELAY1 failed");
     }
 }
 END_TEST
