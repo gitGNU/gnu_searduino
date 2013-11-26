@@ -21,6 +21,9 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#ifndef __MINGW32__
+#define _XOPEN_SOURCE 500
+#endif
 #include <Arduino.h>
 
 #include <stdio.h>
@@ -28,10 +31,10 @@
 #include <pthread.h>
 
 
-
 #ifndef __MINGW32__
 #include <signal.h>
 #include <sys/types.h>
+#include <unistd.h>
 void sim_sighandler(int sig);
 #endif
 
@@ -390,8 +393,14 @@ main(int argc, char **argv)
 
   /* printf ("Using arduino code from library: %s\n",  ard_code);  */
   /* printf ("Using arduino board: %s\n",  ard_board);  */
-  
-  sim_setup(ard_board, ard_code);
+  if (strncmp(ard_board, "stub", strlen("stub"))==0) 
+    {    
+      sim_setup("uno", ard_code);
+    } 
+  else 
+    {
+      sim_setup(ard_board, ard_code);
+    }
 
   pthread_create(&arduino_thread, NULL, arduino_code, NULL);
 
