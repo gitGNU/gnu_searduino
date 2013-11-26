@@ -1,3 +1,4 @@
+####################################################################
 #
 #       Searduino
 #
@@ -27,6 +28,7 @@ SEARD_INST=/tmp/seard-test-eternal
 LIMIT=0
 
 BOARDS="stub uno mega due leonardo"
+BOARDS="stub "
 PROGS="blink-fast blink-four"
 
 LOG_DIR=${SEARD_INST}/tmp/logs/
@@ -85,18 +87,46 @@ make_a_lot()
 
     if [ "$BOARD" = "stub" ]
 	then
-	RULES="clean all shlib prog"
+	RULES="clean "
     else
 	RULES="clean all"
+	if [ "$UPLOAD_MODE" = "true" ]
+	    then
+	    RULES="$RULES upload"
+	fi
     fi
     
-    export ARDUINO=$BOARD
-    log_and_make  make -f Makefile.$PROG $RULES
 
     if [ "$BOARD" = "stub" ]
 	then
-	./$PROG
-	exit_on_error $? "Executing ./$PROG"
+
+	#
+	if [ "$SIMULATOR_MODE" = "stream" ]
+	then
+	    RULES="$RULES shlib"
+
+	    export ARDUINO=$BOARD
+	    log_and_make  make -f Makefile.$PROG $RULES
+
+	    ${SEARD_INST}/bin/searduino-stream-sim --arduino-code ./$PROG.so --board $ARDUINO
+	elif [ "$SIMULATOR_MODE" = "jearduino" ]
+	then
+	    RULES="$RULES shlib"
+
+	    export ARDUINO=$BOARD
+	    log_and_make  make -f Makefile.$PROG $RULES
+
+	    ${SEARD_INST}/bin/searduino-jearduino.sh --arduino-code ./$PROG.so --board $ARDUINO
+	else
+	    RULES="$RULES prog"
+
+	    export ARDUINO=$BOARD
+	    log_and_make  make -f Makefile.$PROG $RULES
+
+	    ./$PROG
+	    exit_on_error $? "Executing ./$PROG"
+	fi
+
     fi
 
     exit_on_error $? "make -f Makefile.$PROG $RULES"
@@ -143,6 +173,13 @@ do
 	    ;;
 	"--banner")
 	    BANNER_MODE=true
+	    ;;
+	"--upload")
+	    UPLOAD_MODE=true
+	    ;;
+	"--simulator")
+	    SIMULATOR_MODE=$2
+	    shift
 	    ;;
     esac
     shift
