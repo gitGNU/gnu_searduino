@@ -2,9 +2,19 @@
 
 SEARD_TOP=../../
 SEARD_INST=/tmp/seard-test-eternal
+LIMIT=0
 
 BOARDS="stub uno mega due leonardo"
 PROGS="blink-fast blink-four"
+
+LOG_DIR=${SEARD_INST}/tmp/logs/
+DATE=$(date +%Y-%m-%d)
+LOG_FILE=${LOG_DIR}/searduino-test-eternity-${DATE}
+if [ ! -d ${LOG_DIR} ]
+then
+    mkdir -p ${LOG_DIR}
+fi
+
 
 exit_on_error() 
 {
@@ -30,7 +40,7 @@ build_and_install()
 log_and_make()
 {
     echo "ARDUINO=$ARDUINO $*"
-    $* >/dev/null
+    $* >> ${LOG_FILE}
     exit_on_error $? "$*"
 }
 
@@ -50,23 +60,53 @@ make_a_lot()
     log_and_make  make -f Makefile.$PROG $RULES
 }
 
+rename_log_file()
+{
+    DATE=$(date +%Y-%m-%d)
+    LOG_FILE=${LOG_DIR}/searduino-test-eternity-${DATE}
+}
+
+loop_ctr()
+{
+    # Inc counter
+    CTR=$(( $CTR + 1 ))
+    echo "Build: $CTR"
+    sleep 3
+
+    # If a limit is set
+    if [ $LIMIT -ne 0 ]
+    then
+	# if we've reachd the limit, break
+	if [ $CTR -ge $LIMIT ]
+	    then
+	    return 1
+	fi
+    fi
+    return 0
+}
+
 #cd $SEARD_TOP
 #build_and_install
 
 cd $SEARD_INST/share/searduino/example/many-boards
 exit_on_error $? "cd $SEARD_INST/share/searduino/example/many-boards"
 
-for p in $PROGS
+CTR=0
+while (true)
 do
-    for b in $BOARDS
+    for p in $PROGS
     do
-	make_a_lot $b $p
+	for b in $BOARDS
+	do
+	    make_a_lot $b $p
+	done
     done
+    rename_log_file
+
+    loop_ctr
+    if [ $? -ne 0 ]
+    then
+	break
+    fi
+
 done
-
-
-
-
-
-
-
