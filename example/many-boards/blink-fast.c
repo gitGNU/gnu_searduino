@@ -34,8 +34,8 @@ setup()
 
 int main(void)
 {
-  //  init();
-  //setup();
+  init();
+  setup();
 
   /* The following line uses a Saerduino macro 
    * You could use a plain "for (;;)" instead
