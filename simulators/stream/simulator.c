@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -85,11 +85,13 @@ log_callback(uint8_t level, const char *str)
 
 
 int 
-sim_setup(char *ard_lib)
+sim_setup(char *ard_board, char *ard_lib)
 {
   int ret ; 
 
   seasim_disable_streamed_output();
+
+  seasim_set_board_name(ard_board);
 
   seasim_set_arduino_code_name(ard_lib);
 
@@ -220,6 +222,8 @@ static const char* I2C_CODE_ARG_LONG  = "--i2c-code";
 static const char* I2C_CODE_ARG_SHORT = "-ic";
 static const char* ARDUINO_CODE_ARG_LONG  = "--arduino-code";
 static const char* ARDUINO_CODE_ARG_SHORT = "-ac";
+static const char* ARDUINO_BOARD_ARG_LONG  = "--board";
+static const char* ARDUINO_BOARD_ARG_SHORT = "-b";
 static const char* HELP_ARG_LONG  = "--help";
 static const char* HELP_ARG_SHORT = "-h";
 static const char* VERSION_ARG_LONG  = "--version";
@@ -279,17 +283,21 @@ int
 main(int argc, char **argv)
 {
   pthread_t command_thread;
-  char *ard_code = "" ;
+  char *ard_code  = "" ;
+  char *ard_board = "" ;
   int i = 0;
   int ret;
 
   for (i=1;i<argc;i++)
     {
+    
+      printf ("PARSE: %s\n", argv[i]);
+
       if (ARGCMP(argv[i], 
 		 ARDUINO_CODE_ARG_LONG, 
 		 ARDUINO_CODE_ARG_SHORT))
 	{
-	  if (argv[2]==NULL)
+	  if (argv[i+1]==NULL)
 	    {
 	      printf ("Missing argument to %s, %s\n",
 		      ARDUINO_CODE_ARG_LONG, ARDUINO_CODE_ARG_SHORT);
@@ -298,6 +306,22 @@ main(int argc, char **argv)
 	  else
 	    {
 	      ard_code = argv[i+1];
+	      i++;
+	    }
+	}
+      else if (ARGCMP(argv[i], 
+		 ARDUINO_BOARD_ARG_LONG, 
+		 ARDUINO_BOARD_ARG_SHORT))
+	{
+	  if (argv[i+1]==NULL)
+	    {
+	      printf ("Missing argument to %s, %s\n",
+		      ARDUINO_BOARD_ARG_LONG, ARDUINO_BOARD_ARG_SHORT);
+	      return 1;
+	    }
+	  else
+	    {
+	      ard_board = argv[i+1];
 	      i++;
 	    }
 	}
@@ -347,13 +371,27 @@ main(int argc, char **argv)
 
     }
 
+
+  printf ("Done parsing\n");
 #ifndef __MINGW32__
   signal(SIGUSR1, sim_sighandler);
 #endif
   
-  /* printf ("Using arduino code from library: %s\n",  ard_code); */
+  if ( (ard_board == NULL) || (strlen(ard_board)==0) )
+    {
+      fprintf(stderr, "Missing board information.... assuming Uno");
+      ard_board="Uno";
+    }
+  if ( ( ard_code==NULL) || ( strlen(ard_code)==0) )
+    {
+      fprintf(stderr, "Missing arduino code to load");
+      return 1;
+    }
 
-  sim_setup(ard_code);
+  /* printf ("Using arduino code from library: %s\n",  ard_code);  */
+  /* printf ("Using arduino board: %s\n",  ard_board);  */
+  
+  sim_setup(ard_board, ard_code);
 
   pthread_create(&arduino_thread, NULL, arduino_code, NULL);
 

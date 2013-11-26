@@ -409,7 +409,13 @@ class MyWindow(Gtk.Window):
         self.digs = [None]*size
         self.anas = [None]*size
 
-        Gtk.Window.__init__(self, title="Pardon  ( " + seasim_get_searduino_name() + " - " + seasim_get_searduino_version() + " ) board " + seasim_get_board_name())
+        boardName = seasim_get_board_name();
+        print "seasim_get_board_name: " + boardName;
+        
+        Gtk.Window.__init__(self, title="Pardon  ( " + 
+                            seasim_get_searduino_name() + " - " + 
+                            seasim_get_searduino_version() + " ) board " + 
+                            seasim_get_board_name())
 
         self.innerbox = Gtk.HBox(spacing=6)
 
@@ -754,6 +760,7 @@ if args.ic != None:
 
 if args.board != None:
     board=args.board[0]
+    seasim_set_board_name(board)
 
 if args.pins != None:
     size = int(args.pins[0])+2
