@@ -108,7 +108,7 @@ make_a_lot()
 	    export ARDUINO=$BOARD
 	    log_and_make  make -f Makefile.$PROG $RULES
 
-	    ${SEARD_INST}/bin/searduino-stream-sim --arduino-code ./$PROG.so --board $ARDUINO
+	    ${SEARD_INST}/bin/searduino-stream-sim --arduino-code ./$PROG.so 
 	elif [ "$SIMULATOR_MODE" = "jearduino" ]
 	then
 	    RULES="$RULES shlib"
