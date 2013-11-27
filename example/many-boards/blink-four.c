@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 20123 Henrik Sandklef 
+ *   Copyright (C) 2013 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -25,17 +25,42 @@
 #include <Arduino.h>
 #include "searduino.h"
 
+#define NR_PINS 8
+int pins[] = { 13, 12, 11, 10, 9, 8, 7 };
 
 void
 setup()
 {
-  pinMode(13, OUTPUT);
+  int i;
+  for (i=0;i<NR_PINS;i++) 
+    {
+      pinMode(pins[i], OUTPUT);
+    }
+}
+
+
+void 
+setpin(int a) 
+{
+  int i;
+
+  int mask = 0x01;
+  printf("pin\n");
+  for (i=0;i<NR_PINS;i++) 
+    {
+      int new_val = (a & mask)>>i;
+      digitalWrite(pins[i],new_val);
+      mask = mask * 2;
+    }
+  delay(100);
 }
 
 int main(void)
 {
   init();
   setup();
+
+  int val=0;
 
   /* The following line uses a Saerduino macro 
    * You could use a plain "for (;;)" instead
@@ -44,13 +69,11 @@ int main(void)
     {
       #ifdef SEARDUINO_STUB
       static int ctr = 0;
-      printf ("Loop nr: %d\n", ctr);
+      //      printf ("Loop nr: %d\n", ctr);
       if (ctr++>10) { exit(0); }
       #endif
-      digitalWrite(13,1);
-      delay(100);
-      digitalWrite(13,0);
-      delay(100);
+      
+      setpin(val++);
     }
 }
 
