@@ -84,52 +84,42 @@ make_a_lot()
 	banner "$BOARD"
 	banner "$PROG"
     fi
+    
+    export ARDUINO=$BOARD
 
     if [ "$BOARD" = "stub" ]
 	then
+
 	RULES="clean "
+	if [ "$SIMULATOR" != "" ] 
+	then
+	    pwd
+	    SIM_RULES="$RULES shlib"
+	    log_and_make  make -f Makefile.$PROG $SIM_RULES
+	    CMD="${SIMULATOR} --arduino-code ./$PROG.so --board $ARDUINO"
+	    $CMD
+	    exit_on_error $? "$CMD"
+	fi
+
+	PROG_RULES="$RULES prog"
+	
+	export ARDUINO=$BOARD
+	log_and_make  make -f Makefile.$PROG $PROG_RULES
+	
+	./$PROG
+	exit_on_error $? "Executing ./$PROG"
+
+
     else
 	RULES="clean all"
-	if [ "$UPLOAD_MODE" = "true" ]
+	if [ "$(echo $UPLOAD_BOARDS | grep $ARDUINO | wc -l) " != "0" ]
 	    then
 	    RULES="$RULES upload"
 	fi
-    fi
-    
-
-    if [ "$BOARD" = "stub" ]
-	then
-
-	#
-	if [ "$SIMULATOR_MODE" = "stream" ]
-	then
-	    RULES="$RULES shlib"
-
-	    export ARDUINO=$BOARD
-	    log_and_make  make -f Makefile.$PROG $RULES
-
-	    ${SEARD_INST}/bin/searduino-stream-sim --arduino-code ./$PROG.so 
-	elif [ "$SIMULATOR_MODE" = "jearduino" ]
-	then
-	    RULES="$RULES shlib"
-
-	    export ARDUINO=$BOARD
-	    log_and_make  make -f Makefile.$PROG $RULES
-
-	    ${SEARD_INST}/bin/searduino-jearduino.sh --arduino-code ./$PROG.so --board $ARDUINO
-	else
-	    RULES="$RULES prog"
-
-	    export ARDUINO=$BOARD
-	    log_and_make  make -f Makefile.$PROG $RULES
-
-	    ./$PROG
-	    exit_on_error $? "Executing ./$PROG"
-	fi
-
+	make -f Makefile.$PROG $RULES
+	exit_on_error $? "make -f Makefile.$PROG $RULES"
     fi
 
-    exit_on_error $? "make -f Makefile.$PROG $RULES"
     return 0
 }
 
@@ -159,6 +149,20 @@ loop_ctr()
 }
 
 
+set_simulator()
+{
+    case $1 in
+	"stream" )
+	    SIMULATOR=${SEARD_INST}/bin/searduino-stream-sim
+	    ;;
+	"jearduino" )
+	    SIMULATOR=${SEARD_INST}/bin/searduino-jearduino.sh
+	    ;;
+    esac
+}
+
+SIMULATOR_MODE=""
+
 ###################################################
 #
 # Main
@@ -174,11 +178,13 @@ do
 	"--banner")
 	    BANNER_MODE=true
 	    ;;
-	"--upload")
-	    UPLOAD_MODE=true
+	"--upload-board")
+	    UPLOAD_BOARDS="$2"
+	    shift
 	    ;;
 	"--simulator")
 	    SIMULATOR_MODE=$2
+	    set_simulator $2
 	    shift
 	    ;;
     esac
