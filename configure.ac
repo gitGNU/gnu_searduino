@@ -347,6 +347,9 @@ prepare_examples()
     cat example/many-boards/Makefile.blink-four.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/many-boards/Makefile.blink-four
     exit_on_failure $? "Prepared  example/many-boards/Makefile.blink-four"
 
+    cat example/many-boards/Makefile.blink-rand.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > example/many-boards/Makefile.blink-rand
+    exit_on_failure $? "Prepared  example/many-boards/Makefile.blink-rand"
+
 
 }
 
