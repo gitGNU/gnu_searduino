@@ -2,7 +2,7 @@
  *                                                                                   
  *                   Searduino                                                       
  *                                                                                   
- *   Copyright (C) 2012 Henrik Sandklef                                              
+ *   Copyright (C) 2012, 2013 Henrik Sandklef                                              
  *                                                                                   
  * This program is free software; you can redistribute it and/or                     
  * modify it under the terms of the GNU General Public License                       
@@ -21,7 +21,49 @@
  * MA  02110-1301, USA.                                                              
  ****/
 
+#include <stdlib.h>
+
 long map(long x, long in_min, long in_max, long out_min, long out_max)
 {
   return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+
+void randomSeed(unsigned int seed)
+{
+  if (seed != 0) 
+    {
+      srandom(seed);
+    }
+}
+
+long random(long max)
+{
+  long ret;
+  if (max == 0) 
+    {
+       ret = 0;
+    }
+  else
+    {
+      ret = random() % max;
+    }
+  return ret;
+}
+
+long random(long min, long max)
+{
+  long ret;
+
+
+  if (min >= max) 
+    {
+      ret = min;
+    }
+  else 
+    {
+      long diff = max - min;
+      ret = random(diff) + min;
+    }
+  return ret;
 }
