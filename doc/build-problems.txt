@@ -1,3 +1,10 @@
+Plain Debian / Ubuntu :
+================================
+
+Install deps
+-------------------------------
+sudo apt-get install openjdk-6-jdk
+sudo apt-get install arduino
 sudo apt-get install libtool autoconf automake gcc g++
 sudo apt-get install python2.7-dev
 sudo apt-get install autoconf-archive
@@ -5,3 +12,9 @@ sudo apt-get install python-dev
 sudo apt-get install lib32z1-dev
 sudo apt-get install check
 sudo apt-get install gcc-avr binutils-avr avrdude avr-libc
+
+Build and test
+--------------------------------
+make -f Makefile.git  && ./configure --prefix=/opt/ --enable-unittest
+--enable-debian-sources --enable-jearduino --enable-java-extension
+--enable-python-extension && make && make check
