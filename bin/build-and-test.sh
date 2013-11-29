@@ -6,6 +6,10 @@ BUILD_DIR=.
 LOG_FILE=build-and-test.log
 
 
+DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-amd64/include/
+#/usr/lib/jvm/java-6-sun-1.6.0.26/include/
+#/usr/lib/jvm/java-7-openjdk-amd64/include/
+
 FUNC_FILE=$(dirname $0)/functions
 if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
 then
@@ -33,12 +37,12 @@ prepare()
 
     if [ "$CFLAGS" = "" ]
     then
-	export CFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
+	export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
     fi
 
     if [ "$CXXFLAGS" = "" ]
     then
-	export CXXFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
+	export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
     fi
 
     if [ "$DATE_VERSION" = "true" ]
