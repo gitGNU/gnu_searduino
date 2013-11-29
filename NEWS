@@ -1,4 +1,17 @@
+News in 0.67
+==============================================
+
+  General changes:
+  ---------------------
+   Implemented: 
+     void randomSeed(unsigned int seed)
+     long random(long max)
+     long random(long min, long max)
+
+
+
 News in 0.66
+==============================================
 
   General changes:
   ---------------------
