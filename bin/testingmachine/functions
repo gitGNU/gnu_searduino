@@ -44,4 +44,13 @@ set_dist()
 	echo "Unsupport OS: $OS"
 	exit
     fi
+
+    if [ "$DIST" = "Ubuntu" ] && [ "$ARCH" = "Arm" ]
+    then
+	if [ "$(grep -c -i raspberry /etc/apt/sources.list)" != "0" ]
+	then
+	    DIST="Raspbian"
+	fi
+    fi
+
 }
