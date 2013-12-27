@@ -5,7 +5,7 @@ if [ ! -f $SCRIPT_DIR/functions ]
 then
     . $SCRIPT_DIR/functions 
 else
-    echo "Failed sourcing functions file"
+    echo "Failed sourcing functions file: $SCRIPT_DIR/functions "
     exit 1
 fi
 
