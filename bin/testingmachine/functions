@@ -47,7 +47,7 @@ set_dist()
 
     if [ "$DIST" = "Ubuntu" ] && [ "$ARCH" = "Arm" ]
     then
-	if [ "$(grep -c -i raspberry /etc/apt/sources.list)" != "0" ]
+	if [ "$(grep -c -i raspbian /etc/apt/sources.list)" != "0" ]
 	then
 	    DIST="Raspbian"
 	fi
