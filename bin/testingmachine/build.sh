@@ -1,7 +1,13 @@
 #!/bin/sh
 
-OS=$(uname -o)
 SCRIPT_DIR=$(dirname $0)
+if [ ! -f $SCRIPT_DIR/functions ]
+then
+    . $SCRIPT_DIR/functions 
+else
+    echo "Failed sourcing functions file"
+    exit 1
+fi
 
 setup_debian_ubuntu()
 {
