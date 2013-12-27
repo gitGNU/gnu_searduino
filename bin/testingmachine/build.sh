@@ -11,7 +11,8 @@ fi
 
 setup_debian_ubuntu()
 {
-    if [ "$ARCH --disable-java-extension --disable-jearduino"
+    if [ "$ARCH" = "Arm" ]
+	CONF_ARGS="--disable-python-extension --enable-debian-sources --disable-java-extension --disable-jearduino"
     else
 	DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-amd64/include/
 	
