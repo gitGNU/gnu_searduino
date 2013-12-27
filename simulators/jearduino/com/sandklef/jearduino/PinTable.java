@@ -350,7 +350,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		   Analog pins:  14 (A0), 15 (A1), 16 (A2), 17 (A3), 18 (A4), 19 (A5), 
 		*/
 	
-		if (i < 31)
+		if (i < 13)
 		    {
 			setDigitalInputPin(i);
 		    }
