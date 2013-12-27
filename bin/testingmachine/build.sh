@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SCRIPT_DIR=$(dirname $0)
-if [ ! -f $SCRIPT_DIR/functions ]
+if [ -f $SCRIPT_DIR/functions ]
 then
     . $SCRIPT_DIR/functions 
 else
