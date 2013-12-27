@@ -1,0 +1,47 @@
+OS=$(uname -o)
+MACHINE=$(uname -m)
+
+exit_on_error()
+{
+    if [ "$1" != "0" ]
+    then
+	echo "ERROR: $2"
+	exit $1
+    fi
+}
+
+
+set_dist()
+{
+    if [ "$OS" = "GNU/Linux" ] 
+    then
+	PROC_VERSION=$(cat /proc/version)
+	case "$PROC_VERSION" in 
+	    *buntu* )
+		DIST="Ubuntu"
+		;;
+	    *ebian*)
+		DIST="Debian"
+		;;
+            *)
+		echo "Unsupport dist: $PROC_VERSION"
+		exit
+		;;
+	esac
+	case "$MACHINE" in 
+	    *x86* )
+		ARCH="x86"
+		;;
+	    *arm*)
+		ARCH="Arm"
+		;;
+            *)
+		echo "Unsupport machine: $MACHINE"
+		exit
+		;;
+	esac
+    else
+	echo "Unsupport OS: $OS"
+	exit
+    fi
+}
