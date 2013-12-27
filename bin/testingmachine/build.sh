@@ -31,7 +31,7 @@ setup_per_dist()
 
 
 setup_per_dist
-cd $SCRIPT_DIR
+cd $SCRIPT_DIR/../
 #
 #
 #
