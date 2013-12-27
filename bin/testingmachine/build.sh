@@ -11,12 +11,17 @@ fi
 
 setup_debian_ubuntu()
 {
-    DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-amd64/include/
-    export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
-    export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
-
-
-    CONF_ARGS="--disable-python-extension --enable-debian-sources"
+    if [ "$MACHINE" = "Arm" ]
+	then
+	CONF_ARGS="--disable-python-extension --enable-debian-sources\
+                   --disable-java-extension --disable-jearduino"
+    else
+	DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-amd64/include/
+	
+	export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
+	export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
+	CONF_ARGS="--disable-python-extension --enable-debian-sources"
+    fi
 }
 
 setup_per_dist() 
