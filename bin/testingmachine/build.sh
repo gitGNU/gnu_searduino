@@ -27,7 +27,7 @@ setup_per_dist()
     elif [ "$DIST" = "Debian" ]
     then
 	setup_debian_ubuntu
-    elif [ "$ARCH" = "Raspbian" ]
+    elif [ "$DIST" = "Raspbian" ]
     then
 	CONF_ARGS="--disable-python-extension --enable-debian-sources --disable-java-extension --disable-jearduino"
     else
