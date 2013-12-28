@@ -254,7 +254,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     public void handlePinTypeEvent(int pin, int type)
     {
 	pins.setTypeInputPin(pin, type);
-	// System.out.println("EVENT: PIN TYPE-------------> JAVA (really) pin[" + pin + "]: type=" + type );
+	System.out.println("EVENT: PIN TYPE-------------> JAVA (really) pin[" + pin + "]: type=" + type );
     }
     
     public void handleLogEvent(int level, String msg)
