@@ -109,7 +109,9 @@ void LiquidCrystal::clear()
 
 void LiquidCrystal::home()
 {
-  ;
+  current_row    = 0;
+  lcd_row_pos[0] = 0;
+  lcd_row_pos[1] = 0;
 }
 
 void LiquidCrystal::setCursor(uint8_t col, uint8_t row)
