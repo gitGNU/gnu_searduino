@@ -26,9 +26,11 @@
 #include "searduino.h"
 #include "arduino/ext_io.h"
 
+#define LCD_STORAGE_SIZE 41
+
 typedef struct
 {
-  uint8_t data[41]; // 40 is the size, on extra for '\0'
+  uint8_t data[LCD_STORAGE_SIZE]; // 40 is the size, on extra for '\0'
 } lcd_row_t ;
 
 
@@ -94,7 +96,15 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
 /********** high level commands, for the user! */
 void LiquidCrystal::clear()
 {
-  ;
+  current_row    = 0;
+  lcd_row_pos[0] = 0;
+  lcd_row_pos[1] = 0;
+
+  memset(lcd_data_rows[0].data, 0, LCD_STORAGE_SIZE);
+  memset(lcd_data_rows[1].data, 0, LCD_STORAGE_SIZE);
+
+  lcd_sim_callback((char*)lcd_data_rows[0].data,
+		   (char*)lcd_data_rows[2].data );
 }
 
 void LiquidCrystal::home()
