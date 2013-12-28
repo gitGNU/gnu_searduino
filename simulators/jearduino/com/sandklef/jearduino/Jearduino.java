@@ -50,6 +50,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     PinTable pins;
     Logger serial ;
     Logger logger ;
+    LCD    lcd ;
     InfoPanel infoPanel;
     Container pane; 
 
@@ -119,11 +120,18 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	logger = new Logger( "Log");
 	serial = new Logger( "Serial");
+	lcd    = new LCD( "LCD");
 
 	serial.setMaximumSize(new Dimension(200, 400)); 
 	logger.setMaximumSize(new Dimension(200, 400)); 
+	lcd.setMaximumSize(new Dimension(200, 400)); 
+
+	serial.setPreferredSize(new Dimension(200, 100)); 
+	logger.setPreferredSize(new Dimension(200, 100)); 
+	lcd.setPreferredSize(new Dimension(200, 100)); 
 
 	logPanel.add(serial);
+	logPanel.add(lcd);
 	logPanel.add(logger);
 
 	pins = new PinTable(this);
@@ -146,6 +154,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	searduino.registerPinOutCallback(this);
 	searduino.registerPinTypeCallback(this);
 	searduino.registerLogCallback(this);
+	searduino.registerLCDCallback(this);
 
 	infoPanel.setArduinoCodeName(searduino.getArduinoCodeName());
 	infoPanel.setSearduinoVersion(searduino.getSearduinoVersion());
@@ -265,6 +274,12 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	serial.addLog(msg);
     }
     
+    public void handleLCDEvent(String row1, String row2)
+    {
+	System.out.println("EVENT: LCD MESSAGE-------------> " + row1 + "  " + row2 );
+	lcd.setText(row1, row2);
+    }
+
 
     public void handleBoardChoiceEvent(String bName)
     {
