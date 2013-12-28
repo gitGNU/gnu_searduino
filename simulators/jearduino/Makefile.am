@@ -1,4 +1,3 @@
-
 if JEARDUINO_SUPPORT
 
 LIB_PATHS=./:../../faked-arduino/.libs/:../../extensions/java
@@ -34,7 +33,7 @@ JAVACFLAGS=  -cp $(LIB_PATHS)
 
 JEARDUINO_JAR=Jearduino.jar
 
-$(JEARDUINO_JAR):
+$(JEARDUINO_JAR): $(JAVA_SOURCES)
 	javac $(JAVACFLAGS) $(JAVA_SOURCES)
 	jar cf  $(JEARDUINO_JAR) ./com/sandklef/jearduino/*.class
 
@@ -49,7 +48,7 @@ install-exec-hook: $(JEARDUINO_JAR)
 	cp $(JEARDUINO_JAR)  $(DESTDIR)$(libdir)/
 
 
-CLEAN_FILES=jearduino.sh
+CLEANFILES=jearduino.sh $(JEARDUINO_JAR) 
 
 all: $(JEARDUINO_JAR) 
 
