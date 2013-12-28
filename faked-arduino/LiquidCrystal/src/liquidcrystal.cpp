@@ -176,20 +176,28 @@ size_t LiquidCrystal::write(uint8_t value) {
     
   if (value==0) 
     {
+      char retbuf1[17];
+      char retbuf2[17];
+      
+      strncpy(retbuf1,(char*)lcd_data_rows[0].data, 16);
+      strncpy(retbuf2,(char*)lcd_data_rows[1].data, 16);
+      retbuf1[16]='\0';
+      retbuf2[16]='\0';
       if ( lcd_sim_callback == NULL ) 
 	{
 	  printf ("LCD Fallback function\n");
-	  printf ("  LCD[0]: %s\n",
+	  printf ("  LCD[0]: %s  [%s]\n",
+		  retbuf1,
 		  lcd_data_rows[0].data);
-	  printf ("  LCD[1]: %s\n",
+	  printf ("  LCD[1]: %s  [%s]\n",
+		  retbuf2,
 		  lcd_data_rows[1].data);
-	  
 	  fflush(stdout);
 	}
       else 
 	{
-	  lcd_sim_callback((char*)lcd_data_rows[0].data,
-			   (char*)lcd_data_rows[1].data);
+	  lcd_sim_callback(retbuf1,
+			   retbuf2);
 	}
     }
 
