@@ -251,6 +251,7 @@ ext_register_lcd_cb(lcd_to_sim_callback_ptr cb)
       return SEARD_SEARDUINO_NULL_CALLBACK;
     }
   lcd_sim_callback = cb;
+  //  printf ("lcd_sim_callback: %ul\n", lcd_sim_callback);
 
   return SEARD_SEARDUINO_OK;
 }
