@@ -36,6 +36,7 @@ jmethodID pin_mode_callback;
 jmethodID out_callback;
 jmethodID type_callback;
 jmethodID log_callback;
+jmethodID lcd_callback;
 
 JavaVM * g_vm;
 jobject g_obj;
@@ -130,6 +131,30 @@ my_log_sim_callback(uint8_t level, const char *str)
     {
       jstring jstrBuf = (g_env)->NewStringUTF(str);
       g_env->CallVoidMethod(g_obj, log_callback, level, jstrBuf);
+    }
+
+}
+
+
+void
+my_lcd_sim_callback(const char *str1, const char *str2)
+{
+   // fprintf (stdout,
+   //  	   "ALMOST JAVA (C++) LCD CALLBACK  %s, %s\n",
+   //  	   str1, 
+   //  	   str2);
+
+  CHECK_CALLBACK_VOID(type_callback);
+  JNIEnv * g_env;
+  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  CHECK_JNI(getEnvStat, g_env, g_vm);
+
+  if ( (g_env!=NULL) && 
+       (str1!=NULL) && (str2!=NULL) )
+    {
+      jstring jstrBuf1 = (g_env)->NewStringUTF(str1);
+      jstring jstrBuf2 = (g_env)->NewStringUTF(str2);
+      g_env->CallVoidMethod(g_obj, lcd_callback, jstrBuf1, jstrBuf2);
     }
 
 }
@@ -297,9 +322,26 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
 	  printf (" log_callback=%p\n", log_callback);
 	}
     }
+  else if ( type == 5 ) 
+    {
+      printf (" REGISTER CALLBACK FOR TYPE 5.1\n");
+      lcd_callback = env->GetMethodID(g_clazz, "handleLCDEvent", "(Ljava/lang/String;Ljava/lang/String;)V");
+      printf (" REGISTER CALLBACK FOR TYPE 5.2\n");
+      if (lcd_callback == NULL) 
+	{
+	  printf ("Unable to get method ref\n");
+	}
+      else
+	{
+	  printf (" REGISTER CALLBACK FOR TYPE 5.3\n");
+	  ret  = seasim_register_lcd_cb(my_lcd_sim_callback);
+	  printf (" REGISTER CALLBACK FOR TYPE 5.4\n");
+	  printf (" lcd_callback=%p\n", lcd_callback);
+	}
+    }
   else
     {
-      printf ("\n\n\n\tCan not register type %s\n\n\n", type);
+      printf ("\n\n\n\tCan not register type %d\n\n\n", type);
     }
 
   printf (" REGISTER CALLBACK TYPE done\n");
@@ -511,7 +553,7 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setArduinoCodeName
   
   if (ret==1)
     {
-      printf (" -----------------------------------------  loading code failed (1)\n", ret); fflush(stdout); 
+      printf (" -----------------------------------------  loading code failed (1)\n"); fflush(stdout); 
     }
   else if (is_setup!=3)
     {

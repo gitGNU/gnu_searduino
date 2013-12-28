@@ -29,5 +29,6 @@ public interface SearduinoObserver
     public void handlePinOutEvent(int pin, int value, int type);
     public void handlePinTypeEvent(int pin, int type);
     public void handleLogEvent(int level, String msg);
+    public void handleLCDEvent(String row1, String row2);
 }
 

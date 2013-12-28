@@ -59,6 +59,7 @@ public class Searduino
     private static final int SEARDUINO_PIN_VALUE = 2;
     private static final int SEARDUINO_PIN_TYPE  = 3;
     private static final int SEARDUINO_LOG       = 4;
+    private static final int SEARDUINO_LCD       = 5;
 
 
     /* Must be the same as in faked-arduino/include/arduino/searduino-pin.h */
@@ -113,6 +114,16 @@ public class Searduino
 	registerObserver(obs);
 	try {
 	    registerPinCallback(obs, SEARDUINO_LOG);
+	} catch (Exception ie) {
+	    System.out.println(ie.getMessage());
+	}
+    }
+    
+    public void registerLCDCallback(SearduinoObserver obs)
+    {
+	registerObserver(obs);
+	try {
+	    registerPinCallback(obs, SEARDUINO_LCD);
 	} catch (Exception ie) {
 	    System.out.println(ie.getMessage());
 	}
