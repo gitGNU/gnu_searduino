@@ -38,8 +38,8 @@ AM_CXXFLAGS=$(MYCFLAGS)
 
 AM_LDFLAGS=-lpthread 
 
-TESTS =  testliquidcrystal testbegin testlcdcallback
-check_PROGRAMS = testliquidcrystal testbegin testlcdcallback
+TESTS =  testliquidcrystal testbegin testlcdcallback testclear
+check_PROGRAMS = testliquidcrystal testbegin testlcdcallback testclear
 
 testbegin_SOURCES = test_begin.cpp
 testbegin_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
@@ -51,10 +51,14 @@ testliquidcrystal_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
 testliquidcrystal_CFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
 testliquidcrystal_LDADD = ../../libsearduinostub.la @CHECK_LIBS@ -lpthread
 
-
 testlcdcallback_SOURCES = test_lcdcallback.cpp
 testlcdcallback_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
 testlcdcallback_CFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
 testlcdcallback_LDADD = ../../libsearduinostub.la @CHECK_LIBS@ -lpthread
+
+testclear_SOURCES = test_clear.cpp
+testclear_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testclear_CFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testclear_LDADD = ../../libsearduinostub.la @CHECK_LIBS@ -lpthread
 
 endif
