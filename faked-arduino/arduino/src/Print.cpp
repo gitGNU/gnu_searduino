@@ -162,8 +162,8 @@ size_t Print::print(const Printable& x)
 
 size_t Print::println(void)
 {
-  size_t n = printf("%c",'\r');
-  n += printf("%c",'\n');
+  size_t n = write('\r');
+  n += write('\n');
   return n;
 }
 
