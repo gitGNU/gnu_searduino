@@ -44,9 +44,10 @@
  * Function pointer definitions
  *  
  */
-typedef void    (*dm_to_sim_callback_ptr)(uint8_t pin, uint8_t mode); 
-typedef void    (*out_to_sim_callback_ptr)(uint8_t pin, unsigned int val, uint8_t pin_type); 
-typedef void    (*log_to_sim_callback_ptr)(uint8_t level, const char*);
+typedef void    (*dm_to_sim_callback_ptr)     (uint8_t pin, uint8_t mode); 
+typedef void    (*out_to_sim_callback_ptr)    (uint8_t pin, unsigned int val, uint8_t pin_type); 
+typedef void    (*log_to_sim_callback_ptr)    (uint8_t level, const char*);
+typedef void    (*lcd_to_sim_callback_ptr)    (const char*, const char*);
 typedef void    (*pintype_to_sim_callback_ptr)(uint8_t pin, uint8_t type); 
 
 
@@ -61,6 +62,7 @@ extern FILE* proto_stream ;
 extern dm_to_sim_callback_ptr  dm_sim_callback;
 extern out_to_sim_callback_ptr out_sim_callback;
 extern log_to_sim_callback_ptr log_sim_callback;
+extern lcd_to_sim_callback_ptr lcd_sim_callback;
 
 
 /*
@@ -110,6 +112,9 @@ ext_register_pinout_sim_cb(out_to_sim_callback_ptr cb);
 
 uint8_t
 ext_register_log_cb(log_to_sim_callback_ptr cb);
+
+uint8_t
+ext_register_lcd_cb(lcd_to_sim_callback_ptr cb);
 
 uint8_t
 ext_register_dig_mode_sim_cb(dm_to_sim_callback_ptr cb);

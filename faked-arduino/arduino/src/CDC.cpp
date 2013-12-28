@@ -5,6 +5,8 @@
 #include "Stream.h"
 #include "USBAPI.h"
 
+#include "utils/print.h"
+
 #if defined(USBCON)
 #ifdef CDC_ENABLED
 
@@ -68,7 +70,7 @@ size_t Serial_::write(uint8_t c)
 {
   if ( cdc_serial_initialised )
     {
-      Serial.println(c);
+      serial_print_c(c);
     }
   else
     {

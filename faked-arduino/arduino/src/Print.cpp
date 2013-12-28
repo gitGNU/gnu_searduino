@@ -35,8 +35,12 @@ size_t Print::write(const uint8_t *buffer, size_t size)
 {
   size_t n = 0;
   while (size--) {
+#ifdef TESTING
     n += printf ("%c",(*buffer++));
+#endif
+    n += write((uint8_t)*buffer++);
   }
+  write((uint8_t)0);
   return n;
 }
 
@@ -48,8 +52,10 @@ size_t Print::print(const __FlashStringHelper *ifsh)
 
 size_t Print::print(const String &s)
 {
+
+
   size_t n = 0;
-  log_generic(5, "Print::print(const String &s)\n");
+  log_generic(5, (char *)"Print::print(const String &s)\n");
   for (uint16_t i = 0; i < s.length(); i++) {
     n += printf("%c", (s[i]));
   }
@@ -58,6 +64,8 @@ size_t Print::print(const String &s)
 
 size_t Print::print(const char str[])
 {
+  //  PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
+
   /* len is used to return the length to the Arduino code
   *  We don't care how many chars have been written
   */
@@ -66,12 +74,16 @@ size_t Print::print(const char str[])
   /* Make sure string is not null ;)
    *   ... do we get higher comment grade from this comment? */
   if (str!=NULL){
+    write (str);
+#ifdef TESTING
     len = strlen(str);
 
     /* ... and finally: print it to the simulator */
     //    printf ("str=%s\n", str);
     serial_print_s((char *)str);
     return len;
+#endif 
+    return 0;
   }
   return 0;
 }
@@ -109,11 +121,23 @@ size_t Print::print(long n, int base)
   return 0;
 }
 
+
+
 size_t Print::print(unsigned long n, int base)
 {
-  if (base == 0) return printf("%lu",n);
-  PRINT_DUMMY_FUNCTION_IMPLEMENTATION();
+  write (n);
   return 0;
+  /*
+  static char buf[] = {0,0};
+  if (base < 0) 
+    {
+      printf ("LOG SERIAL: %c\n",  (char)n);
+      buf[0]=n;
+      log_sim_callback(SEARDUINO_LOG_SERIAL, buf);
+    }
+  else printf("%lu",n);
+  return 0;
+  */
 }
 
 size_t Print::print(double n, int digits)

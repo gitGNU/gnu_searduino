@@ -79,6 +79,12 @@ seasim_register_log_cb(log_to_sim_callback_ptr cb)
 }
 
 uint8_t
+seasim_register_lcd_cb(lcd_to_sim_callback_ptr cb)
+{
+  return ext_register_lcd_cb(cb);
+}
+
+uint8_t
 seasim_register_type_cb(pintype_to_sim_callback_ptr cb)
 {
   return ext_register_pin_type_sim_cb(cb);

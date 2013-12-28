@@ -148,6 +148,7 @@ ext_get_dig_mode(uint8_t pin)
 out_to_sim_callback_ptr out_sim_callback = NULL;
 dm_to_sim_callback_ptr  dm_sim_callback = NULL ;
 log_to_sim_callback_ptr log_sim_callback = NULL ;
+lcd_to_sim_callback_ptr lcd_sim_callback = NULL ;
 pintype_to_sim_callback_ptr  pintype_sim_callback = NULL;
 
 
@@ -236,6 +237,20 @@ ext_register_log_cb(log_to_sim_callback_ptr cb)
       return SEARD_SEARDUINO_NULL_CALLBACK;
     }
   log_sim_callback = cb;
+
+  return SEARD_SEARDUINO_OK;
+}
+
+uint8_t
+ext_register_lcd_cb(lcd_to_sim_callback_ptr cb)
+{
+  PRINT_FUNCTION_NAME(("%d",(int)cb));
+
+  if (cb==NULL)
+    {
+      return SEARD_SEARDUINO_NULL_CALLBACK;
+    }
+  lcd_sim_callback = cb;
 
   return SEARD_SEARDUINO_OK;
 }

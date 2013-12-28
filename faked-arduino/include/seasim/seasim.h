@@ -391,6 +391,10 @@ seasim_register_out_sim_cb(out_to_sim_callback_ptr cb);
 uint8_t
 seasim_register_log_cb(log_to_sim_callback_ptr cb);
 
+uint8_t
+seasim_register_lcd_cb(lcd_to_sim_callback_ptr cb);
+
+
 /**
  * @name    seasim_register_type_cb
  * @brief   Register a callback for type changes on a pin

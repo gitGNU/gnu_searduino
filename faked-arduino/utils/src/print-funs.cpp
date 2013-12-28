@@ -132,16 +132,16 @@ serial_print_s(char* s, ...)
 void 
 serial_print_c(char c )
 {
-  char buffer[10];
+  static char buffer[]= {0,0};
 
-  sprintf(buffer, "%d", c);
+  buffer[0]=c;
   if (log_sim_callback!=NULL)
     {
       log_sim_callback(SEARDUINO_LOG_SERIAL, buffer);
     }
   else
     {
-      fprintf(stderr, "%s", buffer);
+      fprintf(stderr, "Serial fallback printer: %s\n", buffer);
     }
 }
 
@@ -150,7 +150,7 @@ serial_print_l(long l )
 {
   char buffer[10];
 
-  sprintf(buffer, "%u", l);
+  sprintf(buffer, "%u", (unsigned int)l);
 
   if (log_sim_callback!=NULL)
     {
@@ -175,6 +175,7 @@ extern "C" {
   {
     Serial.println(c);
   }  
+
 }
 
 
