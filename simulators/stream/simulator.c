@@ -63,8 +63,19 @@ my_dm_sim_callback(uint8_t pin, uint8_t mode)
 }
 
 void
+lcd_callback(const char *str1, const char *str2)
+{
+  printf ("LCD_CALLACK() LCD[0]: %s\n" , str1);
+  printf ("LCD_CALLACK() LCD[1]: %s\n" , str2);
+  fflush(stdout);
+}
+
+void
 log_callback(uint8_t level, const char *str)
 {
+  static char serial_buf[1000];
+  static int serial_pos;
+
   switch (level)
     {
     case SEARDUINO_LOG_LEVEL_NONE:
@@ -79,7 +90,18 @@ log_callback(uint8_t level, const char *str)
       printf ("ERROR:   %s", str);
       break;
     case SEARDUINO_LOG_SERIAL:
-      printf ("SERIAL: %s", str);
+      if (str[0]=='\0') 
+	{
+	  fprintf (stdout, "SERIAL: %s\n", serial_buf);
+	  fflush(stdout);
+	  serial_pos=0;
+	  serial_buf[0]='\0';
+	}
+      else 
+	{
+	  strcat(&serial_buf[serial_pos], str);
+	  serial_pos = serial_pos + strlen(str);
+	}
       break;
     default:
       break;
@@ -119,9 +141,13 @@ sim_setup(char *ard_board, char *ard_lib)
       return ret;
     }
 
-  printf ("CHECK IF REGISTRATION SUCCEEDED\n");
   seasim_register_log_cb(log_callback);
 
+  seasim_register_lcd_cb(lcd_callback);
+
+  printf ("CHECK IF REGISTRATION SUCCEEDED\n");
+
+  usleep(1000*1000*3);
   return 0;
 }
 
