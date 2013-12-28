@@ -25,28 +25,36 @@ if UNITTEST
 
 
 if DEBIANSOURCES
-SEARDUINO_INC_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
+SEARDUINO_INC_PATH=-I/usr/share/arduino/hardware/arduino/cores/arduino/ -I/usr/share/arduino/libraries/LiquidCrystal/
 SEARDUINO_LIB_INC_PATH=/usr/share/arduino/libraries
 else
-SEARDUINO_INC_PATH=../../../arduino-sources/core
-SEARDUINO_LIB_INC_PATH=../../../arduino-sources/libraries
+SEARDUINO_INC_PATH=-I../../../arduino-sources/core -I../../../arduino-sources/libraries/LiquidCrystal
+SEARDUINO_LIB_INC_PATH=../../../arduino-sources/libraries 
 endif
 
-lib_LTLIBRARIES = libi2c.la
-libi2c_la_SOURCES = i2c_setup.c
-AM_CFLAGS= -I../../include/arduino -I../../include/arduino/ -I$(SEARDUINO_INC_PATH)/ -I../../include -DSEARDUINO_STUB
+MYCFLAGS=-I../../include/arduino -I../../include/arduino/ -I../../../arduino-extras/include $(SEARDUINO_INC_PATH)/ -I../../include -DSEARDUINO_STUB -I../../include/seasim/
+AM_CFLAGS=$(MYCFLAGS)
+AM_CXXFLAGS=$(MYCFLAGS)
 
-TESTS =  testliquidcrystal testbegin testliquidcrystal
-check_PROGRAMS = testliquidcrystal testbegin
+AM_LDFLAGS=-lpthread 
 
-testbegin_SOURCES = test_begin.c 
-testbegin_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I$(SEARDUINO_INC_PATH)/ 
-testbegin_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
+TESTS =  testliquidcrystal testbegin testlcdcallback
+check_PROGRAMS = testliquidcrystal testbegin testlcdcallback
 
-testliquidcrystal_SOURCES = test_liquidcrystal.c 
-testliquidcrystal_CFLAGS = @CHECK_CFLAGS@ -I../../include/arduino/ -I$(SEARDUINO_INC_PATH)/ 
-testliquidcrystal_LDADD = ../../libsearduinostub.la @CHECK_LIBS@
+testbegin_SOURCES = test_begin.cpp
+testbegin_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testbegin_CFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testbegin_LDADD = ../../libsearduinostub.la @CHECK_LIBS@ -lpthread
+
+testliquidcrystal_SOURCES = test_liquidcrystal.cpp
+testliquidcrystal_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testliquidcrystal_CFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testliquidcrystal_LDADD = ../../libsearduinostub.la @CHECK_LIBS@ -lpthread
 
 
+testlcdcallback_SOURCES = test_lcdcallback.cpp
+testlcdcallback_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testlcdcallback_CFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
+testlcdcallback_LDADD = ../../libsearduinostub.la @CHECK_LIBS@ -lpthread
 
 endif

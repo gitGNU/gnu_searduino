@@ -26,11 +26,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "searduino.h"
+#include "LiquidCrystal.h"
+
 
 START_TEST (test_setup)
 {
   init();
-
+  
+  LiquidCrystal *lcd = new LiquidCrystal(8, 9, 4, 5, 6, 7);
+  
+  fail_if( lcd == NULL);  
 
 }
 END_TEST
