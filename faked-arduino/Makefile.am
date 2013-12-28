@@ -121,7 +121,8 @@ endif
 AM_CFLAGS= \
            -I$(SEARDUINO_INC_PATH)/           \
            -I$(SEARDUINO_LIB_INC_PATH)/Wire \
-           -I$(SEARDUINO_LIB_INC_PATH)/Wire/utility \
+           -I$(SEARDUINO_LIB_INC_PATH)/Wire/utility  \
+           -I$(SEARDUINO_LIB_INC_PATH)/LiquidCrystal \
            -I../faked-arduino/include/arduino  \
            -I../faked-arduino/include/         \
            -I../faked-arduino/include/avr      \
@@ -137,6 +138,7 @@ AM_CXXFLAGS= \
            -I$(SEARDUINO_LIB_INC_PATH)/Wire \
            -I$(SEARDUINO_LIB_INC_PATH)/Wire/utility \
            -I$(SEARDUINO_LIB_INC_PATH)/Servo \
+           -I$(SEARDUINO_LIB_INC_PATH)/LiquidCrystal \
            -I../faked-arduino/include/arduino   \
            -I../faked-arduino/include/avr       \
            -I../faked-arduino/include/          \
