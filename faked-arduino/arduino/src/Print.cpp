@@ -83,7 +83,6 @@ size_t Print::print(const char str[])
     serial_print_s((char *)str);
     return len;
 #endif 
-    return 0;
   }
   return 0;
 }
