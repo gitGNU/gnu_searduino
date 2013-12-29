@@ -103,8 +103,17 @@ void LiquidCrystal::clear()
   memset(lcd_data_rows[0].data, 0, LCD_STORAGE_SIZE);
   memset(lcd_data_rows[1].data, 0, LCD_STORAGE_SIZE);
 
+  strcpy((char*)lcd_data_rows[0].data, " ");
+  strcpy((char*)lcd_data_rows[1].data, " ");
+
+  /*  printf ("Emptied them... %d %d\n", 
+	  strlen((char*)lcd_data_rows[0].data),
+	  strlen((char*)lcd_data_rows[1].data));
+  */
+  
   lcd_sim_callback((char*)lcd_data_rows[0].data,
-		   (char*)lcd_data_rows[2].data );
+		   (char*)lcd_data_rows[1].data);
+
 }
 
 void LiquidCrystal::home()
