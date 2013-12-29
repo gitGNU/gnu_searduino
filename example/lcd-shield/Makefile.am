@@ -1,7 +1,8 @@
 pkgdataexampledir = $(pkgdatadir)/example/lcd-shield/
 dist_pkgdataexample_DATA = \
-  main.c                   \
-  Makefile.lcd-shield       \
+  main.c                    \
+  lcd-shield.cpp             \
+  Makefile.lcd-shield         \
   Makefile.tmpl
 
 
