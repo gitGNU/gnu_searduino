@@ -39,14 +39,25 @@ char storage_buffer2[20];
 
 
 void
-lcd_clear(const char *str1, const char *str2)
+lcd_cb(const char *str1, const char *str2)
 {
   static int cb_counter;
+
+  memset(storage_buffer1, 0, 20);
+  memset(storage_buffer2, 0, 20);
 
   strcpy(storage_buffer1, str1);
   strcpy(storage_buffer2, str2);
 
-  /* Check length of recieved string (should be 16) */
+  printf ("LCD_CALLACK() LCD[0]: %s\n" , str1);
+  printf ("LCD_CALLACK() LCD[1]: %s\n" , str2);
+  printf ("CB #%d '%s'(%d)   '%s'(%d)\n", cb_counter+1, 
+	  str1, 
+	  strlen(str1), 
+	  str2, 
+	  strlen(str2));
+  fflush(stdout);  /*  MIND YOU, IS FLUSH REALLY NEEDED!!! */ 
+
   switch (cb_counter)
     {
     case 0:
@@ -56,19 +67,35 @@ lcd_clear(const char *str1, const char *str2)
       /* 2 */
       break;
     case 2:
-      printf ("CB #3 '%s'  '%s'\n", str1, str2);
+      /* 3 */
+      /*      printf ("CB #3 '%s'  '%s'\n", str1, str2);
       fail_if(strlen(str1)!=0);  
-      fail_if(strlen(str2)!=0); 
+      fail_if(strlen(str2)!=0); */
+      break;
+    case 3:
+      /* 4 */
+      break;
+    case 4:
+      /* 5 */
+      break;
+    case 5:
+      /* 6 */
+      printf ("CB #6 '%s'  '%s'\n", str1, str2);
+      fail_if(strlen(str1)!=16);  
+      fail_if(strlen(str2)!=16); 
+    case 6:
+      /* 7 */
+      printf ("CB #7 '%s'  '%s'\n", str1, str2);
+      fail_if(strlen(str1)!=1);  
+      fail_if(strlen(str2)!=16); 
       break;
     }
 
-  printf ("LCD_CALLACK() LCD[0]: %s\n" , str1);
-  printf ("LCD_CALLACK() LCD[1]: %s\n" , str2);
-  fflush(stdout);  /*  MIND YOU, IS FLUSH REALLY NEEDED!!! */ 
 
   cb_counter++;
 
 }
+
 
 
 void wait_for_a_while() 
@@ -84,14 +111,14 @@ void wait_for_a_while()
   printf ("\b\ball loops are now done\n");
 }
 
-START_TEST (test_cb)
+START_TEST (test_clear)
 {
   init();
   LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
   
   lcd.begin(16, 2);
 
-  seasim_register_lcd_cb(lcd_clear); 
+  seasim_register_lcd_cb(lcd_cb); 
 
   /* fake lcd print from User   */
   lcd.setCursor(0,0);
@@ -109,6 +136,33 @@ START_TEST (test_cb)
 END_TEST
 
 
+START_TEST (test_home)
+{
+  init();
+  LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+  
+  lcd.begin(16, 2);
+
+  seasim_register_lcd_cb(lcd_cb); 
+
+  /* fake lcd print from User   */
+  lcd.setCursor(0,0);
+  /* 4 */
+  lcd.print(start_buffer1);
+  lcd.setCursor(0,1);
+  /* 5 */
+  lcd.print(start_buffer2);
+
+  /* 6 */
+  lcd.home();
+
+  /* 7 */
+  lcd.print(" ");
+
+}
+END_TEST
+
+
 
 
 Suite *
@@ -119,7 +173,8 @@ buffer_suite(void) {
 
   printf ("Testing callback LiquidCrystal\n");
 
-  tcase_add_test(tc_core, test_cb);
+  tcase_add_test(tc_core, test_clear);
+  tcase_add_test(tc_core, test_home);
 
   wait_for_a_while();
 
