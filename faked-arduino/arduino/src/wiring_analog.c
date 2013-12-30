@@ -48,9 +48,9 @@ analogRead(uint8_t pin)
 {
   int ret_val;
 
-  /*  printf ("analogRead(%d)   which has type: %d\n", 
-	  pin, 
-	  get_current_pin_type(pin));*/
+  /* printf ("analogRead(%d)   which has type: %d\n",  
+   	  pin,  
+   	  get_current_pin_type(pin)); */
 
   set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG);
 
