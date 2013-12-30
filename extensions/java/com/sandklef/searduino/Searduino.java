@@ -49,6 +49,7 @@ public class Searduino
     public  native int getDigitalMode(int pin);
     public  native int setArduinoCodeName(String ac);
     public  native int getCurrentPinType(int pin);
+    public  native int hasGenericPinType(int pin, int type);
     private native int registerPinCallback(SearduinoObserver o, int type);
 
     public native  int fakeAnalogInput(int pin, int val);
@@ -78,10 +79,39 @@ public class Searduino
 	System.loadLibrary("searduinojni");
     }
 
+    public boolean hasGenericPinTypeBoolean(int pin, int type)
+    {
+	return (hasGenericPinType(pin, type)==1);
+    }
+
     public int getPinMode(int pin)
     {
 	return pin-1;
     }
+
+    public static int getPinType(String pintype) 
+    {
+	if (pintype.equals(SEARDUINO_PINTYPE_DIGITAL_STRING)) 
+	    return SEARDUINO_PINTYPE_DIGITAL;
+	if (pintype.equals(SEARDUINO_PINTYPE_ANALOG_STRING)) 
+	    return SEARDUINO_PINTYPE_ANALOG;
+	if (pintype.equals(SEARDUINO_PINTYPE_PWM_STRING)) 
+	    return SEARDUINO_PINTYPE_PWM;
+	return -1;
+    }
+
+    public static String getPinType(int pin) 
+    {
+	if (pin==SEARDUINO_PINTYPE_DIGITAL) 
+	    return SEARDUINO_PINTYPE_DIGITAL_STRING;
+	if (pin==SEARDUINO_PINTYPE_PWM) 
+	    return SEARDUINO_PINTYPE_PWM_STRING;
+	if (pin==SEARDUINO_PINTYPE_ANALOG) 
+	    return SEARDUINO_PINTYPE_ANALOG_STRING;
+	return "";
+    }
+
+
 
     private void registerObserver(SearduinoObserver obs)
     {
