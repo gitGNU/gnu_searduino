@@ -30,9 +30,32 @@
 
 void setup(void)
 {
-  pinMode(13, OUTPUT);
+  pinMode(RELAY_PIN, OUTPUT);
 }
 
+int readInput()
+{
+#ifdef FAKE_CODE
+  static unsigned int fake;
+
+  fake = fake + 100;
+  if (fake>1000)
+    {fake=0;}
+  //  printf ("return: %d\n", fake);
+  return fake;
+#else
+  return analogRead(INPUT_PIN);
+#endif
+}
+
+int validateInput(int in)
+{
+  if (in>500)
+    { 
+      return HIGH ;
+    }
+  return LOW;
+}
 
 int main(void)
 {
@@ -45,7 +68,7 @@ int main(void)
    */
   SEARDUINO_LOOP()
     {
-      if (digitalRead(INPUT_PIN)>500) 
+      if (validateInput(readInput(INPUT_PIN)))
 	{
 	  digitalWrite(RELAY_PIN,HIGH);
 	}
@@ -53,6 +76,7 @@ int main(void)
 	{
 	  digitalWrite(RELAY_PIN,LOW);
 	}
+      delay(500);
     }
 }
 
