@@ -140,6 +140,16 @@ public class ExecControl extends JPanel implements ActionListener
 	System.out.println("action sending");
 
 	ee.ExecEvent(type);
-
     }
+
+    public void sendStart(){
+	int type;
+	type = EXEC_CONTROL_START;
+	start.setEnabled(false);
+	pause.setEnabled(true);
+	resume.setEnabled(false);
+	halt.setEnabled(true);
+	ee.ExecEvent(type);
+    }
+
 }
