@@ -258,7 +258,7 @@ static void print_board_analog_pins(void)
   char* apins_str[] = { "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"} ;
  
 
-  printf ("Analog pins:  ");
+  printf ("  Analog pins:  ");
   for (i=0;i<NR_OF_ARDUINO_PINS;i++)
     {
       /* printf (" *%d \n", i); */
@@ -286,8 +286,9 @@ print_board_setup(void)
   printf ("Board settings:\n");
   printf ("---------------\n");
   printf ("Name:         %s\n", get_board_name());
-  print_board_digital_pins("Digital pins: ", SEARDUINO_PIN_TYPE_DIGITAL);
-  print_board_digital_pins("PWM pins:     ", SEARDUINO_PIN_TYPE_PWM);
+  printf ("Pins:         %d\n", get_generic_nr_of_pins());
+  print_board_digital_pins("  Digital pins: ", SEARDUINO_PIN_TYPE_DIGITAL);
+  print_board_digital_pins("  PWM pins:     ", SEARDUINO_PIN_TYPE_PWM);
   print_board_analog_pins();
   printf ("\n");
 }
@@ -337,7 +338,7 @@ board_setup_uno(void)
   define_arduino_pin(A4, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(A5, ANALOG_IN, NO_DIGITAL_OUT, NO_DIGITAL_IN, NO_PWM_OUT);
 
-  printf ("\n\t*** UNO board setup done\n\n");
+  printf ("\n\t*** UNO board setup done (%d pins)\n\n", get_generic_nr_of_pins());
 
   print_board_setup();
   return 0;
