@@ -264,7 +264,7 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
   //printf ("method: %s\n", strCIn);
 
 
-  printf (" -------------------------------------\n");
+  //  printf (" -------------------------------------\n");
 
   if ( type == 1 ) 
     {
@@ -283,60 +283,60 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
   else if ( type == 2 ) 
     {
       out_callback = env->GetMethodID(g_clazz, "handlePinOutEvent", "(III)V");
-      printf (" 5\n");
+      //      printf (" 5\n");
       if (out_callback == NULL) {
 	printf ("Unable to get method ref\n");
       }
       else
 	{
 	  ret  = seasim_register_out_sim_cb(my_out_sim_callback);
-	  printf (" out_callback=%p\n", out_callback);
+	  //	  printf (" out_callback=%p\n", out_callback);
 	}
     }
   else if ( type == 3 ) 
     {
       type_callback = env->GetMethodID(g_clazz, "handlePinTypeEvent", "(II)V");
-      printf (" REGISTER CALLBACK FOR TYPE\n");
+      //      printf (" REGISTER CALLBACK FOR TYPE\n");
       if (type_callback == NULL) {
-	printf ("Unable to get method ref\n");
+	//printf ("Unable to get method ref\n");
       }
       else
 	{
 	  ret  = seasim_register_type_cb(my_type_sim_callback);
-	  printf (" type_callback=%p\n", type_callback);
+	  //printf (" type_callback=%p\n", type_callback);
 	}
     }
   else if ( type == 4 ) 
     {
-      printf (" REGISTER CALLBACK FOR TYPE 4.1\n");
+      //printf (" REGISTER CALLBACK FOR TYPE 4.1\n");
       log_callback = env->GetMethodID(g_clazz, "handleLogEvent", "(ILjava/lang/String;)V");
-      printf (" REGISTER CALLBACK FOR TYPE 4.2\n");
+      //printf (" REGISTER CALLBACK FOR TYPE 4.2\n");
       if (log_callback == NULL) {
 	printf ("Unable to get method ref\n");
       }
       else
 	{
-	  printf (" REGISTER CALLBACK FOR TYPE 4.3\n");
+	  //  printf (" REGISTER CALLBACK FOR TYPE 4.3\n");
 	  ret  = seasim_register_log_cb(my_log_sim_callback);
-	  printf (" REGISTER CALLBACK FOR TYPE 4.4\n");
-	  printf (" log_callback=%p\n", log_callback);
+	  //printf (" REGISTER CALLBACK FOR TYPE 4.4\n");
+	  // printf (" log_callback=%p\n", log_callback);
 	}
     }
   else if ( type == 5 ) 
     {
-      printf (" REGISTER CALLBACK FOR TYPE 5.1\n");
+      //printf (" REGISTER CALLBACK FOR TYPE 5.1\n");
       lcd_callback = env->GetMethodID(g_clazz, "handleLCDEvent", "(Ljava/lang/String;Ljava/lang/String;)V");
-      printf (" REGISTER CALLBACK FOR TYPE 5.2\n");
+      //printf (" REGISTER CALLBACK FOR TYPE 5.2\n");
       if (lcd_callback == NULL) 
 	{
 	  printf ("Unable to get method ref\n");
 	}
       else
 	{
-	  printf (" REGISTER CALLBACK FOR TYPE 5.3\n");
+	  //printf (" REGISTER CALLBACK FOR TYPE 5.3\n");
 	  ret  = seasim_register_lcd_cb(my_lcd_sim_callback);
-	  printf (" REGISTER CALLBACK FOR TYPE 5.4\n");
-	  printf (" lcd_callback=%p\n", lcd_callback);
+	  //printf (" REGISTER CALLBACK FOR TYPE 5.4\n");
+	  //printf (" lcd_callback=%p\n", lcd_callback);
 	}
     }
   else
@@ -344,7 +344,7 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
       printf ("\n\n\n\tCan not register type %d\n\n\n", type);
     }
 
-  printf (" REGISTER CALLBACK TYPE done\n");
+  //  printf (" REGISTER CALLBACK TYPE done\n");
 
   return (jboolean)returnValue;
  }
@@ -486,7 +486,7 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setBoardName
   CHECK_JNI(getEnvStat, g_env, g_vm);
 
   const char* strCIn = (env)->GetStringUTFChars(board , 0);
-  printf ("board: %s\n", strCIn);
+  //  printf ("board: %s\n", strCIn);
 
   ret = seasim_set_board_name((char*)strCIn);
   
@@ -499,7 +499,18 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getCurrentPinType
 {
   jint ret =  seasim_get_current_pin_type(pin);
 
-  printf ("SEASIM RET: %d\n", ret);
+  //  printf ("SEASIM RET: %d\n", ret);
+
+  return ret;
+
+}
+
+JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_hasGenericPinType
+  (JNIEnv *env, jobject obj, jint pin, jint type)
+{
+  jint ret =  seasim_has_generic_pin_type(pin, type);
+
+  //  printf ("SEASIM RET: %d\n", ret);
 
   return ret;
 
@@ -547,9 +558,9 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setArduinoCodeName
   const char* strCIn = (env)->GetStringUTFChars(str , 0);
   printf ("board code: %s\n", strCIn);
 
-  printf (" ----------------------------------------->  loading code %s\n", strCIn);
+  //  printf (" ----------------------------------------->  loading code %s\n", strCIn);
   ret = seasim_set_arduino_code_name(strCIn);
-  printf (" <-----------------------------------------  loading code returned: %d\n", ret); fflush(stdout); 
+  //  printf (" <-----------------------------------------  loading code returned: %d\n", ret); fflush(stdout); 
   
   if (ret==1)
     {
