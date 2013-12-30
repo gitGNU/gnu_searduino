@@ -24,9 +24,8 @@
 #include <Arduino.h>
 #include "searduino.h"
 
-#define RELAY_PIN 13
+#define RELAY_PIN 7
 #define INPUT_PIN A0
-
 
 void setup(void)
 {
@@ -50,7 +49,7 @@ int readInput()
 
 int validateInput(int in)
 {
-  if (in>500)
+  if (in>700)
     { 
       return HIGH ;
     }
@@ -62,6 +61,7 @@ int main(void)
   
   init();
   setup();
+
 
   /* The following line uses a Saerduino macro 
    * You could use a plain "for (;;)" instead
