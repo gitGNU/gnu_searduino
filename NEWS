@@ -1,12 +1,47 @@
-News in 0.67
+News in 0.7
 ==============================================
 
   General changes:
   ---------------------
-   Implemented: 
-     void randomSeed(unsigned int seed)
-     long random(long max)
-     long random(long min, long max)
+
+    LCD Support 
+       Available in Java extenstions, Stream simulator, Jearduino
+       NOT available in Python extension
+
+  Jearduino:
+  ---------------------
+
+       LCD Support
+       Pin types now shown as Combo boxes
+       
+       New arguments:
+
+         --arduino-code <FILE>  - loads <FILE> for use
+         --board <BOARD>        - sets <BOARD> to use
+         --start                - starts your code as soon as it is loaded
+
+  New implemented API functions: 
+  ---------------------
+
+     Math:
+       randomSeed(unsigned int seed)
+       random(long max)
+       random(long min, long max)
+
+     Liquidcrystal:
+       LiquidCrystal
+       begin
+       clear
+       home
+       setCursor
+       write
+       print
+
+   Bugs fixed:
+   -------------------
+
+       Fixed changing pin types and modes (Leaonardo board)
+       Many more
 
 
 
