@@ -69,7 +69,7 @@ static uint8_t stub_output_enabled = 1;
 uint8_t
 ext_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
-  printf ("%s (%d,%d)\n", __func__, pin, val);
+  //  printf ("%s (%d,%d)\n", __func__, pin, val);
   LOG_PIN_VAL_FUNCTION(pin, val);
   input_callback(pin, val, pin_type);
 
