@@ -27,6 +27,8 @@ import java.util.prefs.Preferences;
 
 public class JearduinoPreferences {
 
+    private int arduinoCodeNameCount = 10;
+
     private Preferences jearduinoPrefs;
 
     private String boardId = "board";
@@ -48,6 +50,11 @@ public class JearduinoPreferences {
 	jearduinoPrefs.put(boardId, board);
     }
 
+    public int getArduinoCodeNameCount()
+    {
+	return arduinoCodeNameCount;
+    }
+
     public String getArduinoCodeName(int nr)
     {
 	return jearduinoPrefs.get(arduinoCodeIdPrefix+nr, "");
@@ -56,6 +63,11 @@ public class JearduinoPreferences {
     public void setArduinoCodeName(int nr, String ac)
     {
 	jearduinoPrefs.put(arduinoCodeIdPrefix+nr, ac);
+    }
+
+    public void unsetArduinoCodeName(int nr)
+    {
+	jearduinoPrefs.remove(arduinoCodeIdPrefix+nr);
     }
     
 
