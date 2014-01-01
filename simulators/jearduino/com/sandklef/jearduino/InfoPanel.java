@@ -30,6 +30,7 @@ public class InfoPanel extends JPanel
 {
 
     JLabel infoLabel;
+    String projectName;
     String boardName;
     String searduinoVersion;
     String arduinoCodeName;
@@ -38,6 +39,7 @@ public class InfoPanel extends JPanel
     {
 	String text = "Searduino: "      + searduinoVersion + 
 	    "  Board: "        + boardName + 
+	    "  Project: "        + projectName + 
 	    "  Arduino code: " + arduinoCodeName;
 	//	System.out.println("UPDATING INFO TEXT TO: " + text );
 	infoLabel.setText(text);
@@ -47,6 +49,12 @@ public class InfoPanel extends JPanel
     public void setBoardName(String b)
     {
 	boardName = b;
+	updateText();
+    }
+
+    public void setProjectName(String b)
+    {
+	projectName = b;
 	updateText();
     }
 
@@ -68,6 +76,7 @@ public class InfoPanel extends JPanel
 
 	setArduinoCodeName("none");
 	setSearduinoVersion("0");
+	setProjectName("none");
 	setBoardName("none");
 
 	add(infoLabel);
