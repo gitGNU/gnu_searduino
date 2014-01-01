@@ -161,11 +161,9 @@ set_board_name(char *board)
 
   board_index = 0;
 
-  printf ("Invalid board name (NULL)\n");
-
   if (board==NULL)
     {
-      printf ("Invalid board name (NULL)\n");
+      fprintf (stderr, "ERROR: set_board_name(), Invalid board name (NULL)\n");
       return 0;
     }
   

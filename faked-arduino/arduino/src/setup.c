@@ -101,26 +101,26 @@ int searduino_setup(void)
       return 0;
     }
   PRINT_FUNCTION_NAME_NOARGS();
-  printf("searduino_setup(void) init log\n");
+  //  printf("searduino_setup(void) init log\n");
   searduino_internal_init_log(NULL);
   
   searduino_internal_log_i("Setting up Searduino\n");
   
   searduino_internal_log_i("Loading Arduino code\n");
 
-  printf("searduino_setup(void) init ext io\n");
+  //printf("searduino_setup(void) init ext io\n");
   searduino_internal_log_i("Initialising external IO module\n");
   init_ext_io();
   
-  printf("searduino_setup(void) init time\n");
+  //printf("searduino_setup(void) init time\n");
   searduino_internal_log_i("Initialising time module\n");
   init_time();
 
-  printf("searduino_setup(void) init pins\n");
+  //printf("searduino_setup(void) init pins\n");
   searduino_internal_log_i("Initialising arduino pins module\n");
   init_arduino_pins();
 
-  printf("searduino_setup(void) set running\n");
+  //printf("searduino_setup(void) set running\n");
   searduino_internal_log_i("Setting program as running\n");
   searduino_set_running();
 
@@ -131,7 +131,7 @@ int searduino_setup(void)
   hid_enable_faked_hid();
 #endif
   
-  printf("searduino_setup(void) returning\n");
+  //printf("searduino_setup(void) returning\n");
   return 0;
 }
 
@@ -146,7 +146,8 @@ get_arduino_code_name(void)
   if ((arduino_code==NULL) || 
       (arduino_code[0]=='\0'))
     {
-      printf ("Could not get the name of the arduino library to use\n");
+      /* This is not an error.... simply means we haven't set the board name yet */
+      //fprintf (stderr, "Could not get the name of the arduino library to use\n");
     }
   else
     {
@@ -166,32 +167,32 @@ searduino_set_arduino_code_name(const char* libname)
   
   if (libname==NULL)
     {
-      printf("Resetting arduino code name");
+      //      fprintf(stderr, "Resetting arduino code name");
       arduino_code[0]='\0';
       return 1;
     }
   else if (strlen(libname)>=1024)
     {
-      printf ("Too big libname\n");
-      printf ("Replace this with not hard coding ret value\n");
+      fprintf (stderr, "Too big libname\n");
+      fprintf (stderr, "Replace this with not hard coding ret value\n");
       return 1;
     }
 
   if (strncmp(arduino_code, libname, strlen(libname)==0))
     {
-      printf("Not setting arduino code name: %s to the same thing   (setup.c)\n", libname);
+      fprintf(stderr, "Not setting arduino code name: %s to the same thing   (setup.c)\n", libname);
       return 0;
     }
 
-  printf("Setting arduino code name: %s   (setup.c)\n", libname);
+  //  printf("Setting arduino code name: %s   (setup.c)\n", libname);
   strncpy (arduino_code, libname, 1024);
 
   ret = load_arduino_code();
-  printf("Loading of code %s returned %d    (setup.c)\n", libname, ret);
+  //  printf("Loading of code %s returned %d    (setup.c)\n", libname, ret);
   fflush(stdout);
   if (ret!=0)
     {
-      printf ("Setting up arduino code failed: %d\n", 	      ret);
+      fprintf (stderr, "Setting up arduino code failed: %d\n", 	      ret);
       return 1;
     }
 
@@ -207,17 +208,17 @@ load_arduino_code(void)
 
   ard_lib_name = get_arduino_code_name();
 
-  printf ("Trying to load code from %s\n", ard_lib_name);
+  //  printf ("Trying to load code from %s\n", ard_lib_name);
 
   if (ard_lib_name == NULL)
     {
       /* If we have NOT been given a library name, we're a static binary */
-      printf ("Statically linked code, not loading\n");
+      fprintf (stderr, "Statically linked code, not loading\n");
     }
   else
     {
       /* If we have been given a library name, load it */
-      printf ("Dynamically linked code, will call dlopen(%s)\n", ard_lib_name); 
+      // fprintf (stderr, "Dynamically linked code, will call dlopen(%s)\n", ard_lib_name); 
       arduino_lib = dlopen ((const char*)ard_lib_name, RTLD_LAZY);
       if ( arduino_lib == NULL)
 	{
@@ -229,12 +230,12 @@ load_arduino_code(void)
       searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
       if ( searduino_main_entry == NULL)
 	{
-	  printf ("Couldn't find searduino_main in arduino code\n");
+	  fprintf (stderr, "Couldn't find searduino_main in arduino code\n");
 	  return 1;
 	}
       /* printf ("setup.c:  code at %p\n", searduino_main_entry); */
     }
-  printf ("Successfully loaded code from %s\n", ard_lib_name);
+  //  printf ("Successfully loaded code from %s\n", ard_lib_name);
   return 0;
 }
 

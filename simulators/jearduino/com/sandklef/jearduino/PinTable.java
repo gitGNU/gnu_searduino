@@ -92,19 +92,17 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public void setTypeInputPin(int pin, int type, boolean fromArduino)
     {
-	System.out.println("---> setTypeInputPin(" + pin + ", " + type + ", " + fromArduino + ")");
 	if (pins==null) {
-	    System.out.println("setTypeInputPin() .... pins not created, bailing out");
+	    //System.out.println("setTypeInputPin() .... pins not created  yet, bailing out");
 	    return ;
 	}
 			   
 	if (!searduino.hasGenericPinTypeBoolean(pin, type))
 	    {
-		System.out.println("ERROR: Can not set type " +
+		System.out.println("\n\n *** ERROR: Can not set type " +
 				   searduino.getPinType(type) + 
-				   " on pin " + pin);
-		System.exit(1);
-		//return ;
+				   " on pin " + pin + " \n\n" );
+		return ;
 	    }
 
 	/* 
@@ -119,8 +117,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 			JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
 			int pos = getItemPosFromCombo(cb, 
 						      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_DIGITAL));
-			System.out.println("  digital cb pos:" + pos);
-						      
 			cb.setSelectedIndex(pos);
 		    }
 		else if (type==Searduino.SEARDUINO_PINTYPE_ANALOG)
@@ -128,8 +124,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 			JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
 			int pos = getItemPosFromCombo(cb, 
 						      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_ANALOG));
-			System.out.println("  analog cb pos:" + pos);
-						      
 			cb.setSelectedIndex(pos);
 		    }
 		else if (type==Searduino.SEARDUINO_PINTYPE_PWM)
@@ -137,8 +131,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 			JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
 			int pos = getItemPosFromCombo(cb, 
 						      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_PWM));
-			System.out.println("  pwm cb pos:" + pos);
-						      
 			cb.setSelectedIndex(pos);
 		    }
 	    }
@@ -154,8 +146,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		    }
 		else if (type==Searduino.SEARDUINO_PINTYPE_ANALOG)
 		    {
-			System.out.println(" --- setTypeInputPin(" + pin + ", " + type + ", " + fromArduino + ")   SETTING ANALOG");
-			//setDigitalInputPin(pin);
 			setAnalogInputPin(pin);
 		    }
 		else if (type==Searduino.SEARDUINO_PINTYPE_PWM)
@@ -164,62 +154,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		    }
 	    }
 
-	System.out.println("<--- setTypeInputPin(" + pin + ", " + type + ", " + fromArduino + ")");
-	/*
-	JComboBox cbt = (JComboBox)pins[pin][TABLE_TYPE_POS];
-	for (int i=0;i<cbt.getItemCount();i++)
-	    {
-		System.out.println("    - looking: change pin type at " + i + " : item=" +
-				   cbt.getItemAt(i) + "?????");
-
-		if (cbt.getItemAt(i).equals(searduino.getPinType(Searduino.SEARDUINO_PINTYPE_DIGITAL)))
-		    {
-			System.out.println("          - setDigitalInputPin(pin); " + " " +i);
-			cbt.setSelectedIndex(i);
-			if (!fromArduino) { setDigitalInputPin(pin); }
-			break;
-		    }
-		else if (cbt.getItemAt(i).equals(searduino.getPinType(Searduino.SEARDUINO_PINTYPE_PWM)))
-		    {
-			System.out.println("          - setPwmPin(pin);" + " " +i);
-			cbt.setSelectedIndex(i);
-			if (!fromArduino) { setPwmPin(pin); }
-			break;
-		    }
-		else if (cbt.getItemAt(i).equals(searduino.getPinType(Searduino.SEARDUINO_PINTYPE_ANALOG)))
-		    {
-			System.out.println("           - setAnalogInputPin(pin);" + " " +i);
-			cbt.setSelectedIndex(i);
-			if (!fromArduino) { setAnalogInputPin(pin); }
-			break;
-		    }
-	    }
-	System.out.println("<--- setTypeInputPin(" + pin + ", " + type + ", " + fromArduino + ")");
-	return ;
-	/*
-	if (type==Searduino.SEARDUINO_PINTYPE_DIGITAL)
-	    {
-		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
-		cb.setSelectedIndex(0);
-		setDigitalInputPin(pin);
-	    }
-	else if (type==Searduino.SEARDUINO_PINTYPE_ANALOG)
-	    {
-		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
-		cb.setSelectedIndex(2);
-		setAnalogInputPin(pin);
-	    }
-	else if (type==Searduino.SEARDUINO_PINTYPE_PWM)
-	    {
-		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
-		cb.setSelectedIndex(1);
-		setPwmPin(pin);
-	    }
-	else 
-	    {
-		System.out.println("\n\n\n\n\tERROR - we should not be here\n\n\n\n");
-	    }
-	*/
     }
 	
     public void setAnalogInputPin(int pin)
@@ -242,11 +176,8 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	spinner.setEnabled(true);
 	spinner.addChangeListener(this);
 
-	System.out.println("----> ADD ANALOG INPUT PIN AT:  " + pin);
-
 	if (pins[pin][TABLE_INPUT_POS]!=null)
 	    {
-		System.out.println("     REMOVE ANALOG PIN AT:  " + (pos));
 		this.remove(pos);
 	    }
 	try {
@@ -256,12 +187,10 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
 	}
 
-	System.out.println("      ADD ANALOG PIN " + pin + " at pos:" + pos + "    spinner=" + spinner);
-
 	this.add(spinner, pos);
+	((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(false);
 	pins[pin][TABLE_INPUT_POS]=spinner;
 	pinType[pin]=Searduino.SEARDUINO_PINTYPE_ANALOG;
-	System.out.println("<---- ADD ANALOG INPUT PIN AT:  " + pin);
 	spinner.repaint();
 	this.revalidate();
 	this.repaint();
@@ -288,6 +217,9 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		this.remove(pos);
 	    }
 	this.add(input, pos);
+
+	((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(false);
+
 	pins[pin][TABLE_INPUT_POS]=input;
 	pinType[pin]=Searduino.SEARDUINO_PINTYPE_DIGITAL;
     }
@@ -313,6 +245,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
 	((JLabel)pins[pin][TABLE_MODE_POS]).setText("Output");
 	pins[pin][TABLE_INPUT_POS]=input;
+	((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(false);
 	//	((JLabel)pins[pin][TABLE_TYPE_POS]).setText("PWM");
 	pinType[pin]=Searduino.SEARDUINO_PINTYPE_PWM;
     }
@@ -526,39 +459,14 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		digValue.setVisible(false);
 		add(digValue);
 		
-		//		pins[i][TABLE_TYPE_POS]   = typeLabel;
 		pins[i][TABLE_TYPE_POS]   = typeCombo;
 		pins[i][TABLE_NUMBER_POS] = numberLabel;
 		pins[i][TABLE_MODE_POS]   = modeLabel;
 		pins[i][TABLE_OUTPUT_POS] = digValue;
 
-		//		System.out.println("Pin " + i +"  has type: " +  
-		//		searduino.getCurrentPinType(i));
-	
 		setTypeInputPin(i, searduino.getCurrentPinType(i), false);
 	
 
-		/* UNO
-		   Digital pins: 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 
-		   PWM pins:     3, 6, 9, 10, 11, 
-		   Analog pins:  14 (A0), 15 (A1), 16 (A2), 17 (A3), 18 (A4), 19 (A5), 
-		*/
-		/*
-		if (i < 13)
-		    {
-			setDigitalInputPin(i);
-		    }
-		else if (i >= 14)
-		    {
-			setAnalogInputPin(i);
-		    }
-		else
-		    {
-			setPwmPin(i);
-		    }
-		*/
-		//((JLabel)pins[i][TABLE_TYPE_POS]).setMaximumSize(new Dimension(100, 10));
-		//((JLabel)pins[i][TABLE_TYPE_POS]).setMinimumSize(new Dimension(100, 10));
 	    }
 
 

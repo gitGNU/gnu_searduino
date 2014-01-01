@@ -262,7 +262,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void handlePinTypeEvent(int pin, int type)
     {	
-	System.out.println("EVENT: PIN TYPE-------------> JAVA (really) pin[" + pin + "]: type=" + type );
+	//	System.out.println("EVENT: PIN TYPE-------------> JAVA (really) pin[" + pin + "]: type=" + type );
 	pins.setTypeInputPin(pin, type, true);
     }
     
@@ -347,13 +347,12 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    codeName = code;
 	}
 	
-	//	System.out.println("getAndUseArduinoCodeName: code -------------> CODe: " + codeName );
-	
-	ret = searduino.setArduinoCodeName(codeName);
+	/*	ret = searduino.setArduinoCodeName(codeName);
 	if (ret!=0)
 	    {
 		return ;
 	    }
+	*/
 	infoPanel.setArduinoCodeName(codeName);
 	File f = new File(codeName);
 	if (f==null) {
@@ -378,11 +377,15 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     public void saveArduinoCodeName(String canonName, String shortName)
     {
 	int ret;
+
+	/*
+	System.out.println("saveArduinoCodeName() --> getAndUseArduinoCodeName: code -------------> CODe: " + canonName );
 	ret = searduino.setArduinoCodeName(canonName);
 	if (ret!=0)
 	    {
 		return ;
 	    }
+	*/
 
 	for (int i=(codeNamesToStore-1);i>-1;i--)
 	    {
@@ -399,7 +402,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	jpref.setArduinoCodeName(0, canonName);
 	
 	infoPanel.setArduinoCodeName(shortName);
-	searduino.setArduinoCodeName(canonName);
+	//	searduino.setArduinoCodeName(canonName);
 	showArduinoCodeNameMenu();
     }
 
@@ -446,29 +449,22 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	String board = null;
 	String code  = null;
 
-	System.out.println("ARGS: " + nrArgs);
 	for (int i=0; i<nrArgs; i++)  {
-	    System.out.println("Parse... " + args[i] + "\n");
-	    
 	    if (args[i].equals("--board")) {
-		System.out.println("found\n");
 		if (i+1<nrArgs) 			    {
-		    System.out.println("BOARD: " + args[i+1]);
 		    board = args[i+1];
 		    i++;
 		} else  {
-		    System.out.println("Missing args to --board");
+		    System.err.println("Missing args to --board");
 		    System.exit(1);
 		}
 	    }
 	    else if (args[i].equals("--arduino-code")) {
-		System.out.println("found\n");
 		if (i+1<nrArgs) 			    {
-		    System.out.println("CODE: " + args[i+1]);
 		    code = args[i+1];
 		    i++;
 		} else  {
-		    System.out.println("Missing args to --arduino-code");
+		    System.err.println("Missing args to --arduino-code");
 		    System.exit(1);
 		}
 	    }
@@ -476,7 +472,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 		startDirect=true;
 	    }
 	    else {
-		System.out.println("Error when pasing command line '" + args[i] + "'");
+		System.err.println("Error when pasing command line '" + args[i] + "'");
 		System.exit(1);
 	    }
 	}

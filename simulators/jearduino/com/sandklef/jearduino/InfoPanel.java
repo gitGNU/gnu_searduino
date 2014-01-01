@@ -39,7 +39,7 @@ public class InfoPanel extends JPanel
 	String text = "Searduino: "      + searduinoVersion + 
 	    "  Board: "        + boardName + 
 	    "  Arduino code: " + arduinoCodeName;
-	System.out.println("UPDATING INFO TEXT TO: " + text );
+	//	System.out.println("UPDATING INFO TEXT TO: " + text );
 	infoLabel.setText(text);
 
     }
