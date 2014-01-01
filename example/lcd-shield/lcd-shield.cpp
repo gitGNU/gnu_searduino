@@ -79,15 +79,21 @@ void read_and_write() {
   //  Serial.println(x);
   //Serial.println(resistance);
 
-  lcd.setCursor(0,1);
-  printf (" A0 => %d\n", analogRead (A0));                  
+  /*  printf (" A0 => %d\n", analogRead (A0));                  
   printf (" A1 => %d\n", analogRead (A1));                  
   printf (" A2 => %d\n", analogRead (A2));                  
   printf (" A3 => %d\n", analogRead (A3));                  
   printf (" A4 => %d\n", analogRead (A4));                  
+  */
+
+  lcd.scrollDisplayRight();
+
+  lcd.setCursor(0,1);
   sprintf(buf,"A0: %d A1: %d" , x, resistance);
-  
   lcd.print(buf);
+
+  lcd.setCursor(0,0);
+  lcd.print("ABCDEFGHIJKLMNOPQRSTUVXYZ");
 
   if (x < 50) {  
     //char *s1 = "Right"; 
