@@ -481,8 +481,11 @@ cat bin/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bi
 exit_on_failure $? "Prepared installation verification script"
 chmod a+x bin/verify-install.sh
 
-cat bin/arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/arduino-ex2c
+cat bin/searduino-arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/searduino-arduino-ex2c
 exit_on_failure $? "Prepared Arduino examples to C translator"
+
+cat bin/searduino-builder.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/searduino-builder
+exit_on_failure $? "Prepared Searduino buider"
 
 
 AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/java/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile  simulators/jearduino/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile  example/many-boards/Makefile example/hid/Makefile example/log/Makefile example/digital-rw/Makefile example/serial/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile  test/mk/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile example/lcd-shield/Makefile example/toggle-pins/Makefile example/relay/Makefile example/verification/ok-version/Makefile  example/verification/nok-version/Makefile tools/Makefile ])

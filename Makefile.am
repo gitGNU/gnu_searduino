@@ -7,7 +7,7 @@ else
 endif
 # lib
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/arduino-ex2c.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 
 
 
 ARD_SRC= \
@@ -118,7 +118,7 @@ ARD_EXAMPLES =
 endif
 
 
-bin_SCRIPTS = bin/arduino-ex2c bin/functions bin/verify-install.sh bin/find_port.sh
+bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder bin/functions bin/verify-install.sh bin/find_port.sh
 
 #ACLOCAL_AMFLAGS = -I.m4
 
