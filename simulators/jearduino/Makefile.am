@@ -24,6 +24,7 @@ JAVA_SOURCES = \
 	$(PKG_PATH)/BoardEvent.java \
 	$(PKG_PATH)/JearduinoPreferences.java \
 	$(PKG_PATH)/InfoPanel.java    \
+	$(PKG_PATH)/ProjectPanel.java    \
 	$(PKG_PATH)/JearduinoMenu.java   \
 	$(PKG_PATH)/JearduinoAbout.java   \
 	$(PKG_PATH)/ArduinoCodeNameEvent.java   \
