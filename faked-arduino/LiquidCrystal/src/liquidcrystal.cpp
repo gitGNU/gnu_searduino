@@ -28,6 +28,10 @@
 
 #define LCD_STORAGE_SIZE 41
 
+#define SCROLL_DISABLED 0
+#define SCROLL_LEFT     1
+#define SCROLL_RIGHT    2
+
 typedef struct
 {
   uint8_t data[LCD_STORAGE_SIZE]; // 40 is the size, on extra for '\0'
@@ -41,7 +45,8 @@ static uint8_t lcd_row_pos[]    = { 0, 0};
 static uint8_t lcd_dotsize      = 0;
 static lcd_row_t lcd_data_rows[2];
 static uint8_t current_row      = 0;
-
+static int     current_pos      = 0; /* for scrolling */
+static uint8_t scroll_enable   = SCROLL_DISABLED;
 
 LiquidCrystal::LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
@@ -157,11 +162,11 @@ void LiquidCrystal::blink() {
 
 // These commands scroll the display without changing the RAM
 void LiquidCrystal::scrollDisplayLeft(void) {
-  ;
+  scroll_enable = SCROLL_LEFT ;
 }
 
 void LiquidCrystal::scrollDisplayRight(void) {
-  ;
+  scroll_enable = SCROLL_RIGHT ;
 }
 
 // This is for text that flows Left to Right
@@ -197,11 +202,54 @@ size_t LiquidCrystal::write(uint8_t value) {
     
   if (value==0) 
     {
+      char *start1;
+      char *start2;
       char retbuf1[17];
       char retbuf2[17];
+      char tmpbuf1[81];
+      char tmpbuf2[81];
+
+      sprintf(tmpbuf1, "%-40s%-40s", (char*)lcd_data_rows[0].data, (char*)lcd_data_rows[0].data);
+      tmpbuf1[81]='\0';
+
+      sprintf(tmpbuf2, "%-40s%-40s", (char*)lcd_data_rows[1].data, (char*)lcd_data_rows[1].data);
+      tmpbuf2[81]='\0';
+      if (scroll_enable==SCROLL_DISABLED)
+	{
+	  start1 = tmpbuf1;
+	  start2 = tmpbuf2;
+	  current_pos = 0;
+	}
+      else if (scroll_enable==SCROLL_LEFT)
+	{
+	  start1 = tmpbuf1;
+	  start1 = start1 + current_pos;
+
+	  start2 = tmpbuf2;
+	  start2 = start2 + current_pos;
+
+	  current_pos++;
+	  if (current_pos>40) { current_pos=0; }
+	}
+      else if (scroll_enable==SCROLL_RIGHT)
+	{
+	  start1 = tmpbuf1;
+	  start1 = start1 + 40 + current_pos;
+
+	  start2 = tmpbuf2;
+	  start2 = start2 + 40 + current_pos;
+
+	  current_pos--;
+	  if (current_pos<-40) { current_pos=0; }
+	}
+
+      /*
+      printf ("tmpbuf1 (%d): '%s'\n", current_pos, tmpbuf1);
+      printf ("tmpbuf2 (%d): '%s'\n", current_pos, tmpbuf2);
+      */
       
-      strncpy(retbuf1,(char*)lcd_data_rows[0].data, 16);
-      strncpy(retbuf2,(char*)lcd_data_rows[1].data, 16);
+      strncpy(retbuf1,start1, 16);
+      strncpy(retbuf2,start2, 16);
       retbuf1[16]='\0';
       retbuf2[16]='\0';
       if ( lcd_sim_callback == NULL ) 
@@ -223,7 +271,7 @@ size_t LiquidCrystal::write(uint8_t value) {
     }
 
   pos = lcd_row_pos[current_row];
-  if (pos>=40) pos=39;
+  if (pos>=40) { return 1 ; }
 
   data = lcd_data_rows[current_row].data; 
   data[pos] = value;
