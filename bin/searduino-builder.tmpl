@@ -1,0 +1,92 @@
+#!/bin/bash
+
+SEARDUINO_PATH=__INSTALL_DIR__
+export LD_LIBRARY_PATH=__INSTALL_DIR__/lib
+TMPL_DIR=${SEARDUINO_PATH}/share/searduino/tmpl
+PROJECT_DIR=""
+HOME_DIR=${HOME}
+SEARDUINO_HOME_DIR=${HOME}/searduino/
+ARDUINO_EX2C=${SEARDUINO_PATH}/bin/searduino-arduino-ex2c 
+
+MISSING_DIR=1
+NON_EXIST_DIR=2
+NON_EXIST_INO=3
+
+exit_on_failure()
+{
+    if [ $1 -ne 0 ]
+    then
+	echo "ERROR:  $2"
+	exit $1
+    fi
+}
+
+
+parse_args()
+{
+    export BUILD_TYPE=stub
+
+    while [ "$1" != "" ]
+    do
+	case $1 in
+	    "--ino")
+		INO_FILE=$2
+		shift
+		;;
+	    "--ino-dir")
+		INO_DIR=$2
+		shift
+		;;
+	    *)
+		PROJECT_DIR="$1"
+		break
+		;;
+	esac	
+	shift
+    done
+
+    
+}
+
+
+
+parse_args $*
+
+if [ "$INO_FILE" != "" ]
+then
+    if [ ! -f $INO_FILE ]
+    then
+	echo "Ino file ($INO_FILE) does not exist"
+	exit $NON_EXIST_INO
+    fi
+    
+    echo ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} $INO_FILE
+
+elif [ "$INO_DIR" != "" ]
+then
+    if [ ! -d $INO_DIR ]
+    then
+	echo "Directory with ino files ($INO_DIRS) does not exist"
+	exit $NON_EXIST_INO
+    fi
+    
+    echo ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} $INO_DIR
+
+elif [ "$PROJECT_DIR" != "" ]
+then
+    if [ ! -d $PROJECT_DIR ]
+    then
+	echo "Build directory does not exist"
+	exit $NON_EXIST_DIR
+    fi
+    echo "Build $PROJECT_DIR"
+fi
+
+
+echo "HOME:        ${HOME_DIR}"
+echo "PROJECT DIR: $PROJECT_DIR"
+
+
+
+
+exit 0
