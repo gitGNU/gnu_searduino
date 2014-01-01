@@ -65,8 +65,15 @@ my_dm_sim_callback(uint8_t pin, uint8_t mode)
 void
 lcd_callback(const char *str1, const char *str2)
 {
-  printf ("LCD_CALLACK() LCD[0]: %s\n" , str1);
-  printf ("LCD_CALLACK() LCD[1]: %s\n" , str2);
+#define LCD_COLS 16
+#define LCD_HEADER() {printf ("+"); int i; for (i=0;i<LCD_COLS;i++) { printf ("-"); } printf("+\n");}
+#define LCD_FOOTER() LCD_HEADER()
+  LCD_HEADER();
+  printf ("|%s|\n" , " LCD - printout ");
+  LCD_HEADER();
+  printf ("|%-16s|\n" , str1);
+  printf ("|%-16s|\n" , str2);
+  LCD_HEADER();
   fflush(stdout);
 }
 
