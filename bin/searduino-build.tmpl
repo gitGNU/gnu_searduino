@@ -1,0 +1,61 @@
+#!/bin/bash
+
+SEARDUINO_PATH=__INSTALL_DIR__
+export LD_LIBRARY_PATH=__INSTALL_DIR__/lib
+TMPL_DIR=${SEARDUINO_PATH}/share/searduino/tmpl
+DIR=""
+
+MISSING_DIR=1
+NON_EXIST_DIR=2
+
+exit_on_failure()
+{
+    if [ $1 -ne 0 ]
+    then
+	echo "ERROR:  $2"
+	exit $1
+    fi
+}
+
+
+parse_args()
+{
+    export BUILD_TYPE=stub
+
+    while [ "$1" != "" ]
+    do
+	case $1 in
+	    "--shlib")
+		BUILD_TYPE=shlib
+		;;
+	    *)
+#		echo "PARSE: $1"
+		break
+		;;
+	esac	
+	DIR="$1"
+	shift
+    done
+
+    
+}
+
+
+
+parse_args $*
+
+if [ "$DIR" = "" ]
+then
+    echo "Missing directory to build"
+    return $MISSING_DIR
+fi
+if [ ! -d $DIR]
+then
+    echo "Build directory does not exist"
+    return $NON_EXIST_DIR
+fi
+
+
+
+
+exit 0
