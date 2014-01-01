@@ -44,18 +44,31 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     FileEvent  fe;
     ArduinoCodeNameEvent  ae;
 
-    JMenu boardMenu;
+    /* Level 1 */
     JMenu fileMenu;
+    JMenu boardMenu;
     JMenu helpMenu;
-    JMenu codeMenu;
+    JMenu projectMenu;
 
+    /* Level 2 */
+    JMenu codeMenu;
+    JMenu prevCodeMenu;
     JRadioButtonMenuItem leoItem;
     JRadioButtonMenuItem unoItem ;
     JRadioButtonMenuItem megaItem ;
     JRadioButtonMenuItem mega2560Item;
 
+    JMenuItem loadFromFile;
+
+    /* PRoject menu */
+    JMenuItem importArduinoFileItem;
+    JMenuItem openSearduinoProjectItem;
+    JMenuItem buildItem;
+
     JMenuItem boardItem;
+
     JMenuItem aboutItem;
+    JMenuItem manualItem;
     JMenuItem codeItem[];
 
     JFileChooser fc;
@@ -69,18 +82,25 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
 	codeItem = new JMenuItem[10];
 
-	//	JMenuBar menuBar = new JMenuBar();
-	boardMenu = new JMenu("Board");
-	fileMenu  = new JMenu("File");
-	helpMenu  = new JMenu("Help");
-	codeMenu  = new JMenu("Code");
+	/* Level 1 */
+	fileMenu    = new JMenu("File");
+	projectMenu = new JMenu("Project");
+	boardMenu   = new JMenu("Board");
+	helpMenu    = new JMenu("Help");
+
+	loadFromFile = new JMenuItem("Load code from file");
+	loadFromFile.addActionListener(this);
+
+
+	codeMenu  = new JMenu("Previous code");
 
 	add(fileMenu);
+	add(projectMenu);
 	add(boardMenu);
 	add(helpMenu);
-	add(codeMenu);
 
 	createBoardMenu();
+	createProjectMenu();
 	createFileMenu();
 	createHelpMenu();
     }
@@ -117,6 +137,12 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     }
 
+    public void showManual()
+    {
+	System.out.println("Show manual");
+    }
+	
+
     public int handleCodeChoice(Object o)
     {
 	for (int i=0;i<10;i++)
@@ -134,7 +160,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
-	System.out.println("MENU click " + e.getActionCommand());
+	System.out.println("MENU click " + e.getActionCommand() + " (" + e.getSource() + ")");
 	
 	Object o = e.getSource();
 
@@ -144,13 +170,29 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	    {
 		be.handleBoardChoiceEvent(e.getActionCommand());
 	    }
-	else if  ( o == boardItem )
+	else if  ( o == loadFromFile )
 	    {
 		findArduinoCode();
 	    }
 	else if  ( o == aboutItem )
 	    {
 		showAbout();
+	    }
+	else if  ( o == manualItem )
+	    {
+		showManual();
+	    }
+	else if  ( o == buildItem )
+	    {
+		System.out.println("BUILD");
+	    }
+	else if  ( o == importArduinoFileItem )
+	    {
+		System.out.println("importArduinoFileItem");
+	    }
+	else if  ( o == openSearduinoProjectItem )
+	    {
+		System.out.println("openSearduinoProjectItem");
 	    }
 	else if ( codeIdx != -1 )
 	    {
@@ -162,18 +204,19 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     
     public void createFileMenu()
     {
-	boardItem = new JMenuItem("Open Arduino file");
-
-	fileMenu.add(boardItem);
-	boardItem.addActionListener(this);
+	fileMenu.add(loadFromFile);
+	fileMenu.add(codeMenu);
     }
   
     public void createHelpMenu()
     {
 	aboutItem = new JMenuItem("About") ;
+	manualItem = new JMenuItem("Manual") ;
 
 	helpMenu.add(aboutItem);
+	helpMenu.add(manualItem);
 	aboutItem.addActionListener(this);
+	manualItem.addActionListener(this);
     }
   
     public void removeCodeItems()
@@ -214,4 +257,22 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	boardMenu.add(megaItem);
 	boardMenu.add(mega2560Item);
     }
+
+    public void createProjectMenu()
+    {
+	importArduinoFileItem = new JMenuItem("Import Arduino File");
+	openSearduinoProjectItem = new JMenuItem("Open Searduino Project");
+	buildItem = new JMenuItem("Build");
+
+	importArduinoFileItem.addActionListener(this);
+	openSearduinoProjectItem.addActionListener(this);
+	buildItem.addActionListener(this);
+
+	projectMenu.add(importArduinoFileItem);
+	projectMenu.add(openSearduinoProjectItem);
+	projectMenu.add(buildItem);
+
+    }
+
+
 }
