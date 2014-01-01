@@ -52,9 +52,10 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     Logger logger ;
     LCD    lcd ;
     InfoPanel infoPanel;
+    ProjectPanel projectPanel;
     Container pane; 
 
-    private int codeNamesToStore = 10;
+    private int codeNamesToStore ;
     private int nrpins = 0;
     public String version;
     //    public String boardName;
@@ -78,9 +79,9 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	jpref = new JearduinoPreferences();
 
-	pane = getContentPane();
+	codeNamesToStore = jpref.getArduinoCodeNameCount();
 
-	//	System.out.println("BOARD: " + jpref.getBoard());
+	pane = getContentPane();
 
 	pane.setLayout(new GridBagLayout());
 
@@ -101,9 +102,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	pinPanel.setVisible(true);
 	pinPanel.setLayout(new GridLayout());
 
-	
 	logPanel.setLayout(new BoxLayout(logPanel, BoxLayout.PAGE_AXIS));
-
 
 	ec = new ExecControl(this);
 	controlPanel.add(ec);
@@ -117,6 +116,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	searduino = new Searduino();
 	infoPanel = new InfoPanel();
+	projectPanel = new ProjectPanel();
 
 	logger = new Logger( "Log");
 	serial = new Logger( "Serial");
@@ -156,7 +156,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	searduino.registerLogCallback(this);
 	searduino.registerLCDCallback(this);
 
-	infoPanel.setArduinoCodeName(searduino.getArduinoCodeName());
+	projectPanel.setArduinoCodeName(searduino.getArduinoCodeName());
 	infoPanel.setSearduinoVersion(searduino.getSearduinoVersion());
 
 	setupSizes();
@@ -171,6 +171,9 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	serial.setMaximumSize(new Dimension(200, 500));
 	serial.setMinimumSize(new Dimension(200, 400));
 	*/
+	projectPanel.setMinimumSize(new Dimension( 400, 50));
+	projectPanel.setMaximumSize(new Dimension( 400, 50));
+
 	infoPanel.setMinimumSize(new Dimension( 400, 50));
 	infoPanel.setMaximumSize(new Dimension( 400, 50));
 
@@ -187,32 +190,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	int he = 0;
 
-	/*  row  1*/
-
-	c.fill = GridBagConstraints.HORIZONTAL;
-	c.ipady = he;      //
-	c.ipadx = 1;      //
-	c.weightx = 0.0;
-
-	c.gridx = 0;
-	c.gridy = 1;
-
-	c.gridwidth = 1;
-	pane.add(pinPanel, c);
-
-	c.fill = GridBagConstraints.HORIZONTAL;
-	c.ipady = he;      //
-	c.ipadx = 0;      //
-	c.weightx = 0.0;
-
-	c.gridx = 1;
-	c.gridy = 1;
-
-	c.gridwidth = 1;
-	pane.add(logPanel, c);
-
-	/* 2nd row */
-
+	/* Row 2 */
 
 	c.fill = GridBagConstraints.HORIZONTAL;
 	c.ipady = he;      //
@@ -223,7 +201,44 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	c.gridy = 0;
 
 	c.gridwidth = 2;
+	pane.add(projectPanel, c);
+
+
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.ipady = he;      //
+	c.ipadx = 0;      //
+	c.weightx = 0.0;
+
+	c.gridx = 0;
+	c.gridy = 1;
+
+	c.gridwidth = 2;
 	pane.add(controlPanel, c);
+
+
+	/*  row  1*/
+
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.ipady = he;      //
+	c.ipadx = 1;      //
+	c.weightx = 0.0;
+
+	c.gridx = 0;
+	c.gridy = 2;
+
+	c.gridwidth = 1;
+	pane.add(pinPanel, c);
+
+	c.fill = GridBagConstraints.HORIZONTAL;
+	c.ipady = he;      //
+	c.ipadx = 0;      //
+	c.weightx = 0.0;
+
+	c.gridx = 1;
+	c.gridy = 2;
+
+	c.gridwidth = 1;
+	pane.add(logPanel, c);
 
 	/* 3nd row */
 	c.fill = GridBagConstraints.HORIZONTAL;
@@ -232,7 +247,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	c.gridwidth = 1;
 
 	c.gridx = 0;
-	c.gridy = 2;
+	c.gridy = 3;
 
 	c.gridwidth = 2;
 	pane.add(infoPanel, c);
@@ -353,7 +368,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 		return ;
 	    }
 	*/
-	infoPanel.setArduinoCodeName(codeName);
+	projectPanel.setArduinoCodeName(codeName);
 	File f = new File(codeName);
 	if (f==null) {
 	    return ;
@@ -364,44 +379,77 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     public void showArduinoCodeNameMenu()
     {
 	jmenu.removeCodeItems();
-	for (int i=0;i<codeNamesToStore;i++)
-	    {
-		//		System.out.println("UPDATE MENU (" + i + ") WITH: code -------------> CODe: " +  jpref.getArduinoCodeName(i));
-		
-		jmenu.updateCodeItem(i, 
-				     jpref.getArduinoCodeName(i));
-	    }
+	for (int i=0;i<codeNamesToStore;i++) {
+	    System.out.println("UPDATE MENU (" + i + ") WITH: code -------------> CODe: " +  jpref.getArduinoCodeName(i));
+	    
+	    jmenu.updateCodeItem(i, 
+				 jpref.getArduinoCodeName(i));
+	}
     }
 
 
     public void saveArduinoCodeName(String canonName, String shortName)
     {
 	int ret;
+	boolean found=false;
 
-	/*
 	System.out.println("saveArduinoCodeName() --> getAndUseArduinoCodeName: code -------------> CODe: " + canonName );
-	ret = searduino.setArduinoCodeName(canonName);
-	if (ret!=0)
+
+	for (int i=0; i<codeNamesToStore;i++)
 	    {
-		return ;
+		int next = i+1;
+		if (next==codeNamesToStore) 
+		    {
+			break;
+		    }
+
+		if (i!=codeNamesToStore) 
+		    {
+			/*
+			 *
+			 * Check if duplicate entry
+			 *
+			 */
+			if ( (jpref.getArduinoCodeName(next).length() != 0 ) &&
+			     jpref.getArduinoCodeName(i).equals(jpref.getArduinoCodeName(next)))
+			    {
+				System.out.println("   Duplicate entry at : " + (next) );  
+
+				for (int j=next;j<codeNamesToStore;j++) 
+				    {
+
+					System.out.println("        MOVE   : " + (j+1) + " to " + j);  
+					jpref.setArduinoCodeName(j,jpref.getArduinoCodeName(j+1));
+
+					System.out.println("        REMOVE : " + (j+1) );  
+					jpref.unsetArduinoCodeName(j+1);
+				    }
+			    }
+		    }
+		if (canonName.equals(jpref.getArduinoCodeName(i))) 
+		    {
+			found=true;
+		    }
 	    }
-	*/
+
+	if(found) { System.out.println(" Not adding menu item, since it's already there: " + canonName); return ; }
 
 	for (int i=(codeNamesToStore-1);i>-1;i--)
 	    {
-		//		System.out.println("CURRENT MENU["+(i+1)+"]"  + jpref.getArduinoCodeName(i+1) );  
-	    }
-	for (int i=(codeNamesToStore-1);i>-1;i--)
-	    {
-		//		System.out.println("UPDATE MENU["+(i+1)+"]  " + jpref.getArduinoCodeName(i) + " prev: [ " + i + "]" + jpref.getArduinoCodeName(i+1));  
+		System.out.println("UPDATE MENU["+(i+1)+"]  " + 
+				   jpref.getArduinoCodeName(i) + 
+				   " prev: [ " + i + "]" + 
+				   jpref.getArduinoCodeName(i+1));  
+
 		jpref.setArduinoCodeName(i+1, 
 					 jpref.getArduinoCodeName(i));
+		
 	    }
 
 	//	System.out.println("UPDATE MENU["+(0)+"]  " + canonName);  
 	jpref.setArduinoCodeName(0, canonName);
 	
-	infoPanel.setArduinoCodeName(shortName);
+	projectPanel.setArduinoCodeName(shortName);
 	//	searduino.setArduinoCodeName(canonName);
 	showArduinoCodeNameMenu();
     }
@@ -425,7 +473,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	catch (java.lang.UnsatisfiedLinkError e)
 	    {
 		System.out.println("EXCEPTION!  - FAILED SETTING arduino code -------------> BOARD: " + boardCode );
-		infoPanel.setArduinoCodeName("");
+		projectPanel.setArduinoCodeName("");
 		return ;
 	    }
 	//	System.out.println("New board code seems fine: " + f.getName() );
@@ -435,7 +483,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void handleArduinoCodeNameEvent(int codeIdx)
     {
-	infoPanel.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
+	projectPanel.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
 	searduino.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
 	ec.setStartable();
     }
