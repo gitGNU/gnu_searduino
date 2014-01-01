@@ -25,23 +25,19 @@ package com.sandklef.jearduino;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.BorderFactory;
 
 public class InfoPanel extends JPanel 
 {
 
     JLabel infoLabel;
-    String projectName;
     String boardName;
     String searduinoVersion;
-    String arduinoCodeName;
     
     public void updateText()
     {
 	String text = "Searduino: "      + searduinoVersion + 
-	    "  Board: "        + boardName + 
-	    "  Project: "        + projectName + 
-	    "  Arduino code: " + arduinoCodeName;
-	//	System.out.println("UPDATING INFO TEXT TO: " + text );
+	    "  Board: "        + boardName ;
 	infoLabel.setText(text);
 
     }
@@ -52,21 +48,9 @@ public class InfoPanel extends JPanel
 	updateText();
     }
 
-    public void setProjectName(String b)
-    {
-	projectName = b;
-	updateText();
-    }
-
     public void setSearduinoVersion(String v)
     {
 	searduinoVersion = v;
-	updateText();
-    }
-
-    public void setArduinoCodeName(String c)
-    {
-	arduinoCodeName = c;
 	updateText();
     }
 
@@ -74,9 +58,9 @@ public class InfoPanel extends JPanel
     {
 	infoLabel = new JLabel();
 
-	setArduinoCodeName("none");
+	setBorder(BorderFactory.createTitledBorder("Information"));
+	
 	setSearduinoVersion("0");
-	setProjectName("none");
 	setBoardName("none");
 
 	add(infoLabel);
