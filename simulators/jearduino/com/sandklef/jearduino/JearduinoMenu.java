@@ -39,9 +39,11 @@ import java.awt.event.*;
 
 public class JearduinoMenu extends JMenuBar implements ActionListener {
 
-
-    BoardEvent be;
-    FileEvent  fe;
+    BoardEvent    be;
+    FileEvent     fe;
+    DirEvent      de;
+    InoDirEvent   ie;
+    JearduinoEvent je;
     ArduinoCodeNameEvent  ae;
 
     /* Level 1 */
@@ -74,11 +76,15 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     JFileChooser fc;
     
 
-    public JearduinoMenu(BoardEvent boardEv, FileEvent fileEv, ArduinoCodeNameEvent  ardEv )
+    public JearduinoMenu(JearduinoEvent jeardEv, BoardEvent boardEv, FileEvent fileEv, 
+			 DirEvent dirEv, InoDirEvent inoEv, ArduinoCodeNameEvent  ardEv )
     {
 	be = boardEv;
 	fe = fileEv;
+	de = dirEv;
 	ae = ardEv;
+	ie = inoEv;
+	je = jeardEv;
 
 	codeItem = new JMenuItem[10];
 
@@ -107,7 +113,15 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     public void findArduinoCode()
     {
-	fc = new JFileChooser();
+	String searduino_default_path = System.getProperty("user.home") + "/searduino";
+
+	String searduino_dir = System.getProperty("searduino.project.dir");
+
+	if (searduino_dir==null) {
+	    searduino_dir = searduino_default_path;
+	}
+
+	fc = new JFileChooser(new File(searduino_dir));
 
 	int returnVal = fc.showOpenDialog(JearduinoMenu.this);
 	
@@ -125,6 +139,71 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	} else {
 	    System.out.println("Open command cancelled by user." );
 	}
+    }
+
+    public void findInoCode()
+    {
+	String ino_default_path="/usr/share/doc/arduino-core/examples/";
+
+	String ino_dir = System.getProperty("searduino.arduinoex.dir");
+
+	if (ino_dir==null) {
+	    ino_dir = ino_default_path;
+	}
+		
+	fc = new JFileChooser(new File(ino_dir));
+	fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+	int returnVal = fc.showOpenDialog(JearduinoMenu.this);
+
+	if (returnVal == JFileChooser.APPROVE_OPTION) {
+	    File file = fc.getSelectedFile();
+	    //This is where a real application would open the file.
+	    try {
+		System.out.println("Opening: " + file.getCanonicalPath()  );
+		ie.handleInoDirEvent(file);
+	    }
+	    catch (java.io.IOException e)
+		{
+		    System.out.println("Uh oh... could not get file name" );
+		}
+	} else {
+	    System.out.println("Open command cancelled by user." );
+	}
+	
+    }
+
+    public void findSerduinoProject()
+    {
+	String searduino_default_path = System.getProperty("user.home") + "/searduino";
+
+	String searduino_dir = System.getProperty("searduino.project.dir");
+
+	if (searduino_dir==null) {
+	    searduino_dir = searduino_default_path;
+	}
+
+	fc = new JFileChooser(new File(searduino_dir));
+	fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+	int returnVal = fc.showOpenDialog(JearduinoMenu.this);
+
+	if (returnVal == JFileChooser.APPROVE_OPTION) {
+	    File file = fc.getSelectedFile();
+	    //This is where a real application would open the file.
+	    try {
+		System.out.println("Opening: " + file.getCanonicalPath()  );
+		de.handleSearduinoDirEvent(file);
+	    }
+	    catch (java.io.IOException e)
+		{
+		    System.out.println("Uh oh... could not get file name" );
+		}
+	} else {
+	    System.out.println("Open command cancelled by user." );
+	}
+	
+
     }
 
     public void showAbout()
@@ -184,15 +263,19 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	    }
 	else if  ( o == buildItem )
 	    {
-		System.out.println("BUILD");
+		je.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_BUILD_PROJECT, null);
 	    }
 	else if  ( o == importArduinoFileItem )
 	    {
 		System.out.println("importArduinoFileItem");
+		findInoCode();
 	    }
 	else if  ( o == openSearduinoProjectItem )
 	    {
 		System.out.println("openSearduinoProjectItem");
+
+		findSerduinoProject();
+
 	    }
 	else if ( codeIdx != -1 )
 	    {
