@@ -43,8 +43,10 @@ class Logger extends JPanel {
     }
 
     public void addLog(String data) {
-	textArea.append(data);
+	textArea.append(data+"\n");
 	this.validate();
-	textArea.setCaretPosition(textArea.getDocument().getLength());
+	textArea.setCaretPosition(textArea.getDocument().getLength()); 
+	this.revalidate();
+	this.repaint();
     }
 }
