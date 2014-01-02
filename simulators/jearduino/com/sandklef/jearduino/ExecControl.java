@@ -30,8 +30,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
-import java.awt.GridLayout;
-import java.awt.Dimension;
 
 public class ExecControl extends JPanel implements ActionListener
 {
@@ -50,23 +48,15 @@ public class ExecControl extends JPanel implements ActionListener
     public ExecControl(ExecEvent e)
     {
 	
-	//	super(new GridLayout(1, 4));    
 	setBorder(BorderFactory.createTitledBorder("Execution"));
 	
-	// setMaximumSize(new Dimension(500, 200));
-	// setMinimumSize(new Dimension(200, 50));
-
 	start  = new JButton("Start");
-	//        start.setPreferredSize(new Dimension(80, 20));
 
 	pause  = new JButton("Pause");
-        //pause.setPreferredSize(new Dimension(80, 20));
 
 	resume = new JButton("Resume");
-        //resume.setPreferredSize(new Dimension(80, 20));
 
 	halt   = new JButton("Stop");
-        //halt.setPreferredSize(new Dimension(70, 20));
 
 	ee = e;
 
@@ -84,6 +74,9 @@ public class ExecControl extends JPanel implements ActionListener
 	pause.setEnabled(false);
 	resume.setEnabled(false);
 	halt.setEnabled(false);
+
+	setVisible(true);
+
     }
 
     public void setStates(Boolean startState, 
@@ -95,6 +88,20 @@ public class ExecControl extends JPanel implements ActionListener
 	pause.setEnabled(pauseState);
 	resume.setEnabled(resumeState);
 	halt.setEnabled(haltState);
+    }
+			  
+    public void unsetStartable()
+    {
+	start.setEnabled(false);
+    }
+			  
+			  
+    public void unsetAll()
+    {
+	start.setEnabled(false);
+	pause.setEnabled(false);
+	resume.setEnabled(false);
+	halt.setEnabled(false);
     }
 			  
     public void setStartable()
