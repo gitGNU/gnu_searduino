@@ -39,34 +39,36 @@ News in coming 0.8
 
     New command line arguments:
 
-         --arduino-code <FILE>  - loads <FILE> for use
-         --board <BOARD>        - sets <BOARD> to use
-         --start                - starts your code as soon as it is loaded
+      --arduino-code <FILE>  - loads <FILE> for use
+      --board <BOARD>        - sets <BOARD> to use
+      --start                - starts your code as soon as it is loaded
 
   Stream simulator:
   ---------------------
 
-       New command line arguments:
+    New command line arguments:
 
-         --searduino-project <di> - load searduino project dir
+    --searduino-project <di> - load searduino project dir
 
   New program:
   ---------------------
 
-       bin/searduino-builder - to ease up builds 
-       bin/searduino-stream.sh - wrapper for streamed simulator
+    bin/searduino-builder - to ease up builds 
+    bin/searduino-stream.sh - wrapper for streamed simulator
 
   Configuration:
   ---------------------
 
-       share/searduino/settings - conf file for Searduino (logs etc)
-       share/searduino/functions - basic bash functions for scripts and wrappers
+    share/searduino/settings - conf file for Searduino (logs etc)
+    share/searduino/functions - basic bash functions for scripts and wrappers
 
   New implemented API functions: 
   ---------------------
 
   Bugs fixed:
   -------------------
+
+   * Wrong month in logs
 
 
 New in 0.7
