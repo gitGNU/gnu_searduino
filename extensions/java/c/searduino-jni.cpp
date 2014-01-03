@@ -29,7 +29,7 @@
 #include <stdio.h>
 #include <pthread.h>
 
-pthread_t arduino_thread[10];
+static pthread_t arduino_thread[10];
 int thread_index=0;
 
 jmethodID pin_mode_callback;
@@ -72,7 +72,7 @@ void
 my_dm_sim_callback(uint8_t pin, uint8_t mode)
 {
   //  fprintf (stdout,"ALMOST JAVA (C++) CALLBACK0 :: digmod:%d:%d\n",pin, mode);
-
+  
   CHECK_CALLBACK_VOID(pin_mode_callback);
   JNIEnv * g_env;
   int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
@@ -185,7 +185,7 @@ my_type_sim_callback(uint8_t pin, uint8_t pin_type)
 
 
 
-void* arduino_code(void *in)
+void* arduino_code_impl(void *in)
 {
   //  printf ("arduino_code:    %p\n", searduino_main_entry); fflush(stdout);
 
@@ -337,10 +337,15 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
 
   printf ("cancel thread\n");
 
-  //  seasim_set_halted();
+  seasim_set_halted();
 
-  ret = pthread_cancel(arduino_thread[thread_index]);
-  printf ("cancel thread %d\n", ret);
+  if (arduino_thread[thread_index]!=0)
+    {
+      printf ("cancel thread %u\n", (unsigned int)arduino_thread[thread_index]);
+      ret = pthread_cancel(arduino_thread[thread_index]);
+      arduino_thread[thread_index]=0;
+      printf ("cancel thread %d\n", ret);
+    }
 
   printf ("cancel thread returning\n");
   return ;
@@ -388,17 +393,33 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
   (JNIEnv *, jobject)
 {
   int retval;
-  
-  printf ("joining thread....\n");
-  //  pthread_join(arduino_thread[thread_index], (void**)&retval);
+  int ret;
+  seasim_set_halted();
+
+  if (arduino_thread[thread_index]!=0) 
+    {
+      printf ("cancel thread %u\n", (unsigned int)arduino_thread[thread_index]);
+      ret = pthread_cancel(arduino_thread[thread_index]);
+      printf ("cancel thread %d\n", ret);
+      arduino_thread[thread_index]=0;
+    }
+
+  //pthread_join(arduino_thread[thread_index], (void**)&retval);
+  //printf ("starting thread....join returned: %d\n", retval);
 
   //  thread_index++;
 
-  printf ("starting thread....join returned: %d\n", retval);
-  printf ("starting thread....thread: %p\n", arduino_thread);
-  printf ("starting thread....thread: %p\n", &arduino_thread);
+  /*
+    printf ("starting thread....join returned: %d\n", retval);
+    printf ("starting thread....thread: %p\n", arduino_thread);
+    printf ("starting thread....thread: %p\n", &arduino_thread);
+  */
+
+  printf ("Call seasim_set_running()\n");
   seasim_set_running();
-  pthread_create(&arduino_thread[thread_index], NULL, arduino_code, NULL);
+
+  printf ("Call pthreade_create %d %d \n", thread_index, arduino_code_impl);
+  pthread_create(&arduino_thread[thread_index], NULL, arduino_code_impl, NULL);
 }
 
 
@@ -462,7 +483,7 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setBoardName
 
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getCurrentPinType
-  (JNIEnv *env, jobject obj, jint pin)
+(JNIEnv *env, jobject obj, jint pin)
 {
   jint ret =  seasim_get_current_pin_type(pin);
 
@@ -484,15 +505,22 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_hasGenericPinType
 }
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setGenericInput
-  (JNIEnv *env, jobject obj, jint pin, jint val, jint pin_type)
+(JNIEnv *env, jobject obj, jint pin, jint val, jint pin_type)
 {
   seasim_fake_input(pin, val, pin_type);
 }
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getNrOfPins
-  (JNIEnv *, jobject)
+(JNIEnv *, jobject)
 {
   return seasim_get_nr_of_pins();
+}
+
+
+JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_closeArduinoCode
+(JNIEnv *env, jobject o)
+{
+  seasim_close_arduino_code_name();
 }
 
 
