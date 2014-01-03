@@ -76,7 +76,7 @@ parse_args()
     then
 	export SEARDUINO_PATH=$1
 	export FIRST_CHAR=${SEARDUINO_PATH:0:1}
-	echo " FIRST_CHAR: \"$FIRST_CHAR\""
+#	echo " FIRST_CHAR: \"$FIRST_CHAR\""
 	if [ "$FIRST_CHAR" = "/" ]
 	then
 	    SEARDUINO_PATH=$1/../../../../searduino
