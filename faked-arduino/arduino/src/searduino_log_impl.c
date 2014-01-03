@@ -200,7 +200,7 @@ int searduino_logger_log_impl(searduino_logger *logger,
       fprintf(fp, " -- Log file for %s (%s) --\n", PACKAGE, VERSION);
       fprintf(fp, " -- Created: %.4d-%.2d-%.2d %.2d:%.2d:%.2d --\n", 
 	      1900+loctime->tm_year,
-	      loctime->tm_mon,
+	      loctime->tm_mon+1,
 	      loctime->tm_mday,
 	      loctime->tm_hour,
 	      loctime->tm_min,
@@ -208,7 +208,10 @@ int searduino_logger_log_impl(searduino_logger *logger,
       intro_printed = 1;
       
     }
-  fprintf(fp, "[%.2d:%.2d:%.2d] ", 
+  fprintf(fp, "[%.4d-%.2d-%.2d  %.2d:%.2d:%.2d sarduino-log] ", 
+	  1900+loctime->tm_year,
+	  loctime->tm_mon+1,
+	  loctime->tm_mday,
 	  loctime->tm_hour,
 	  loctime->tm_min,
 	  loctime->tm_sec  );
