@@ -74,6 +74,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     JMenuItem aboutItem;
     JMenuItem manualItem;
+    JMenuItem jearduinoManualItem;
     JMenuItem codeItem[];
 
     JFileChooser fc;
@@ -228,9 +229,17 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	} catch (java.io.IOException e)  {
 	    System.out.println("Could not open manual" );
 	}
-
     }
-	
+
+    public void showJearduinoManual()
+    {
+	System.out.println("Show Jearduino manual");
+	try {
+	    Desktop.getDesktop().open(new File("/opt/share/searduino/doc/jearduino.html"));
+	} catch (java.io.IOException e)  {
+	    System.out.println("Could not open jearduino manual" );
+	}
+    }
 
     public int handleCodeChoice(Object o)
     {
@@ -271,6 +280,10 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	    {
 		showManual();
 	    }
+	else if  ( o == jearduinoManualItem )
+	    {
+		showJearduinoManual();
+	    }
 	else if  ( o == buildItem )
 	    {
 		je.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_BUILD_PROJECT, null);
@@ -300,12 +313,15 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     public void createHelpMenu()
     {
 	aboutItem = new JMenuItem("About") ;
-	manualItem = new JMenuItem("Manual") ;
+	manualItem = new JMenuItem("Searduino Manual") ;
+	jearduinoManualItem = new JMenuItem("Jearduino Manual") ;
 
 	helpMenu.add(aboutItem);
+	//	helpMenu.add(jearduinoManualItem);
 	helpMenu.add(manualItem);
 	aboutItem.addActionListener(this);
 	manualItem.addActionListener(this);
+	//jearduinoManualItem.addActionListener(this);
     }
   
     public void removeCodeItems()
