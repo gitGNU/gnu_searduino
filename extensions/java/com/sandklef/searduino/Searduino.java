@@ -40,6 +40,7 @@ public class Searduino
     public  native void startArduinoCode();
 
     public  native String getArduinoCodeName();
+    public  native void   closeArduinoCode();
     public  native String getSearduinoVersion();
     public  native String getSearduinoName();
     public  native String getBoardName();
