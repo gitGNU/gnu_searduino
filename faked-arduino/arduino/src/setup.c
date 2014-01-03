@@ -46,6 +46,7 @@ int searduino_exec_available = 0 ;
 /* global */
 searduino_main_ptr_ptr searduino_main_entry = NULL;
 
+void *arduino_lib;
 static char arduino_code[1024];
 
 #define SEARDUIONO_SIM_RUNNING 0
@@ -184,7 +185,7 @@ searduino_set_arduino_code_name(const char* libname)
       return 0;
     }
 
-  //  printf("Setting arduino code name: %s   (setup.c)\n", libname);
+  printf(" --------------------------------------- Setting arduino code name: %s   (setup.c)\n", libname);
   strncpy (arduino_code, libname, 1024);
 
   ret = load_arduino_code();
@@ -200,10 +201,10 @@ searduino_set_arduino_code_name(const char* libname)
 }
 
 
+
 int
 load_arduino_code(void)
 {
-  void *arduino_lib;
   char *ard_lib_name;
 
   ard_lib_name = get_arduino_code_name();
@@ -233,9 +234,25 @@ load_arduino_code(void)
 	  fprintf (stderr, "Couldn't find searduino_main in arduino code\n");
 	  return 1;
 	}
-      /* printf ("setup.c:  code at %p\n", searduino_main_entry); */
+      printf ("setup.c:  code at %p\n", searduino_main_entry); 
     }
   //  printf ("Successfully loaded code from %s\n", ard_lib_name);
+  return 0;
+}
+
+
+int
+close_arduino_code(void)
+{
+  arduino_code[0]='\0';
+
+  if (arduino_lib!=NULL) 
+    {
+      fprintf(stderr, "NOT CLOSING CL code at %u\n", arduino_lib);
+      //      dlclose(arduino_lib);
+      arduino_lib=NULL;
+    }
+
   return 0;
 }
 
