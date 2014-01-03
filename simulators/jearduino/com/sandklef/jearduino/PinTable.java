@@ -111,7 +111,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	 */
 	if (fromArduino) 
 	    {
-		
 		if (type==Searduino.SEARDUINO_PINTYPE_DIGITAL)
 		    {
 			JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
@@ -342,25 +341,28 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public void setMode(int pin, int mode)
     {
-	//	System.out.println("SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);
-	
+	System.out.println("---->SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);
+	System.out.flush();
 	/* INPUT */
 	if (mode==0) {
 	    /* Set input */
 	    ((JLabel)pins[pin][TABLE_MODE_POS]).setText("INPUT");
 	    pinMode[pin] = 0;
 
-	    /* Unset output 
+	    /* Unset output */
 	    if ( pinType[pin] == Searduino.SEARDUINO_PINTYPE_DIGITAL )
 		{
 		    ((JToggleButton)pins[pin][TABLE_INPUT_POS]).setVisible(true);
 		}
-	    else
+	    else if ( pinType[pin] == Searduino.SEARDUINO_PINTYPE_ANALOG )
 		{
 		    ((JSpinner)pins[pin][TABLE_INPUT_POS]).setVisible(true);
 		}
-	    */
-	    //	    ((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(false);
+	    else
+		{
+		    System.out.println("ERROR ---- SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);		    
+		}
+	    ((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(false);
 	}
 
 	/* OUTPUT */
@@ -375,13 +377,18 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		{
 		    ((JToggleButton)pins[pin][TABLE_INPUT_POS]).setVisible(false);
 		}
+	    else if ( pinType[pin] == Searduino.SEARDUINO_PINTYPE_ANALOG )
+		{
+		    ((JSpinner)pins[pin][TABLE_INPUT_POS]).setVisible(true);
+		}
 	    else
 		{
-		    ((JSpinner)pins[pin][TABLE_INPUT_POS]).setVisible(false);
+		    System.out.println("ERROR ---- SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);		    
 		}
 	    ((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(true);
 	    
 	}
+	System.out.println("<---- SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);
     }
 
     private void addTypeOnPin(ArrayList a, int pin, int type)

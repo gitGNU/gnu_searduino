@@ -28,7 +28,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.GridLayout;
 import javax.swing.BorderFactory;
-import java.awt.Dimension;
 
 class LCD extends JPanel {
     private JTextArea textArea = new JTextArea();

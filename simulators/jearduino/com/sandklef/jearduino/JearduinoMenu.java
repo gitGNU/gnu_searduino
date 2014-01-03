@@ -117,6 +117,9 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
 	String searduino_dir = System.getProperty("searduino.project.dir");
 
+	System.out.println("findArduinoCode -------------" );
+
+
 	if (searduino_dir==null) {
 	    searduino_dir = searduino_default_path;
 	}
@@ -282,6 +285,8 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 		System.out.println("Code at " + codeIdx +
 				   " was choosen " );
 		ae.handleArduinoCodeNameEvent(codeIdx);
+		System.out.println("Code at " + codeIdx +
+				   " was choosen ... call has been made" );
 	    }
     }
     

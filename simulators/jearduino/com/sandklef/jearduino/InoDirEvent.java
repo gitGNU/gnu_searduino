@@ -23,40 +23,10 @@
 
 package com.sandklef.jearduino;
 
-import javax.swing.JPanel;
-import javax.swing.JLabel;
-import javax.swing.BorderFactory;
-import java.awt.GridLayout;
+import java.io.File;
 
-public class ProjectPanel extends JPanel 
+
+public interface InoDirEvent
 {
-    JLabel projectLabel;
-    JLabel arduinoCodeLabel;
-
-    public void setProjectName(String p)
-    {
-	projectLabel.setText("Project name:" + p);
-    }
-
-    public void setArduinoCodeName(String ac)
-    {
-	arduinoCodeLabel.setText("<html><b>Arduino code:</b>" + ac  + "</html>");
-    }
-
-    public ProjectPanel()
-    {
-	super(new GridLayout(2, 2));    
-	setBorder(BorderFactory.createTitledBorder("Project"));
-
-	projectLabel     = new JLabel();
-	arduinoCodeLabel = new JLabel();
-
-	setArduinoCodeName("-");
-	setProjectName("-");
-
-	add(projectLabel); 
-	add(arduinoCodeLabel); 
-
-    }
-
+    public void handleInoDirEvent(File f);
 }
