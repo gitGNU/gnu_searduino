@@ -35,6 +35,8 @@ News in coming 0.8
 
     Tabbed paned
 
+      - extra tab with logs from arduino sim engine
+
     New command line arguments:
 
          --arduino-code <FILE>  - loads <FILE> for use
