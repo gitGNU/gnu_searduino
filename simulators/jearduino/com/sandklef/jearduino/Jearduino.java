@@ -199,7 +199,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     public void addLog(String data) {
 	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-M-dd hh:mm:ss");
 	String date = sdf.format(new Date());
-	String text =  "[" + date + "]: " + data + "\n";
+	String text =  "[" + date + " jearduino-logger]: " + data + "\n";
 	System.out.println("Logger:   " + data);
 	System.out.flush();
 
