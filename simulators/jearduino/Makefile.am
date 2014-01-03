@@ -22,6 +22,9 @@ JAVA_SOURCES = \
 	$(PKG_PATH)/LCD.java \
 	$(PKG_PATH)/Board.java \
 	$(PKG_PATH)/BoardEvent.java \
+	$(PKG_PATH)/TailerEvent.java \
+	$(PKG_PATH)/Tailer.java \
+	$(PKG_PATH)/FileLogger.java \
 	$(PKG_PATH)/JearduinoPreferences.java \
 	$(PKG_PATH)/InfoPanel.java    \
 	$(PKG_PATH)/ProjectPanel.java    \

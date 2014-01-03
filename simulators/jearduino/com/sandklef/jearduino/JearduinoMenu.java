@@ -45,6 +45,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     InoDirEvent   ie;
     JearduinoEvent je;
     ArduinoCodeNameEvent  ae;
+    TailerEvent    te;
 
     /* Level 1 */
     JMenu fileMenu;
@@ -77,7 +78,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     
 
     public JearduinoMenu(JearduinoEvent jeardEv, BoardEvent boardEv, FileEvent fileEv, 
-			 DirEvent dirEv, InoDirEvent inoEv, ArduinoCodeNameEvent  ardEv )
+			 DirEvent dirEv, InoDirEvent inoEv, ArduinoCodeNameEvent ardEv )
     {
 	be = boardEv;
 	fe = fileEv;

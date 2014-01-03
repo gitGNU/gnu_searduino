@@ -56,7 +56,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     PinTable pins;
     Logger serial ;
     Logger logger ;
-    Logger loggerBig ;
+    FileLogger fileLogger ;
     LCD    lcd ;
     InfoPanel infoPanel;
     ProjectPanel projectPanel;
@@ -75,7 +75,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     JPanel pinPanel;
     JPanel logPanel;
     JPanel loggerPanel;
-    JPanel loggerPanelBig;
+    JPanel fileLoggerPanel;
 
     ExecControl ec;
     Board       board;
@@ -116,7 +116,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	logPanel = new JPanel();
 
 	loggerPanel = new JPanel();
-	loggerPanelBig = new JPanel();
+	fileLoggerPanel = new JPanel();
 
 
 	pinPanel.setVisible(true);
@@ -142,25 +142,25 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	projectPanel = new ProjectPanel();
 
 	logger    = new Logger( "Log");
-	loggerBig = new Logger( "Log");
+	fileLogger = new FileLogger( "File Log");
 	serial = new Logger( "Serial");
 	lcd    = new LCD( "LCD");
 
 	serial.setMaximumSize(new Dimension(200, 400)); 
 	logger.setMaximumSize(new Dimension(200, 400)); 
-	loggerBig.setMaximumSize(new Dimension(200, 1000)); 
+	fileLogger.setMaximumSize(new Dimension(200, 1000)); 
 	lcd.setMaximumSize(new Dimension(200, 400)); 
 
 	serial.setPreferredSize(new Dimension(200, 100)); 
 	logger.setPreferredSize(new Dimension(600, 150)); 
-	loggerBig.setPreferredSize(new Dimension(600, 400)); 
+	fileLogger.setPreferredSize(new Dimension(600, 400)); 
 	lcd.setPreferredSize(new Dimension(200, 100)); 
 
 	logPanel.add(serial);
 	logPanel.add(lcd);
 
 	loggerPanel.add(logger);
-	loggerPanelBig.add(loggerBig);
+	fileLoggerPanel.add(fileLogger);
 
 	pins = new PinTable(this, searduino);
 	pins.setVisible(true);
@@ -190,7 +190,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	tabbedPane.addTab("Control", null, pane,
 			  "Main tab");
 
-	tabbedPane.addTab("Log", null, loggerPanelBig,
+	tabbedPane.addTab("Log", null, fileLoggerPanel,
 			  "Log tab");
 
 	setupSizes();
@@ -204,7 +204,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	System.out.flush();
 
 	logger.addLog(text);
-	loggerBig.addLog(text);
+	fileLogger.addLog(text);
     }
 
 
@@ -847,6 +847,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    /* If no code supplied on cli - use latest */
 	    jearduino.getAndUseArduinoCodeName(null);
 	}
+
+	jearduino.fileLogger.start();
 
 	/* Update menu items */
 	jearduino.showArduinoCodeNameMenu();
