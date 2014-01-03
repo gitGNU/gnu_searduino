@@ -34,6 +34,8 @@ import javax.swing.filechooser.*;
 import javax.swing.JFileChooser;
 import java.io.File;
 
+import java.awt.Desktop;
+
 import javax.swing.event.*;
 import java.awt.event.*;
 
@@ -48,10 +50,10 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     TailerEvent    te;
 
     /* Level 1 */
-    JMenu fileMenu;
+    JMenu arduinoMenu;
     JMenu boardMenu;
     JMenu helpMenu;
-    JMenu projectMenu;
+    JMenu searduinoMenu;
 
     /* Level 2 */
     JMenu codeMenu;
@@ -90,25 +92,24 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	codeItem = new JMenuItem[10];
 
 	/* Level 1 */
-	fileMenu    = new JMenu("File");
-	projectMenu = new JMenu("Project");
+	arduinoMenu    = new JMenu("Arduino");
+	searduinoMenu = new JMenu("Searduino");
 	boardMenu   = new JMenu("Board");
 	helpMenu    = new JMenu("Help");
 
 	loadFromFile = new JMenuItem("Load code from file");
 	loadFromFile.addActionListener(this);
 
+	codeMenu  = new JMenu("Previous programs");
 
-	codeMenu  = new JMenu("Previous code");
-
-	add(fileMenu);
-	add(projectMenu);
+	add(searduinoMenu);
+	add(arduinoMenu);
 	add(boardMenu);
 	add(helpMenu);
 
 	createBoardMenu();
-	createProjectMenu();
-	createFileMenu();
+	createSearduinoMenu();
+	createArduinoMenu();
 	createHelpMenu();
     }
 
@@ -167,10 +168,9 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 		System.out.println("Opening: " + file.getCanonicalPath()  );
 		ie.handleInoDirEvent(file);
 	    }
-	    catch (java.io.IOException e)
-		{
-		    System.out.println("Uh oh... could not get file name" );
-		}
+	    catch (java.io.IOException e) {
+		System.out.println("Uh oh... could not get file name" );
+	    }
 	} else {
 	    System.out.println("Open command cancelled by user." );
 	}
@@ -223,6 +223,12 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     public void showManual()
     {
 	System.out.println("Show manual");
+	try {
+	    Desktop.getDesktop().open(new File("/opt/share/searduino/doc/manual.html"));
+	} catch (java.io.IOException e)  {
+	    System.out.println("Could not open manual" );
+	}
+
     }
 	
 
@@ -291,12 +297,6 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	    }
     }
     
-    public void createFileMenu()
-    {
-	fileMenu.add(loadFromFile);
-	fileMenu.add(codeMenu);
-    }
-  
     public void createHelpMenu()
     {
 	aboutItem = new JMenuItem("About") ;
@@ -347,21 +347,27 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	boardMenu.add(mega2560Item);
     }
 
-    public void createProjectMenu()
+    public void createSearduinoMenu()
     {
-	importArduinoFileItem = new JMenuItem("Import Arduino File");
 	openSearduinoProjectItem = new JMenuItem("Open Searduino Project");
 	buildItem = new JMenuItem("Build");
 
-	importArduinoFileItem.addActionListener(this);
 	openSearduinoProjectItem.addActionListener(this);
 	buildItem.addActionListener(this);
 
-	projectMenu.add(importArduinoFileItem);
-	projectMenu.add(openSearduinoProjectItem);
-	projectMenu.add(buildItem);
+	searduinoMenu.add(openSearduinoProjectItem);
+	searduinoMenu.add(buildItem);
 
+	searduinoMenu.add(codeMenu);
+	searduinoMenu.add(loadFromFile);
     }
 
+    public void createArduinoMenu()
+    {
+	importArduinoFileItem = new JMenuItem("Import Arduino Sketches");
+	importArduinoFileItem.addActionListener(this);
+	arduinoMenu.add(importArduinoFileItem);
+    }
+  
 
 }
