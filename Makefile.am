@@ -1,13 +1,13 @@
 if DEBIAN_SOURCES
-   SUBDIRS =         debian-mk arduino-extras faked-arduino extensions simulators mk example test tools
+   SUBDIRS =         debian-mk arduino-extras faked-arduino extensions simulators mk example test tools scripts 
    DIST_SUBDIRS = $(SUBDIRS)
 else
-   SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools
+   SUBDIRS =   arduino-sources arduino-extras faked-arduino extensions simulators mk example test tools scripts
    DIST_SUBDIRS = $(SUBDIRS)
 endif
 # lib
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions bin/verify-install.sh bin/find_port.sh 
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions bin/verify-install.sh bin/find_port.sh script/settings.tmpl script/functions.tmpl 
 
 
 ARD_SRC= \
@@ -118,8 +118,8 @@ ARD_EXAMPLES =
 endif
 
 
-bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder bin/functions bin/verify-install.sh bin/find_port.sh
-
+bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder bin/functions  bin/find_port.sh 
+# bin/verify-install.sh
 #ACLOCAL_AMFLAGS = -I.m4
 
 pkgdataexampledir = $(pkgdatadir)/tmpl
@@ -131,7 +131,7 @@ dist_pkgdataexample_DATA = \
   tmpl/pre_c.tmpl      \
   tmpl/Makefile.tmpl
 
-EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile
+EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl
 
 #m4/gnulib-cache.m4
 #  ${ARD_SRC}

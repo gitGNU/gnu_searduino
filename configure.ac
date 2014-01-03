@@ -403,6 +403,26 @@ prepare_test_mk()
 
 }
 
+
+replace_vars()
+{
+    INFILE=$1
+    OUTFILE=$2
+
+   cat ${INFILE}                           | \
+        sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g"      | \
+        sed "s,__CYGWIN__,${CYGWIN},g"                 | \
+        sed "s,__DEBIAN_SOURCES__,$debian_sources,g"   | \
+        sed "s,__ARDUINO_PATH__,${ARDUINO_PATH},g"     | \
+        sed "s,__ARDUINO_SOURCES_FROM__,${ARDUINO_SOURCES_FROM},g"      | \
+        sed "s,__SEARDUINO_VERSION_MAJOR__,${VERSION_LONG_MAJOR},g"     | \
+        sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
+        sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
+        sed "s,__SEARDUINO_VERSION_PREPARE__,${VERSION_LONG_PREPARE},g" | \
+        sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"  > \
+        ${OUTFILE}
+}
+
 prepare_searduino_mk()
 {
 #  CYGWIN_NT-6.1
@@ -412,17 +432,8 @@ prepare_searduino_mk()
 	
     export VERSION_LONG=""
     set_lversion
-    cat mk/searduino.mk.tmpl                           | \
-        sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g"      | \
-        sed "s,__CYGWIN__,${CYGWIN},g"                 | \
-        sed "s,__ARDUINO_PATH__,${ARDUINO_PATH},g"     | \
-        sed "s,__ARDUINO_SOURCES_FROM__,${ARDUINO_SOURCES_FROM},g"      | \
-        sed "s,__SEARDUINO_VERSION_MAJOR__,${VERSION_LONG_MAJOR},g"     | \
-        sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
-        sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
-        sed "s,__SEARDUINO_VERSION_PREPARE__,${VERSION_LONG_PREPARE},g" | \
-        sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"  > \
-        mk/searduino.mk
+
+    replace_vars mk/searduino.mk.tmpl mk/searduino.mk
     exit_on_failure $? "Prepared searduino.mk "
 
     cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > arduino-sources/Makefile
@@ -432,6 +443,16 @@ prepare_searduino_mk()
     cat mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > arduino-sources/libraries/Makefile
     exit_on_failure $? "Prepared libraries Makefile"
 }
+
+prepare_scripts()
+{
+    replace_vars scripts/settings.tmpl  scripts/settings
+    exit_on_failure $? "Prepared settings script"
+
+    replace_vars scripts/functions.tmpl scripts/functions
+    exit_on_failure $? "Prepared functions script"
+}
+
 
 if test "x${prefix}" = "xNONE" ;
 then 
@@ -470,12 +491,16 @@ exit_on_failure $? "Prepared doc Makefile"
 prepare_examples
 prepare_searduino_mk
 prepare_test_mk
+prepare_scripts
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/pardon/searduino-pardon.sh
 exit_on_failure $? "Prepared python simulator wrapper script"
 
 cat simulators/jearduino/searduino-jearduino.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/jearduino/searduino-jearduino.sh
 exit_on_failure $? "Prepared Java simulator wrapper script"
+
+cat simulators/stream/searduino-stream.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/stream/searduino-stream.sh
+exit_on_failure $? "Prepared Streamed simulator wrapper script"
 
 cat bin/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/verify-install.sh
 exit_on_failure $? "Prepared installation verification script"
@@ -488,7 +513,7 @@ cat bin/searduino-builder.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin
 exit_on_failure $? "Prepared Searduino buider"
 
 
-AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/java/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile  simulators/jearduino/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile  example/many-boards/Makefile example/hid/Makefile example/log/Makefile example/digital-rw/Makefile example/serial/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile  test/mk/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile example/lcd-shield/Makefile example/toggle-pins/Makefile example/relay/Makefile example/verification/ok-version/Makefile  example/verification/nok-version/Makefile tools/Makefile ])
+AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/java/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile  simulators/jearduino/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile  example/many-boards/Makefile example/hid/Makefile example/log/Makefile example/digital-rw/Makefile example/serial/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/board-makefiles/Makefile test/Makefile  test/mk/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile example/lcd-shield/Makefile example/toggle-pins/Makefile example/relay/Makefile example/verification/ok-version/Makefile  example/verification/nok-version/Makefile tools/Makefile scripts/Makefile ])
 
 LIBXTST=""
 AC_CHECK_LIB(Xtst, XTestFakeMotionEvent, LIBXTST="-lXtst",[AC_CHECK_LIB(Xext,XTestFakeMotionEvent , LIBXTST="-lXext")])

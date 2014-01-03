@@ -1,2 +1,59 @@
-SEARDUINO_PATH=__INSTALL_DIR__
-TMPL_DIR=${SEARDUINO_PATH}/share/searduino/tmpl
+#
+# Arduino specific
+#
+export ARDUINO_PATH=__ARDUINO_PATH__
+
+
+#
+# Searduino specific
+#
+export SEARDUINO_PATH=__INSTALL_DIR__
+export DEBIAN_SOURCES=__DEBIAN_SOURCES__
+export TMPL_DIR=${SEARDUINO_PATH}/share/searduino/tmpl
+export SEARDUINO_PROJECT_DIR=${HOME}/searduino
+
+#
+# Logging 
+#
+# SEARDUINO_LOG_LEVEL - set log level (see levels below)
+# SEARDUINO_LOG - log to file
+#
+# Log levels:
+# ------------------
+#   4  Debug    
+#   3  Info     
+#   2  Warning  
+#   1  Error    
+#   0  None     
+#   10 Serial        
+#
+# File:
+# --------------
+#
+#   stderr - log to stderr
+#   stdout - log to stdout
+#   <file> - log to file pointed to by <file>
+#
+########
+#
+#export SEARDUINO_LOG_LEVEL=0
+#
+#export SEARDUINO_LOG=stderr
+#export SEARDUINO_LOG=stdout
+#export SEARDUINO_LOG=/tmp/searduino-internal.log
+
+
+
+################################################################## 
+#
+# Don't change anything below this point
+#
+if [ "$DEBIAN_SOURCES" = "yes" ]
+then
+    ARDUINO_INO_EX=/usr/share/arduino/examples/
+else
+    ARDUINO_INO_EX=${SEARDUINO_PATH}/share/examples/arduino/
+fi
+
+
+
