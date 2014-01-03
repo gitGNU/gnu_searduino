@@ -33,6 +33,10 @@ parse_args()
 		INO_FILE=$2
 		shift
 		;;
+	    "--build")
+		PROJECT_DIR=$2
+		shift
+		;;
 	    "--ino-dir")
 		INO_DIR=$2
 		shift
@@ -48,9 +52,18 @@ parse_args()
     
 }
 
+RET=0
+
 
 
 parse_args $*
+
+#echo "HOME:        ${HOME_DIR}"
+#echo "PROJECT DIR: $PROJECT_DIR"
+#echo "INO_FILE:    ${INO_FILE}"
+#echo "INO_DIR:     ${INO_DIR}"
+
+
 
 if [ "$INO_FILE" != "" ]
 then
@@ -60,7 +73,8 @@ then
 	exit $NON_EXIST_INO
     fi
     
-    echo ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} $INO_FILE
+    ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} $INO_FILE 2>&1 
+    RET=$?
 
 elif [ "$INO_DIR" != "" ]
 then
@@ -70,7 +84,8 @@ then
 	exit $NON_EXIST_INO
     fi
     
-    echo ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} $INO_DIR
+    ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} $INO_DIR 2>&1 
+    RET=$?
 
 elif [ "$PROJECT_DIR" != "" ]
 then
@@ -79,14 +94,13 @@ then
 	echo "Build directory does not exist"
 	exit $NON_EXIST_DIR
     fi
-    echo "Build $PROJECT_DIR"
+#    echo "Build $PROJECT_DIR"
+    cd $PROJECT_DIR
+    make clean shlib  2>&1 
+    RET=$?
 fi
 
 
-echo "HOME:        ${HOME_DIR}"
-echo "PROJECT DIR: $PROJECT_DIR"
 
 
-
-
-exit 0
+exit $RET
