@@ -155,6 +155,12 @@ seasim_set_arduino_code_name(const char* libname)
   return searduino_set_arduino_code_name(libname);
 }
 
+int
+seasim_close_arduino_code_name()
+{
+  return close_arduino_code();
+}
+
 char *
 seasim_get_arduino_code_name(void)
 {
@@ -274,5 +280,10 @@ uint8_t
 seasim_get_nr_of_pins(void)
 {
   return get_generic_nr_of_pins();
+}
+
+int seasim_set_log_level(int level)
+{
+  return searduino_set_log_level(level);
 }
 

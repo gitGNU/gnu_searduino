@@ -287,6 +287,10 @@ seasim_get_dig_mode(uint8_t pin);
 char *
 seasim_get_arduino_code_name(void);
 
+int
+seasim_close_arduino_code_name(void);
+
+
 /**
  * @name    seasim_set_arduino_code_name
  * @brief   Sets the name of the Arduino code (file name) loaded
@@ -649,6 +653,8 @@ seasim_get_supported_boards(void);
 uint8_t
 seasim_get_nr_of_pins(void);
 
+int 
+seasim_set_log_level(int level);
 
 #ifdef __cplusplus
 } /* extern "C" */
