@@ -45,6 +45,7 @@ int searduino_internal_init_log(char * name)
   char *env_var ; 
   int level ;
 
+
   if (internal_logger_impl.initialised!=0)
     {
       return 0;

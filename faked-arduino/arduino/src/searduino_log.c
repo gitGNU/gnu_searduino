@@ -34,15 +34,12 @@
 #else
 
 
-/* Stub only */
-
 static searduino_logger logger;
 
 int searduino_log_set_file(char *fname)
 {
   return searduino_logger_set_file(&logger, fname);
 }
-
 
 int searduino_get_log_level(void)
 {
