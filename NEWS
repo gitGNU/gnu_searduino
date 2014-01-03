@@ -1,4 +1,73 @@
-News in 0.7
+News in coming 0.8
+==============================================
+
+  In short:
+  ---------------------
+
+  Better integration with Arduino. 
+
+  With this release it is possible to import an Arduino file in to the
+  GUI Simulator (jearduino) and have the code automically built and
+  loaded so you can run your Arduino code. The resulting C code is
+  stored in ~/searduino/<ino-example>.
+
+
+  General changes:
+  ---------------------
+
+  Jearduino:
+  ---------------------
+
+    New menu items
+
+    * Import Arduino examples (ino files) 
+       
+      - Import an Arduino file which results in a Searduino project
+        ready for use in simulator
+
+    * Searduino projects 
+
+      - Work with directoris containing Searduino code
+
+    * Build 
+
+      - when having a project loaded 
+
+    Tabbed paned
+
+    New command line arguments:
+
+         --arduino-code <FILE>  - loads <FILE> for use
+         --board <BOARD>        - sets <BOARD> to use
+         --start                - starts your code as soon as it is loaded
+
+  Stream simulator:
+  ---------------------
+
+       New command line arguments:
+
+         --searduino-project <di> - load searduino project dir
+
+  New program:
+  ---------------------
+
+       bin/searduino-builder - to ease up builds 
+       bin/searduino-stream.sh - wrapper for streamed simulator
+
+  Configuration:
+  ---------------------
+
+       share/searduino/settings - conf file for Searduino (logs etc)
+       share/searduino/functions - basic bash functions for scripts and wrappers
+
+  New implemented API functions: 
+  ---------------------
+
+  Bugs fixed:
+  -------------------
+
+
+New in 0.7
 ==============================================
 
   General changes:
