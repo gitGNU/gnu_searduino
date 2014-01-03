@@ -167,6 +167,7 @@ int searduino_logger_log_impl(searduino_logger *logger,
   time_t curtime;
   struct tm *loctime;
 
+
   /* make sure we get a proper logger */
   if (logger==NULL)
     {
@@ -188,8 +189,9 @@ int searduino_logger_log_impl(searduino_logger *logger,
     }
 
   ret = 0 ;
-  /* printf ("LEVEL  %d %d  %d \n",  */
-  /* 	  level,  logger->current_log_level, ( level <= logger->current_log_level )); */
+
+  /* printf ("LEVEL  %d %d  %d \n",   */
+  /*  	  level,  logger->current_log_level, ( level <= logger->current_log_level )); */
 
   curtime = time (NULL); 
   loctime = localtime (&curtime);
