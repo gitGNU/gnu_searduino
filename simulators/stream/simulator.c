@@ -260,10 +260,13 @@ static const char* ARDUINO_CODE_ARG_LONG  = "--arduino-code";
 static const char* ARDUINO_CODE_ARG_SHORT = "-ac";
 static const char* ARDUINO_BOARD_ARG_LONG  = "--board";
 static const char* ARDUINO_BOARD_ARG_SHORT = "-b";
+static const char* INTERNAL_LOG_LONG  = "--log-level";
+static const char* INTERNAL_LOG_SHORT  = "-l";
 static const char* HELP_ARG_LONG  = "--help";
 static const char* HELP_ARG_SHORT = "-h";
 static const char* VERSION_ARG_LONG  = "--version";
 static const char* VERSION_ARG_SHORT = "-V";
+
 
 static void usage(void)
 {
@@ -323,6 +326,7 @@ main(int argc, char **argv)
   char *ard_board = "" ;
   int i = 0;
   int ret;
+  int internal_log=0;
 
   for (i=1;i<argc;i++)
     {
@@ -358,6 +362,23 @@ main(int argc, char **argv)
 	  else
 	    {
 	      ard_board = argv[i+1];
+	      i++;
+	    }
+	}
+      else if (ARGCMP(argv[i], 
+		 INTERNAL_LOG_LONG, 
+		 INTERNAL_LOG_SHORT))
+	{
+	  if (argv[i+1]==NULL)
+	    {
+	      printf ("Missing argument to %s, %s\n",
+		      INTERNAL_LOG_LONG, 
+		      INTERNAL_LOG_SHORT);
+	      return 1;
+	    }
+	  else
+	    {
+	      internal_log = atoi(argv[i+1]);
 	      i++;
 	    }
 	}
@@ -415,12 +436,12 @@ main(int argc, char **argv)
   
   if ( (ard_board == NULL) || (strlen(ard_board)==0) )
     {
-      fprintf(stderr, "Missing board information.... assuming Uno");
+      fprintf(stderr, "Missing board information.... assuming Uno\n");
       ard_board="Uno";
     }
   if ( ( ard_code==NULL) || ( strlen(ard_code)==0) )
     {
-      fprintf(stderr, "Missing arduino code to load");
+      fprintf(stderr, "Missing arduino code to load\n");
       return 1;
     }
 
@@ -433,6 +454,11 @@ main(int argc, char **argv)
   else 
     {
       sim_setup(ard_board, ard_code);
+    }
+
+  if ( internal_log != 0 ) 
+    {
+      seasim_set_log_level(internal_log);
     }
 
   pthread_create(&arduino_thread, NULL, arduino_code, NULL);

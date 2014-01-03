@@ -43,6 +43,9 @@ SEARDUINO_INC_PATH=../../arduino-sources/core
 SEARDUINO_LIB_INC_PATH=../../arduino-sources/libraries
 endif
 
+bin_SCRIPTS = searduino-stream.sh 
+
+EXTRA_DIST = searduino-stream.sh.tmpl $(bin_SCRIPTS) $(JAVA_SOURCES)
 
 
 AM_CFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/ -I../../arduino-extras/include/ $(GNULIB_PTHREAD_I) --std=c99
