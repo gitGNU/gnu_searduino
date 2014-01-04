@@ -1,7 +1,7 @@
 #
 #       Searduino
 #
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#  Copyright (C) 2011, 2012, 2014 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -20,6 +20,12 @@
 # MA  02110-1301, USA.                                              
 #
 #
+
+ifeq (${SEARDUINO_OVERRIDE_ARDUINO},)
+
+else
+ARDUINO=$(SEARDUINO_OVERRIDE_ARDUINO)
+endif
 
 ifndef ARDUINO
 $(error Variables not set correctly ARDUINO='${ARDUINO}')
