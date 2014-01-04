@@ -31,6 +31,8 @@ import java.io.File;
 public interface JearduinoEvent
 {
     public static int JEARDUINO_EVENT_BUILD_PROJECT = 1;
+    public static int JEARDUINO_EVENT_BUILD_ARDUINO = 2;
+    public static int JEARDUINO_EVENT_UPLOAD        = 3;
 
     public void handleJearduinoEvent(int i, Object o);
 }
