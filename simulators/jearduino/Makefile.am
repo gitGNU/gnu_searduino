@@ -30,7 +30,6 @@ JAVA_SOURCES = \
         ${PKG_PATH}/InfoPanel.java \
         ${PKG_PATH}/TailerEvent.java \
         ${PKG_PATH}/Jearduino.java \
-        ${PKG_PATH}/Menu.java \
         ${PKG_PATH}/PinEvent.java \
         ${PKG_PATH}/InoDirEvent.java \
         ${PKG_PATH}/JearduinoEvent.java \
