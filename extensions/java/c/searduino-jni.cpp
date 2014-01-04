@@ -478,7 +478,7 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setBoardName
 
   ret = seasim_set_board_name((char*)strCIn);
   
-  
+  return ret;
 }
 
 
