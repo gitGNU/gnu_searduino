@@ -706,22 +706,14 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	System.out.println(" 	 " + commandOutput);
     }
 
-    public void craeteSearduinoProjectFromIno()
-    {
-    }
-    
 
     public void handleJearduinoEvent(int i, Object o) {
 	if (i==JearduinoEvent.JEARDUINO_EVENT_BUILD_PROJECT) {
-	    try {
-		if (currentSearduinoProject!=null) {
-		    buildSearduinoProject(new File(currentSearduinoProject));
-		    
-		}
-	    }
-	    catch (IOException e) {
-		addLog("Failed opening file: " + currentSearduinoProject);
-	    }
+	    buildSearduinoProject(currentSearduinoProject);
+	} else if (i==JearduinoEvent.JEARDUINO_EVENT_BUILD_ARDUINO) {
+	    buildSearduinoProject(currentSearduinoProject, searduino.getBoardName());
+	} else if (i==JearduinoEvent.JEARDUINO_EVENT_UPLOAD) {
+	    ;
 	}
     }
 
@@ -747,17 +739,45 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }	
 
 
-    private void buildSearduinoProject(File  dir) throws IOException
+    private void buildSearduinoProject(File  dir, String board) 
     {
 	String shortDir     = dir.getName();
 	String searduinoDir = System.getProperty("searduino.project.dir") ;
-	String buildCommand = System.getProperty("searduino.dir") + "/bin/searduino-builder " ;
-	String buildArgs    = searduinoDir + "/" + shortDir;
-
+	String buildCommand = System.getProperty("searduino.dir") + 
+	    "/bin/searduino-builder " ;
+	String boardArgs="";
+	if (board.equals("")) {
+	    board = "stub";
+	}
+	
+	boardArgs = " --board " + board;
+	String buildArgs    = searduinoDir + "/" + shortDir + boardArgs;
+	
 	buildCommand = buildCommand + " " + buildArgs;
+	try { 
+	    execCommand(buildCommand);
+	    getAndUseSearduinoDir(dir);
+	} catch (IOException e) {
+	    addLog("Failed building file: " + currentSearduinoProject);
+	}
+    }
+    
+    private void buildSearduinoProject(String  dirS, String board) 
+    {
+	if (dirS==null) return ;
 
-	execCommand(buildCommand);
-	getAndUseSearduinoDir(dir);
+	File dir = new File(dirS);
+	buildSearduinoProject(dir, board);
+    }
+
+    private void buildSearduinoProject(String dirS) 
+    {
+	buildSearduinoProject(dirS, "stub");
+    }
+
+    private void buildSearduinoProject(File dir) 
+    {
+	buildSearduinoProject(dir, "stub");
     }
 
     private void createSearduinoFromIno(File dir) throws IOException
