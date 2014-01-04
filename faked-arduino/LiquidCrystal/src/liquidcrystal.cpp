@@ -94,6 +94,13 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
    lcd_lines   = lines;
    lcd_cols    = cols;
    lcd_dotsize = dotsize;
+
+   memset(lcd_data_rows[0].data, 0, LCD_STORAGE_SIZE);
+   memset(lcd_data_rows[1].data, 0, LCD_STORAGE_SIZE);
+
+   lcd_data_rows[0].data[0]='\0';
+   lcd_data_rows[1].data[0]='\0';
+
 }
 
 
