@@ -98,6 +98,8 @@ _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
 _LDFLAGS = $(USER_LD_FLAGS)  $(USER_ARDUINO_LD_FLAGS)  -Wl,-rpath,$(SEARDUINO_PATH)/lib 
 
 
+all: $(PROG)
+
 $(PROG).elf: $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX)
 	$(CXX) -Os -Wl,--gc-sections -mmcu=$(CPU)  -o $(PROG).elf $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) \
                 $(LIB)  -lm $(LDFLAGS) $(USER_ARDUINO_LDFLAGS) 

@@ -72,6 +72,8 @@ _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
 
 _LDFLAGS = $(USER_LD_FLAGS)  $(USER_STUB_LD_FLAGS) -lpthread -Wl,-rpath,$(SEARDUINO_PATH)/lib 
 
+all: $(SHLIB)
+
 $(PROG): $(LIB) $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN)
 	$(CXX) $(LIB) $(OBJ_MAIN) $(OBJ_C) $(OBJ_CXX) -o $(PROG) $(LDFLAGS)
 
