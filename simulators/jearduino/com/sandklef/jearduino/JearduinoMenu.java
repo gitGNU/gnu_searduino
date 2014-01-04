@@ -65,8 +65,12 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     JMenuItem loadFromFile;
 
-    /* PRoject menu */
+    /* Arduino menu */
     JMenuItem importArduinoFileItem;
+    JMenuItem verifyArduinoCodeItem;
+    JMenuItem uploadArduinoCodeItem;
+
+
     JMenuItem openSearduinoProjectItem;
     JMenuItem buildItem;
 
@@ -258,7 +262,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
-	System.out.println("MENU click " + e.getActionCommand() + " (" + e.getSource() + ")");
+	//	System.out.println("MENU click " + e.getActionCommand() + " (" + e.getSource() + ")");
 	
 	Object o = e.getSource();
 
@@ -292,6 +296,16 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	    {
 		System.out.println("importArduinoFileItem");
 		findInoCode();
+	    }
+	else if  ( o == verifyArduinoCodeItem )
+	    {
+		je.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_BUILD_ARDUINO, null);
+		System.out.println("verifyArduinoCodeItem");
+	    }
+	else if  ( o == uploadArduinoCodeItem )
+	    {
+		je.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_UPLOAD, null);
+		System.out.println("uploadArduinoCodeItem");
 	    }
 	else if  ( o == openSearduinoProjectItem )
 	    {
@@ -381,8 +395,17 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     public void createArduinoMenu()
     {
 	importArduinoFileItem = new JMenuItem("Import Arduino Sketches");
+	verifyArduinoCodeItem = new JMenuItem("Verify/build code");
+	uploadArduinoCodeItem = new JMenuItem("Upload to Arduino board");
+
+
 	importArduinoFileItem.addActionListener(this);
+	verifyArduinoCodeItem.addActionListener(this);
+	uploadArduinoCodeItem.addActionListener(this);
+
 	arduinoMenu.add(importArduinoFileItem);
+	arduinoMenu.add(verifyArduinoCodeItem);
+	arduinoMenu.add(uploadArduinoCodeItem);
     }
   
 
