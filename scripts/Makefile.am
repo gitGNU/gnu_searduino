@@ -1,6 +1,8 @@
 pkgdataexampledir = $(pkgdatadir)/scripts/
 dist_pkgdataexample_DATA = \
-	settings \
-	functions
+	settings     \
+	functions     \
+	settings.tmpl  \
+	functions.tmpl  
 
 
