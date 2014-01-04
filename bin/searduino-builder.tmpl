@@ -37,6 +37,9 @@ parse_args()
 		PROJECT_DIR=$2
 		shift
 		;;
+	    "--upload")
+		UPLOAD=" upload "
+		;;
 	    "--ino-dir")
 		INO_DIR=$2
 		shift
@@ -73,7 +76,7 @@ then
     BOARD=$(echo $BOARD | tr [A-Z] [a-z])
     export SEARDUINO_OVERRIDE_ARDUINO=$BOARD
     export SHLIB=""
-    MAKE_RULES="$MAKE_RULES all"
+    MAKE_RULES="$MAKE_RULES all $UPLOAD"
 else
     MAKE_RULES="$MAKE_RULES shlib"
 fi
