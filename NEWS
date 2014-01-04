@@ -37,6 +37,10 @@ News in coming 0.8
 
       - extra tab with logs from arduino sim engine
 
+    Manual
+
+      - open manual in browser
+
     New command line arguments:
 
       --arduino-code <FILE>  - loads <FILE> for use
