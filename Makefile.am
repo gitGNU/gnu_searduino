@@ -7,7 +7,7 @@ else
 endif
 # lib
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions bin/verify-install.sh bin/find_port.sh script/settings.tmpl script/functions.tmpl 
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions bin/verify-install.sh bin/find_port.sh scripts/settings.tmpl scripts/functions.tmpl 
 
 
 ARD_SRC= \
