@@ -41,6 +41,10 @@ parse_args()
 		INO_DIR=$2
 		shift
 		;;
+	    "--board")
+		BOARD=$2
+		shift
+		;;
 	    *)
 		PROJECT_DIR="$1"
 		break
@@ -62,6 +66,17 @@ parse_args $*
 #echo "PROJECT DIR: $PROJECT_DIR"
 #echo "INO_FILE:    ${INO_FILE}"
 #echo "INO_DIR:     ${INO_DIR}"
+
+MAKE_RULES="clean "
+if [ "$BOARD" != "" ] && [ "$BOARD" != "stub" ] 
+then
+    BOARD=$(echo $BOARD | tr [A-Z] [a-z])
+    export SEARDUINO_OVERRIDE_ARDUINO=$BOARD
+    export SHLIB=""
+    MAKE_RULES="$MAKE_RULES all"
+else
+    MAKE_RULES="$MAKE_RULES shlib"
+fi
 
 
 
@@ -96,7 +111,7 @@ then
     fi
 #    echo "Build $PROJECT_DIR"
     cd $PROJECT_DIR
-    make clean shlib  2>&1 
+    make $MAKE_RULES  2>&1 
     RET=$?
 fi
 
