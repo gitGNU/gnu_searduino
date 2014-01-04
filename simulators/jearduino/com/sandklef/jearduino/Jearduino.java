@@ -711,9 +711,9 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	if (i==JearduinoEvent.JEARDUINO_EVENT_BUILD_PROJECT) {
 	    buildSearduinoProject(currentSearduinoProject);
 	} else if (i==JearduinoEvent.JEARDUINO_EVENT_BUILD_ARDUINO) {
-	    buildSearduinoProject(currentSearduinoProject, searduino.getBoardName());
+	    buildSearduinoProject(currentSearduinoProject, searduino.getBoardName(), false);
 	} else if (i==JearduinoEvent.JEARDUINO_EVENT_UPLOAD) {
-	    ;
+	    buildSearduinoProject(currentSearduinoProject, searduino.getBoardName(), true);
 	}
     }
 
@@ -739,7 +739,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }	
 
 
-    private void buildSearduinoProject(File  dir, String board) 
+    private void buildSearduinoProject(File  dir, String board, boolean upload) 
     {
 	String shortDir     = dir.getName();
 	String searduinoDir = System.getProperty("searduino.project.dir") ;
@@ -749,9 +749,14 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	if (board.equals("")) {
 	    board = "stub";
 	}
+	String uploadArgs="";
+	if (upload) {
+	    uploadArgs=" --upload ";
+	}
 	
-	boardArgs = " --board " + board;
-	String buildArgs    = searduinoDir + "/" + shortDir + boardArgs;
+
+	boardArgs = " --board " + board + " ";
+	String buildArgs    = boardArgs + uploadArgs + searduinoDir + "/" + shortDir ;
 	
 	buildCommand = buildCommand + " " + buildArgs;
 	try { 
@@ -762,12 +767,25 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	}
     }
     
+    private void buildSearduinoProject(File  dir, String board) 
+    {
+	buildSearduinoProject(dir, board, false) ;
+    }
+    
     private void buildSearduinoProject(String  dirS, String board) 
     {
 	if (dirS==null) return ;
 
 	File dir = new File(dirS);
 	buildSearduinoProject(dir, board);
+    }
+
+    private void buildSearduinoProject(String  dirS, String board, boolean upload) 
+    {
+	if (dirS==null) return ;
+
+	File dir = new File(dirS);
+	buildSearduinoProject(dir, board, upload);
     }
 
     private void buildSearduinoProject(String dirS) 
