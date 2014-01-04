@@ -55,10 +55,11 @@ USER_LD_FLAGS=__BUILD_LD_FLAGS__
 
 SEARDUINO_PATH=__SEARDUINO_PATH__
 
-all: __ALL_DEP__
-
 simulate:
-	$(SEARDUINO_PATH)/bin/searduino-stream-sim --arduino-code ./$(SHLIB)
+	$(SEARDUINO_PATH)/bin/searduino-stream.sh --arduino-code ./$(SHLIB)
+
+simulate-gui:
+	$(SEARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code ./$(SHLIB)
 
 include __SEARDUINO_MK__
 
