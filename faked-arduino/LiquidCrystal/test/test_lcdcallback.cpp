@@ -42,6 +42,11 @@ void
 lcd_callback(const char *str1, const char *str2)
 {
   static int cb_counter;
+  printf ("cb %d\n", cb_counter);
+
+  printf ("LCD_CALLACK() LCD[0]: '%s' (size: %d)\n" , str1, strlen(str1));
+  printf ("LCD_CALLACK() LCD[1]: '%s' (size: %d)\n" , str2, strlen(str2));
+  fflush(stdout);  /*  MIND YOU, IS FLUSH REALLY NEEDED!!! */ 
 
   strcpy(storage_buffer1, str1);
   strcpy(storage_buffer2, str2);
@@ -50,8 +55,11 @@ lcd_callback(const char *str1, const char *str2)
   switch (cb_counter)
     {
     case 0:
+      printf ("str1 %d   str2 %d\n", strlen(str1), strlen(str2));
       fail_if(strlen(str1)!=16);  
-      fail_if(strlen(str2)!=0); 
+      fail_if(strlen(str2)!=16); 
+      fail_if(strncmp(str2,"     " , 5)!=0); 
+
       break;
     case 1:
       fail_if(strlen(str1)!=16);  
@@ -59,7 +67,8 @@ lcd_callback(const char *str1, const char *str2)
       break;
     case 2:
       printf ("CB #3 '%s'  '%s'\n", str1, str2);
-      fail_if(strlen(str1)!=1);  
+      fail_if(strlen(str1)!=16); 
+      fail_if(strncmp(str1,"     " , 5)!=0); 
       fail_if(strlen(str2)!=16); 
       break;
     case 3:
@@ -67,16 +76,16 @@ lcd_callback(const char *str1, const char *str2)
 	int s1 = strlen(str1);
 	int s2 = strlen(str2);
 	printf ("CB #4 '%s' (%d)  '%s' (%d)\n", str1, s1, str2, s2);
-	fail_if(s1!=1);  
-	fail_if(s2!=1); 
+	fail_if(strlen(str1)!=16); 
+	fail_if(strncmp(str1,"     " , 5)!=0); 
+
+	fail_if(strlen(str2)!=16); 
+	fail_if(strncmp(str2,"     " , 5)!=0); 
       }
       break;
       
     }
 
-  printf ("LCD_CALLACK() LCD[0]: %s\n" , str1);
-  printf ("LCD_CALLACK() LCD[1]: %s\n" , str2);
-  fflush(stdout);  /*  MIND YOU, IS FLUSH REALLY NEEDED!!! */ 
 
   cb_counter++;
 
@@ -87,7 +96,7 @@ void wait_for_a_while()
 {
   int i ;
   printf ("Loops left:   ");
-  for (i=50;i>0;i--)
+  for (i=10;i>0;i--)
     {
       usleep(1000*100);
       printf ("\b\b%.2d", i);
@@ -106,10 +115,12 @@ START_TEST (test_cb)
   seasim_register_lcd_cb(lcd_callback); 
 
   /* fake lcd print from User   */
+  printf ("print 1\n");
   lcd.setCursor(0,0);
   lcd.print(start_buffer1);
 
   /* fake lcd print from User   */
+  printf ("print 1\n");
   lcd.setCursor(0,1);
   lcd.print(start_buffer2);
 
