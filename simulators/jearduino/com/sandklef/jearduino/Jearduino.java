@@ -221,8 +221,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	serial.setMaximumSize(new Dimension(200, 500));
 	serial.setMinimumSize(new Dimension(200, 400));
 	*/
-	projectPanel.setMinimumSize(new Dimension( 400, 50));
-	projectPanel.setMaximumSize(new Dimension( 400, 50));
+	projectPanel.setMinimumSize(new Dimension( 10, 300));
+	projectPanel.setMaximumSize(new Dimension( 10, 300));
 
 	infoPanel.setMinimumSize(new Dimension( 400, 50));
 	infoPanel.setMaximumSize(new Dimension( 400, 50));
@@ -618,7 +618,13 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    /* Set up pins */
 	    setupBoardPins();
 
-	    projectPanel.setProjectName("");
+	    ///	    projectPanel.setProjectName("");
+	    if (f.isDirectory()) {
+		projectPanel.setProjectName(f.toString());
+	    } else if (f.isFile()) {
+		projectPanel.setArduinoCodeName(f.toString());
+	    } else 
+
 	    setArduinoFileInfo(boardCode);
 	    saveArduinoCodeName(boardCode, f.getName());
 	    ec.setStartable();
@@ -672,6 +678,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	projectPanel.setProjectName("");
 	//waitAWhile(500) ;
 	addLog("--- 3 handleArduinoCodeNameEvent");
+	projectPanel.setProjectName(null);
+	projectPanel.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
 	searduino.setArduinoCodeName(jpref.getArduinoCodeName(codeIdx));
 	addLog("--- 4 handleArduinoCodeNameEvent");
 	ec.setStartable();
@@ -749,7 +757,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	buildCommand = buildCommand + " " + buildArgs;
 
 	execCommand(buildCommand);
-
 	getAndUseSearduinoDir(dir);
     }
 
