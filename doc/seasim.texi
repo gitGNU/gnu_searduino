@@ -1,4 +1,4 @@
-@subsection Writing a simulator in C/C++ 
+@section Writing a simulator in C/C++ 
 
 Writing a GUI frontend in C/C++ on top of Searduino is pretty straight
 forward. We suggest you look into the source code of the streamed
@@ -11,6 +11,6 @@ called seasim.h:
 @url{http://git.savannah.gnu.org/cgit/searduino.git/tree/faked-arduino/include/seasim/seasim.h}
 
 
-@subsection Writing local tests in Python
+@section Writing local tests in Python
 For now, we would like to refer to pardon in the Searduino source
 treee for en example on how to write a simulator in Python.

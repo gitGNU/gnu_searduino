@@ -30,7 +30,7 @@
 @subtitle Stubs
 @subtitle Simulator
 @subtitle ... for Arduino
-@subtitle 
+@c@subtitle 
 @subtitle Version: @value{VERSION} 
 @subtitle Date: @value{UPDATED} 
 @author Henrik Sandklef
