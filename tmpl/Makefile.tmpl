@@ -50,10 +50,12 @@ SRC_C= __C_FILES__
 SRC_CXX= __CXX_FILES__ 
 MAIN_SRC=__MAIN_FILE__
 
-USER_C_FLAGS=-fPIC 
-USER_LD_FLAGS=__BUILD_LD_FLAGS__
+#USER_C_FLAGS=
+#USER_LD_FLAGS=__BUILD_LD_FLAGS__
 
 SEARDUINO_PATH=__SEARDUINO_PATH__
+
+all:
 
 simulate:
 	$(SEARDUINO_PATH)/bin/searduino-stream.sh --arduino-code ./$(SHLIB)
