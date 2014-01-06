@@ -7,6 +7,7 @@ PROJECT_DIR=""
 HOME_DIR=${HOME}
 SEARDUINO_HOME_DIR=${HOME}/searduino/
 ARDUINO_EX2C=${SEARDUINO_PATH}/bin/searduino-arduino-ex2c 
+NON_EXIST_MAKEFILE=4
 
 MISSING_DIR=1
 NON_EXIST_DIR=2
@@ -111,6 +112,11 @@ then
     then
 	echo "Build directory does not exist"
 	exit $NON_EXIST_DIR
+    fi
+    if [ ! -f $PROJECT_DIR/Makefile ]
+    then
+	echo "No Makefile in the Build directory"
+	exit $NON_EXIST_MAKEFILE
     fi
 #    echo "Build $PROJECT_DIR"
     cd $PROJECT_DIR
