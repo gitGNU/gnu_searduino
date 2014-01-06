@@ -201,11 +201,17 @@ The procedure for doing this is the same as described in the section
 @*
 
 Jearduino accepts some command line switches:
+@*
 @code{--board BOARD} - sets the board to use when starting up
+@*
 @code{ --arduino-code} - sets the code to execute 
+@*
 @code{ --searduino-project} - sets the Searduino project to use
+@*
 @code{ --build} - build the code when starting up
+@*
 @code{ --start} - start executing the code asap... if build was ok
+@*
 
 
 @section Pardon simulator (obsoleted)
