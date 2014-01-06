@@ -8,6 +8,9 @@ HOME_DIR=${HOME}
 SEARDUINO_HOME_DIR=${HOME}/searduino/
 ARDUINO_EX2C=${SEARDUINO_PATH}/bin/searduino-arduino-ex2c 
 NON_EXIST_MAKEFILE=4
+NON_BOARD=5
+
+##
 
 MISSING_DIR=1
 NON_EXIST_DIR=2
@@ -72,6 +75,11 @@ parse_args $*
 #echo "INO_DIR:     ${INO_DIR}"
 
 MAKE_RULES="clean "
+if [ "$BOARD" = "<none>" ] 
+    echo "Can't handle board: <none>"
+    exit $NON_BOARD
+fi
+
 if [ "$BOARD" != "" ] && [ "$BOARD" != "stub" ] 
 then
     BOARD=$(echo $BOARD | tr [A-Z] [a-z])
