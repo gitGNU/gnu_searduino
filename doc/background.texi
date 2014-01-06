@@ -15,11 +15,9 @@ create a simple simulator communicating via a pipe. We saw the
 potential of the simulator and decided to write a ``proper'' API for
 it instead. To make the simulator more usable for quick checks and for
 people preferring GUIs we started to write a simulator GUI in Python,
-so we added a Python extension to the simulator API. And here we are
-right now....
+so we added a Python extension to the simulator API. After a while we
+started hacking on a GUI frontend in Java.  And here we are right
+now....
 
 Hope you like it!
-
-
-
 
