@@ -720,7 +720,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	Process process = null;
 	BufferedReader inStream = null;
 	String line;
-	
+	int ret;
+
 	process = Runtime.getRuntime().exec(cmd);
 	inStream = new BufferedReader(
 				      new InputStreamReader( process.getInputStream() ));  
@@ -731,6 +732,17 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	addLog(commandOutput);
 	System.out.println(" Output from: " + cmd);
 	System.out.println(" 	 " + commandOutput);
+
+	ret = process.exitValue();
+	if (ret!=0) {
+	    addLog("ERROR:");
+	    addLog("  return value: " + ret);
+	    addLog("  Command:      " + cmd );
+	} else {
+	    addLog("SUCCESS:");
+	    addLog("  Command:      " + cmd );
+	}
+
     }
 
 
