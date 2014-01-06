@@ -585,3 +585,33 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_fakeDigitalInput
 {
   return seasim_fake_digital_input (pin, val);
 }
+
+JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSystemInformation
+  (JNIEnv *, jobject)
+{
+  #define SYS_INFO_LENGTH 2048
+  char buf[SYS_INFO_LENGTH];
+  const char *ver   = seasim_get_searduino_version();
+  const char *board = seasim_get_board_name();
+  const char *codeN = seasim_get_arduino_code_name();
+
+  strcpy(buf, "Searduino system information:\n");
+  strcat(buf, "-----------------------------");
+
+#define ADD_TEXT_IF_OK(a)   if ( (a!=NULL) && ( (strlen(buf)+strlen(a)+2) <SYS_INFO_LENGTH)) \
+    {  strcat(buf, a);   }
+  
+  ADD_TEXT_IF_OK("\n * Version: ");
+  ADD_TEXT_IF_OK(ver);
+  ADD_TEXT_IF_OK("\n * Board:   ");
+  ADD_TEXT_IF_OK(board);
+  ADD_TEXT_IF_OK("\n * Code:    ");
+  ADD_TEXT_IF_OK(codeN);
+
+  JNIEnv * g_env;
+  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  jstring jstrBuf = (g_env)->NewStringUTF(buf);
+
+  return jstrBuf;
+}
+
