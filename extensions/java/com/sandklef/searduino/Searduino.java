@@ -51,6 +51,7 @@ public class Searduino
     public  native int setArduinoCodeName(String ac);
     public  native int getCurrentPinType(int pin);
     public  native int hasGenericPinType(int pin, int type);
+    public  native String getSystemInformation();
     private native int registerPinCallback(SearduinoObserver o, int type);
 
     public native  int fakeAnalogInput(int pin, int val);
