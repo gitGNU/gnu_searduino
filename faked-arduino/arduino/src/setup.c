@@ -47,7 +47,7 @@ int searduino_exec_available = 0 ;
 searduino_main_ptr_ptr searduino_main_entry = NULL;
 
 void *arduino_lib;
-static char arduino_code[1024];
+char arduino_code[1024];
 
 #define SEARDUIONO_SIM_RUNNING 0
 #define SEARDUIONO_SIM_PAUSE   1
@@ -86,6 +86,7 @@ void searduino_set_halted(void)
 
 void init(void)
 {
+  strcpy(arduino_code, "");;
   searduino_setup();
 }
 
@@ -149,13 +150,14 @@ get_arduino_code_name(void)
     {
       /* This is not an error.... simply means we haven't set the board name yet */
       //fprintf (stderr, "Could not get the name of the arduino library to use\n");
+      ret = NULL;
     }
   else
     {
       ret = arduino_code;
     }
-
-  /* printf ("Returning: %s\n", ret); */
+  printf ("get_arduino_code_name() ==> %d\n", ret);
+  printf ("get_arduino_code_name() ==> %s\n", ret);
   return ret;
 }
 
@@ -169,7 +171,7 @@ searduino_set_arduino_code_name(const char* libname)
   if (libname==NULL)
     {
       //      fprintf(stderr, "Resetting arduino code name");
-      arduino_code[0]='\0';
+      strcpy(arduino_code, "");
       return 1;
     }
   else if (strlen(libname)>=1024)
@@ -244,7 +246,7 @@ load_arduino_code(void)
 int
 close_arduino_code(void)
 {
-  arduino_code[0]='\0';
+  strcpy(arduino_code, "");
 
   if (arduino_lib!=NULL) 
     {
