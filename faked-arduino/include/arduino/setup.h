@@ -91,6 +91,9 @@ void init_time(void);
   
 int initialise_hid(void);
 
+char * 
+get_arduino_code_name(void);
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
