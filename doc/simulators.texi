@@ -180,7 +180,35 @@ TBD
 @subsection Scripting over the network
 TBD
 
-@section Pardon simulator
+@section Jearduino
+Jearduino is a GUI frontend for Searduino. It is written in Java and
+provides all the features of the other simulators as well as some
+extra.
+
+Jearduino is covered in a separate manual but we will go through how
+to start Jearduino since we hope that the simulator will be easy
+enough to understand - if not, please read the Jearduino manual.
+
+@subsection Preparing the simulator
+The procedure for doing this is the same as described in the section
+``Streamed simulator''
+
+@subsection Launching the simulator
+
+@*
+@*
+@code{/opt/searduino/bin/searduino-jearduino.sh}
+@*
+
+Jearduino accepts some command line switches:
+@code{--board BOARD} - sets the board to use when starting up
+@code{ --arduino-code} - sets the code to execute 
+@code{ --searduino-project} - sets the Searduino project to use
+@code{ --build} - build the code when starting up
+@code{ --start} - start executing the code asap... if build was ok
+
+
+@section Pardon simulator (obsoleted)
 With Searduino you can test your Arduino program in the Python
 simulator (written in Python using Gtk). 
 
