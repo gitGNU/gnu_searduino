@@ -37,6 +37,8 @@ extern void serialEventRun(void) __attribute__((weak));
 #include <stdio.h>
 extern int searduino_exec ;
 extern int searduino_exec_available ;
+extern "C" { int  searduino_main(); }
+
 #else
 #undef ENABLE_SLEEP
 #endif
