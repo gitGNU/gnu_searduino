@@ -67,6 +67,7 @@ _CFLAGS=   -g $(USER_C_FLAGS) -Wall -fPIC \
             $(INC_FLAGS) $(USER_STUB_C_FLAGS)  -DSEARDUINO_STUB
 
 _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
+            $(LIB_FLAGS) \
              $(MODULE_CXX_FLAGS) \
              $(INC_FLAGS) $(USER_STUB_CXX_FLAGS) -DSEARDUINO_STUB
 
