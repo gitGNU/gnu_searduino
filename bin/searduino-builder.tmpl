@@ -76,6 +76,7 @@ parse_args $*
 
 MAKE_RULES="clean "
 if [ "$BOARD" = "<none>" ] 
+then
     echo "Can't handle board: <none>"
     exit $NON_BOARD
 fi
@@ -87,6 +88,8 @@ then
     export SHLIB=""
     MAKE_RULES="$MAKE_RULES all $UPLOAD"
 else
+    export SEARDUINO_OVERRIDE_ARDUINO=stub
+    export SHLIB=""
     MAKE_RULES="$MAKE_RULES shlib"
 fi
 
