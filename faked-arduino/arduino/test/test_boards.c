@@ -84,6 +84,26 @@ START_TEST (test_board)
 }
 END_TEST
 
+START_TEST (test_get_board_setup)
+{
+  char *tmp;
+  int ret;
+
+  board_setup();
+
+  printf ("* Setting board to %s\n", MY_UNO);
+  ret = set_board_name(MY_UNO);
+  fail_if( ret == 0 );
+
+  tmp = get_board_setup();
+  
+  fail_if (tmp == NULL );
+  
+  printf ("Board setup (via get_board_setup(): %s\n", tmp);
+  
+}
+END_TEST
+
 
 START_TEST (test_supported_boards)
 {
@@ -107,6 +127,7 @@ buffer_suite(void) {
 
   tcase_add_test(tc_core, test_board);
   tcase_add_test(tc_core, test_supported_boards);
+  tcase_add_test(tc_core, test_get_board_setup);
 
   return s;
 }
