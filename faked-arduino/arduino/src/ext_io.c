@@ -64,6 +64,7 @@ FILE* proto_stream ;
  */
 static uint8_t stub_output_enabled = 1;
 
+#define RETURN_IF_HALTED() if (searduino_is_halted()) { printf ("CODE HALTED\n"); return 0; }  
 
 
 uint8_t
@@ -292,6 +293,8 @@ searduino_disable_streamed_output(void)
 int 
 ext_digital_set_mode(uint8_t pin, uint8_t mode)
 {
+  RETURN_IF_HALTED();
+
   /* Make sure all is set up before continuing*/
   init_ext_io();
 
@@ -356,6 +359,7 @@ ext_analog_set_mode(uint8_t pin, uint8_t mode)
 int 
 ext_generic_write_outpin(uint8_t pin, unsigned int val, uint8_t pin_type)
 {
+  RETURN_IF_HALTED();
 
   /* Make sure all is set up before continuing*/
   init_ext_io();
