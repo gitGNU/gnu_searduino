@@ -656,6 +656,16 @@ seasim_get_nr_of_pins(void);
 int 
 seasim_set_log_level(int level);
 
+int
+seasim_setup_board(void);
+
+int 
+seasim_get_board_pins(char *board);
+
+char * 
+seasim_get_board_setup(void);
+
+
 #ifdef __cplusplus
 } /* extern "C" */
 #endif
