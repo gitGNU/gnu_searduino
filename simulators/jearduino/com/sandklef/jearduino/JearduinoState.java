@@ -29,8 +29,10 @@ public class JearduinoState {
     String codeName;
     int    buildType;      
     String board;
+    int    boardPins;
     String shortCodeName;
     String canonicalCodeName;
+
 
     public final int SEARDUINO_STATE_STUB    = 0 ;
     public final int SEARDUINO_STATE_ARDUINO = 1 ;
@@ -41,6 +43,7 @@ public class JearduinoState {
 	buildType         = SEARDUINO_STATE_STUB;
 	shortCodeName     = "";
 	canonicalCodeName = "";
+	boardPins         = 0 ;
     }
     
     public String getCurrentSearduinoProject() {
@@ -57,6 +60,14 @@ public class JearduinoState {
     
     public void setCurrentBuildType(int type) {
 	buildType=type;
+    }
+
+    public int getBoardPins() {
+	return boardPins;
+    }
+
+    public void setBoardPins(int pins) {
+	boardPins=pins;
     }
 
     public boolean buildTypeArduino() {
@@ -94,6 +105,7 @@ public class JearduinoState {
 	rs  = rs + "  *  SearduinoProject: " + searduinoProject + "\n";
 	rs  = rs + "  *  BuildType:        " + buildType + "\n";
 	rs  = rs + "  *  Board:            " + board + "\n";
+	rs  = rs + "  *    pins:           " + boardPins + "\n";
 	rs  = rs + "  *  Code (short):     " + shortCodeName + "\n";
 	rs  = rs + "  *  Code (canonical): " + canonicalCodeName + "\n";
 	return rs;
