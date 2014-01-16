@@ -335,35 +335,18 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
 {
   int ret;
 
-  printf ("cancel thread\n");
-  fflush(stdout);
-
   if (arduino_thread[thread_index]!=0)
     {
-      printf ("Halting code\n");
-      fflush(stdout);
-      
       seasim_set_halted();
-      usleep(300);
-      printf ("Halted code\n");
-      fflush(stdout);
+      usleep(200);
 
-      printf ("cancel thread %u\n", (unsigned int)arduino_thread[thread_index]);
-      fflush(stdout);
       ret = pthread_cancel(arduino_thread[thread_index]);
-      printf ("cancel thread => %d\n", ret);
-      fflush(stdout);
-      usleep(300);
+      usleep(200);
 
       arduino_thread[thread_index]=0;
-      printf ("cancel thread %d\n", ret);
     }
 
-  printf ("Sleeping after cancel code\n");
-  fflush(stdout);
-  usleep(300);
-  printf ("cancel thread returning\n");
-  fflush(stdout);
+  usleep(100);
   return ;
 }
 
@@ -417,9 +400,7 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
       //      pthread_join(arduino_thread[thread_index], (void**)&retval);
       //printf ("starting thread....join returned: %d\n", retval);
 
-      printf ("cancel thread %u\n", (unsigned int)arduino_thread[thread_index]);
       ret = pthread_cancel(arduino_thread[thread_index]);
-      printf ("cancel thread %d\n", ret);
       arduino_thread[thread_index]=0;
     }
 
@@ -432,10 +413,8 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
     printf ("starting thread....thread: %p\n", &arduino_thread);
   */
 
-  printf ("Call seasim_set_running()\n");
   seasim_set_running();
 
-  printf ("Call pthreade_create %d %d \n", thread_index, arduino_code_impl);
   pthread_create(&arduino_thread[thread_index], NULL, arduino_code_impl, NULL);
 }
 
