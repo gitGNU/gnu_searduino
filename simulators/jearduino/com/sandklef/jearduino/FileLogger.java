@@ -60,7 +60,6 @@ class FileLogger extends JPanel implements TailerEvent, ActionListener {
 
 	add(scrollPane);
 	add(pane);
-
 	pane.add(clear);
 	pane.add(printState);
 
@@ -83,6 +82,7 @@ class FileLogger extends JPanel implements TailerEvent, ActionListener {
 	} else if (e.getSource() == printState) {
 	    addLog(jearduino.getJearduinoState());
 	    addLog(jearduino.getSearduinoState());
+	    addLog(jearduino.searduino.getBoardSetup());
 	}
     }
 
