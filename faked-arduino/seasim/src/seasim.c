@@ -226,6 +226,12 @@ seasim_set_board_name(char *board)
   return set_board_name(board);
 }
 
+int
+seasim_setup_board(void)
+{
+  return board_setup();
+}
+
 char *
 seasim_get_board_name(void)
 {
@@ -287,3 +293,15 @@ int seasim_set_log_level(int level)
   return searduino_set_log_level(level);
 }
 
+int 
+seasim_get_board_pins(char *board)
+{
+  return get_board_pins(board);
+}
+
+
+char * 
+seasim_get_board_setup(void)
+{
+  return get_board_setup();
+}
