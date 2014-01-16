@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2012, 2013 Henrik Sandklef 
+ *   Copyright (C) 2012, 2013, 2014 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -61,9 +61,10 @@ enum
 
 struct searduino_board_t
 {
-  int             id;
-  char           *name;
+  int             id    ;
+  char           *name  ;
   board_setup_ptr setup ;
+  int             pins  ;
 } ;
 
 
@@ -73,27 +74,33 @@ static struct searduino_board_t searduino_boards[] =
   {
     { SEARDUINO_BOARD_UNSET, 
       "none",
-      NULL
+      NULL,
+      0
     },
     { SEARDUINO_BOARD_UNO, 
       "Uno",
-      board_setup_uno
+      board_setup_uno,
+      20
     },
     { SEARDUINO_BOARD_MEGA, 
       "Mega",
-      NULL
+      NULL,
+      54
     },
     { SEARDUINO_BOARD_MEGA_2560, 
       "Mega2560",
-      board_setup_mega2560
+      board_setup_mega2560,
+      54
     },
     { SEARDUINO_BOARD_LEONARDO, 
       "Leonardo",
-      board_setup_leonardo
+      board_setup_leonardo,
+      20
     },
     { SEARDUINO_BOARD_LAST, 
       NULL,
-      NULL
+      NULL,
+      0
     }
   };
 
@@ -167,11 +174,9 @@ set_board_name(char *board)
       return 0;
     }
   
-  
-
   for (i=1;i<SEARDUINO_BOARD_LAST;i++)
     {
-      /* printf ("   checking %d '%s' == '%s' for settings\n", i, board, searduino_boards[i].name); */
+      //      printf ("   checking %d '%s' == '%s' for settings\n", i, board, searduino_boards[i].name);
       if (searduino_boards[i].name==NULL)
 	{
 	  fprintf(stderr, "Major internal error: %s:%d (%s) when setting board to '%s'\n", 
@@ -183,15 +188,14 @@ set_board_name(char *board)
 		      strlen(searduino_boards[i].name))==0)
 	   && (strlen(searduino_boards[i].name) == strlen(board)))
 	{
-	  /* printf ("   checking %d '%s' is our choice :) \n", i, searduino_boards[i].name); */
+	  //	  printf ("   checking %d '%s' is our choice :) \n", i, searduino_boards[i].name);
 	  board_index = i;
-	  board_setup();
 
 	  return i;
 	}
     }
 
-  printf ("Could not match board name %s\n", board);
+  //  printf ("Could not match board name %s\n", board);
   return board_index;
 }
 
@@ -202,7 +206,7 @@ board_setup(void)
   int ret;
 
 
-  //  printf (" =================== BOARD SETUP (boards.c) ==========================");
+  //  printf (" =================== BOARD SETUP (boards.c) ==========================\n");
 
   /* Set all pins to zero */
   init_arduino_pins();
@@ -214,9 +218,6 @@ board_setup(void)
       board_index = SEARDUINO_BOARD_UNO;
     }
   
-  /*  printf ("SETTING UP BOARD: %s\n", searduino_boards[board_index].name);
-   */
-
   if ( searduino_boards[board_index].setup == NULL )
     {
       fprintf(stderr, "Missing setup function for '%s'\n", 
@@ -259,11 +260,10 @@ static void print_board_analog_pins(void)
   printf ("  Analog pins:  ");
   for (i=0;i<NR_OF_ARDUINO_PINS;i++)
     {
-      /* printf (" *%d \n", i); */
       if ( has_generic_pin_type(i,SEARDUINO_PIN_TYPE_ANALOG) )
 	{
 	  printf ("%d (A%d), ", i, i - A0);
-	  /*for (j=0;j<8;j++)
+	  for (j=0;j<8;j++)
 	    {
 	      if (apins[j]==i)
 		{
@@ -271,10 +271,109 @@ static void print_board_analog_pins(void)
 		  break;
 		}
 	    }
-	    printf (", "); */
+	    printf (", ");
 	}
     }
   printf ("\n");
+}
+
+int 
+get_board_pins(char *board)
+{
+  int i ;
+  if (board==NULL) 
+    {
+      return -1;
+    }
+
+  for (i=1;i<SEARDUINO_BOARD_LAST;i++)
+    {
+      /* printf ("get_board_pins: %s == %s?\n",  */
+      /* 	      searduino_boards[i].name,  */
+      /* 	      board); */
+      if (strncmp(searduino_boards[i].name, 
+		  board, strlen(board))==0) 
+	{
+	  return searduino_boards[i].pins;
+	}
+    }
+  return -1;
+}
+
+char * 
+get_board_setup(void)
+{
+#define BOARD_STRING_SIZE 1000
+  static char buf[BOARD_STRING_SIZE];
+  static char tmp[200];
+  int i ;
+  int j ; 
+  int   apins[]     = { A0, A1, A2, A3, A4, A5, A6, A7} ;
+  char* apins_str[] = { "A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7"} ;
+
+  strcpy(buf, "");
+
+
+#define ADD_BOARD_INFO(a) if (strlen(buf)+strlen(a)<BOARD_STRING_SIZE) strcat(buf,a);
+  ADD_BOARD_INFO("\n");
+  ADD_BOARD_INFO("Board settings:\n");
+  ADD_BOARD_INFO("---------------\n");
+  if (get_board_name()==NULL) 
+    {
+      ADD_BOARD_INFO(" - no board set yet -\n");
+      return buf;
+    }
+
+  ADD_BOARD_INFO("Name:         ");
+  ADD_BOARD_INFO(get_board_name());
+  sprintf(tmp, "\nPins:         %d\n", get_generic_nr_of_pins());
+  ADD_BOARD_INFO(tmp);
+  ADD_BOARD_INFO("  Digital pins:  ");
+
+  for (i=0;i<NR_OF_ARDUINO_PINS;i++)
+    {
+      if ( has_generic_pin_type(i, SEARDUINO_PIN_TYPE_DIGITAL))
+	{
+	  sprintf (tmp, "%d, ", i);
+	  ADD_BOARD_INFO(tmp);
+	}
+    }
+    ADD_BOARD_INFO("\n");
+  ADD_BOARD_INFO("  PWM pins:      ");
+  for (i=0;i<NR_OF_ARDUINO_PINS;i++)
+    {
+      if ( has_generic_pin_type(i, SEARDUINO_PIN_TYPE_PWM))
+	{
+	  sprintf (tmp, "%d, ", i);
+	  ADD_BOARD_INFO(tmp);
+	}
+    }
+  ADD_BOARD_INFO("\n");
+
+  ADD_BOARD_INFO("  Analog pins:   ");
+  for (i=0;i<NR_OF_ARDUINO_PINS;i++)
+    {
+      if ( has_generic_pin_type(i,SEARDUINO_PIN_TYPE_ANALOG) )
+	{
+	  sprintf (tmp, "%d (A%d), ", i, i - A0);
+	  ADD_BOARD_INFO(tmp);
+	  for (j=0;j<8;j++)
+	    {
+	      if (apins[j]==i)
+		{
+		  sprintf (tmp, " (%s)", apins_str[j]);
+		  ADD_BOARD_INFO(tmp);
+		  break;
+		}
+	    }
+	  ADD_BOARD_INFO(", ");
+	}
+    }
+  ADD_BOARD_INFO("\n");
+  ADD_BOARD_INFO("\n");
+
+
+  return buf;
 }
 
 void 
@@ -459,6 +558,8 @@ board_setup_leonardo(void)
   A10 = 12;
 
 
+  define_arduino_pin(0,   NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+
   /* PWM: 3, 5, 6, 9, 10, 11, and 13. 
      Provide 8-bit PWM output with the analogWrite() function.  */
   define_arduino_pin(3,   NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, PWM_OUT);
@@ -489,7 +590,7 @@ board_setup_leonardo(void)
   define_arduino_pin(17, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(18, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
   define_arduino_pin(19, ANALOG_IN,    DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
-  define_arduino_pin(20, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
+  //  define_arduino_pin(20, NO_ANALOG_IN, DIGITAL_OUT, DIGITAL_IN, NO_PWM_OUT);
 
   printf ("\n\t*** Leanoard board setup done\n\n");
 

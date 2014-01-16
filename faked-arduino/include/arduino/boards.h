@@ -42,4 +42,13 @@ get_board_name(void);
 char *
 get_supported_boards(void);
 
+int
+board_setup(void);
+
+int 
+get_board_pins(char *board);
+
+char * 
+get_board_setup(void);
+
 #endif /*BOARDS_H*/
