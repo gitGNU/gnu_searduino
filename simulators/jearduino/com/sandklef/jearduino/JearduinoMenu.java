@@ -360,7 +360,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	leoItem = new JRadioButtonMenuItem("Leonardo");
 	unoItem = new JRadioButtonMenuItem ("Uno");
 	megaItem = new JRadioButtonMenuItem ("Mega");
-	mega2560Item = new JRadioButtonMenuItem("Mega 2560");
+	mega2560Item = new JRadioButtonMenuItem("Mega2560");
 
 	boardMenu.add(leoItem);
 	leoItem.addActionListener(this);
@@ -380,7 +380,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     public void createSearduinoMenu()
     {
 	openSearduinoProjectItem = new JMenuItem("Open Searduino Project");
-	buildItem = new JMenuItem("Build");
+	buildItem = new JMenuItem("Build for simulator");
 
 	openSearduinoProjectItem.addActionListener(this);
 	buildItem.addActionListener(this);
@@ -395,7 +395,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
     public void createArduinoMenu()
     {
 	importArduinoFileItem = new JMenuItem("Import Arduino Sketches");
-	verifyArduinoCodeItem = new JMenuItem("Verify/build code");
+	verifyArduinoCodeItem = new JMenuItem("Verify/build code for Arduino board");
 	uploadArduinoCodeItem = new JMenuItem("Upload to Arduino board");
 
 
