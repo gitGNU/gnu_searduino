@@ -43,6 +43,8 @@
 int searduino_exec ;
 int searduino_exec_available = 0 ;
 
+static int dlopen_counter=0;
+
 /* global */
 searduino_main_ptr_ptr searduino_main_entry = NULL;
 
@@ -156,8 +158,6 @@ get_arduino_code_name(void)
     {
       ret = arduino_code;
     }
-  printf ("get_arduino_code_name() ==> %d\n", ret);
-  printf ("get_arduino_code_name() ==> %s\n", ret);
   return ret;
 }
 
@@ -181,18 +181,18 @@ searduino_set_arduino_code_name(const char* libname)
       return 1;
     }
 
+  /*
   if (strncmp(arduino_code, libname, strlen(libname)==0))
     {
       fprintf(stderr, "Not setting arduino code name: %s to the same thing   (setup.c)\n", libname);
       return 0;
     }
+  */
 
-  printf(" --------------------------------------- Setting arduino code name: %s   (setup.c)\n", libname);
+  //printf(" --------------------------------------- Setting arduino code name: %s   (setup.c)\n", libname);
   strncpy (arduino_code, libname, 1024);
 
   ret = load_arduino_code();
-  //  printf("Loading of code %s returned %d    (setup.c)\n", libname, ret);
-  fflush(stdout);
   if (ret!=0)
     {
       fprintf (stderr, "Setting up arduino code failed: %d\n", 	      ret);
@@ -211,7 +211,7 @@ load_arduino_code(void)
 
   ard_lib_name = get_arduino_code_name();
 
-  //  printf ("Trying to load code from %s\n", ard_lib_name);
+  printf ("Trying to load code from %s (counter: %d)\n", ard_lib_name, dlopen_counter);
 
   if (ard_lib_name == NULL)
     {
@@ -222,11 +222,22 @@ load_arduino_code(void)
     {
       /* If we have been given a library name, load it */
       // fprintf (stderr, "Dynamically linked code, will call dlopen(%s)\n", ard_lib_name); 
+      if ( (arduino_lib!=NULL) && (dlopen_counter>0) )
+	{
+	  dlclose(arduino_lib);
+	  dlopen_counter--;
+	  usleep(1000);
+	}
+
       arduino_lib = dlopen ((const char*)ard_lib_name, RTLD_LAZY);
       if ( arduino_lib == NULL)
 	{
 	  fprintf (stderr, "Couldn't open dyn lib (%s)\n", dlerror());
 	  return 1;
+	}
+      else 
+	{
+	  dlopen_counter++;
 	}
       /* printf ("setup.c:  code at %p\n", arduino_lib); */
       
@@ -236,7 +247,6 @@ load_arduino_code(void)
 	  fprintf (stderr, "Couldn't find searduino_main in arduino code\n");
 	  return 1;
 	}
-      printf ("setup.c:  code at %p\n", searduino_main_entry); 
     }
   //  printf ("Successfully loaded code from %s\n", ard_lib_name);
   return 0;
@@ -250,8 +260,12 @@ close_arduino_code(void)
 
   if (arduino_lib!=NULL) 
     {
-      fprintf(stderr, "NOT CLOSING CL code at %u\n", arduino_lib);
-      //      dlclose(arduino_lib);
+      //      fprintf(stderr, " ===========================================================CLOSING CL code? at %u  (counter: %d\n)", arduino_lib, dlopen_counter);
+      if (dlopen_counter>0)
+	{
+	  dlclose(arduino_lib);
+	  dlopen_counter--;
+	}
       arduino_lib=NULL;
     }
 
