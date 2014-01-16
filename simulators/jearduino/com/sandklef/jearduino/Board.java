@@ -22,6 +22,7 @@
  ****/
 
 package com.sandklef.jearduino;
+import com.sandklef.searduino.Searduino;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -37,15 +38,21 @@ public class Board extends JPanel implements ActionListener
 {
     JComboBox boardList ;
     BoardEvent be;
+    String[] boards;
+    Searduino searduino;
 
-    public Board(BoardEvent e)
+    public Board(BoardEvent e, Searduino s)
     {
+	searduino = s;
+
+	boards = searduino.getSupportedBoards().split(",");
+
 	//	super(new GridLayout(1, 1));    
 	setBorder(BorderFactory.createTitledBorder("Board"));
 
 	be = e;
 	
-	String[] boards = { "Uno", "Leonardo", "Mega", "Mega2560" };
+	//	String[] boards = { "Uno", "Leonardo", "Mega", "Mega2560" };
 	boardList = new JComboBox(boards);
 	
 	//	boardList.setPreferredSize(new Dimension(100,20));
@@ -55,6 +62,22 @@ public class Board extends JPanel implements ActionListener
 	add(boardList);
 
     }
+
+    public String[] getSupported() {
+	return boards;
+    }
+
+    public boolean isSupported(String board) {
+	if (board==null) return false;
+
+	for (int i=0;i<boards.length;i++) {
+	    if (board.equals(boards[i])) {
+		return true;
+	    }
+	}
+	return false;
+    }
+
 
     public void actionPerformed(ActionEvent e) {
         JComboBox cb = (JComboBox)e.getSource();
