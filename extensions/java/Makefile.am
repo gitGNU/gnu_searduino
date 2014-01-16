@@ -1,7 +1,7 @@
 #
 #       Searduino
 #
-#  Copyright (C) 2013 Henrik Sandklef      
+#  Copyright (C) 2013, 2014 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -73,5 +73,7 @@ install-exec-hook: $(SEARDUINO_JAR) $(libsearduinojni.la)
               $(DESTDIR)$(libdir)/jearduino$(SHLIB_EXT)
 	cp $(SEARDUINO_JAR)  $(DESTDIR)$(libdir)/
 
+check:
+	cd test && make check
 
 endif
