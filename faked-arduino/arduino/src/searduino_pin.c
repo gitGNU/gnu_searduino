@@ -55,6 +55,7 @@ static unsigned int digitalWrite_timelimit = 20*1000;
 #define genericWrite_timelimit digitalWrite_timelimit
 
 
+
 uint8_t A0  = 0;
 uint8_t A1  = 0;
 uint8_t A2  = 0;
@@ -320,6 +321,7 @@ set_generic_nr_of_pins(void)
 uint8_t
 get_generic_nr_of_pins(void)
 {
+  set_generic_nr_of_pins();
   return nr_of_pins;
 }
 
