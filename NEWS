@@ -2,6 +2,8 @@ News in coming 0.9
 ==============================================
 
   upload/verify for board
+  loading a file again will actually reload it. Needed when rebuilding code.
+  No crash when halting and reloading dyn files
 
   
 
