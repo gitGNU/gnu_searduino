@@ -45,7 +45,11 @@ public class Searduino
     public  native String getSearduinoName();
     public  native String getBoardName();
     public  native int    setBoardName(String board);
+    public  native int    setUpBoard();
+    public  native String getBoardSetup();
     public  native int    getNrOfPins();
+    public  native int    getBoardPins(String board);
+    public  native String getSupportedBoards();
 
     public  native int getDigitalMode(int pin);
     public  native int setArduinoCodeName(String ac);
