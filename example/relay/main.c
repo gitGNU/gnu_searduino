@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2014 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -27,6 +27,8 @@
 #define RELAY_PIN 7
 #define INPUT_PIN A0
 
+#define LIGHT_THRESHOLD 250
+
 void setup(void)
 {
   pinMode(RELAY_PIN, OUTPUT);
@@ -49,7 +51,7 @@ int readInput()
 
 int validateInput(int in)
 {
-  if (in>700)
+  if (in>LIGHT_THRESHOLD)
     { 
       return HIGH ;
     }
@@ -61,16 +63,18 @@ int main(void)
   
   init();
   setup();
-
+  int i ;
 
   /* The following line uses a Saerduino macro 
    * You could use a plain "for (;;)" instead
    */
   SEARDUINO_LOOP()
     {
+
       if (validateInput(readInput(INPUT_PIN)))
 	{
 	  digitalWrite(RELAY_PIN,HIGH);
+	  delay(1000);
 	}
       else
 	{
