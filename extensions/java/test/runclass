@@ -1,0 +1,16 @@
+#!/bin/bash
+
+CLASS_NAME=$(echo $1 | sed 's,\.class,,g')
+
+JAVA_LIBRARY_PATH=../Searduino.jar:../
+export LD_LIBRARY_PATH=../.libs
+
+
+COMMAND="java -cp .:${JAVA_LIBRARY_PATH} "
+COMMAND="$COMMAND -Djava.library.path=${JAVA_LIBRARY_PATH}:../.libs/ "
+COMMAND="$COMMAND $CLASS_NAME"
+
+
+
+echo $COMMAND
+$COMMAND
