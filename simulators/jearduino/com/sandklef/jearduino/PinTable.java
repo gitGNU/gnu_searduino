@@ -33,6 +33,7 @@ import java.awt.*;
 import java.awt.Color;
 import javax.swing.JComboBox;
 
+import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.*;
@@ -59,8 +60,9 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 			    "Input",
 			    "Value"};
 
-    private int nrPins ;
-    
+    private JPanel panel;
+    JScrollPane scrollPane;
+
     private final int TABLE_NUMBER_POS  = 0;
     private final int TABLE_TYPE_POS    = 1;
     private final int TABLE_MODE_POS    = 2;
@@ -68,18 +70,26 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
     private final int TABLE_OUTPUT_POS  = 4;
 
     Searduino searduino;
+    JearduinoState jState;
     private int[] pinMode;
     private int[] pinType;
 
     private PinEvent pe;
 
-    public PinTable(PinEvent e, Searduino searduinoIn)
-    {
+    public PinTable(PinEvent e, JearduinoState js, Searduino searduinoIn)    {
+	super(new GridLayout(2, 1));    
+	setBorder(BorderFactory.createTitledBorder("einar"));
 	searduino = searduinoIn;
+	panel = this; 
+	    //new JPanel(new GridBagLayout());
+	//scrollPane = new JScrollPane(panel, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+	//scrollPane.setPreferredSize(new Dimension(600, 600));
+
+	//	add(panel);
 	pe = e ;
+	jState=js;
 	setBorder(BorderFactory.createTitledBorder("Pins"));
     }
-
 
     private int getItemPosFromCombo(JComboBox cb, String item) {
 	for (int i=0;i<cb.getItemCount();i++) {
@@ -93,52 +103,48 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
     public void setTypeInputPin(int pin, int type, boolean fromArduino)
     {
 	if (pins==null) {
-	    //System.out.println("setTypeInputPin() .... pins not created  yet, bailing out");
+	    System.out.println("setTypeInputPin() .... pins not created  yet, bailing out");
 	    return ;
 	}
-			   
-	if (!searduino.hasGenericPinTypeBoolean(pin, type))
-	    {
-		System.out.println("\n\n *** ERROR: Can not set type " +
+	
+	if (!searduino.hasGenericPinTypeBoolean(pin, type)) {
+	    System.out.println("\n\n *** ERROR: Can not set type " +
 				   searduino.getPinType(type) + 
-				   " on pin " + pin + " \n\n" );
-		return ;
-	    }
+			       " on pin " + pin + " \n\n" );
+	    return ;
+	}
+
+	System.out.println("Pin " + pin + ", items: " + ((JComboBox)pins[pin][TABLE_TYPE_POS]).getItemCount());
 
 	/* 
 	 * Change pin type called from Arduino code
 	 *   update combobox
 	 */
-	if (fromArduino) 
-	    {
-		if (type==Searduino.SEARDUINO_PINTYPE_DIGITAL)
-		    {
-			JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
-			int pos = getItemPosFromCombo(cb, 
-						      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_DIGITAL));
-			cb.setSelectedIndex(pos);
-		    }
-		else if (type==Searduino.SEARDUINO_PINTYPE_ANALOG)
-		    {
-			JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
-			int pos = getItemPosFromCombo(cb, 
-						      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_ANALOG));
-			cb.setSelectedIndex(pos);
-		    }
-		else if (type==Searduino.SEARDUINO_PINTYPE_PWM)
-		    {
-			JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
-			int pos = getItemPosFromCombo(cb, 
-						      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_PWM));
-			cb.setSelectedIndex(pos);
-		    }
+	if (fromArduino)    {
+	    System.out.println("setTypeInputPin() .... ARDUINO");
+	    if (type==Searduino.SEARDUINO_PINTYPE_DIGITAL) {
+		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
+		int pos = getItemPosFromCombo(cb, 
+					      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_DIGITAL));
+		cb.setSelectedIndex(pos);
+	    } else if (type==Searduino.SEARDUINO_PINTYPE_ANALOG) {
+		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
+		int pos = getItemPosFromCombo(cb, 
+					      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_ANALOG));
+		cb.setSelectedIndex(pos);
+	    } else if (type==Searduino.SEARDUINO_PINTYPE_PWM) {
+		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
+		int pos = getItemPosFromCombo(cb, 
+					      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_PWM));
+		cb.setSelectedIndex(pos);
 	    }
+	}
 	/* 
 	 * Change pin type called from the GUI (simulator)
 	 *   do NOT update combobox
 	 */
-	else
-	    {
+ 	else {
+	    System.out.println("setTypeInputPin() .... GUI");
 		if (type==Searduino.SEARDUINO_PINTYPE_DIGITAL)
 		    {
 			setDigitalInputPin(pin);
@@ -151,13 +157,13 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		    {
 			setPwmPin(pin);
 		    }
+		panel.revalidate();
+		panel.repaint();
 	    }
-
     }
 	
     public void setAnalogInputPin(int pin)
     {
-	int pos = pin*5+TABLE_INPUT_POS+1;
 
 	if (pins==null)
 	    {
@@ -175,50 +181,56 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	spinner.setEnabled(true);
 	spinner.addChangeListener(this);
 
+	GridBagLayout layout = (GridBagLayout)panel.getLayout();
+	GridBagConstraints c = (GridBagConstraints) layout.getConstraints(panel);
+
 	if (pins[pin][TABLE_INPUT_POS]!=null)
 	    {
-		this.remove(pos);
+		remove((Component)pins[pin][TABLE_INPUT_POS]);
 	    }
 	try {
-	    Thread.sleep(0);
+	    Thread.sleep(10);
 	} catch (InterruptedException e) {
 	    System.out.println(e);
 
 	}
 
-	this.add(spinner, pos);
+	c.gridx = 4;
+	c.gridy = pin+1;	
+	panel.add(spinner, c);
 	((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(false);
 	pins[pin][TABLE_INPUT_POS]=spinner;
 	pinType[pin]=Searduino.SEARDUINO_PINTYPE_ANALOG;
 	spinner.repaint();
-	this.revalidate();
-	this.repaint();
     }
 
     
     public void setDigitalInputPin(int pin)
     {
-	int pos = pin*5+TABLE_INPUT_POS+1;
+	if (pins==null) {
+	    return ;
+	}
 
-	if (pins==null)
-	    {
-		return ;
-	    }
-
+	    System.out.println("setDigitalInputPin()");
+	
 	JToggleButton input;
 	input = new JToggleButton("");
 	input.addActionListener(this);
 	input.setEnabled(true);
 	input.setVisible(true);
-	
+
+	GridBagLayout layout = (GridBagLayout)panel.getLayout();
+	GridBagConstraints c = (GridBagConstraints) layout.getConstraints(panel);
+
 	if (pins[pin][TABLE_INPUT_POS]!=null)
 	    {
-		this.remove(pos);
+		remove((Component)pins[pin][TABLE_INPUT_POS]);
 	    }
-	this.add(input, pos);
+	c.gridx = 4;
+	c.gridy = pin+1;	
+	panel.add(input, c);
 
 	((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(false);
-
 	pins[pin][TABLE_INPUT_POS]=input;
 	pinType[pin]=Searduino.SEARDUINO_PINTYPE_DIGITAL;
     }
@@ -232,15 +244,17 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	input = new JLabel("");
 	input.setEnabled(true);	
 	input.setVisible(true);
+	    System.out.println("setPwmPin()");
 
 	if (pins[pin][TABLE_INPUT_POS]!=null)
 	    {
-		this.remove(pos);
+		remove((Component)pins[pin][TABLE_INPUT_POS]);
 	    }
 
-	//	System.out.println("ADD PWN PIN AT: " + pin + " " + (pin*5+TABLE_OUTPUT_POS+1));
+	GridBagLayout layout = (GridBagLayout)panel.getLayout();
+	GridBagConstraints c = (GridBagConstraints) layout.getConstraints(panel);
 
-	this.add(input, pos);
+	panel.add(input, c);
 
 	((JLabel)pins[pin][TABLE_MODE_POS]).setText("Output");
 	pins[pin][TABLE_INPUT_POS]=input;
@@ -252,20 +266,20 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     private void handlePinActionPerformed(ActionEvent e) 
     {
-		for (char i=1; i<nrPins;i++)
+	for (char i=0; i<jState.getBoardPins();i++)
+	    {
+		if (e.getSource() == pins[i][TABLE_INPUT_POS]) 
 		    {
-			if (e.getSource() == pins[i][TABLE_INPUT_POS]) 
+			if (((JToggleButton)pins[i][TABLE_INPUT_POS]).isSelected())
 			    {
-				if (((JToggleButton)pins[i][TABLE_INPUT_POS]).isSelected())
-				    {
-					pe.inputValueEvent(i, (char)1);
-				    }
-				else
-				    {
+				pe.inputValueEvent(i, (char)1);
+			    }
+			else
+			    {
 					pe.inputValueEvent(i, (char)0);
-				    }
-			    }  
+			    }
 		    }  
+	    }  
     }
 
     
@@ -273,34 +287,29 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
     {
 	String command = e.getActionCommand();
 
-	if (command.equals("comboBoxChanged"))
-	    {
-		JComboBox cb = (JComboBox)e.getSource();
-		String pinType = (String)cb.getSelectedItem();
-		int pinTypeInt = Searduino.getPinType(pinType);
-		//		System.out.println("comboBoxChanged::: " + pinType + " " + pinTypeInt);
-
-		for (int i=0;i<nrPins;i++) 
-		    {
-			//			System.out.println("  Trying to find cbox at " + i );
-			
-			if (pins[i][TABLE_TYPE_POS]==cb)
-			    {
-				//				System.out.println("   ---> found one at " + i + "  will change it to " + pinType + " / " + pinTypeInt );
-				setTypeInputPin(i, pinTypeInt, false);
-			    }
-		    }
+	if (command.equals("comboBoxChanged")) {
+	    JComboBox cb   = (JComboBox)e.getSource();
+	    String pinType = (String)cb.getSelectedItem();
+	    int pinTypeInt = Searduino.getPinType(pinType);
+	    //		System.out.println("comboBoxChanged::: " + pinType + " " + pinTypeInt);
+	    
+	    for (int i=0;i<jState.getBoardPins();i++) {
+		//			System.out.println("  Trying to find cbox at " + i );
+		
+		if (pins[i][TABLE_TYPE_POS]==cb) {
+		    //				System.out.println("   ---> found one at " + i + "  will change it to " + pinType + " / " + pinTypeInt );
+		    setTypeInputPin(i, pinTypeInt, false);
+		}
 	    }
-	else
-	    {
-		handlePinActionPerformed(e);
-	    }
+	} else {
+	    handlePinActionPerformed(e);
+	}
     }
 
 
     public void stateChanged(ChangeEvent e) {
 	 
-	for (int i=1; i<nrPins;i++)
+	for (int i=0; i<jState.getBoardPins();i++)
 	    {
 		if (e.getSource() == pins[i][TABLE_INPUT_POS]) 
 		    {
@@ -317,11 +326,27 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public void setPinValue(int pin, int val, int type)
     {
-	// System.out.println("PIN VALUE: " + pin + "  VALUE: " + val);
-	((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(true);
-	((JLabel)pins[pin][TABLE_OUTPUT_POS]).setText(""+val);
+	JLabel label = (JLabel)pins[pin][TABLE_OUTPUT_POS];
+	System.out.println("PIN VALUE: " + pin + "  VALUE: " + val + " TYPE: " + type);
+	label.setVisible(true);
+	label.setText(""+val);
+	if ( type == Searduino.SEARDUINO_PINTYPE_DIGITAL  ) 
+	    {
+		if (val==0) 
+		    {
+			label.setForeground(Color.green);
+		    }
+		else 
+		    {
+			label.setForeground(Color.red);
+		    }
+	    }
+	else 
+	    {
+		label.setForeground(Color.black);
+	    }
     }
-
+    
     public void setPinTypeOBSOLETE(int pin, int type)
     {
 	System.out.println("PIN: " + pin + "  TYPE: " + type);
@@ -341,7 +366,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public void setMode(int pin, int mode)
     {
-	System.out.println("---->SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);
+	//	System.out.println("---->SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);
 	System.out.flush();
 	/* INPUT */
 	if (mode==0) {
@@ -388,7 +413,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	    ((JLabel)pins[pin][TABLE_OUTPUT_POS]).setVisible(true);
 	    
 	}
-	System.out.println("<---- SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);
+	//	System.out.println("<---- SET PIN " + pin + " (" +  pinType[pin] + ")  to: " + mode);
     }
 
     private void addTypeOnPin(ArrayList a, int pin, int type)
@@ -400,83 +425,116 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	    }
     }
 
+    public void setupPinTypes()
+    {
+	int nrPins = jState.getBoardPins();
+	for (int i=0;i<nrPins;i++) {
+	    setTypeInputPin(i, searduino.getCurrentPinType(i), false);
+	}
+
+    }
+
     public void setupPins()
     {
-	int nrOfPins = searduino.getNrOfPins();
 
-	nrPins = nrOfPins;
-	
-	//System.out.println("=========================== Creating PinTable (" + nrOfPins +") 1"  );
-	this.setLayout(new GridLayout(nrPins, 5));
-	//System.out.println("=========================== Creating PinTable (" + nrOfPins +") 2" );
+	//	jState.setBoardPins(jState.getBoardPins());
+	int nrPins = jState.getBoardPins();
+
+	System.out.println("=========================== Creating PinTable (" + nrPins +") " );
+
+	/* +1 for the header row */
+	panel.setLayout(new GridBagLayout());
+	//	this.setLayout(new GridLayout(nrPins, 4));
+	GridBagConstraints c = new GridBagConstraints();
 
 	removeAll();
-	//System.out.println("=========================== Creating PinTable (" + nrOfPins +") 3" );
+	System.out.println("=========================== Creating PinTable (" + nrPins +") 3" );
 
 	pinMode = new int[nrPins];
 	pinType = new int[nrPins];
-	pins = new Object[nrPins][5] ;
+	pins    = new Object[nrPins][5] ;
 	
-	//System.out.println("=========================== Creating PinTable (" + nrOfPins +") 4" );
-	add(new JLabel("Pin"));
+	System.out.println("=========================== Creating PinTable (" + nrPins +") 4" );
+	//	c.fill = GridBagConstraints.HORIZONTAL;
+	c.gridx = 0;
+	c.gridy = 0;
 
-	add(new JLabel("Type"));
+	panel.add(new JLabel("Pin"), c);
 
-	add(new JLabel("Mode"));
+	c.gridx = 1;
+	panel.add(new JLabel("Type"), c);
 
-	add(new JLabel("Ouput"));
+	c.gridx = 2;
+	panel.add(new JLabel("Mode"), c);
 
-	add(new JLabel("Input"));
+	c.gridx = 3;
+	panel.add(new JLabel("Ouput"), c);
 
-	for (int i=1;i<nrPins;i++)
-	    {
-		JLabel digValue;
-		//JLabel typeLabel;
-		JLabel numberLabel;
-		JLabel modeLabel;
-		
-		pinMode[i] = 0;
-		pinType[i] = 0;
+	c.gridx = 4;
+	panel.add(new JLabel("Input"), c);
 
-		numberLabel = new JLabel("" + i);
-		numberLabel.setVisible(true);
-		add(numberLabel);
-		
-    
-		/*		typeLabel = new JLabel("");
-		typeLabel.setVisible(true);
-		add(typeLabel);
-		*/
-		JComboBox typeCombo ;
-		ArrayList<String> myTypes = new ArrayList<String>();
-		addTypeOnPin(myTypes, i, Searduino.SEARDUINO_PINTYPE_DIGITAL);
-		addTypeOnPin(myTypes, i, Searduino.SEARDUINO_PINTYPE_PWM);
-		addTypeOnPin(myTypes, i, Searduino.SEARDUINO_PINTYPE_ANALOG);
-
-		typeCombo = new JComboBox(myTypes.toArray());
-		typeCombo.setVisible(true);
-		typeCombo.addActionListener(this);
-		add(typeCombo);
-
-		modeLabel = new JLabel("INPUT");
-		modeLabel.setVisible(true);
-		add(modeLabel);
-		
-		digValue = new JLabel("0");
-		digValue.setVisible(false);
-		add(digValue);
-		
-		pins[i][TABLE_TYPE_POS]   = typeCombo;
-		pins[i][TABLE_NUMBER_POS] = numberLabel;
-		pins[i][TABLE_MODE_POS]   = modeLabel;
-		pins[i][TABLE_OUTPUT_POS] = digValue;
-
-		setTypeInputPin(i, searduino.getCurrentPinType(i), false);
+	for (int i=0;i<nrPins;i++) {
+	    JLabel digValue;
+	    JLabel numberLabel;
+	    JLabel modeLabel;
+	    JLabel inputLabel;
+	    
+	    System.out.println(" Adding pin: " + i );
+	    /*
+	      pinMode[i] = 0;
+	      pinType[i] = 0;
+	    */
+	    numberLabel = new JLabel("" + i);
+	    numberLabel.setVisible(true);
+	    
+	    JComboBox typeCombo ;
+	    ArrayList<String> myTypes = new ArrayList<String>();
+	    addTypeOnPin(myTypes, i, Searduino.SEARDUINO_PINTYPE_DIGITAL);
+	    addTypeOnPin(myTypes, i, Searduino.SEARDUINO_PINTYPE_PWM);
+	    addTypeOnPin(myTypes, i, Searduino.SEARDUINO_PINTYPE_ANALOG);
+	    typeCombo = new JComboBox(myTypes.toArray());
+	    //new JComboBox();
+	    //new JComboBox(myTypes.toArray());
+	    typeCombo.setVisible(true);
+	    typeCombo.addActionListener(this);
+	    
+	    modeLabel = new JLabel("INPUT");
+	    modeLabel.setVisible(true);
+	    
+	    digValue = new JLabel("0");
+	    digValue.setVisible(false);
+	    
+	    inputLabel = new JLabel("<none>");
+	    
+	    c.gridy = i+1;
+	    /* 1 Pin */
+	    c.gridx = 0;
+	    panel.add(numberLabel, c);
+	    /* 2 Type */
+	    c.gridx = 1;
+	    panel.add(typeCombo, c);
+	    /* 3 Mode */
+	    c.gridx = 2;
+	    panel.add(modeLabel, c);
+	    /* 4 Output */
+	    c.gridx = 3;
+	    panel.add(digValue, c);
+	    /* 5 Input */
+	    c.gridx = 4;
+	    panel.add(inputLabel, c);
+	    
+	    pins[i][TABLE_NUMBER_POS] = numberLabel;
+	    pins[i][TABLE_TYPE_POS]   = typeCombo;
+	    pins[i][TABLE_MODE_POS]   = modeLabel;
+	    pins[i][TABLE_OUTPUT_POS] = digValue;
+	    pins[i][TABLE_INPUT_POS]  = inputLabel;
+	    
+	    // done in setupPinType
+	    //setTypeInputPin(i, searduino.getCurrentPinType(i), false);
+	}
 	
-
-	    }
-
-
+	System.out.println("=========================== Creating PinTable (" + nrPins +") fini" );
+	
     }
     
 }
