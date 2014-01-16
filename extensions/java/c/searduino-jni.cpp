@@ -336,18 +336,34 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
   int ret;
 
   printf ("cancel thread\n");
-
-  seasim_set_halted();
+  fflush(stdout);
 
   if (arduino_thread[thread_index]!=0)
     {
+      printf ("Halting code\n");
+      fflush(stdout);
+      
+      seasim_set_halted();
+      usleep(300);
+      printf ("Halted code\n");
+      fflush(stdout);
+
       printf ("cancel thread %u\n", (unsigned int)arduino_thread[thread_index]);
+      fflush(stdout);
       ret = pthread_cancel(arduino_thread[thread_index]);
+      printf ("cancel thread => %d\n", ret);
+      fflush(stdout);
+      usleep(300);
+
       arduino_thread[thread_index]=0;
       printf ("cancel thread %d\n", ret);
     }
 
+  printf ("Sleeping after cancel code\n");
+  fflush(stdout);
+  usleep(300);
   printf ("cancel thread returning\n");
+  fflush(stdout);
   return ;
 }
 
@@ -398,14 +414,15 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
 
   if (arduino_thread[thread_index]!=0) 
     {
+      //      pthread_join(arduino_thread[thread_index], (void**)&retval);
+      //printf ("starting thread....join returned: %d\n", retval);
+
       printf ("cancel thread %u\n", (unsigned int)arduino_thread[thread_index]);
       ret = pthread_cancel(arduino_thread[thread_index]);
       printf ("cancel thread %d\n", ret);
       arduino_thread[thread_index]=0;
     }
 
-  //pthread_join(arduino_thread[thread_index], (void**)&retval);
-  //printf ("starting thread....join returned: %d\n", retval);
 
   //  thread_index++;
 
@@ -482,6 +499,14 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setBoardName
 }
 
 
+JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setUpBoard
+  (JNIEnv *env, jobject obj)
+{
+  jint ret = seasim_setup_board();
+  return ret;
+}
+
+
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getCurrentPinType
 (JNIEnv *env, jobject obj, jint pin)
 {
@@ -498,10 +523,7 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_hasGenericPinType
 {
   jint ret =  seasim_has_generic_pin_type(pin, type);
 
-  //  printf ("SEASIM RET: %d\n", ret);
-
   return ret;
-
 }
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setGenericInput
@@ -586,6 +608,24 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_fakeDigitalInput
   return seasim_fake_digital_input (pin, val);
 }
 
+JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getBoardPins
+  (JNIEnv *env, jobject obj, jstring board)
+{
+  JNIEnv * g_env;
+  int ret;
+
+  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  CHECK_JNI(getEnvStat, g_env, g_vm);
+
+  const char* strCIn = (env)->GetStringUTFChars(board , 0);
+  //  printf ("board: %s\n", strCIn);
+
+  ret = seasim_get_board_pins((char*)strCIn);
+  
+  return ret;
+
+}
+
 JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSystemInformation
   (JNIEnv *, jobject)
 {
@@ -611,6 +651,30 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSystemInforma
   JNIEnv * g_env;
   int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   jstring jstrBuf = (g_env)->NewStringUTF(buf);
+
+  return jstrBuf;
+}
+
+JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSupportedBoards
+  (JNIEnv *, jobject)
+{
+  const char *src = seasim_get_supported_boards();
+
+  JNIEnv * g_env;
+  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  jstring jstrBuf = (g_env)->NewStringUTF( src);
+
+  return jstrBuf;
+}
+
+JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getBoardSetup
+  (JNIEnv *, jobject)
+{
+  const char *src = seasim_get_board_setup();
+
+  JNIEnv * g_env;
+  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  jstring jstrBuf = (g_env)->NewStringUTF( src);
 
   return jstrBuf;
 }
