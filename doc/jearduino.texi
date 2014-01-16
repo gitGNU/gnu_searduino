@@ -1,0 +1,36 @@
+\input texinfo   @c -*-texinfo-*-
+
+@c %**start of header
+@setfilename jearduino.texi
+@settitle Jearduino - GUI frontend for Seardunio
+@c %**end of header
+@afourpaper
+@c @setchapternewpage odd
+
+
+@titlepage
+@title Searduino - GUI frontend for Seardunio
+@subtitle January 2014
+@end titlepage
+
+@contents
+
+@chapter Background
+@include background.texi
+
+@chapter Introduction
+
+@section Jearduino features
+
+@subsection Import Arduino sketches
+
+@subsection Load Searduino projects
+
+@subsection Load shared libraries
+
+@subsection Verify and upload to Arduino boards
+
+
+@bye
+
+
