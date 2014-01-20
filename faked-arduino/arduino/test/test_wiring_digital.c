@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2012 Henrik Sandklef 
+ *   Copyright (C) 2012, 2014 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -28,11 +28,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define INPUT  0 
-#define OUTPUT 1
-
-
-
 START_TEST (test_digin_callback_raw)
 {
   int i ;
@@ -41,15 +36,26 @@ START_TEST (test_digin_callback_raw)
 	  "\t*** from layers below\n"
 	  "\t <start>\n");
 
-
+  /* 
+     Macro for testing pin
+     * 1: set input mode,     write 0,            if 1 => error
+     * 2: set output mode,    no write,           if 1 => error
+     * 3: still output mode,  write 1 (internal), if 1 => error
+   */
 #define TEST_DIG_PIN_FUN(i) \
+      /* 1 */								\
       pinMode(i, INPUT); \
       digitalWrite(i, 0); \
-      fail_if(digitalRead(i)==1); \
+      printf ("1 mode on %d is now: %d \n", i,   get_generic_pin_mode(i)) ;	\
+      fail_if(digitalRead(i)==1, "read non 1 from pin");					\
+      /* 2 */								\
       pinMode(i, OUTPUT);         \
-      fail_if(digitalRead(i)==1, "Reading from pin %d was 1", i); \
+      printf ("2 mode on %d is now: %d \n", i,   get_generic_pin_mode(i)) ; \
+      fail_if(digitalRead(i)==1, "Reading from pin %d was 1 (first time)", i); \
+      /* 3 */								\
       digin_callback(i,1);        \
-      fail_if(digitalRead(i)==1, "Reading from pin %d was 1", i);
+      printf ("3 mode on %d is now: %d \n", i,   get_generic_pin_mode(i)) ;	\
+      fail_if(digitalRead(i)==1, "Reading from pin %d was 1 (second time)", i);
 
 
   TEST_DIG_PIN_FUN(1);
@@ -224,8 +230,10 @@ int main(void)
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
 
-  seasim_set_board_name("uno");
+  seasim_set_board_name("Uno");
   seasim_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
+  seasim_setup_board();
+  
 
   srunner_run_all(sr, CK_NORMAL);
   num_failed = srunner_ntests_failed(sr);
