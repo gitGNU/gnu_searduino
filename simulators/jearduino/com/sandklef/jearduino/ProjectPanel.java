@@ -60,7 +60,7 @@ public class ProjectPanel extends JPanel
 		ret = s;
 	    }
 	}
-	System.out.println("getName(" + s +");  => " + ret);
+	//	System.out.println("getName(" + s +");  => " + ret);
 	return ret;
     }
 

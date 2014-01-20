@@ -114,14 +114,14 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	    return ;
 	}
 
-	System.out.println("Pin " + pin + ", items: " + ((JComboBox)pins[pin][TABLE_TYPE_POS]).getItemCount());
+	//	System.out.println("Pin " + pin + ", items: " + ((JComboBox)pins[pin][TABLE_TYPE_POS]).getItemCount());
 
 	/* 
 	 * Change pin type called from Arduino code
 	 *   update combobox
 	 */
 	if (fromArduino)    {
-	    System.out.println("setTypeInputPin() .... ARDUINO");
+	    // System.out.println("setTypeInputPin() .... ARDUINO");
 	    if (type==Searduino.SEARDUINO_PINTYPE_DIGITAL) {
 		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
 		int pos = getItemPosFromCombo(cb, 
@@ -144,7 +144,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	 *   do NOT update combobox
 	 */
  	else {
-	    System.out.println("setTypeInputPin() .... GUI");
+	    // System.out.println("setTypeInputPin() .... GUI");
 		if (type==Searduino.SEARDUINO_PINTYPE_DIGITAL)
 		    {
 			setDigitalInputPin(pin);
@@ -244,7 +244,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	input = new JLabel("");
 	input.setEnabled(true);	
 	input.setVisible(true);
-	    System.out.println("setPwmPin()");
 
 	if (pins[pin][TABLE_INPUT_POS]!=null)
 	    {
@@ -327,7 +326,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
     public void setPinValue(int pin, int val, int type)
     {
 	JLabel label = (JLabel)pins[pin][TABLE_OUTPUT_POS];
-	System.out.println("PIN VALUE: " + pin + "  VALUE: " + val + " TYPE: " + type);
+	//	System.out.println("PIN VALUE: " + pin + "  VALUE: " + val + " TYPE: " + type);
 	label.setVisible(true);
 	label.setText(""+val);
 	if ( type == Searduino.SEARDUINO_PINTYPE_DIGITAL  ) 
@@ -349,7 +348,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
     
     public void setPinTypeOBSOLETE(int pin, int type)
     {
-	System.out.println("PIN: " + pin + "  TYPE: " + type);
+	//	System.out.println("PIN: " + pin + "  TYPE: " + type);
 	//	((JLabel)pins[pin][TABLE_TYPE_POS]).setVisible(true);
 	//((JLabel)pins[pin][TABLE_TYPE_POS]).setText(""+type);
     }
@@ -440,21 +439,17 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	//	jState.setBoardPins(jState.getBoardPins());
 	int nrPins = jState.getBoardPins();
 
-	System.out.println("=========================== Creating PinTable (" + nrPins +") " );
-
 	/* +1 for the header row */
 	panel.setLayout(new GridBagLayout());
 	//	this.setLayout(new GridLayout(nrPins, 4));
 	GridBagConstraints c = new GridBagConstraints();
 
 	removeAll();
-	System.out.println("=========================== Creating PinTable (" + nrPins +") 3" );
 
 	pinMode = new int[nrPins];
 	pinType = new int[nrPins];
 	pins    = new Object[nrPins][5] ;
 	
-	System.out.println("=========================== Creating PinTable (" + nrPins +") 4" );
 	//	c.fill = GridBagConstraints.HORIZONTAL;
 	c.gridx = 0;
 	c.gridy = 0;
@@ -479,7 +474,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	    JLabel modeLabel;
 	    JLabel inputLabel;
 	    
-	    System.out.println(" Adding pin: " + i );
 	    /*
 	      pinMode[i] = 0;
 	      pinType[i] = 0;
@@ -532,8 +526,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	    // done in setupPinType
 	    //setTypeInputPin(i, searduino.getCurrentPinType(i), false);
 	}
-	
-	System.out.println("=========================== Creating PinTable (" + nrPins +") fini" );
 	
     }
     

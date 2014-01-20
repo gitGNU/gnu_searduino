@@ -124,8 +124,6 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
 	String searduino_dir = System.getProperty("searduino.project.dir");
 
-	System.out.println("findArduinoCode -------------" );
-
 
 	if (searduino_dir==null) {
 	    searduino_dir = searduino_default_path;
@@ -217,7 +215,6 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     public void showAbout()
     {
-	System.out.println("Show about");
 	JearduinoAbout jabout = new JearduinoAbout();
 
 	jabout.pack();
@@ -227,7 +224,6 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     public void showManual()
     {
-	System.out.println("Show manual");
 	try {
 	    Desktop.getDesktop().open(new File("/opt/share/searduino/doc/manual.html"));
 	} catch (java.io.IOException e)  {
@@ -237,7 +233,6 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     public void showJearduinoManual()
     {
-	System.out.println("Show Jearduino manual");
 	try {
 	    Desktop.getDesktop().open(new File("/opt/share/searduino/doc/jearduino.html"));
 	} catch (java.io.IOException e)  {
@@ -294,33 +289,28 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	    }
 	else if  ( o == importArduinoFileItem )
 	    {
-		System.out.println("importArduinoFileItem");
 		findInoCode();
 	    }
 	else if  ( o == verifyArduinoCodeItem )
 	    {
 		je.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_BUILD_ARDUINO, null);
-		System.out.println("verifyArduinoCodeItem");
 	    }
 	else if  ( o == uploadArduinoCodeItem )
 	    {
 		je.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_UPLOAD, null);
-		System.out.println("uploadArduinoCodeItem");
 	    }
 	else if  ( o == openSearduinoProjectItem )
 	    {
-		System.out.println("openSearduinoProjectItem");
-
 		findSerduinoProject();
 
 	    }
 	else if ( codeIdx != -1 )
 	    {
-		System.out.println("Code at " + codeIdx +
-				   " was choosen " );
+		// System.out.println("Code at " + codeIdx +
+		// 		   " was choosen " );
 		ae.handleArduinoCodeNameEvent(codeIdx);
-		System.out.println("Code at " + codeIdx +
-				   " was choosen ... call has been made" );
+		// System.out.println("Code at " + codeIdx +
+				   // " was choosen ... call has been made" );
 	    }
     }
     
