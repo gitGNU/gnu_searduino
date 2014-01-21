@@ -1,7 +1,7 @@
 #
 #       Searduino
 #
-#  Copyright (C) 2013 Henrik Sandklef      
+#  Copyright (C) 2013,2014 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -32,14 +32,24 @@ SEARDUINO_INC_PATH=-I../../../arduino-sources/core -I../../../arduino-sources/li
 SEARDUINO_LIB_INC_PATH=../../../arduino-sources/libraries 
 endif
 
-MYCFLAGS=-I../../include/arduino -I../../include/arduino/ -I../../../arduino-extras/include $(SEARDUINO_INC_PATH)/ -I../../include -DSEARDUINO_STUB -I../../include/seasim/
+
+ARDUINO_CODE=../../../extensions/arduino-lib/.libs/libarduino-code.so
+ARDUINO_CODE_ARG=-DARDUINO_CODE=\"$(ARDUINO_CODE)\"
+
+ARDUINO_LCD_CODE=./liblcd.so
+ARDUINO_LCD_CODE_ARG=-DARDUINO_LCD_CODE=\"$(ARDUINO_LCD_CODE)\"
+
+MYCFLAGS=-I../../include/arduino -I../../include/arduino/ -I../../../arduino-extras/include $(SEARDUINO_INC_PATH)/ -I../../include -DSEARDUINO_STUB -I../../include/seasim/ $(ARDUINO_CODE_ARG) $(ARDUINO_LCD_CODE_ARG)
 AM_CFLAGS=$(MYCFLAGS)
 AM_CXXFLAGS=$(MYCFLAGS)
 
 AM_LDFLAGS=-lpthread 
 
+
 TESTS =  testliquidcrystal testbegin testlcdcallback testclear
 check_PROGRAMS = testliquidcrystal testbegin testlcdcallback testclear
+
+all: $(ARDUINO_CODE)
 
 testbegin_SOURCES = test_begin.cpp
 testbegin_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
