@@ -49,7 +49,13 @@ AM_LDFLAGS=-lpthread
 TESTS =  testliquidcrystal testbegin testlcdcallback testclear
 check_PROGRAMS = testliquidcrystal testbegin testlcdcallback testclear
 
-all: $(ARDUINO_CODE)
+check-local: $(ARDUINO_CODE) $(ARDUINO_LCD_CODE)
+
+$(ARDUINO_LCD_CODE):
+	make -f Makefile-arduino-lcd
+
+$(ARDUINO_CODE):
+	cd ../../../extensions/arduino-lib/ && make clean && make
 
 testbegin_SOURCES = test_begin.cpp
 testbegin_CXXFLAGS = @CHECK_CFLAGS@ $(MYCFLAGS)
