@@ -35,10 +35,9 @@ START_TEST (test_setup)
   
   LiquidCrystal *lcd = new LiquidCrystal(8, 9, 4, 5, 6, 7);
   
-  fail_if( lcd == NULL);  
+  fail_if(lcd == NULL);  
 
   lcd->begin(16, 2);
-
 }
 END_TEST
 
@@ -60,7 +59,10 @@ int main(void)
   int num_failed;
   //  test_micros();
 
-  searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
+  printf ("Will load: %s\n", ARDUINO_CODE);
+  fflush(stdout);
+
+  searduino_set_arduino_code_name(ARDUINO_CODE);
 
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
