@@ -84,6 +84,15 @@ seasim_register_lcd_cb(lcd_to_sim_callback_ptr cb)
   return ext_register_lcd_cb(cb);
 }
 
+
+char * get_lcd_data(void) ;
+
+char *
+seasim_get_lcd_data(void)
+{
+  return get_lcd_data();
+}
+
 uint8_t
 seasim_register_type_cb(pintype_to_sim_callback_ptr cb)
 {

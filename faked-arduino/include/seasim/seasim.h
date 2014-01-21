@@ -665,6 +665,9 @@ seasim_get_board_pins(char *board);
 char * 
 seasim_get_board_setup(void);
 
+char *
+seasim_get_lcd_data(void);
+
 
 #ifdef __cplusplus
 } /* extern "C" */
