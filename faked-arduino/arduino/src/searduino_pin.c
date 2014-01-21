@@ -329,10 +329,11 @@ get_generic_nr_of_pins(void)
 int 
 set_generic_pin_mode(uint8_t pin, uint8_t mode)
 {
-  /* printf ("SGM %d %d  (%d || %d)\n", pin, mode, */
-  /* 	  has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL),  */
-  /* 	  has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM)); */
-
+  /*
+   printf ("SGM %d %d  (%d || %d)\n", pin, mode, 
+   	  has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL),  
+   	  has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM)); 
+  */
   
   if ( (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_DIGITAL)) ||
        (has_generic_pin_type(pin, SEARDUINO_PIN_TYPE_PWM) ))
