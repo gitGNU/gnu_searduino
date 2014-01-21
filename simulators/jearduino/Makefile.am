@@ -16,6 +16,7 @@ JAVA_SOURCES = \
         ${PKG_PATH}/FileEvent.java \
         ${PKG_PATH}/Logger.java \
         ${PKG_PATH}/Tailer.java \
+	${PKG_PATH}//TailerEvent.java \
         ${PKG_PATH}/FileLogger.java \
         ${PKG_PATH}/BoardEvent.java \
         ${PKG_PATH}/ExecControl.java \
