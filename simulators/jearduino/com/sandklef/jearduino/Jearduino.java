@@ -384,7 +384,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	pins.setupPins();
 
-	
 	ret = searduino.setUpBoard();
 	
 	pins.setupPinTypes();
@@ -401,14 +400,15 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     private int setupBoard(String bName)
     {
 	int ret;
+
 	ret = searduino.setBoardName(bName);
 
-	/* 
 	if (ret==0) {
-	    ec.unsetAll();
+	    /*	    ec.unsetAll();*/
+	    System.out.println("Failed setting board name....");
 	    return 1;
 	}
-	*/
+
 	jState.setBoard(bName);
 	setupBoardPins();
 	return 0;
@@ -764,7 +764,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }
 
 
-    public void waitAWhile(int del) {
+    public static void waitAWhile(int del) {
 	try {
 	    Thread.sleep(del);
 	} catch (InterruptedException e) {
@@ -1010,10 +1010,11 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	final Jearduino jearduino ;
 	jearduino = new Jearduino();
+
 	boolean startDirect = false;
 	boolean buildDirect = false;
 	int nrArgs     = args.length;
-	String boardS  = null;
+	String boardS  = "<none>";
 	String code    = null;
 	String project = null;
 	int ret=0;
@@ -1067,21 +1068,15 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	
 
 	if (boardS==null) {
-	    ret = jearduino.setupBoard(jearduino.jpref.getBoard());
-	} else {
-	    if ( jearduino.isBoardSupported(boardS)) {
-		    ret = jearduino.setupBoard(boardS);
-		} else {
-		    System.out.println ("You supplied an unsupported board: " 
-				      + boardS);
-		    String boards[]   = jearduino.getSupportedBoards();
-		    String boardArray = Arrays.toString(boards);
-		    System.out.println ("   Supported boards: " + boardArray);
-		    System.exit(1);
-		}
+	    boardS = jearduino.jpref.getBoard();
 	}
 
-			   
+	if (ret!=0) {
+	    System.out.println ("Could not set up board " +  boardS + " returned: " + ret);
+	    System.exit(ret);
+	}
+
+
 	jearduino.fileLogger.start();
 
 	/* Update menu items */
@@ -1090,32 +1085,43 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	System.out.println("Searduino version: " + jearduino.version);
 	System.out.println("Searduino board:   " + jearduino.searduino.getBoardName());
 
-	if ( (code==null) && (project==null) ){
+
+	if ( (code==null) && (project==null) ) {
 	    startDirect=false;
 	}
 
+	//	if (jearduino.validBoard()) {
 
-	if (jearduino.validBoard()) {
-
-	    if (project!=null) {
-		jearduino.handleSearduinoDirEvent(new File(project));
-	    } else if (code!=null) {
-		jearduino.getAndUseArduinoCodeName(code, false);
-	    } else {
-		/* If no code supplied on cli - use latest */
-		jearduino.getAndUseArduinoCodeName(null, false);
-	    }
+	if ( jearduino.isBoardSupported(boardS)) {
 	    
+	    ret = jearduino.setupBoard(boardS);
+	} else {
+	    System.out.println ("You supplied an unsupported board: " 
+				+ boardS);
+	    String boards[]   = jearduino.getSupportedBoards();
+	    String boardArray = Arrays.toString(boards);
+	    System.out.println ("   Supported boards: " + boardArray);
+	    System.exit(1);
+	}
+	
+	if (project!=null) {
+	    jearduino.handleSearduinoDirEvent(new File(project));
+	} else if (code!=null) {
+	    jearduino.getAndUseArduinoCodeName(code, false);
+	} else {
+	    /* If no code supplied on cli - use latest */
+	    jearduino.getAndUseArduinoCodeName(null, false);
+	}
+	
+
 	    if (buildDirect) {
 		jearduino.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_BUILD_PROJECT, null);
 	    }
 	    
 	    if (startDirect) {
-		System.out.println("Send start.....\n");
-		jearduino.waitAWhile(2000);
 		jearduino.ec.sendStart();
 	    }
-	}
+	    //}
 
         SwingUtilities.invokeLater(new Runnable() {
 		public void run() {
