@@ -97,6 +97,10 @@ public class Searduino
 
     public static int getPinType(String pintype) 
     {
+	if (pintype==null) {
+	    return -1;
+	}
+
 	if (pintype.equals(SEARDUINO_PINTYPE_DIGITAL_STRING)) 
 	    return SEARDUINO_PINTYPE_DIGITAL;
 	if (pintype.equals(SEARDUINO_PINTYPE_ANALOG_STRING)) 
