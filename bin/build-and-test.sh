@@ -121,10 +121,10 @@ checker()
 
     SAVED_DIR=$(pwd)
 
-    cd ${TMP_INST}/share/searduino/example/digpins/ && make -f Makefile.digpins clean all
+    cd ${TMP_INST}/share/searduino/example/digpins/ && make -f Makefile.digpins clean prog  && make -f Makefile.digpins clean shlib
     exit_on_failure $? "make digpins in install dir"
     
-    cd ${TMP_INST}/share/searduino/example/python-digcounter && make -f Makefile.digcounter clean all
+    cd ${TMP_INST}/share/searduino/example/python-digcounter && make -f Makefile.digcounter clean prog && make -f Makefile.digcounter clean shlib
     exit_on_failure $? "make digcounter in installed dir"
 
     cd ${SAVED_DIR}
