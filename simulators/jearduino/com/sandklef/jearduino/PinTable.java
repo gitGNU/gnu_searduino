@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2013 Henrik Sandklef 
+ *   Copyright (C) 2013, 2014 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -97,7 +97,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		return i;
 	    }
 	}
-	return 0;
+	return -1;
     }
 
     public void setTypeInputPin(int pin, int type, boolean fromArduino)
@@ -106,6 +106,11 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	    System.out.println("setTypeInputPin() .... pins not created  yet, bailing out");
 	    return ;
 	}
+	if (pins[0]==null) {
+	    System.out.println("setTypeInputPin() .... pins not created  yet, bailing out");
+	    return ;
+	}
+
 	
 	if (!searduino.hasGenericPinTypeBoolean(pin, type)) {
 	    System.out.println("\n\n *** ERROR: Can not set type " +
@@ -126,7 +131,11 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
 		int pos = getItemPosFromCombo(cb, 
 					      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_DIGITAL));
-		cb.setSelectedIndex(pos);
+		if(pos==-1) {
+		    System.out.println("WARNING: deal with this way better");
+		} else {
+		    cb.setSelectedIndex(pos);
+		}
 	    } else if (type==Searduino.SEARDUINO_PINTYPE_ANALOG) {
 		JComboBox cb = (JComboBox)pins[pin][TABLE_TYPE_POS];
 		int pos = getItemPosFromCombo(cb, 
