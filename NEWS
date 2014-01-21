@@ -1,10 +1,27 @@
-News in coming 0.9
+News in 0.9
 ==============================================
 
-  upload/verify for board
-  loading a file again will actually reload it. Needed when rebuilding code.
-  No crash when halting and reloading dyn files
+  Upload and verify for Arduino boards.
 
+    It is now possible to use Jearduino to verify(build) and upload
+    code for physical Arduino boards. Makes it easy to test in
+    simualtor and with two clicks upload it to a physical board.
+
+  Loading a file again will actually reload it. 
+
+    Needed when rebuilding code. Previously the Arduino code didn't
+    get reloaded if loading the same file name as currently loaded.
+
+  No crash when halting and reloading dyn files.
+
+    Earlier versions sometimes crashed when halting and reloading a
+    file containing Arduino code.
+
+  LCD correct after halt and start.
+
+    Earlier versions had the previous LCD data incorrectly stored and
+    displayed when rotating left/right.
+    
   
 
 News in 0.8
