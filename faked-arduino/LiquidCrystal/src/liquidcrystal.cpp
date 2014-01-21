@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2012, 2013 Henrik Sandklef 
+ *   Copyright (C) 2012, 2013, 2014 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -48,6 +48,24 @@ static uint8_t current_row      = 0;
 static int     current_pos      = 0; /* for scrolling */
 static uint8_t scroll_enable   = SCROLL_DISABLED;
 
+
+extern "C" {
+char *
+get_lcd_data(void) 
+{
+  static char tmpbuf[83];
+
+  sprintf(tmpbuf,
+	  "LCD DATA:\n---------------\n1: [%s]\n2: [%s]", 
+	  (char*)lcd_data_rows[0].data, 
+	  (char*)lcd_data_rows[1].data);
+
+  return tmpbuf;
+}
+}
+
+
+
 LiquidCrystal::LiquidCrystal(uint8_t rs, uint8_t rw, uint8_t enable,
 			     uint8_t d0, uint8_t d1, uint8_t d2, uint8_t d3,
 			     uint8_t d4, uint8_t d5, uint8_t d6, uint8_t d7)
@@ -87,6 +105,7 @@ void LiquidCrystal::init(uint8_t fourbitmode, uint8_t rs, uint8_t rw, uint8_t en
   _data_pins[5] = d5;
   _data_pins[6] = d6;
   _data_pins[7] = d7; 
+  clear();
 }
 
 void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize) 
@@ -95,12 +114,7 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
    lcd_cols    = cols;
    lcd_dotsize = dotsize;
 
-   memset(lcd_data_rows[0].data, 0, LCD_STORAGE_SIZE);
-   memset(lcd_data_rows[1].data, 0, LCD_STORAGE_SIZE);
-
-   lcd_data_rows[0].data[0]='\0';
-   lcd_data_rows[1].data[0]='\0';
-
+   clear();
 }
 
 
@@ -108,23 +122,38 @@ void LiquidCrystal::begin(uint8_t cols, uint8_t lines, uint8_t dotsize)
 /********** high level commands, for the user! */
 void LiquidCrystal::clear()
 {
+
   current_row    = 0;
   lcd_row_pos[0] = 0;
   lcd_row_pos[1] = 0;
 
+  
+
   memset(lcd_data_rows[0].data, 0, LCD_STORAGE_SIZE);
   memset(lcd_data_rows[1].data, 0, LCD_STORAGE_SIZE);
-
   strcpy((char*)lcd_data_rows[0].data, " ");
   strcpy((char*)lcd_data_rows[1].data, " ");
 
-  /*  printf ("Emptied them... %d %d\n", 
+  /*printf ("Emptied them... %d %d\n", 
 	  strlen((char*)lcd_data_rows[0].data),
 	  strlen((char*)lcd_data_rows[1].data));
   */
-  
-  lcd_sim_callback((char*)lcd_data_rows[0].data,
-		   (char*)lcd_data_rows[1].data);
+   lcd_data_rows[0].data[0]='\0';
+   lcd_data_rows[1].data[0]='\0';
+
+
+   if ( lcd_sim_callback == NULL ) 
+     {
+       ;
+     }
+   else 
+     {
+       lcd_sim_callback((char*)lcd_data_rows[0].data,
+			(char*)lcd_data_rows[1].data);
+     }
+
+   current_pos = 0 ;
+   return ;
 
 }
 
@@ -202,25 +231,47 @@ void LiquidCrystal::createChar(uint8_t location, uint8_t charmap[]) {
   ;
 }
 
-
 size_t LiquidCrystal::write(uint8_t value) {
   uint8_t  pos;
   uint8_t *data;
-    
+
+
+  if (  searduino_is_halted() ) 
+    {
+      return 0;
+    }
+  
   if (value==0) 
     {
       char *start1;
       char *start2;
-      char retbuf1[17];
-      char retbuf2[17];
-      char tmpbuf1[81];
-      char tmpbuf2[81];
+      static char retbuf1[17];
+      static char retbuf2[17];
+      static char tmpbuf1[81];
+      static char tmpbuf2[81];
 
-      sprintf(tmpbuf1, "%-40s%-40s", (char*)lcd_data_rows[0].data, (char*)lcd_data_rows[0].data);
+      /*
+      printf ("LCD: ----- : %u %s \n", 
+	      lcd_data_rows[0], 
+	      scroll_enable);
+      */
+
+      memset(retbuf1, 0, 17);
+      memset(retbuf2, 0, 17);
+      memset(tmpbuf1, 0, 81);
+      memset(tmpbuf2, 0, 81);
+
+
+      sprintf(tmpbuf1, "%-40s%-40s", 
+	      (char*)lcd_data_rows[0].data, 
+	      (char*)lcd_data_rows[0].data);
       tmpbuf1[81]='\0';
 
-      sprintf(tmpbuf2, "%-40s%-40s", (char*)lcd_data_rows[1].data, (char*)lcd_data_rows[1].data);
+      sprintf(tmpbuf2, "%-40s%-40s", 
+	      (char*)lcd_data_rows[1].data, 
+	      (char*)lcd_data_rows[1].data);
       tmpbuf2[81]='\0';
+
       if (scroll_enable==SCROLL_DISABLED)
 	{
 	  start1 = tmpbuf1;
@@ -274,6 +325,8 @@ size_t LiquidCrystal::write(uint8_t value) {
 	{
 	  lcd_sim_callback(retbuf1,
 			   retbuf2);
+	  
+	  ;
 	}
     }
 
