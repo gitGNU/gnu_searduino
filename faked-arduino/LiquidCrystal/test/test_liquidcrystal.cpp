@@ -27,17 +27,18 @@
 #include <stdio.h>
 
 #include "searduino.h"
+#include "seasim.h"
 #include "LiquidCrystal.h"
 
+LiquidCrystal *lcd;
 
 START_TEST (test_setup)
 {
   init();
   
-  LiquidCrystal *lcd = new LiquidCrystal(8, 9, 4, 5, 6, 7);
+  lcd = new LiquidCrystal(8, 9, 4, 5, 6, 7);
   
   fail_if( lcd == NULL);  
-
 }
 END_TEST
 
@@ -59,7 +60,9 @@ int main(void)
   int num_failed;
   //  test_micros();
 
+  seasim_set_board_name("Uno");
   searduino_set_arduino_code_name("../../../extensions/arduino-lib/.libs/libarduino-code.so");
+  seasim_setup_board();
 
   Suite *s = buffer_suite();
   SRunner *sr = srunner_create(s);
