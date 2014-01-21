@@ -2,6 +2,8 @@
 
 LOG_FILE=test-dist.log
 
+DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-amd64/include/
+
 FUNC_FILE=$(dirname $0)/functions
 if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
 then
@@ -11,6 +13,7 @@ then
 fi
 
 source $FUNC_FILE
+
 
 DIST_FILE=$1
 if [ "$DIST_FILE" = "" ]
@@ -22,6 +25,11 @@ if [ "$DIST_FILE" = "" ]
 then
     echo "No dist file to test ... bailing out"
     exit 1
+fi
+
+if [ "$2" = "--arduino-source" ]
+then
+    export ARDUINO_SOURCE=$3
 fi
 
 echo "Working with: $DIST_FILE"
@@ -39,6 +47,17 @@ prepare()
     
     tar zxvf ${CUR_DIR}/${DIST_FILE}
     exit_on_failure $? "Unpacking DIST_FILE: ${CUR_DIR}/${DIST_FILE}"
+
+    if [ "$CFLAGS" = "" ]
+    then
+	export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
+    fi
+
+    if [ "$CXXFLAGS" = "" ]
+    then
+	export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
+    fi
+    
 
     cd *
     exit_on_failure $? "Changing directory"
