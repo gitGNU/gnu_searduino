@@ -1014,7 +1014,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	boolean startDirect = false;
 	boolean buildDirect = false;
 	int nrArgs     = args.length;
-	String boardS  = "<none>";
+	String boardS  = "Uno";
 	String code    = null;
 	String project = null;
 	int ret=0;
