@@ -495,6 +495,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 		    hasDir=true;
 		}
 		useCode(new File(jState.getCanonicalCodeName()), hasDir);
+		ec.unsetStartable();
 		searduino.startArduinoCode();
 	    }
     }
@@ -619,8 +620,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 		
 	    }
 
-	System.out.println("\n\n======= STORE " + canonName + "==================== \n+n");
-
 	/* Store the new one in the first spot */
 	jpref.setArduinoCodeName(0, canonName);
 	
@@ -648,6 +647,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	addLog("useCode(" + f + ", " + hasDirectory + ")");
 
+
+	
 	try {
 	    code = f.getName();
 	    canonCode = f.getCanonicalPath();
@@ -662,7 +663,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    return;
 	}
 
-
 	if (ret != 0 ) {
 	    if (jState.buildTypeStub()) {
 		setSearduinoProjectInfo(jState.getCurrentSearduinoProject(),
@@ -673,6 +673,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    ec.unsetAll();
 	    return;
 	} else {
+	
 	    addLog("Loaded Arduino code: " + f);
 	    
 	    /* Set up pins */
@@ -688,6 +689,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 		} else {
 		    dir = "";
 		} 
+
 		setSearduinoProjectInfo(dir, code, canonCode);
 		saveArduinoCodeName(canonCode, code);
 		ec.setStartable();
@@ -697,14 +699,13 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void setSearduinoProjectInfo(String project, String shortCode, String longCode) {
 
+
 	/* Manage project info */
 	if (project==null) { 
 	    project=""; 
 	}
-	if (project.equals("")) { 
-	    searduino.closeArduinoCode();
-	}
-	
+
+		
 	/* Set current project name */
 	jState.setCurrentSearduinoProject(project);
 	projectPanel.setProjectName(project);
@@ -727,17 +728,12 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	addLog("Opening file: " + f);
 
-	//	System.out.println("openArduinoFileEvent -> setupBoardPins()");
-	//setupBoardPins();
-
 	try {
 	    canonFile = f.getCanonicalPath();
 	} catch (IOException e)  {
 	    showError("load Arduino code: " + f.toString());
 	    return;
 	}
-
-
 	
 	if (hasProject) {
 	    setSearduinoProjectInfo(jState.getCurrentSearduinoProject(), 
@@ -746,6 +742,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	} else {
 	    setSearduinoProjectInfo("", f.getName(),canonFile) ;
 	}
+
 	useCode(f, hasProject);
     }
 
@@ -877,8 +874,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     public void handleSearduinoDirEvent(File dir)
     {
-	stopArduinoCode(true);
-
 	getAndUseSearduinoDir(dir);
     }	
 
@@ -1109,7 +1104,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	//	if (jearduino.validBoard()) {
 
 	if ( jearduino.isBoardSupported(boardS)) {
-	    
 	    ret = jearduino.setupBoard(boardS);
 	} else {
 	    System.out.println ("You supplied an unsupported board: " 
@@ -1120,24 +1114,26 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    System.exit(1);
 	}
 	
+
 	if (project!=null) {
 	    jearduino.handleSearduinoDirEvent(new File(project));
 	} else if (code!=null) {
+	    jearduino.setSearduinoProjectInfo("", "", code) ;
 	    jearduino.getAndUseArduinoCodeName(code, false);
 	} else {
 	    /* If no code supplied on cli - use latest */
 	    jearduino.getAndUseArduinoCodeName(null, false);
 	}
 	
-
-	    if (buildDirect) {
-		jearduino.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_BUILD_PROJECT, null);
-	    }
-	    
-	    if (startDirect) {
-		jearduino.ec.sendStart();
-	    }
-	    //}
+	
+	if (buildDirect) {
+	    jearduino.handleJearduinoEvent(JearduinoEvent.JEARDUINO_EVENT_BUILD_PROJECT, null);
+	}
+	
+	if (startDirect) {
+	    jearduino.ec.sendStart();
+	}
+	//}
 
         SwingUtilities.invokeLater(new Runnable() {
 		public void run() {
