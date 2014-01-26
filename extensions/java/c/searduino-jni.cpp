@@ -187,7 +187,7 @@ my_type_sim_callback(uint8_t pin, uint8_t pin_type)
 
 void* arduino_code_impl(void *in)
 {
-  //  printf ("arduino_code:    %p\n", searduino_main_entry); fflush(stdout);
+  //printf ("arduino_code:    %p\n", searduino_main_entry); fflush(stdout);
 
   if (searduino_main_entry!=NULL)
     {
@@ -395,6 +395,7 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
   int ret;
   seasim_set_halted();
 
+
   if (arduino_thread[thread_index]!=0) 
     {
       //      pthread_join(arduino_thread[thread_index], (void**)&retval);
@@ -403,7 +404,6 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
       ret = pthread_cancel(arduino_thread[thread_index]);
       arduino_thread[thread_index]=0;
     }
-
 
   //  thread_index++;
 
