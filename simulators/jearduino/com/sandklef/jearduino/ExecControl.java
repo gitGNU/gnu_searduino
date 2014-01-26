@@ -113,8 +113,6 @@ public class ExecControl extends JPanel implements ActionListener
     public void actionPerformed(ActionEvent e) {
 	int type = 0 ; 
 
-	System.out.println("action");
-
 	if (e.getSource() == pause) {
 	    start.setEnabled(false);
 	    pause.setEnabled(false);
@@ -144,19 +142,19 @@ public class ExecControl extends JPanel implements ActionListener
 	    halt.setEnabled(true);
 	}
 
-	System.out.println("action sending");
-
 	ee.ExecEvent(type);
     }
 
     public void sendStart(){
 	int type;
 	type = EXEC_CONTROL_START;
-	start.setEnabled(false);
-	pause.setEnabled(true);
-	resume.setEnabled(false);
-	halt.setEnabled(true);
+
+	setStates(false, 
+		  true,
+		  false,
+		  true);
 	ee.ExecEvent(type);
+
     }
 
 }
