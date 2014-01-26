@@ -39,16 +39,22 @@ import javax.swing.JTabbedPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import com.sandklef.searduino.Searduino;
+
 import java.awt.GridLayout;
 
 public class JearduinoAbout extends JDialog {
     
     protected JComponent makeAboutPanel() {
         JPanel panel = new JPanel(false);
-        JLabel filler = new JLabel("Jearduino - GUI front end to Searduino");
-        filler.setHorizontalAlignment(JLabel.CENTER);
-        panel.setLayout(new GridLayout(1, 1));
-        panel.add(filler);
+        JLabel name = new JLabel("Jearduino - GUI front end to Searduino");
+        JLabel version = new JLabel("Version: " + 
+				   Jearduino.getSearduinoInstance().getSearduinoVersion());
+        name.setHorizontalAlignment(JLabel.CENTER);
+        version.setHorizontalAlignment(JLabel.CENTER);
+        panel.setLayout(new GridLayout(2, 1));
+        panel.add(name);
+        panel.add(version);
         return panel;
     }
 
@@ -74,7 +80,7 @@ public class JearduinoAbout extends JDialog {
 
     public JearduinoAbout()
     {        
-
+	
 	JTabbedPane tabbedPane = new JTabbedPane();
 
         JComponent aboutPanel = makeAboutPanel();

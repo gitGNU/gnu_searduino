@@ -113,9 +113,9 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
 	
 	if (!searduino.hasGenericPinTypeBoolean(pin, type)) {
-	    System.out.println("\n\n *** ERROR: Can not set type " +
+	    System.out.println("*** ERROR: Can not set type " +
 				   searduino.getPinType(type) + 
-			       " on pin " + pin + " \n\n" );
+			       " on pin " + pin );
 	    return ;
 	}
 
@@ -132,7 +132,7 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 		int pos = getItemPosFromCombo(cb, 
 					      searduino.getPinType(Searduino.SEARDUINO_PINTYPE_DIGITAL));
 		if(pos==-1) {
-		    System.out.println("WARNING: deal with this way better");
+		    System.out.println("WARNING: deal with this way better (setting pin type needs rewrite)");
 		} else {
 		    cb.setSelectedIndex(pos);
 		}
@@ -220,8 +220,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 	    return ;
 	}
 
-	    System.out.println("setDigitalInputPin()");
-	
 	JToggleButton input;
 	input = new JToggleButton("");
 	input.addActionListener(this);

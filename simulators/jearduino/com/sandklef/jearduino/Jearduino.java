@@ -83,6 +83,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     JPanel loggerPanel;
     JPanel fileLoggerPanel;
 
+    static Jearduino jearduinoInstance ;
+
     /*
     JPanel commandPanel;
 
@@ -1006,10 +1008,22 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	return searduino.getSystemInformation();
     }
 
-   public static void main(String[] args) {
 
-	final Jearduino jearduino ;
-	jearduino = new Jearduino();
+    public static Jearduino getInstance() {
+	if (jearduinoInstance==null) {
+	    jearduinoInstance = new Jearduino();
+	}
+	
+	return jearduinoInstance;
+    }
+
+    
+    public static Searduino getSearduinoInstance() {
+	return Jearduino.getInstance().searduino;
+    }
+
+
+   public static void main(String[] args) {
 
 	boolean startDirect = false;
 	boolean buildDirect = false;
@@ -1018,6 +1032,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	String code    = null;
 	String project = null;
 	int ret=0;
+
+	final Jearduino jearduino = Jearduino.getInstance();
 
 	for (int i=0; i<nrArgs; i++)  {
 	    if (args[i].equals("--board")) {
@@ -1129,4 +1145,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 		}
 	    });
     }
+    
+    
+
 }
