@@ -1,3 +1,17 @@
+News in coming 
+==============================================
+
+  Version number visible in Jearduino->About
+
+  
+  Bugs fixed:
+  -------------------
+
+  Jearduino
+   * segmentation fault when loading Arduino Code
+   * start button enabled after start
+
+
 News in 0.9
 ==============================================
 
