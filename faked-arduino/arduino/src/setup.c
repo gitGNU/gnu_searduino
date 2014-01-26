@@ -43,13 +43,13 @@
 int searduino_exec ;
 int searduino_exec_available = 0 ;
 
-static int dlopen_counter=0;
+volatile static int dlopen_counter=0;
 
 /* global */
 searduino_main_ptr_ptr searduino_main_entry = NULL;
 
 void *arduino_lib;
-char arduino_code[1024];
+static char arduino_code[1024];
 
 #define SEARDUIONO_SIM_RUNNING 0
 #define SEARDUIONO_SIM_PAUSE   1
@@ -168,9 +168,10 @@ searduino_set_arduino_code_name(const char* libname)
 {
   int ret;
   
+
   if (libname==NULL)
     {
-      //      fprintf(stderr, "Resetting arduino code name");
+      fprintf(stderr, "Resetting arduino code name");
       strcpy(arduino_code, "");
       return 1;
     }
@@ -189,8 +190,17 @@ searduino_set_arduino_code_name(const char* libname)
     }
   */
 
-  //printf(" --------------------------------------- Setting arduino code name: %s   (setup.c)\n", libname);
-  strncpy (arduino_code, libname, 1024);
+  /* printf(" --------------------------------------- Setting arduino code name: '%s' at %u   (setup.c)\n",  */
+  /* 	 libname, */
+  /* 	 arduino_code);  */
+
+  /* printf(" --------------------------------------- prev arduino code name: '%s'   (setup.c)\n",  */
+  /* 	 arduino_code);  */
+  
+
+  strncpy (arduino_code, 
+	   libname, 
+	   1023);
 
   ret = load_arduino_code();
   if (ret!=0)
