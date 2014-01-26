@@ -3,6 +3,8 @@
 PACKAGE=searduino
 TMP_INST=/opt/$PACKAGE
 
+DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-amd64/include/
+
 FUNC_FILE=$(dirname $0)/functions
 if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
 then
@@ -26,12 +28,12 @@ prepare()
 
     if [ "$CFLAGS" = "" ]
     then
-	export CFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
+	export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
     fi
 
     if [ "$CXXFLAGS" = "" ]
     then
-	export CXXFLAGS="-I/usr/lib/jvm/java-6-sun-1.6.0.26/include/ -I/usr/lib/jvm/java-6-sun-1.6.0.26/include/linux/"
+	export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
     fi
 
     ./configure --prefix=${TMP_INST}  --enable-unittest 
@@ -58,10 +60,10 @@ check()
 
     SAVED_DIR=$(pwd)
 
-    cd ${TMP_INST}/share/searduino/example/digpins/ && make -f Makefile.digpins clean all
+    cd ${TMP_INST}/share/searduino/example/digpins/ && make -f Makefile.digpins clean prog  && make -f Makefile.digpins clean shlib
     exit_on_failure $? "make digpins in install dir"
     
-    cd ${TMP_INST}/share/searduino/example/python-digcounter && make -f Makefile.digcounter clean all
+    cd ${TMP_INST}/share/searduino/example/python-digcounter && make -f Makefile.digcounter clean prog && make -f Makefile.digcounter clean shlib
     exit_on_failure $? "make digcounter in installed dir"
 
     cd ${SAVED_DIR}
