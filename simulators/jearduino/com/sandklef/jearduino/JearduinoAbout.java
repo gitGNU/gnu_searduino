@@ -89,7 +89,7 @@ public class JearduinoAbout extends JDialog {
 
 	tabbedPane.addTab("About", aboutPanel);
 	tabbedPane.addTab("Authors", authorPanel);
-	tabbedPane.addTab("Copyright and License", licensePanel);
+	tabbedPane.addTab("License", licensePanel);
 
 	//	add(tabbedPane);
 
@@ -109,7 +109,8 @@ public class JearduinoAbout extends JDialog {
 		}
 	    });
 
-	setMinimumSize(new Dimension(400, 400));
+	setPreferredSize(new Dimension(400, 200)); 
+	setMaximumSize(new Dimension(400, 200));
     }
 
 
@@ -117,20 +118,18 @@ public class JearduinoAbout extends JDialog {
         JPanel panel = new JPanel(false);
 
 	JTextArea infoArea = new JTextArea();
-	JTextArea licenseArea = new JTextArea();
 
-        panel.setLayout(new GridLayout(2, 1));
-        panel.add(infoArea);
-        panel.add(licenseArea);
+        panel.setLayout(new GridLayout(1, 1));
 
-	JScrollPane scrollPane = new JScrollPane(licenseArea); 
-	licenseArea.setEditable(false);
+	JScrollPane iscrollPane = new JScrollPane(infoArea); 
+
 	infoArea.setEditable(false);
-        panel.add(infoArea);
-        panel.add(licenseArea);
+        panel.add(iscrollPane);
 
         infoArea.append("Searduino is currently copyrighted to the authors\n");
         infoArea.append(" * see individual files for more information\n");
+	infoArea.append("Searduino is licensed under GPLv3\n");
+	infoArea.append(" * See http://www.gnu.org/licenses/gpl-3.0.txt\n");
 	infoArea.append("Searduino is Free Software - software that gives you 4 freedoms:\n");
 	infoArea.append(" * The freedom to run the program, for any purpose (freedom 0).\n");
 	infoArea.append(" * The freedom to study how the program works, and change it so it does your computing as you wish (freedom 1).\n");
@@ -138,8 +137,6 @@ public class JearduinoAbout extends JDialog {
 	infoArea.append(" * The freedom to distribute copies of your modified versions to others (freedom 3).\n");
 	infoArea.append("\nRead more about free software at http://www.gnu.org/philosophy/free-sw.html\n\n");
 	
-	licenseArea.append("Searduino is licensed under GPLv3\n");
-	licenseArea.append(" See http://www.gnu.org/licenses/gpl-3.0.txt for more iformation\n");
 	
         return panel;
     }
