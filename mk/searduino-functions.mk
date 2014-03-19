@@ -132,26 +132,45 @@ lib-install: $(LIB) $(LIB_H)
 libs: lib shlib
 
 
-uno:
-        SEARDUINO_OVERRIDE_ARDUINO=uno ARDUINO=uno make clean all upload
-
-due:
-        SEARDUINO_OVERRIDE_ARDUINO=due ARDUINO=due make clean all upload
-
-mega:
-        SEARDUINO_OVERRIDE_ARDUINO=mega ARDUINO=mega make clean all upload
-
-mega2560:
-        SEARDUINO_OVERRIDE_ARDUINO=mega2560 ARDUINO=mega2560 make clean all upload
 
 sim:
-        SEARDUINO_OVERRIDE_ARDUINO=stub ARDUINO=stub make clean shlib
+	export SEARDUINO_OVERRIDE_ARDUINO=stub && make clean shlib
+
+due:
+	export SEARDUINO_OVERRIDE_ARDUINO=due && make clean all 
+
+mega:
+	export SEARDUINO_OVERRIDE_ARDUINO=mega && make clean all
+
+mega2560:
+	export SEARDUINO_OVERRIDE_ARDUINO=mega2560 && make clean all 
+
+leonardo:
+	export SEARDUINO_OVERRIDE_ARDUINO=leonardo && make clean all 
+
+uno:
+	export SEARDUINO_OVERRIDE_ARDUINO=uno && make clean all 
 
 sim-start:
 	make sim
 	$(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB)
 
+due-upload:
+	export SEARDUINO_OVERRIDE_ARDUINO=due && make clean all upload
+
+mega-upload:
+	export SEARDUINO_OVERRIDE_ARDUINO=mega && make clean all upload
+
+mega2560-upload:
+	export SEARDUINO_OVERRIDE_ARDUINO=mega2560 && make clean all upload
+
+leonardo-upload:
+	export SEARDUINO_OVERRIDE_ARDUINO=leonardo && make clean all upload
+
+uno-upload:
+	export SEARDUINO_OVERRIDE_ARDUINO=uno && make clean all upload
+
+
 simpson:
 	make sim-start
-
 
