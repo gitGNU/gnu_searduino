@@ -131,3 +131,15 @@ lib-install: $(LIB) $(LIB_H)
 
 libs: lib shlib
 
+
+sim:
+        SEARDUINO_OVERRIDE_ARDUINO=stub ARDUINO=stub make clean shlib
+
+sim-start:
+        make sim
+        $(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB)
+
+simpson:
+        make sim-start
+
+
