@@ -133,7 +133,8 @@ libs: lib shlib
 
 
 
-sim:
+sim: stub
+stub:
 	export SEARDUINO_OVERRIDE_ARDUINO=stub && make clean shlib
 
 due:
@@ -151,7 +152,8 @@ leonardo:
 uno:
 	export SEARDUINO_OVERRIDE_ARDUINO=uno && make clean all 
 
-sim-start:
+sim-start: stub-start
+stub-start:
 	make sim
 	$(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB)
 
