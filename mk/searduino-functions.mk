@@ -152,6 +152,6 @@ sim-start:
 	$(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB)
 
 simpson:
-        make sim-start
+	make sim-start
 
 
