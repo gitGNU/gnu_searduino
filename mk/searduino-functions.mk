@@ -133,16 +133,16 @@ libs: lib shlib
 
 
 uno:
-        SEARDUINO_OVERRIDE_ARDUINO=uno ARDUINO=stub make clean all upload
+        SEARDUINO_OVERRIDE_ARDUINO=uno ARDUINO=uno make clean all upload
 
 due:
-        SEARDUINO_OVERRIDE_ARDUINO=due ARDUINO=stub make clean all upload
+        SEARDUINO_OVERRIDE_ARDUINO=due ARDUINO=due make clean all upload
 
 mega:
-        SEARDUINO_OVERRIDE_ARDUINO=mega ARDUINO=stub make clean all upload
+        SEARDUINO_OVERRIDE_ARDUINO=mega ARDUINO=mega make clean all upload
 
 mega2560:
-        SEARDUINO_OVERRIDE_ARDUINO=mega2560 ARDUINO=stub make clean all upload
+        SEARDUINO_OVERRIDE_ARDUINO=mega2560 ARDUINO=mega2560 make clean all upload
 
 sim:
         SEARDUINO_OVERRIDE_ARDUINO=stub ARDUINO=stub make clean shlib
