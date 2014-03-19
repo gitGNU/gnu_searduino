@@ -1,6 +1,11 @@
 News in coming 
 ==============================================
 
+  Targets for every board, 
+    make uno
+    make sim
+    etc...
+
   Version number visible in Jearduino->About
 
   Slightly better looking Jearduino->About->License
