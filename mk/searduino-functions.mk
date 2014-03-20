@@ -133,6 +133,9 @@ libs: lib shlib
 
 
 
+stub-prog:
+	export SEARDUINO_OVERRIDE_ARDUINO=stub && make clean prog
+
 sim: stub
 stub:
 	export SEARDUINO_OVERRIDE_ARDUINO=stub && make clean shlib
