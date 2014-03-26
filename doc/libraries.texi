@@ -89,5 +89,17 @@ To install you simply type:
 
 @section Using the library
 
-To use the library and heades
+To use the library and heades in another Searduino project you only
+need to do the following:
+
+@code{USER_C_FLAGS=-I<path>}
+
+@code{USER_CXX_FLAGS=-I<path>}
+
+@code{USER_LD_FLAGS=-L<path>}
+
+
+And of course the path should be set to where the headers and libs of
+your new lib were installed.
+
 
