@@ -436,6 +436,9 @@ prepare_searduino_mk()
     replace_vars mk/searduino.mk.tmpl mk/searduino.mk
     exit_on_failure $? "Prepared searduino.mk "
 
+    replace_vars mk/library-functions.mk.tmpl mk/library-functions.mk
+    exit_on_failure $? "Prepared library-functions.mk "
+
     cat mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > arduino-sources/Makefile
     exit_on_failure $? "Prepared arduino-sources Makefile"
 
