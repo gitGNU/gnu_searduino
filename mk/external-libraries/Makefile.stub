@@ -1,0 +1,3 @@
+ARDUINO=stub
+
+include $(SEARDUINO_MK)
