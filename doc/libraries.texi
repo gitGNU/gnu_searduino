@@ -1,27 +1,85 @@
 @chapter Turning your code into a library
 
 In bigger projects it might be useful to put some pieces of code
-together and turn it into a library, the obvious case would be to turn
-sub projects into libraries.
+together and turn it into a library. This is typically useful when you
+like to use some code in various different other projects. This
+chapter will guide you how to do this.
 
 @section Preparing the Makefile
 
-Take an existing Searduino Makefile. From this you need to add just a
-few things:
-@*
-@*
-@itemize @bullet
-@item @code{LIB} - set this variable to the name of your library
-@item @code{LIB_H} - header files to install
-@item @code{USER_LIB_INSTALL_PATH} - where to install your library and headers
-@end itemize
-@*
-@*
-After this, the only thing you need to do is to call
-@code{lib-install} and your library and headers will be installed.
-@*
-@i{Note: the library is install under USER_LIB_INSTALL_PATH/lib/board,
-where board is the board as derived from the ARDUINO variable}
-@*
+A Makefile for building libraries is somewhat similar to the usual
+Searduino Makefile as you use when building your normal Arduino
+programs.
+
+@multitable  @columnfractions .0 .30 .40 .30
+@item 
+@tab @b{Directive}
+@tab @b{Example}
+@tab @b{Description}
+
+@item
+@tab @code{SEARDUINO_PATH}
+@tab Should be set yo your Searduino installation root directory.
+@tab /opt
+
+@item
+@tab @code{SRC_C}
+@tab The C files in the library you want to build
+@tab dir-a/filea.c filec.c
+
+@item
+@tab @code{SRC_CXX}
+@tab The C++ files in the library you want to build
+@tab dir-a/filea.cpp  filec.cpp
+
+@item
+@tab @code{BOARDS_TO_BUILD}
+@tab The boards you want to build for. Defaults to all supported boards.
+@tab uno leonardo
+
+@item
+@tab @code{PACKAGE}
+@tab A name for your library.
+@tab tvout
+
+@item
+@tab @code{USER_C_FLAGS}
+@tab Flags added to the compiler when compiling C files
+@tab -Imydir
+
+@item
+@tab @code{USER_CXX_FLAGS}
+@tab Flags added to the compiler when compiling C++ files
+@tab -Imydir
+
+@item
+@tab @code{USER_LD_FLAGS}
+@tab Flags added to the linker when linking the build C/C++ files
+@tab -lc
+
+@end multitable
+
+
+
+And finally, you need to include some Makefile stuff:
+
+
+@code{include $(SEARDUINO_PATH)/share/searduino//mk/library-functions.mk}
+
+
+@section Building and installing the library
+
+This is really easy, assuming the code itself is ok.
+
+To build/compile you simply type:
+
+
+@code{make}
+
+
+To install you simply type:
+
+
+@code{make install}
 
 
