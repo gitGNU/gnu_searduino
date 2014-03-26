@@ -33,6 +33,11 @@ programs.
 @tab dir-a/filea.cpp  filec.cpp
 
 @item
+@tab @code{H_FILES}
+@tab The header files to install. Directory structure is kept.
+@tab dir-a/monkey.h donkey.h
+
+@item
 @tab @code{BOARDS_TO_BUILD}
 @tab The boards you want to build for. Defaults to all supported boards.
 @tab uno leonardo
@@ -82,4 +87,7 @@ To install you simply type:
 
 @code{make install}
 
+@section Using the library
+
+To use the library and heades
 
