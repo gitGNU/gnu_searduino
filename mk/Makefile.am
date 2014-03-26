@@ -30,6 +30,13 @@ dist_pkgdataexample_DATA = \
   searduino.mk \
   searduino-stub.mk \
   searduino-functions.mk \
+  library-functions.mk \
+  external-libraries/Makefile.mega2560 \
+  external-libraries/Makefile.mega \
+  external-libraries/Makefile.leonardo \
+  external-libraries/Makefile.due \
+  external-libraries/Makefile.stub \
+  external-libraries/Makefile.uno \
   VERSION
 
 DEBIAN_FILES= \

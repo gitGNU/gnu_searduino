@@ -23,8 +23,8 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=/opt/searduino
-ARDUINO_PATH=/opt/searduino
+SEARDUINO_PATH=/opt/
+ARDUINO_PATH==/opt/
 
 export SRC_C
 export SRC_CXX
@@ -47,25 +47,29 @@ clean:
 	make -f $(MK_PATH)/Makefile.uno extclean
 
 
-all: mydue myuno myleonardo mymega mymega2560
+all: extdue extuno extleonardo extmega extmega2560 extstub
 
-mydue: ARDUINO=due
-mydue: 
+extstub: ARDUINO=due
+extstub: 
+	make -f $(MK_PATH)/Makefile.stub extlib
+
+extdue: ARDUINO=due
+extdue: 
 	make -f $(MK_PATH)/Makefile.due extlib
 
-myuno: ARDUINO=uno
-myuno: 
+extuno: ARDUINO=uno
+extuno: 
 	make -f $(MK_PATH)/Makefile.uno extlib
 
-mymega: ARDUINO=mega
-mymega: 
+extmega: ARDUINO=mega
+extmega: 
 	make -f $(MK_PATH)/Makefile.mega extlib
 
-mymega2560: ARDUINO=mega2560
-mymega2560: 
+extmega2560: ARDUINO=mega2560
+extmega2560: 
 	make -f $(MK_PATH)/Makefile.mega2560 extlib
 
-myleonardo: ARDUINO=leonardo
-myleonardo: 
+extleonardo: ARDUINO=leonardo
+extleonardo: 
 	make -f $(MK_PATH)/Makefile.leonardo extlib
 
