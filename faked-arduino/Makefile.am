@@ -93,10 +93,12 @@ LIB_SEARDUINO_SOURCES_FILES= \
        ./arduino/src/i2c_loader.c \
        ./arduino/src/CDC.cpp \
        ./arduino/src/boards.c \
+       ./arduino/src/Tone.cpp \
        ./arduino/src/hid-backends/x11.c     \
        ./arduino/src/hid-backends/generic.c \
         $(LIB_SEARDUINO_H_FILES)  \
         $(LIB_LIBRARIES_SOURCES_FILES)
+
 
 libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 #libsearduino-stub_SOURCES=$(LIB_SEARDUINO_SOURCES_FILES)

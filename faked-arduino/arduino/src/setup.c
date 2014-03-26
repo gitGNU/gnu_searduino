@@ -168,6 +168,7 @@ searduino_set_arduino_code_name(const char* libname)
 {
   int ret;
   
+  printf ("searduino_set_arduino_code_name");
 
   if (libname==NULL)
     {

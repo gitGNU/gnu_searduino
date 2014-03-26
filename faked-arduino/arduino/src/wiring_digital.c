@@ -77,6 +77,8 @@ pinMode(uint8_t pin, uint8_t mode)
   PRINT_FUNCTION_NAME(("%d,%d",pin,mode));
   if (PIN_OUT_OF_RANGE(pin))
     {
+      fprintf(stderr, "Pin %d is out of range\n", 
+	      pin);
       SEARD_WARNING(SEARD_ARDUINO_OUT_OF_BOUND);
       return;
     }
