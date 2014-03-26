@@ -95,11 +95,8 @@ variable in the Makefile. The following values of that variable are implemented.
 @chapter Examples
 @include examples.texi
 
-
 @chapter Write your own simulator
 @include seasim.texi
-
-
 
 @chapter Future and possible enhancements
 @include future.texi
