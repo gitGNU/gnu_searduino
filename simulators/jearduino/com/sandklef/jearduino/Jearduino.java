@@ -112,7 +112,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	codeNamesToStore = jpref.getArduinoCodeNameCount();
 	constraints = new GridBagConstraints();
 	
-	
 	pane = new JPanel();
 
 	JTabbedPane tabbedPane = new JTabbedPane();

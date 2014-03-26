@@ -80,10 +80,10 @@ public class Board extends JPanel implements ActionListener
 
 
     public void actionPerformed(ActionEvent e) {
-        JComboBox cb = (JComboBox)e.getSource();
-        String boardName = (String)cb.getSelectedItem();
-	System.out.println("Searduino board:   " + boardName);
+        JComboBox cb     = (JComboBox) e.getSource();
+        String boardName = (String)    cb.getSelectedItem();
 
+	System.out.println("Searduino board:   " + boardName);
 	be.handleBoardChoiceEvent(boardName);
     }
     
