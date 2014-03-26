@@ -1,6 +1,9 @@
 News in coming 
 ==============================================
 
+  Easier (way easier!) to build and install external libs in Searduino
+  dir.
+
   Targets for every board, 
     make uno
     make sim
