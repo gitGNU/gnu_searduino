@@ -1,0 +1,3 @@
+ARDUINO=mega2560
+
+include $(SEARDUINO_MK)

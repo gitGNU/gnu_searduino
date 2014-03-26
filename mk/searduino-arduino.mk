@@ -134,3 +134,37 @@ safe-upload: $(PROG).hex check-objects
 	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) \
                    -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
 
+
+
+EXT_LIB_INSTALL_PATH=$(SEARDUINO_PATH)/external-libs/$(PACKAGE)/
+EXT_LIB_PATH=boards/$(BOARD)
+EXTLIB=$(EXT_LIB_PATH)/lib$(PACKAGE).a
+extlib:  clean extinfo $(EXTLIB)
+$(EXTLIB): $(OBJ_C)  $(OBJ_CXX) 
+	-mkdir -p $(EXT_LIB_PATH)
+	$(AR) rcs $(EXTLIB)  $(OBJ_C)  $(OBJ_CXX) 
+	@echo "Created lib: $(EXTLIB)   for $(BOARD) $(ARDUINO)"
+
+extinfo:
+	echo "INFO:   ARDUINO: $(ARDUINO)"
+	echo "INFO:   LIB_PATH: $(LIB_PATH)"
+	echo "INFO:   LIB: $(LIB)"
+	echo "INFO:   EXTLIB: $(EXTLIB)"
+	echo "INFO:   BOARD: $(BOARD)"
+	echo "INFO:   LIB_PATH: $(LIB_PATH)"
+
+extinstall-headers: $(LIB) $(LIB_H)
+	-cp $(LIB_H)  $(LIB_INSTALL)/include/
+
+
+
+extinstall: extlib
+	-mkdir -p $(EXT_LIB_INSTALL_PATH)/libs/
+	-mkdir -p $(EXT_LIB_INSTALL_PATH)/include
+	cp -r boards/* $(EXT_LIB_INSTALL_PATH)/libs/
+	tar cvf HEADERS.tar $(H_FILES) && cp HEADERS.tar $(EXT_LIB_INSTALL_PATH)/include/ && cd $(EXT_LIB_INSTALL_PATH)/include/ && tar xvf HEADERS.tar 
+	rm HEADERS.tar
+
+extclean:
+	-rm -f $(OBJ_C)  $(OBJ_CXX) 
+	-rm -fr boards/

@@ -4,7 +4,7 @@
 # Basically a couple of Makefile wrapping the Ardunio
 # C and C++ files
 #                                                                   
-#  Copyright (C) 2012 Henrik Sandklef      
+#  Copyright (C) 2014 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -23,49 +23,49 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=../../
-ARDUINO_PATH=../
+SEARDUINO_PATH=/opt/searduino
+ARDUINO_PATH=/opt/searduino
 
-SRC_C= ./Wire/utility/twi.c
-SRC_CXX=./Ethernet/Ethernet.cpp ./Ethernet/EthernetServer.cpp ./Ethernet/Dhcp.cpp ./Ethernet/utility/w5100.cpp ./Ethernet/utility/socket.cpp ./Ethernet/EthernetUdp.cpp ./Ethernet/Dns.cpp ./Ethernet/EthernetClient.cpp  ./Wire/Wire.cpp ./SPI/SPI.cpp ./LiquidCrystal/LiquidCrystal.cpp ./SoftwareSerial/SoftwareSerial.cpp ./SD/SD.cpp ./SD/utility/SdVolume.cpp ./SD/utility/SdFile.cpp ./SD/utility/Sd2Card.cpp ./SD/File.cpp ./Stepper/Stepper.cpp ./EEPROM/EEPROM.cpp ./Servo/Servo.cpp 
+export SRC_C
+export SRC_CXX
+export H_FILES
+export LIB
+export USER_CXX_FLAGS
+export USER_C_FLAGS
+export USER_LD_FLAGS
+export PACKAGE
+export SEARDUINO_PATH
+export SEARDUINO_MK=$(SEARDUINO_PATH)/share/searduino/mk/searduino.mk
 
-#./Firmata/Firmata.cpp
+MK_PATH= $(SEARDUINO_PATH)/share/searduino/mk/external-libraries/
 
-LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libraries/libs/$(BOARD)/
-LIB=$(LIB_PATH)/liblibraries.a
-
-
-
-SEARDUINO_MK=$(SEARDUINO_PATH)/mk/searduino-vcs.mk
-
-lib: $(LIB)
-$(LIB): $(OBJ_C)  $(OBJ_CXX) 
-
-include $(SEARDUINO_MK)
-include $(SEARDUINO_FUNC)
+install:
+	make -f $(MK_PATH)/Makefile.uno extinstall
 
 
+clean:
+	make -f $(MK_PATH)/Makefile.uno extclean
 
-objs: $(OBJ_C) $(OBJ_CXX)
-	-ls -al $(OBJ_C)
-	-ls -al $(OBJ_CXX)
 
-due: ARDUINO=due
-due: 
-	make lib
+all: mydue myuno myleonardo mymega mymega2560
 
-uno: ARDUINO=uno
-uno: 
-	make lib
+mydue: ARDUINO=due
+mydue: 
+	make -f $(MK_PATH)/Makefile.due extlib
 
-mega: ARDUINO=mega
-mega: 
-	make lib
+myuno: ARDUINO=uno
+myuno: 
+	make -f $(MK_PATH)/Makefile.uno extlib
 
-mega2560: ARDUINO=mega2560
-mega2560:
-	make lib
+mymega: ARDUINO=mega
+mymega: 
+	make -f $(MK_PATH)/Makefile.mega extlib
 
-leonardo: ARDUINO=leonardo
-leonardo:
-	make lib
+mymega2560: ARDUINO=mega2560
+mymega2560: 
+	make -f $(MK_PATH)/Makefile.mega2560 extlib
+
+myleonardo: ARDUINO=leonardo
+myleonardo: 
+	make -f $(MK_PATH)/Makefile.leonardo extlib
+
