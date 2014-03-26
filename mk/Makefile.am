@@ -21,7 +21,7 @@
 #
 #
 
-SUBDIRS = arduino-sources board-makefiles libraries
+SUBDIRS = arduino-sources board-makefiles libraries external-libraries
 
 pkgdataexampledir = $(pkgdatadir)/mk
 dist_pkgdataexample_DATA = \
@@ -31,12 +31,6 @@ dist_pkgdataexample_DATA = \
   searduino-stub.mk \
   searduino-functions.mk \
   library-functions.mk \
-  external-libraries/Makefile.mega2560 \
-  external-libraries/Makefile.mega \
-  external-libraries/Makefile.leonardo \
-  external-libraries/Makefile.due \
-  external-libraries/Makefile.stub \
-  external-libraries/Makefile.uno \
   VERSION
 
 DEBIAN_FILES= \

@@ -23,8 +23,8 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=/opt/
-ARDUINO_PATH==/opt/
+SEARDUINO_PATH=/opt/searduino/
+ARDUINO_PATH==/opt/searduino/
 
 export SRC_C
 export SRC_CXX
@@ -39,37 +39,37 @@ export SEARDUINO_MK=$(SEARDUINO_PATH)/share/searduino/mk/searduino.mk
 
 MK_PATH= $(SEARDUINO_PATH)/share/searduino/mk/external-libraries/
 
-install:
-	make -f $(MK_PATH)/Makefile.uno extinstall
+ifeq (${BOARDS_TO_BUILD},)
+BOARDS_TO_BUILD=due uno leonardo mega mega2560 stub
+endif
 
 
-clean:
-	make -f $(MK_PATH)/Makefile.uno extclean
+all: $(BOARDS_TO_BUILD)
 
-
-all: extdue extuno extleonardo extmega extmega2560 extstub
-
-extstub: ARDUINO=due
-extstub: 
+stub: ARDUINO=stub
+stub: 
 	make -f $(MK_PATH)/Makefile.stub extlib
 
-extdue: ARDUINO=due
-extdue: 
+due: ARDUINO=due
+due: 
 	make -f $(MK_PATH)/Makefile.due extlib
 
-extuno: ARDUINO=uno
-extuno: 
+uno: ARDUINO=uno
+uno: 
 	make -f $(MK_PATH)/Makefile.uno extlib
 
-extmega: ARDUINO=mega
-extmega: 
+mega: ARDUINO=mega
+mega: 
 	make -f $(MK_PATH)/Makefile.mega extlib
 
-extmega2560: ARDUINO=mega2560
-extmega2560: 
+mega2560: ARDUINO=mega2560
+mega2560: 
 	make -f $(MK_PATH)/Makefile.mega2560 extlib
 
-extleonardo: ARDUINO=leonardo
-extleonardo: 
+leonardo: ARDUINO=leonardo
+leonardo: 
 	make -f $(MK_PATH)/Makefile.leonardo extlib
 
+install: uno
+install: 
+	make -f $(MK_PATH)/Makefile.uno extinstall
