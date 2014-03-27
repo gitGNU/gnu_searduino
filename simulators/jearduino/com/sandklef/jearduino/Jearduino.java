@@ -1017,6 +1017,38 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     }
 
 
+
+    public static void usage_option(String op, String args, String desc) {
+	System.out.println("  " + op + " " + args);
+	System.out.println("   " + desc);
+	System.out.println("");
+    }
+
+    public static void usage() {
+	System.out.println("Jearduino - a graphical frontend to Searduino's simulator");
+	System.out.println("");
+	System.out.println("OPTIONS");
+	System.out.println("");
+	usage_option("--board", 
+		     "<board>", 
+		     "Set Arduino board to use");
+	usage_option("arduino-code", 
+		     "<file>", 
+		     "Set file (shared object) to execute");
+	usage_option("--searduino-project", 
+		     "<dir>", 
+		     "Loads Searduio project as found in dir");
+	usage_option("--build", 
+		     "", 
+		     "Build project after loading it");
+	usage_option("--start", 
+		     "",
+		     "Start project after loading it");
+	usage_option("--help", 
+		     "", 
+		     "Prints this message");
+    }
+
    public static void main(String[] args) {
 
 	boolean startDirect = false;
@@ -1063,8 +1095,13 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	    else if (args[i].equals("--start")) {
 		startDirect=true;
 	    }
+	    else if (args[i].equals("--help")) {
+		usage();
+		System.exit(0);
+	    }
 	    else {
 		System.err.println("Error when pasing command line '" + args[i] + "'");
+		System.err.println("  Start with '--help' for help");
 		System.exit(1);
 	    }
 	}
