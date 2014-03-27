@@ -202,9 +202,9 @@ extinstall-headers: $(LIB) $(LIB_H)
 
 
 extinstall: extlib
-	-mkdir -p $(EXT_LIB_INSTALL_PATH)/libs/
+	-mkdir -p $(EXT_LIB_INSTALL_PATH)/lib/
 	-mkdir -p $(EXT_LIB_INSTALL_PATH)/include
-	cp -r boards/* $(EXT_LIB_INSTALL_PATH)/libs/
+	cp -r boards/* $(EXT_LIB_INSTALL_PATH)/lib/
 	tar cvf HEADERS.tar $(H_FILES) && cp HEADERS.tar $(EXT_LIB_INSTALL_PATH)/include/ \
              && cd $(EXT_LIB_INSTALL_PATH)/include/ && tar xvf HEADERS.tar && rm HEADERS.tar
 

@@ -30,7 +30,7 @@ ARDUINO_PATH=./
 SRC_C=core/WInterrupts.c  core/wiring_analog.c  core/wiring.c  core/wiring_digital.c  core/wiring_pulse.c  core/wiring_shift.c
 SRC_CXX=core/CDC.cpp core/HID.cpp  core/Print.cpp   core/Tone.cpp     core/WMath.cpp core/HardwareSerial.cpp  core/IPAddress.cpp  core/new.cpp   core/Stream.cpp  core/USBCore.cpp  core/WString.cpp
 
-LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD)/
+LIB_PATH=$(SEARDUINO_PATH)/arduino-sources/lib/$(BOARD)/
 LIB=$(LIB_PATH)/libsearduino.a
 
 
