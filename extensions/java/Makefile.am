@@ -21,6 +21,8 @@
 #
 #
 
+SUBDIRS= test
+
 AUTOMAKE_OPTIONS = gnu
 
 if JAVA_EXT_SUPPORT

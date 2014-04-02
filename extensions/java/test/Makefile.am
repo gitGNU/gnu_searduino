@@ -18,6 +18,7 @@ all: $(CLASS_FILES) $(JAVA_RESULTS)
 $(CLASS_FILES): $(JAVA_FILES)
 $(JAVA_RESULTS): $(CLASS_FILES)
 
+EXTRA_DIST = $(JAVA_FILES)
 
 
 %.stdout:%.class
