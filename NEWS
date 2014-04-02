@@ -4,7 +4,7 @@ News in coming
   Easier (way easier!) to build and install external libs in Searduino
   dir.
 
-  Targets for every board, 
+  Built in targets for every board, 
     make uno
     make sim
     etc...
@@ -20,6 +20,8 @@ News in coming
    * segmentation fault when loading Arduino Code
    * start button enabled after start
 
+  As reoprted at:
+   * http://searduino.wordpress.com/2014/01/21/searduino-0-9-released/
 
 News in 0.9
 ==============================================
