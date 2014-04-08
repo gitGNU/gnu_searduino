@@ -10,6 +10,7 @@
 @item avrdude
 @item avrprog
 @item avr-libc
+@item openjdk-6-jdk
 @end itemize
 
 @subsection Windows:
