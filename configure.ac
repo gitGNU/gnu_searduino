@@ -26,6 +26,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
 AC_CHECK_HEADERS(fcntl.h)
 AC_CHECK_HEADERS(pthread.h)
+AC_CHECK_HEADERS(jni.h)
 #AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_SILENT_RULES([yes])
 AC_PROG_CXX
@@ -180,12 +181,12 @@ then
   CYGWIN="true"
 fi
 
-if test "x$jearduino_enabled" = "xyes" ; then
-  if test "x$java_ext_enabled" != "xyes" ; then
-     echo "Jearduino enabled, enabling Java extension"
-     java_ext_enabled="yes"   
-  fi
-fi
+#if test "x$jearduino_enabled" = "xyes" ; then
+#  if test "x$java_ext_enabled" != "xyes" ; then
+#     echo "Jearduino enabled, enabling Java extension"
+#     java_ext_enabled="yes"
+#  fi
+#fi
 
 if test "x$java_ext_enabled" = "xyes" ; then
   AC_PATH_PROG(JAVA,java)
@@ -224,6 +225,32 @@ if test "x$ac_cv_header_pthread_h"  = "xno"; then
    AC_SUBST([GL_GENERATE_STDDEF_H])
 fi
 
+if test "x$java_ext_enabled" = "xyes" ; then
+    if test "x$ac_cv_header_jni_h"  = "xno"; then
+	echo "Java extension enabled, but cant find jni.h"
+	echo "Try setting CFLAGS, CXXFLAGS"
+
+	exit 1
+    fi
+else
+    if test  "x$jearduino_enabled" = "xyes" ; then
+	echo "Jearduino build is enabled but not Java extension"
+	echo " Either disable Jearduino or enable Java extension"
+	
+	exit
+    fi
+fi
+
+
+if test "x$python_ext_enabled" = "xno" ; then
+    if test  "x$pearduino_enabled" = "xyes" ; then
+	echo " Pearduino build is enabled but not Python extension"
+	echo " Either disable Pearduino or enable Python extension"
+	
+	exit
+    fi
+fi
+
 #
 # Set up misc stuff:
 #     shared lib extensions, 
@@ -247,6 +274,45 @@ exit_on_failure()
   else	
     echo "$2 OK"
   fi
+}
+
+print_avr_settings()
+{
+  echo "AVR stuff:"
+  echo "------------------"
+  echo "avr-gcc:            $AVR_GCC"
+  echo "avr-g++:            $AVR_GCXX"
+  echo "avr-objcopy:        $AVR_OBJCP"
+  echo "avr-ar:             $AVR_AR"
+  echo "avrdude:            $AVR_DUDE"
+
+}
+
+check_avr() 
+{
+  if test "$1" = "" ;  then 
+      echo ""
+      echo "***** ERROR *****"
+      echo "   Can't find: $2"
+      echo "   Without it, Searduino will not work. Bailing out....."
+      exit 1
+  fi   
+}
+
+check_avr_stuff()
+{
+  AC_PATH_PROG(AVR_GCC,avr-gcc)
+  AC_PATH_PROG(AVR_GCXX,avr-g++)
+  AC_PATH_PROG(AVR_OBJCP,avr-objcopy)
+  AC_PATH_PROG(AVR_AR,avr-ar)
+  AC_PATH_PROG(AVR_DUDE,avrdude)
+
+  check_avr "$AVR_GCC" "avr-gcc"
+  check_avr "$AVR_GCXX" "avr-g++"
+  check_avr "$AVR_OBJCP" "avr-objcopy"
+  check_avr "$AVR_AR" "avr-ar"
+  check_avr "$AVR_DUDE" "avrdude"
+
 }
 
 
@@ -404,6 +470,8 @@ prepare_test_mk()
 }
 
 
+
+
 replace_vars()
 {
     INFILE=$1
@@ -490,6 +558,10 @@ fi
 cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
 exit_on_failure $? "Prepared doc Makefile"
 
+#
+#
+#
+check_avr_stuff
 
 prepare_examples
 prepare_searduino_mk
@@ -552,26 +624,51 @@ AC_MSG_NOTICE([summary of build options:
   Host type:          ${host}
   Target:             ${target}
   Install prefix:     ${prefix}
-  Compiler:           ${CC}
+  C Compiler:         ${CC}
+  CXX Compiler:       ${CXX}
   Warning flags:      ${WARN_CFLAGS}
   Library types:      Shared=${enable_shared}, Static=${enable_static}
-  Java extension:     $java_ext_enabled
-  Python extension:   $python_ext_enabled
-  Python flags:       $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
-  Jearduino enabled:  $jearduino_enabled
-  Pearduino enabled:  $jearduino_enabled
-  Unit test:          $ut_enabled
-  Unit test cflags:   $CHECK_CFLAGS
-  Unit test ldflags:  $CHECK_LIBS
   Shared lib test:    $st_enabled
   Pedantic flags:     $PEDANTIC_FLAGS
   Pthreads:           $ac_cv_header_pthread_h  / $GL_GENERATE_PTHREAD_H
+
+  AVR stuff:
+  ------------------
+    avr-gcc:          $AVR_GCC
+    avr-g++:          $AVR_GCXX
+    avr-objcopy:      $AVR_OBJCP
+    avr-ar:           $AVR_AR
+    avrdude:          $AVR_DUDE
+
+  Java extension:
+  ------------------
+    Enabled:          $java_ext_enabled
+    Jni.h found:      $ac_cv_header_jni_h
+
+  Python extension:
+  ------------------
+    Enabled:          $python_ext_enabled
+    Python flags:     $PYTHON_CPPFLAGS  $PYTHON_LDFLAGS 
+
+  Simulators:
+  ------------------
+    Jearduino:        $jearduino_enabled
+    Pearduino:        $pearduino_enabled
+
+  Unit test:
+  ------------------
+    Enabled:          $ut_enabled
+    cflags:           $CHECK_CFLAGS
+    ldflags:          $CHECK_LIBS
+
   HID backends:     
   ------------------
     X11:              $USE_XTEST ($LIBXTST)
 
   Use Debian Arduino: $debian_sources
-                    
+ 
+
+
 ])
 
 
