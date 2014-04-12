@@ -12,11 +12,13 @@ fi
 if [ "$1" = "debian" ]
 then
     DEBIAN_ARGS="--enable-debian-sources"
-    DEFAULT_JAVA_PATH=/usr/lib/jvm/java-6-openjdk/include/
+    JAVA_VER=6
 else
     DEBIAN_ARGS=""
-    DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-$ARCH/include/
+    JAVA_VER=7
 fi
+
+DEFAULT_JAVA_PATH=/usr/lib/jvm/java-$JAVA_VER-openjdk-$ARCH/include/
 
 export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
 export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
