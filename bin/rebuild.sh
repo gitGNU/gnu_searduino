@@ -9,6 +9,12 @@ else
     ARCH=amd64
 fi
 
+DEBIAN_ARGS=""
+if [ "$1" = "debian" ]
+then
+    DEBIAN_ARGS="--enable-debian-sources"
+fi
+
 DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-$ARCH/include/
 export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
 export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
