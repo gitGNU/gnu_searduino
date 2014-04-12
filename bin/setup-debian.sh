@@ -1,8 +1,8 @@
 #!/bin/sh
 
 DOC_PKGS=" pandoc " 
-
-DEVEL_PKGS="avrdude gcc gcc-avr  openjdk-7-jdk  arduino libtool autoconf automake gcc g++  python2.7-dev  autoconf-archive  python-dev    check binutils-avr avrdude avr-libc libtool"
+# python2.7-dev python-dev
+DEVEL_PKGS="avrdude gcc gcc-avr  openjdk-7-jdk  arduino libtool autoconf automake gcc g++    autoconf-archive      check binutils-avr avrdude avr-libc libtool"
 
 my_install() 
 {
