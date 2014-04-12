@@ -21,7 +21,7 @@ export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
 
 
 make -f Makefile.git && \
-  ./configure --enable-unittest --prefix=/opt/searduino --disable-python-extension  --disable-pearduino && \
+  ./configure --enable-unittest --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $DEBIAN_ARGS && \
   make clean && make && \
   sudo make install &&  \
   make check &&         \
