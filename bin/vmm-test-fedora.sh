@@ -45,8 +45,7 @@ prepare()
 
 build()
 {
-    $VMM --client-exec  $CLIENT "cd searduino && bin/build-ubuntu.sh $DEB_ARGS"
-#    $VMM --client-exec  $CLIENT "cd searduino && make -f Makefile.git  && ./configure --prefix=/opt/ --enable-unittest --enable-debian-sources --enable-jearduino --enable-java-extension --enable-python-extension && make && make check"
+    $VMM --client-exec  $CLIENT "cd searduino && bin/build-ubuntu.sh $FED_ARGS"
     exit_on_err $? " build"
 }
 
@@ -77,7 +76,7 @@ do_all()
 }
 
 TASKS="all"
-DEB_ARGS=""
+FED_ARGS=""
 
 while [ "$1" != "" ]
 do
@@ -86,8 +85,8 @@ do
 	    CLIENT=$2
 	    shift
 	    ;;
-	"--debian" )
-	    DEB_ARGS="debian"
+	"--fedora" )
+	    FED_ARGS="fedora"
 	    ;;
 	 * )
 	    TASKS=$1
