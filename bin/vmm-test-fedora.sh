@@ -45,7 +45,7 @@ prepare()
 
 build()
 {
-    $VMM --client-exec  $CLIENT "cd searduino && bin/build-ubuntu.sh $FED_ARGS"
+    $VMM --client-exec  $CLIENT "cd searduino && bin/build-fedora.sh $FED_ARGS"
     exit_on_err $? " build"
 }
 
