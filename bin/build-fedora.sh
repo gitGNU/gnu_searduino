@@ -9,7 +9,7 @@ else
     ARCH=amd64
 fi
 
-DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-$ARCH/include/
+DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0-openjdk-1.7.0.60-2.4.5.0.fc19.$ARCH/include/
 
 export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
 export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
