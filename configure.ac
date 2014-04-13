@@ -167,7 +167,7 @@ AC_ARG_ENABLE([fedora-sources],
    fedora_sources=$enableval],
   [fedora_sources=no]
 )
-if test "$fedora_args" = "yes"; then
+if test "$fedora_sources" = "yes"; then
    debian_sources="yes"
 fi
 
