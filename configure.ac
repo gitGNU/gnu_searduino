@@ -155,6 +155,23 @@ AC_ARG_ENABLE([debian-sources],
 )
 
 
+
+
+AC_ARG_ENABLE([fedora-sources],
+  [AS_HELP_STRING([--enable-fedora-sources],
+	  [Use Arduino source code from Fedora packages)])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for fedora-sources option]) ;;
+   esac
+   fedora_sources=$enableval],
+  [fedora_sources=no]
+)
+if test "$fedora_args" = "yes"; then
+   debian_sources="yes"
+fi
+
+
 if test "$python_ext_enabled" = "yes"; then
 # Check for program
 # Keep this echo, it's needed on cygwin
@@ -364,15 +381,15 @@ setup_debianized()
 
     cat mk/debian-mk/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
                  debian-mk/Makefile
-    exit_on_failure $? "Prepared top level Makefile (debian)"
+    exit_on_failure $? "Prepared top level Makefile (debian/fedora)"
     
     cat mk/debian-mk/libraries/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
                  debian-mk/libraries/Makefile
-    exit_on_failure $? "Prepared libraries Makefile (debian)"
+    exit_on_failure $? "Prepared libraries Makefile (debian/fedora)"
     
     cat mk/debian-mk/arduino-sources/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > \
                  debian-mk/arduino-sources/Makefile
-    exit_on_failure $? "Prepared arduino-sources Makefile (debian)"
+    exit_on_failure $? "Prepared arduino-sources Makefile (debian/fedora)"
 
 }
 
@@ -665,7 +682,7 @@ AC_MSG_NOTICE([summary of build options:
   ------------------
     X11:              $USE_XTEST ($LIBXTST)
 
-  Use Debian Arduino: $debian_sources
+  Use Debian/Fedora Arduino: $debian_sources
  
 
 
