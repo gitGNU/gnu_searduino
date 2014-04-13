@@ -2,7 +2,7 @@
 
 DOC_PKGS=" pandoc " 
 
-DEVEL_PKGS="avrdude gcc gcc-avr  openjdk-7-jdk  arduino libtool autoconf automake gcc g++  python2.7-dev  autoconf-archive  python-dev    check binutils-avr avrdude avr-libc libtool"
+DEVEL_PKGS="java-1.7.0-openjdk.i686-devel avr-binutils avr-gcc avr-gcc-g++ avr-libc avrdude automake autoconf libtool gcc-c++ "
 
 my_install() 
 {
