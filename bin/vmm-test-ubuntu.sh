@@ -2,7 +2,7 @@
 
 
 VMM=/opt/bin/tm-vmm
-CLIENT=Debian-6-0-6
+CLIENT=Ubuntu-12-04-32
 SNAPSHOT_NAME=SEARD_BASE
 
 
@@ -38,14 +38,14 @@ prepare()
     $VMM --client-exec $CLIENT "rm -fr searduino ; git clone http://git.savannah.gnu.org/r/searduino.git"
     exit_on_err $? " git clone"
 
-    $VMM --client-exec-as-root  $CLIENT "cd /home/vmm/searduino && bin/setup-debian.sh"
+    $VMM --client-exec-as-root  $CLIENT "cd /home/vmm/searduino && bin/setup-ubuntu.sh"
     exit_on_err $? " setup"
 
 }
 
 build()
 {
-    $VMM --client-exec  $CLIENT "cd searduino && bin/build-debian.sh $DEB_ARGS"
+    $VMM --client-exec  $CLIENT "cd searduino && bin/build-ubuntu.sh $DEB_ARGS"
 #    $VMM --client-exec  $CLIENT "cd searduino && make -f Makefile.git  && ./configure --prefix=/opt/ --enable-unittest --enable-debian-sources --enable-jearduino --enable-java-extension --enable-python-extension && make && make check"
     exit_on_err $? " build"
 }
