@@ -1,3 +1,5 @@
+if UNITTEST
+
 AUTOMAKE_OPTIONS = gnu
 
 JAVA_FILES=com/sandklef/searduino/OpenCloseArduinoCode.java
@@ -26,3 +28,4 @@ EXTRA_DIST = $(JAVA_FILES)
 	-@./runclass  $< 
 #> $@  2> $@.stderr
 
+endif
