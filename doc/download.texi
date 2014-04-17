@@ -1,5 +1,31 @@
 @chapter Getting and installing Searduino
 
+For some OS/distributions we have prepared scripts for setup and build
+our software. To see if your distribution is supported clone the git
+repository and look for files in the bin folder coresponding to your
+dist. If you, as an example, are using Debian you can setup your
+development environment and build the software this way:
+
+@itemize @bullet
+@item @code{bin/setup-debian.sh}
+@item @code{bin/build-debian.sh}
+@end itemize
+@*
+@note{Check the content in the scripts above to see if the settings
+fits your environment}
+@*
+@*
+Otherwise you have a couple of options to build and install the
+software. Main options, until the software packages for the
+distributions are available, are:
+
+@itemize @bullet
+@item Build and install from a released version
+@item Build and install from the source code repository
+@item Install a prebuilt binary version
+@end itemize
+
+
 @section Required software
 
 @subsection Debian based GNU/Linux distributions:
@@ -10,7 +36,7 @@
 @item avrdude
 @item avrprog
 @item avr-libc
-@item openjdk-6-jdk
+@item openjdk-6-jdk  (or openjdk-7-jdk)
 @end itemize
 
 @subsection Windows:
@@ -23,8 +49,10 @@
 
 @subsection Mac:
 @itemize @bullet
-@item 
-@item 
+@item Xcode
+@item MacPorts - http://www.macports.org/install.php
+@item and via MacPorts install avrdude, avr-libc, gcc-avr, gcc, make
+@item Java JDK
 @end itemize
 
 
@@ -42,6 +70,13 @@ You must first configure the makefile etc by typing:
 @*
 The configure script accepts several option. Type @code{./configure
 --help} to see them.
+
+@i{Note: The configure script cannot find the jni.h file needed when
+building java extension and the Jearduino simulator frontend. To help
+the configure script you need use both the CFLAGS and CXXFLAGS to
+point out the directory of the jni.h file.}
+
+
 @*
 @*
 and then continue with building 
@@ -80,15 +115,16 @@ Download from
 @code{git clone git://git.savannah.nongnu.org/searduino.git}
 @*
 @*
-Info on how to install below
 
-@subsection Installing the latest version
+
+@subsection Building the latest version
 First, create tke configure script to set up the Makefiles
 @*
 @code{make -f Makefile.git}
 @*
 @*
-After this, you should follow the procedures for Installing a released version
+After this, you should follow the procedures for Installing a released
+version (see above).
 
 @section Binary releases
 
