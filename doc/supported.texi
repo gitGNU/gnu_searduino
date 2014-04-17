@@ -5,6 +5,7 @@
 @item Uno - @url{http://arduino.cc/en/Main/arduinoBoardUno}
 @item Mega - @url{http://arduino.cc/en/Main/ArduinoBoardMega}
 @item Due - @url{http://arduino.cc/en/Main/arduinoBoardDuemilanove}
+@item Leonardo - @url{http://arduino.cc/en/Main/arduinoBoardDuemilanove}
 @end itemize
 @*
 @b{Supported Operating Systems}
