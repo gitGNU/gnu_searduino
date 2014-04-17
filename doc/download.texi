@@ -1,5 +1,25 @@
 @chapter Getting and installing Searduino
 
+To use Searduino you need some software installed (see Required
+software). To developer searduino you need some more tools in order to
+create the makefiles, configure scripts etc. The latter will not be
+discussed in this manual. Instead, we will focus on how to use, and
+build Searduino.
+
+You have a couple of options to build and install the software. The
+options we provide, until the software packages for the distributions
+are available, are:
+
+@itemize @bullet
+@item Install a prebuilt binary version
+@item Build and install from a released version
+@item Build and install from the source code repository
+@end itemize
+
+@i{Note: The first option is easiest. Only downside is that you have
+to live with our fixed installation path (/opt)}
+@*
+@*
 For some OS/distributions we have prepared scripts for setup and build
 our software. To see if your distribution is supported clone the git
 repository and look for files in the bin folder coresponding to your
@@ -11,19 +31,9 @@ development environment and build the software this way:
 @item @code{bin/build-debian.sh}
 @end itemize
 @*
-@note{Check the content in the scripts above to see if the settings
+@i{Note: Check the content in the scripts above to see if the settings
 fits your environment}
 @*
-@*
-Otherwise you have a couple of options to build and install the
-software. Main options, until the software packages for the
-distributions are available, are:
-
-@itemize @bullet
-@item Build and install from a released version
-@item Build and install from the source code repository
-@item Install a prebuilt binary version
-@end itemize
 
 
 @section Required software
