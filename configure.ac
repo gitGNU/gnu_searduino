@@ -544,7 +544,7 @@ prepare_scripts()
 
 if test "x${prefix}" = "xNONE" ;
 then 
-    SEARD_PREFIX=.
+    SEARD_PREFIX=${ac_default_prefix}
 else	
     SEARD_PREFIX=${prefix}
 fi
