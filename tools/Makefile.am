@@ -1,7 +1,7 @@
 #
 #       Searduino
 #
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#  Copyright (C) 2011, 2012, 2014 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -25,7 +25,7 @@ AUTOMAKE_OPTIONS = gnu
 
 if CYGWIN_USED
 
-FIND_PORT=find_port
+FIND_PORT=searduino_find_port
 bin_PROGRAMS= $(FIND_PORT)
 find_port_SOURCES=find_port.c
 AM_CFLAGS= 
