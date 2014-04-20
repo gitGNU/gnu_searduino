@@ -53,7 +53,7 @@ clean:
 check:
 	@echo "Nothing to do in arduino-sources"
 
-install: due uno mega mega2560
+install: due uno mega mega2560 leonardo
 	 @echo "installing to __INSTALL_DIR__"
 	 mkdir -p  __INSTALL_DIR__/lib/searduino/arduino-libs 
 	 @cp -r lib/*     __INSTALL_DIR__/lib/searduino/arduino-libs/
