@@ -19,14 +19,22 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #AC_PREREQ(2.63)
 AC_INIT([Searduino], [0.9.91], [hesa@sandklef.com])
-AC_COPYRIGHT([Copyright (c) 2012-2018 Henrik Sandklef <hesa@sandklef.com>, Viktor Green.])
+AC_COPYRIGHT([Copyright (c) 2012-2014 Henrik Sandklef <hesa@sandklef.com>, Viktor Green.])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
 AC_CHECK_HEADERS(fcntl.h)
 AC_CHECK_HEADERS(pthread.h)
+
+AX_JNI_INCLUDE_DIR
+for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
+do
+  CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
+done
 AC_CHECK_HEADERS(jni.h)
+AC_SUBST(CPPFLAGS)
+
 #AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
 AM_SILENT_RULES([yes])
 AC_PROG_CXX
@@ -155,6 +163,18 @@ AC_ARG_ENABLE([debian-sources],
 )
 
 
+AC_ARG_ENABLE([doc],
+  [AS_HELP_STRING([--enable-doc],
+	  [Build documentation)])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for doc option]) ;;
+   esac
+   seard_doc=$enableval],
+  [seard_doc=no]
+)
+
+
 
 
 AC_ARG_ENABLE([fedora-sources],
@@ -221,6 +241,7 @@ AM_CONDITIONAL(PEARDUINO_SUPPORT,  test "x$pearduino_enabled" = "xyes")
 AM_CONDITIONAL(JAVA_EXT_SUPPORT,   test "x$java_ext_enabled" = "xyes")
 AM_CONDITIONAL(JEARDUINO_SUPPORT,  test "x$jearduino_enabled" = "xyes")
 
+AM_CONDITIONAL(BUILD_DOC,          test x$seard_doc = xyes)
 AM_CONDITIONAL(DEBIAN_SOURCES,     test x$debian_sources = xyes)
 #AM_CONDITIONAL(DEBIANSOURCES,     test "x$debian_sources" = "xyes")
 AM_CONDITIONAL(DEBIANSOURCES,      test x$debian_sources = xyes)
@@ -631,6 +652,7 @@ AC_SUBST(PEARDUINO_SUPPORT)
 AC_SUBST(JAVA_EXT_SUPPORT)
 AC_SUBST(JEARDUINO_SUPPORT)
 AC_SUBST(DEBIAN_SOURCES)
+AC_SUBST(BUILD_DOC)
 AC_SUBST(DEBIANSOURCES)
 
 
