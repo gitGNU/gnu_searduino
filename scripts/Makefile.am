@@ -3,6 +3,8 @@ dist_pkgdataexample_DATA = \
 	settings     \
 	functions     \
 	settings.tmpl  \
-	functions.tmpl  
+	functions.tmpl  \
+        verify-install.sh
+
 
 
