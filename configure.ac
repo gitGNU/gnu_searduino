@@ -27,11 +27,19 @@ AC_CONFIG_HEADERS(config.h)
 AC_CHECK_HEADERS(fcntl.h)
 AC_CHECK_HEADERS(pthread.h)
 
-AX_JNI_INCLUDE_DIR
-for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
-do
-  CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
-done
+if test "x$JAVA_HOME" != "x"
+then
+  for dir in `find $JAVA_HOME/include -follow -type d`
+  do
+    CPPFLAGS="$CPPFLAGS -I$dir"
+  done
+else
+    AX_JNI_INCLUDE_DIR
+    for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
+    do
+	CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR"
+    done
+fi
 AC_CHECK_HEADERS(jni.h)
 AC_SUBST(CPPFLAGS)
 
@@ -114,7 +122,7 @@ AC_ARG_ENABLE([pearduino],
      *)      AC_MSG_ERROR([bad value $enableval for enable-pearduino option]) ;;
    esac
    pearduino_enabled=$enableval],
-  [pearduino_enabled=yes]
+  [pearduino_enabled=no]
 )
 
 AC_ARG_ENABLE([jearduino],
@@ -266,7 +274,8 @@ fi
 if test "x$java_ext_enabled" = "xyes" ; then
     if test "x$ac_cv_header_jni_h"  = "xno"; then
 	echo "Java extension enabled, but cant find jni.h"
-	echo "Try setting CFLAGS, CXXFLAGS"
+	echo "Try setting JAVA_HOME, "
+	echo "  or CFLAGS, CXXFLAGS"
 
 	exit 1
     fi
