@@ -50,7 +50,9 @@ endif
 
 EXTRA_DIST= $(SEARD_JNI_SRC) $(SEARDUINO_JAVA_SOURCES)
 
-AM_CXXFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ 
+AM_CFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ @CPPFLAGS@ 
+AM_CXXFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ @CPPFLAGS@ 
+
 AM_LDFLAGS= -L../../faked-arduino/.libs   -lsearduinostub
 
 LIB_PATHS=./:../../faked-arduino/.libs/
