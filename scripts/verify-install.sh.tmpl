@@ -5,12 +5,15 @@ do
     if [ "$1" = "--vcs" ]
     then
 	VCS=true
-	shift
     elif [ "$1" = "--arduino-examples" ]
     then
 	ARD_EX=true
-	shift
+    else
+	echo "SYNTAX ERROR"
+	echo 
+	exit 1
     fi
+    shift
 done
 
 if [ "$VCS" = "true" ]
@@ -116,17 +119,17 @@ test_ex()
 
 if [ "$VCS" = "true" ]
 then
-    chmod a+x $SEARDUINO_PATH/bin/arduino-ex2c
+    chmod a+x $SEARDUINO_PATH/bin/searduino-arduino-ex2c
     export ARDEX2C_ARGS="--vcs "
 fi
 
-    $SEARDUINO_PATH/bin/arduino-ex2c    \
+    $SEARDUINO_PATH/bin/searduino-arduino-ex2c    \
        --searduino-path $SEARDUINO_PATH \
        --$TYPE                          \
        --yes                            \
        $ARDEX2C_ARGS                    \
        $EX_PATH/$EXA
-    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $ARDEX2C_ARGS $EX_PATH/$EXA  
+    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/searduino-arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $ARDEX2C_ARGS $EX_PATH/$EXA  
 )"
     cd $(basename $EXA)
 
@@ -333,7 +336,9 @@ test_distance()
     # DISTANCE 
     log_and_exec_no_print cd verification*/distance
 
-    log_and_exec_no_print make -f Makefile.distance clean all prog
+    log_and_exec_no_print make -f Makefile.distance clean shlib 
+
+    log_and_exec_no_print make -f Makefile.distance clean prog
 
     log_and_exec_no_print ./distance
 
@@ -348,7 +353,8 @@ test_digpins()
     # DIGPINS
     log_and_exec_no_print cd ../../digpins
 
-    log_and_exec_no_print make -f Makefile.digpins clean all prog
+    log_and_exec_no_print make -f Makefile.digpins clean shlib
+    log_and_exec_no_print make -f Makefile.digpins clean prog
     inc_searduino_test
     return 0
 }
@@ -374,7 +380,7 @@ test_hid()
     # HID
     log_and_exec_no_print  cd ../hid
 
-    log_and_exec_no_print  make -f Makefile.hid clean all 
+    log_and_exec_no_print  make -f Makefile.hid clean shlib
 
     inc_searduino_test
 
@@ -387,7 +393,7 @@ test_digitalrw()
     # HID
     log_and_exec_no_print  cd ../digital-rw
 
-    log_and_exec_no_print  make -f Makefile.digitalrw clean all
+    log_and_exec_no_print  make -f Makefile.digitalrw clean shlib
 
     inc_searduino_test
 
@@ -400,7 +406,7 @@ test_serial()
     # HID
     log_and_exec_no_print  cd ../serial
 
-    log_and_exec_no_print  make -f Makefile.serial clean all
+    log_and_exec_no_print  make -f Makefile.serial clean shlib
 
     inc_searduino_test
 
