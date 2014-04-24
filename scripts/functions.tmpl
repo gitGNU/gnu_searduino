@@ -7,3 +7,136 @@ exit_on_failure()
     fi
 }
 
+log()
+{
+    echo "$*"
+}
+
+logn()
+{
+    printf "%s:" "$(echo $* | awk '{ print $1}' )"
+}
+
+exit_on_failure()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -ne 0 ]
+    then
+	echo "ERROR:  $2"
+	echo ""
+	exit $1
+    else
+       	  printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+    fi
+}
+
+
+warn_on_failure()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -ne 0 ]
+    then
+       	  printf " FAILED ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+    else
+       	  printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+    fi
+}
+
+
+
+exit_on_failure_no_print()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -ne 0 ]
+    then
+	echo "ERROR:  $2"
+	echo ""
+	exit $1
+    fi
+}
+
+exit_on_success_no_print()
+{
+    STOP_SEC=$(date '+%s')
+    if [ $1 -eq 0 ]
+    then
+	echo "ERROR:  $2 (expected error, so a success is treated as an error)"
+	exit $1
+    fi
+}
+
+
+log_and_exec()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    logn "$*"
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_failure $? ""
+}
+
+log_and_exec_comment()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    logn "$1"
+    shift
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_failure $? ""
+}
+
+log_and_exec_comment_no_quit()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    logn "$1"
+    shift
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    warn_on_failure "$?" ""
+}
+
+log_and_exec_no_print()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_failure_no_print $? ""
+}
+
+
+log_and_false_exec_no_print()
+{
+    LOCAL_START_SEC=$(date '+%s')
+    $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
+    exit_on_success_no_print $? ""
+}
+
+
+set_vars()
+{
+    AC_FILE=$(dirname $0)/../configure.ac
+    if [ -f $AC_FILE ]
+    then   
+	SEARD_VERSION=$(grep AC_INIT $AC_FILE | awk ' { print $2}' | sed -e 's,\[,,g' -e  's,\],,g' -e 's/,//g')
+    fi
+    MY_OS=$(uname -s )
+    CPU=$(uname -m)
+}
+
+init_logging()
+{
+    mkdir -p $(pwd)/logs
+    REAL_LOG_FILE=$(pwd)/logs/$(basename $0 | sed 's,\.sh,,g').log
+    rm -f $REAL_LOG_FILE
+    START_SEC=$(date '+%s')
+}
+
+close_logging()
+{
+    STOP_SEC=$(date '+%s')
+    
+    log "It all took: $(( $STOP_SEC - $START_SEC )) seconds."
+}
+
+set_vars
+
+if [ "$1" = "--version" ]
+then
+   echo "$SEARD_VERSION"
+fi
