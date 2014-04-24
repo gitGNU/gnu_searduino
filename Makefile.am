@@ -7,7 +7,7 @@ else
 endif
 # lib
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions bin/verify-install.sh bin/find_port.sh scripts/settings.tmpl scripts/functions.tmpl 
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions scripts/verify-install.sh bin/searduino_find_port.sh scripts/settings.tmpl scripts/functions.tmpl 
 
 
 ARD_SRC= \
@@ -118,7 +118,7 @@ ARD_EXAMPLES =
 endif
 
 
-bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder bin/functions  bin/find_port.sh 
+bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder scripts/functions  bin/searduino_find_port.sh 
 # bin/verify-install.sh
 #ACLOCAL_AMFLAGS = -I.m4
 
@@ -131,7 +131,20 @@ dist_pkgdataexample_DATA = \
   tmpl/pre_c.tmpl      \
   tmpl/Makefile.tmpl
 
-EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} bin/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl
+MANUALS= \
+ doc/searduino-arch.html \
+ doc/searduino-jearduino.html \
+ doc/searduino-manual.html \
+ doc/searduino-arch.pdf \
+ doc/searduino-jearduino.pdf \
+ doc/searduino-manual.pdf \
+ doc/searduino-arch.txt \
+ doc/searduino-jearduino.txt \
+ doc/searduino-manual.txt 
+
+
+
+EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} scripts/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl $(MANUALS)
 
 #m4/gnulib-cache.m4
 #  ${ARD_SRC}
@@ -161,7 +174,7 @@ check-local:
 	echo "No local check when using Debian's Arduino sources"
 else
 check-local:
-	bin/verify-install.sh --vcs 
+	scripts/verify-install.sh --vcs 
 endif
 
 init-cov:
@@ -197,3 +210,5 @@ install-data-local:
 	echo "$(PACKAGE)" >  version.txt
 	echo "$(VERSION)" >> version.txt
 	cp version.txt $(pkgdatadir)/
+	mkdir -p $(docdir)/
+	cp $(MANUALS)  $(docdir)/

@@ -26,7 +26,6 @@
 #include "LiquidCrystal.h"
 
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);   // init LiquidCrystal 
-#define ANALOG_INPUT A0
 #define PHOTO_INPUT A1
 #define BUZZER_OUTPUT 11
 extern "C" {

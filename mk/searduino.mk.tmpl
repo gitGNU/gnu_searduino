@@ -102,9 +102,9 @@ USB_DEV=$(USER_PORT)
 else
 # Try to identify port automatically
   ifeq (${CYGWIN},true)
-       USB_DEV=$(shell $(SEARDUINO_MK_PATH)/../../bin/find_port.exe $(ARDUINO))
+       USB_DEV=$(shell $(SEARDUINO_MK_PATH)/../../bin/searduino_find_port.exe $(ARDUINO))
   else
-       USB_DEV=$(shell $(SEARDUINO_MK_PATH)/../../bin/find_port.sh $(ARDUINO))
+       USB_DEV=$(shell $(SEARDUINO_MK_PATH)/../../bin/searduino_find_port.sh $(ARDUINO))
   endif
 
    ifneq "$(findstring No support, $(USB_DEV))" ""

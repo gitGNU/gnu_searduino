@@ -75,6 +75,10 @@ install-exec-hook: $(SEARDUINO_JAR) $(libsearduinojni.la)
               $(DESTDIR)$(libdir)/jearduino$(SHLIB_EXT)
 	cp $(SEARDUINO_JAR)  $(DESTDIR)$(libdir)/
 
+
+dummy:
+	echo first dummy
+
 check:
 	cd test && make check
 

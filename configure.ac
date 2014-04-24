@@ -594,9 +594,9 @@ exit_on_failure $? "Prepared Java simulator wrapper script"
 cat simulators/stream/searduino-stream.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/stream/searduino-stream.sh
 exit_on_failure $? "Prepared Streamed simulator wrapper script"
 
-cat bin/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/verify-install.sh
+cat scripts/verify-install.sh.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > scripts/verify-install.sh
 exit_on_failure $? "Prepared installation verification script"
-chmod a+x bin/verify-install.sh
+chmod a+x scripts/verify-install.sh
 
 cat bin/searduino-arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/searduino-arduino-ex2c
 exit_on_failure $? "Prepared Arduino examples to C translator"

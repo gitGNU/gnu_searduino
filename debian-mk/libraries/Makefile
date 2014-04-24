@@ -24,7 +24,7 @@
 #
 #
 
-INSTALLATION_DIR=/opt
+INSTALLATION_DIR=/tmp/searduino-test
 
 all: uno mega due mega2560 leonardo
 

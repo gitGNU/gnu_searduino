@@ -50,13 +50,13 @@ int main(void)
 
   while (ctr++<50)
     {
-      if (tmp) tmp=0 ; else tmp=1;
+      /*      if (tmp) tmp=0 ; else tmp=1;
       digitalWrite(1,digitalRead(tmp));
       for (i=FIRST_OUT;i<=LAST_OUT;i++)
 	{
 	  digitalWrite(i,digitalRead(LAST_OUT+i));
 	}
-
+      */
       delay(interval);
     }
   return 0;
