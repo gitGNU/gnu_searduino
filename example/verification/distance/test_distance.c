@@ -17,6 +17,13 @@ int main(void)
   int ctr=0;
   init();
 
+  seasim_set_board_name("leonardo");
+  seasim_setup_board();
+
+  seasim_setup();
+
+
+
   setup();
 
   for(i=0;;i++)
@@ -26,9 +33,9 @@ int main(void)
       seasim_fake_analog_input (A0,i);
       seasim_fake_analog_input (A1,j);
 
-      /*
-	printf ("get_distance()=%.4d  (i:%.4d  j:%.4d  ctr:%.4d)\n", 
-	get_distance(), i, j , ctr++);
+      /*      printf ("get_distance()=%.4d  (i:%.4d  j:%.4d  ctr:%.4d)  A0:%.4d  A1:%.4d  (%d %d %s)\n", 
+		get_distance(), i, j , ctr++,
+		analogRead(A0) , analogRead(A1), A0,  A1, seasim_get_board_name());
       */
       
       if (get_distance()!=(uint8_t)(i+j))
