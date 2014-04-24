@@ -7,7 +7,7 @@ else
 endif
 # lib
 
-SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl bin/functions scripts/verify-install.sh bin/searduino_find_port.sh scripts/settings.tmpl scripts/functions.tmpl 
+SCRIPT_SRC = bin/build-and-test.sh bin/get-arduino-src.sh bin/searduino-arduino-ex2c.tmpl bin/searduino-builder.tmpl  scripts/verify-install.sh bin/searduino_find_port.sh scripts/settings.tmpl scripts/functions.tmpl 
 
 
 ARD_SRC= \
@@ -131,6 +131,7 @@ dist_pkgdataexample_DATA = \
   tmpl/pre_c.tmpl      \
   tmpl/Makefile.tmpl
 
+if BUILD_DOC
 MANUALS= \
  doc/searduino-arch.html \
  doc/searduino-jearduino.html \
@@ -141,8 +142,9 @@ MANUALS= \
  doc/searduino-arch.txt \
  doc/searduino-jearduino.txt \
  doc/searduino-manual.txt 
-
-
+else
+MANUALS=
+endif
 
 EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} scripts/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl $(MANUALS)
 
@@ -206,9 +208,9 @@ old-check:
 	cd test/ && cd shared-main && make clean && make && make check
 	cd test/ && cd stub && make clean && make && make check
 
-install-data-local:
+install-data-local: $(MANUALS)
 	echo "$(PACKAGE)" >  version.txt
 	echo "$(VERSION)" >> version.txt
 	cp version.txt $(pkgdatadir)/
 	mkdir -p $(docdir)/
-	cp $(MANUALS)  $(docdir)/
+	cp version.txt $(MANUALS)  $(docdir)/
