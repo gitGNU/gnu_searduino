@@ -37,9 +37,10 @@ parse()
 	    # yup, debian-sources  (not ubuntu-sources)
 	    CONF_ARGS="--enable-debian-sources"
 	elif [ "$1" = "--cflags" ]
-	then
+		then
 	    setup_c_flags
 	fi
+    done	
 }
 
 
