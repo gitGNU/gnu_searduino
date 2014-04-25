@@ -30,7 +30,8 @@ AX_PROG_JAVA
 AX_PROG_JAVAC
 
 
-if test "x$JAVA_HOME" != "x"
+DARWIN=$(uname -s | grep -i Darw | wc -l)
+if test "x$JAVA_HOME" != "x" && test "x$DARWIN" != "x"
 then
   for dir in `find $JAVA_HOME/include -follow -type d`
   do
