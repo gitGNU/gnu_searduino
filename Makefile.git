@@ -3,40 +3,40 @@ setup: prepare libtool generate
 mac-setup: prepare maclibtool generate
 
 prepare:
-        @echo "*** Creating dir for Arduino sources"
-        -mkdir -p arduino-sources
+	@echo "*** Creating dir for Arduino sources"
+	-mkdir -p arduino-sources
 
 libtool:
-        @echo "*** Creating autotools dir"
-        -mkdir -p autotools/
-        libtoolize --automake  --copy --force
+	@echo "*** Creating autotools dir"
+	-mkdir -p autotools/
+	libtoolize --automake  --copy --force
 
 maclibtool:
-        @echo "*** Creating autotools dir"
-        -mkdir -p autotools/
-        glibtoolize --automake  --copy --force
+	@echo "*** Creating autotools dir"
+	-mkdir -p autotools/
+	glibtoolize --automake  --copy --force
 
 generate:
-        @echo "*** Retrieving configure tests needed by configure.in"
-        @aclocal -I ./autotools/
+	@echo "*** Retrieving configure tests needed by configure.in"
+	@aclocal -I ./autotools/
 # GNULIB  -I ./m4
-        @ # echo "*** Scanning for include statements"
+	@ # echo "*** Scanning for include statements"
 
-        @autoheader
-        @echo "*** Building Makefile templates (step one)"
+	@autoheader
+	@echo "*** Building Makefile templates (step one)"
 
-        @automake --add-missing
-        @echo "*** Building Makefile templates (step two)"
+	@automake --add-missing
+	@echo "*** Building Makefile templates (step two)"
 
-        @autoconf
+	@autoconf
 #       @if grep "ac_kw foo" configure &>/dev/null; then perl -p -i -e "s/ac_kw foo/ac_kw int foo/"\
  configure; fi
 #       @perl -pi -e 'if (/\[\/\$$\]\*. INSTALL=/) { print $$_ ; $$_ = "\"\") ;;\n"; }' configure
 
-        @-rm -f config.cache config.h
-        @echo "*** Create date/time stamp"
-        @touch stamp-h.in
-        @echo "*** Finished, now run:"
-        @echo "    ./configure  "
+	@-rm -f config.cache config.h
+	@echo "*** Create date/time stamp"
+	@touch stamp-h.in
+	@echo "*** Finished, now run:"
+	@echo "    ./configure  "
 
 
