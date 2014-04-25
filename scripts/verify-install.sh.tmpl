@@ -376,6 +376,12 @@ test_digcounter()
 
 test_hid()
 {
+    DARWIN=$(uname -s | grep -i Darw | wc -l)
+
+    if test "x$DARWIN" != "x"
+    then
+        return 0
+    fi
     #
     # HID
     log_and_exec_no_print  cd ../hid
