@@ -37,7 +37,8 @@ prepare()
 #    fi
     
     
-    if test "x$MY_OS" != "xDarwin"
+    if [ "x$MY_OS" != "xDarwin" ]
+    then
 	./configure --prefix=${TMP_INST}  --enable-unittest 
 	exit_on_failure $? "configure"
     else
