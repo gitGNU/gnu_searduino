@@ -26,6 +26,9 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
 AC_CHECK_HEADERS(fcntl.h)
 AC_CHECK_HEADERS(pthread.h)
+AX_PROG_JAVA
+AX_PROG_JAVAC
+
 
 if test "x$JAVA_HOME" != "x"
 then
