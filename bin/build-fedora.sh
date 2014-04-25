@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DIST=fedora
+
 FUNC=$(dirname $0)/build-functions
 if [ -f $FUNC ]
 then
