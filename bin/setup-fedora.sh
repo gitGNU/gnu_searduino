@@ -2,7 +2,7 @@
 
 DOC_PKGS=" pandoc " 
 
-DEVEL_PKGS=" java-1.7.0-openjdk-devel  avr-binutils avr-gcc avr-gcc-g++ avr-libc avrdude automake autoconf libtool gcc-c++ libXtst-devel"
+DEVEL_PKGS=" java-1.7.0-openjdk-devel  avr-binutils avr-gcc avr-gcc-c++ avr-libc avrdude automake autoconf autoconf-arhive libtool gcc-c++ libXtst-devel arduino"
 
 my_install() 
 {
