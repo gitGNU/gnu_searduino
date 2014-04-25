@@ -19,10 +19,10 @@ setup_c_flags()
         DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0/include/
     elif [ "$1" = "debian" ]
     then
-        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.6.0-openjdk
+        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.6.0-openjdk/include
     elif [ "$1" = "ubuntu" ]
     then
-        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0-openjdk
+        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0-openjdk/include
     fi
 
     export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
