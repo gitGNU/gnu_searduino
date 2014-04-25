@@ -18,7 +18,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #AC_PREREQ(2.63)
-AC_INIT([Searduino], [0.9.91], [hesa@sandklef.com])
+AC_INIT([Searduino], [0.9.92], [hesa@sandklef.com])
 AC_COPYRIGHT([Copyright (c) 2012-2014 Henrik Sandklef <hesa@sandklef.com>, Viktor Green.])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
