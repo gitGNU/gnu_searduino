@@ -14,7 +14,16 @@ setup()
 
 setup_c_flags()
 {
-    DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0/include/
+    if [ "$1" = "fedora" ]
+    then
+        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0/include/
+    elif [ "$1" = "debian" ]
+    then
+        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.6.0-openjdk
+    elif [ "$1" = "ubuntu" ]
+    then
+        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0-openjdk
+    fi
 
     export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
     export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
@@ -26,7 +35,6 @@ setup_arduino_sources()
     if [ "$1" = "fedora" ]
     then
 	CONF_ARGS="--enable-fedora-sources"
-	
     elif [ "$1" = "debian" ]
     then
 	CONF_ARGS="--enable-debian-sources"
@@ -46,7 +54,7 @@ parse()
 	    setup_arduino_sources $DIST
 	elif [ "$1" = "--cflags" ]
 		then
-	    setup_c_flags
+	    setup_c_flags $DIST
 	fi
 	shift
     done	
