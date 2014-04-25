@@ -51,7 +51,7 @@ dobuild()
     setup
 
     make -f Makefile.git && \
-	./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $FEDORA_ARGS  && \
+	./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
 	make clean && make && \
 	sudo make install && \
 	bash /opt/searduino/share/searduino/scripts/verify-install.sh && \
