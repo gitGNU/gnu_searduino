@@ -1,0 +1,58 @@
+setup() 
+{
+    MACH=$(uname -m)
+    
+    if [ "$MACH" = "i686" ]
+    then
+	ARCH=i386
+    else
+	ARCH=amd64
+    fi
+
+
+}
+
+setup_c_flags()
+{
+    DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0/include/
+
+    export CFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
+    export CXXFLAGS="-I${DEFAULT_JAVA_PATH} -I${DEFAULT_JAVA_PATH}/linux/"
+
+}
+
+parse() 
+{
+    while [ "$1" != "" ]
+    do
+	if [ "$1" = "fedora" ]
+	then
+	    CONF_ARGS="--enable-fedora-sources"
+	    
+	elif [ "$1" = "debian" ]
+	then
+	    CONF_ARGS="--enable-debian-sources"
+	elif [ "$1" = "ubuntu" ]
+	then
+	    # yup, debian-sources  (not ubuntu-sources)
+	    CONF_ARGS="--enable-debian-sources"
+	elif [ "$1" = "--cflags" ]
+	then
+	    setup_c_flags
+	fi
+}
+
+
+dobuild() 
+{
+    parse $*
+    setup
+
+    make -f Makefile.git && \
+	./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $FEDORA_ARGS  && \
+	make clean && make && \
+	sudo make install && \
+	bash /opt/searduino/share/searduino/scripts/verify-install.sh && \
+	echo "Wow, it all passed :)"
+    
+}
