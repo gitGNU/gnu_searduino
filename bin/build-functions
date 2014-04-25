@@ -21,21 +21,29 @@ setup_c_flags()
 
 }
 
+setup_arduino_sources()
+{
+    if [ "$1" = "fedora" ]
+    then
+	CONF_ARGS="--enable-fedora-sources"
+	
+    elif [ "$1" = "debian" ]
+    then
+	CONF_ARGS="--enable-debian-sources"
+    elif [ "$1" = "ubuntu" ]
+    then
+	# yup, debian-sources  (not ubuntu-sources)
+	CONF_ARGS="--enable-debian-sources"
+    fi
+}
+
 parse() 
 {
     while [ "$1" != "" ]
     do
-	if [ "$1" = "fedora" ]
+	if [ "$1" = "--arduino-sources" ]
 	then
-	    CONF_ARGS="--enable-fedora-sources"
-	    
-	elif [ "$1" = "debian" ]
-	then
-	    CONF_ARGS="--enable-debian-sources"
-	elif [ "$1" = "ubuntu" ]
-	then
-	    # yup, debian-sources  (not ubuntu-sources)
-	    CONF_ARGS="--enable-debian-sources"
+	    setup_arduino_sources $DIST
 	elif [ "$1" = "--cflags" ]
 		then
 	    setup_c_flags
