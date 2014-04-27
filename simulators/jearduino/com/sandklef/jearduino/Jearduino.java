@@ -63,7 +63,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
     PinTable      pins;
     Logger        serial ;
-    Logger        logger ;
+    //    Logger        logger ;
     FileLogger    fileLogger ;
     LCD           lcd ;
     InfoPanel     infoPanel;
@@ -98,7 +98,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     JearduinoState jState;
 
     static int appSizeHeight = 700;
-    static int appSizeWidth  = 1080;
+    static int appSizeWidth  = 800;
 
     static int infoSizeHeight = 20;
     static int infoSizeWidth  = 800;
@@ -159,18 +159,18 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	infoPanel = new InfoPanel();
 	projectPanel = new ProjectPanel();
 
-	logger    = new Logger( "Log");
+	//	logger    = new Logger( "Log");
 	fileLogger = new FileLogger( "File Log", this);
 	serial = new Logger( "Serial");
 	lcd    = new LCD( "LCD");
 
 	serial.setMaximumSize(new Dimension(200, 400)); 
-	logger.setMaximumSize(new Dimension(200, 400)); 
+	//	logger.setMaximumSize(new Dimension(200, 400)); 
 	//fileLogger.setMaximumSize(new Dimension(600, 800)); 
 	lcd.setMaximumSize(new Dimension(200, 400)); 
 
 	serial.setPreferredSize(new Dimension(200, 100)); 
-	logger.setPreferredSize(new Dimension(600, 150)); 
+	//	logger.setPreferredSize(new Dimension(600, 150)); 
 	//fileLogger.setPreferredSize(new Dimension(600, 800)); 
 	lcd.setPreferredSize(new Dimension(200, 100)); 
 
@@ -180,6 +180,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	lastCommandResult.setVisible(true);
 	lastCommand.setVisible(true);
 	*/
+	logPanel.add(controlPanel);
 	logPanel.add(serial);
 	logPanel.add(lcd);
 	/*
@@ -190,7 +191,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	commandPanel.setBorder(BorderFactory.createTitledBorder("Command"));
 	*/
 
-	loggerPanel.add(logger);
+	//	loggerPanel.add(logger);
 	fileLoggerPanel.add(fileLogger);
 
 	pins = new PinTable(this, jState, searduino);
@@ -239,7 +240,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	System.out.flush();
 	*/
 
-	logger.addLog(text);
+	//	logger.addLog(text);
 	fileLogger.addLog(text);
     }
 
@@ -269,8 +270,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	controlPanel.setMaximumSize(new Dimension(400, 80));
 	controlPanel.setMinimumSize(new Dimension(400, 80));
 
-	logger.setMaximumSize(new Dimension(500, 300));
-	logger.setMinimumSize(new Dimension(500, 300));
+	//	logger.setMaximumSize(new Dimension(500, 300));
+	//logger.setMinimumSize(new Dimension(500, 300));
 
 	loggerPanel.setMaximumSize(new Dimension(800, 300));
 	loggerPanel.setMinimumSize(new Dimension(800, 300));
@@ -306,7 +307,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	constraints.gridy = 1;
 
 	constraints.gridwidth = 2;
-	pane.add(controlPanel, constraints);
+	//	pane.add(controlPanel, constraints);
 
 
 	/*  row  2*/
