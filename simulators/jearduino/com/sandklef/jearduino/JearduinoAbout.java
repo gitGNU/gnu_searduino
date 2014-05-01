@@ -72,7 +72,7 @@ public class JearduinoAbout extends JDialog {
 	textArea.setEditable(false);
         panel.add(textArea);
 
-	textArea.append("Henrik Sandklef\nViktor Green\nPeter Myllykoski" );
+	textArea.append("Henrik Sandklef.\nAdditions by: Viktor Green and Peter Myllykoski\n" );
 
         return panel;
     }
