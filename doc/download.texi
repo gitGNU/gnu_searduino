@@ -182,13 +182,13 @@ To use it, type:
 @code{cd /opt/searduino}
 @*
 @*
-@code{./bin/verify-install.sh}
+@code{./scripts/verify-install.sh}
 @*
 @*
 You can upload all built program to the uno boards by adding the option @code{--upload}
 @*
 @*
-@code{bin/verify-install.sh --upload}
+@code{scripts/verify-install.sh --upload}
 @*
 @*
 @i{Note: this only uploads to the Uno boards, not to the other
@@ -200,7 +200,7 @@ You can also execute each shared library in the stream simulator, by
 using the option @code{--simulate}
 @*
 @*
-@code{bin/verify-install.sh --simulate}
+@code{scripts/verify-install.sh --simulate}
 @*
 @*
 @i{Note: Since the Arduino code will execute for ever, you must stop
