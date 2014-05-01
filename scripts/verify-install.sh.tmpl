@@ -8,6 +8,12 @@ do
     elif [ "$1" = "--arduino-examples" ]
     then
 	ARD_EX=true
+    elif [ "$1" = "--upload" ]
+    then
+	export UPLOAD="true"
+    elif [ "$1" = "--simulate" ]
+    then
+	export SIMULATE="true"
     else
 	echo "SYNTAX ERROR"
 	echo 
@@ -446,17 +452,6 @@ test_examples()
     cd $STORED_DIR
 }
 
-while [ "$1" != "" ]
-do
-    if [ "$1" = "--upload" ]
-    then
-	export UPLOAD="true"
-    elif [ "$1" = "--simulate" ]
-    then
-	export SIMULATE="true"
-    fi
-    shift
-done
 
 
 init_logging
