@@ -50,7 +50,7 @@ then
     EX_PATH=$SEARDUINO_PATH/ard-ex
     EXAMPLES_PATH=$SEARDUINO_PATH/example
 else
-    EX_PATH=$SEARDUINO_PATH/share/examples/arduino
+    EX_PATH=$SEARDUINO_PATH/share/searduino/examples/arduino
     EXAMPLES_PATH=$SEARDUINO_PATH/share/searduino/example
 fi
 
@@ -99,15 +99,18 @@ test_report()
     echo "================================================="
     echo ""
     echo "   Arduino examples tested:   $ARDUINO_EX_CTR"
-    echo "   ----------------------------------------------"
-    echo -n "      Succeeded:              $ARDUINO_EX_CTR_SUCC "
-    printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_SUCC / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
-
-    echo -n "      Failed:                 $ARDUINO_EX_CTR_FAIL "
-    printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_FAIL / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
-
-    echo    "                              (failures indicates features not supported in Searduino's simulator)"
-    echo ""
+    if [ "$ARDUINO_EX_CTR" != "0" ]
+    then
+	echo "   ----------------------------------------------"
+	echo -n "      Succeeded:              $ARDUINO_EX_CTR_SUCC "
+	printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_SUCC / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
+	
+	echo -n "      Failed:                 $ARDUINO_EX_CTR_FAIL "
+	printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_FAIL / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
+	
+	echo    "                              (failures indicates features not supported in Searduino's simulator)"
+	echo ""
+    fi
     if [ "$VCS" != "true" ]
     then
 	echo "   Searduino examples tested: $SEARDUINO_EX_CTR"
