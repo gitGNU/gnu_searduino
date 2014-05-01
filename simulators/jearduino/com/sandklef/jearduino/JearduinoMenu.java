@@ -239,6 +239,7 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 	    System.out.println("Could not open manual.");
 	    System.out.println("   Searduino path: " + seardPath );
 	    System.out.println("   Manual file: "    + manualFile );
+	    System.out.println("   Exception: "      + e );
 	}
     }
 
