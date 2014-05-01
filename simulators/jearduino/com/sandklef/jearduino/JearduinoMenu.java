@@ -224,10 +224,16 @@ public class JearduinoMenu extends JMenuBar implements ActionListener {
 
     public void showManual()
     {
+	String seardPath = System.getenv("SEARDUINO_PATH") ;
+	String manualFile = seardPath + "/share/searduino/doc/searduino-manual.pdf";
+	//"/home/hesa/opt/searduino/simulators/jearduino/com/sandklef/jearduino/Jearduino.java";
+
 	try {
-	    Desktop.getDesktop().open(new File("/opt/share/searduino/doc/manual.html"));
-	} catch (java.io.IOException e)  {
-	    System.out.println("Could not open manual" );
+	    Desktop.getDesktop().open(new File(manualFile));
+	} catch (Exception e)  {
+	    System.out.println("Could not open manual.");
+	    System.out.println("   Searduino path: " + seardPath );
+	    System.out.println("   Manual file: "    + manualFile );
 	}
     }
 
