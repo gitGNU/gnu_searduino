@@ -240,7 +240,7 @@ Here's an example of how to instruct Searduino to use
 @*
 Add the following to your Makefile, before you include the file @code{searduino.mk}
 @*
-@code{USER_POR=/dev/ttyACM0}
+@code{USER_PORT=/dev/ttyACM0}
 @*
 After this you can invoke make on your makefile as usual.
 
