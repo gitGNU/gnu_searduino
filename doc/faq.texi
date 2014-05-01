@@ -10,15 +10,16 @@ has not yet been implemented in Searduino.
 
 You can ask the Searduino folks to do it or you can implement it your
 self.
-
 @cindex The code works fine in the simulator but nothing happens on
 the Arduino board?
+@*
+@*
 @b{Sim code works, but not on the Arduino?}
 
 One of the thing we've experienced when developing Searduino is that
-Arduino crashes when you're having printf (and family) calls in your
+Arduino crashes when you're having printf and similar calls in your
 code. Instead of using printf in your code you can use the debug
-macros in Searduino.
+macros (e.g SEARDUINO_DEBUG) in Searduino.
 
 @cindex @b{How do I use an external library in Searduino?}
 
