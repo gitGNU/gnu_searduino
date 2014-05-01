@@ -39,10 +39,10 @@ prepare()
     
     if [ "x$MY_OS" != "xDarwin" ]
     then
-	./configure --prefix=${TMP_INST}  --enable-unittest 
+	./configure --prefix=${TMP_INST}  --enable-unittest --enable-doc
 	exit_on_failure $? "configure"
     else
-	./configure --prefix=${TMP_INST} 
+	./configure --prefix=${TMP_INST}  --enable-doc
 	exit_on_failure $? "configure"
     fi
 }
@@ -53,6 +53,9 @@ build()
     exit_on_failure $? "make clean"
 
     make 
+    exit_on_failure $? "make "
+
+    make doc
     exit_on_failure $? "make "
 
     sudo make install
