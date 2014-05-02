@@ -71,10 +71,7 @@ dobuild()
 
     if [ "$BUILD_ARGS" = "true" ]
     then
-	make -f Makefile.git && \
-	    ./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
-	    make clean && make && \
-	    make dist 
+	bin/build-bin-dist.sh
     else
 	make -f Makefile.git && \
 	    ./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
