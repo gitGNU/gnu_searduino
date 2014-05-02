@@ -52,6 +52,9 @@ parse()
 	if [ "$1" = "--arduino-sources" ]
 	then
 	    setup_arduino_sources $DIST
+	elif [ "$1" = "--bin-dist" ]
+	then	
+	    BUILD_ARGS="true"
 	elif [ "$1" = "--cflags" ]
 		then
 	    setup_c_flags $DIST
@@ -66,11 +69,18 @@ dobuild()
     parse $*
     setup
 
-    make -f Makefile.git && \
-	./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
-	make clean && make && \
-	sudo make install && \
-	bash /opt/searduino/share/searduino/scripts/verify-install.sh && \
-	echo "Wow, it all passed :)"
-    
+    if [ "$BUILD_ARGS" = "true" ]
+    then
+	make -f Makefile.git && \
+	    ./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
+	    make clean && make && \
+	    make dist 
+    else
+	make -f Makefile.git && \
+	    ./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
+	    make clean && make && \
+	    sudo make install && \
+	    bash /opt/searduino/share/searduino/scripts/verify-install.sh && \
+	    echo "Wow, it all passed :)"
+    fi
 }
