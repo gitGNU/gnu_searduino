@@ -97,11 +97,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     
     JearduinoState jState;
 
-    static int appSizeHeight = 700;
-    static int appSizeWidth  = 800;
-
-    static int infoSizeHeight = 20;
-    static int infoSizeWidth  = 800;
+    static int appSizeHeight = 750;
+    static int appSizeWidth  = 700;
 
     public Jearduino() {
 
@@ -122,7 +119,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	/*  info */
 
-	setSize(appSizeHeight, appSizeWidth);
+	setSize(appSizeWidth, appSizeHeight);
 
 
         controlPanel = new JPanel();
@@ -144,8 +141,8 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 
 	ec = new ExecControl(this);
-	controlPanel.add(ec);
-	controlPanel.setVisible(true);
+	//	ec.setBorder(BorderFactory.createTitledBorder("Execution"));
+
 	
 
 	jmenu = new JearduinoMenu(this, this, this, this, this, this);
@@ -157,41 +154,22 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	searduino = new Searduino();
 	board = new Board(this, searduino);
 	infoPanel = new InfoPanel();
-	projectPanel = new ProjectPanel();
+	//	projectPanel = new ProjectPanel();
+
+	//	controlPanel.add(projectPanel, constraints);
+	controlPanel.add(ec);
+	controlPanel.setVisible(true);
 
 	//	logger    = new Logger( "Log");
 	fileLogger = new FileLogger( "File Log", this);
 	serial = new Logger( "Serial");
 	lcd    = new LCD( "LCD");
 
-	serial.setMaximumSize(new Dimension(200, 400)); 
-	//	logger.setMaximumSize(new Dimension(200, 400)); 
-	//fileLogger.setMaximumSize(new Dimension(600, 800)); 
-	lcd.setMaximumSize(new Dimension(200, 400)); 
-
-	serial.setPreferredSize(new Dimension(200, 100)); 
-	//	logger.setPreferredSize(new Dimension(600, 150)); 
-	//fileLogger.setPreferredSize(new Dimension(600, 800)); 
-	lcd.setPreferredSize(new Dimension(200, 100)); 
-
-	/*
-	lastCommand       = new JLabel("cmd");
-	lastCommandResult = new JLabel("res");
-	lastCommandResult.setVisible(true);
-	lastCommand.setVisible(true);
-	*/
 	logPanel.add(controlPanel);
 	logPanel.add(serial);
 	logPanel.add(lcd);
-	/*
-	logPanel.add(commandPanel);
-	commandPanel.add(lastCommand);
-	commandPanel.add(lastCommandResult);
-	commandPanel.setVisible(true);
-	commandPanel.setBorder(BorderFactory.createTitledBorder("Command"));
-	*/
+	logPanel.add(infoPanel, constraints);
 
-	//	loggerPanel.add(logger);
 	fileLoggerPanel.add(fileLogger);
 
 	pins = new PinTable(this, jState, searduino);
@@ -217,7 +195,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	searduino.registerLogCallback(this);
 	searduino.registerLCDCallback(this);
 
-	projectPanel.setArduinoCodeName(searduino.getArduinoCodeName());
+	infoPanel.setArduinoCodeName(searduino.getArduinoCodeName());
 	infoPanel.setSearduinoVersion(searduino.getSearduinoVersion());
 
 	tabbedPane.addTab("Control", null, pane,
@@ -226,6 +204,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	tabbedPane.addTab("Log", null, fileLoggerPanel,
 			  "Log tab");
 
+	addToGUI();
 	setupSizes();
     }
 
@@ -249,35 +228,9 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	;
     }
 
-    public void setupSizes()
+
+    private void addToGUI() 
     {
-	/*
-	logger.setMaximumSize(new Dimension(200, 400));
-	logger.setMinimumSize(new Dimension(200, 400));
-
-	serial.setMaximumSize(new Dimension(200, 500));
-	serial.setMinimumSize(new Dimension(200, 400));
-	*/
-	projectPanel.setMinimumSize(new Dimension( 10, 300));
-	projectPanel.setMaximumSize(new Dimension( 10, 300));
-
-	infoPanel.setMinimumSize(new Dimension( 400, 50));
-	infoPanel.setMaximumSize(new Dimension( 400, 50));
-
-	pinPanel.setMaximumSize(new Dimension(400, 600));
-	pinPanel.setMinimumSize(new Dimension(400, 600));
-
-	controlPanel.setMaximumSize(new Dimension(400, 80));
-	controlPanel.setMinimumSize(new Dimension(400, 80));
-
-	//	logger.setMaximumSize(new Dimension(500, 300));
-	//logger.setMinimumSize(new Dimension(500, 300));
-
-	loggerPanel.setMaximumSize(new Dimension(800, 300));
-	loggerPanel.setMinimumSize(new Dimension(800, 300));
-
-	serial.setMaximumSize(new Dimension(300, 300));
-	serial.setMinimumSize(new Dimension(300, 300));
 
 	int he = 0;
 
@@ -293,7 +246,6 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	constraints.gridwidth = 2;
 	//	System.out.println("projectPanel" + projectPanel + " c " + constraints);
-	pane.add(projectPanel, constraints);
 
 
 	/*  row  1*/
@@ -348,14 +300,35 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	pane.add(loggerPanel, constraints);
 
 
-	constraints.fill = GridBagConstraints.HORIZONTAL;
-	constraints.ipady = 0;      //
-	constraints.weightx = 0.0;
-	constraints.gridwidth = 0;
+    }
+    
 
-	constraints.gridx = 0;
-	constraints.gridy = 4;
-	pane.add(infoPanel, constraints);
+    private void setupSizes()
+    {
+	serial.setMaximumSize(new Dimension(200, 400)); 
+	lcd.setMaximumSize(new Dimension(200, 400)); 
+
+	serial.setPreferredSize(new Dimension(200, 100)); 
+	lcd.setPreferredSize(new Dimension(200, 100)); 
+
+	//	projectPanel.setMinimumSize(new Dimension( 100, 200));
+	//projectPanel.setMaximumSize(new Dimension( 100, 300));
+
+	infoPanel.setMinimumSize(new Dimension( 400, 50));
+	infoPanel.setMaximumSize(new Dimension( 400, 50));
+
+	pinPanel.setMaximumSize(new Dimension(400, 600));
+	pinPanel.setMinimumSize(new Dimension(400, 600));
+
+	controlPanel.setMaximumSize(new Dimension(400, 80));
+	controlPanel.setMinimumSize(new Dimension(400, 80));
+
+	loggerPanel.setMaximumSize(new Dimension(800, 300));
+	loggerPanel.setMinimumSize(new Dimension(800, 300));
+
+	serial.setMaximumSize(new Dimension(300, 300));
+	serial.setMinimumSize(new Dimension(300, 300));
+
 
     }
 
@@ -624,7 +597,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 	jpref.setArduinoCodeName(0, canonName);
 	
 	/* Display code name in project panel */
-	projectPanel.setArduinoCodeName(shortName);
+	infoPanel.setArduinoCodeName(shortName);
 
 	/* Update menu items */
 	showArduinoCodeNameMenu();
@@ -669,7 +642,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 					"", "");
 		showError("load Arduino code: " + f);
 	    }
-	    projectPanel.setArduinoCodeName("");
+	    infoPanel.setArduinoCodeName("");
 	    ec.unsetAll();
 	    return;
 	} else {
@@ -708,12 +681,12 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 		
 	/* Set current project name */
 	jState.setCurrentSearduinoProject(project);
-	projectPanel.setProjectName(project);
+	infoPanel.setProjectName(project);
 
 	/* Manage code info */
 	if (shortCode!=null) {
 	    jState.setCodeName(shortCode, longCode);
-	    projectPanel.setArduinoCodeName(shortCode);
+	    infoPanel.setArduinoCodeName(shortCode);
 	}
     }
     
