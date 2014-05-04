@@ -1,4 +1,4 @@
-
+PACKAGE=searduino
 
 FUNC_FILE=$(dirname $0)/functions
 if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
@@ -36,8 +36,15 @@ packit()
     cd $TMP_INST
     cd ..
     rm -f   ${TAR_FILE}*
+    echo TAR
     tar cvf ${TAR_FILE} $PACKAGE
+    RET=$?
+    echo "TAR: $RET"
+    exit_on_failure $? "archive: tar cvf ${TAR_FILE} $PACKAGE   (in $(pwd)) "
     gzip    ${TAR_FILE}
+    RET=$?
+    echo "GZIP: $RET"
+    exit_on_failure $? "gzip tar file ${TAR_FILE} $PACKAGE   (in $(pwd)) "
 }
 
 setup() 
@@ -125,6 +132,14 @@ parse()
     done	
 }
 
+
+prepare()
+{
+   make -f Makefile.git $MAKE_GIT_ARGS && \
+       ./configure $CONF_ARGS --prefix=/opt/searduino --disable-python-extension  --disable-pearduino  
+	
+}
+
 build_bin_dist()
 {
     log "Building and checking"
@@ -144,14 +159,24 @@ build()
 {
     if [ "$DIST" = "darwin" ]
     then
-        MAKE_GIT_ARGS="mac-setup"
+	MAKE_GIT_ARGS="mac-setup"
     fi
-    make -f Makefile.git $MAKE_GIT_ARGS && \
-	./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
-	make clean && make && \
-	sudo make install && \
-	bash /opt/searduino/share/searduino/scripts/verify-install.sh && \
-	echo "Wow, it all passed :)"
+    
+    make clean && make 
+    return $?
+}
+
+install()
+{
+    sudo make install
+    return $?
+}
+
+
+verify()
+{
+    bash /opt/searduino/share/searduino/scripts/verify-install.sh && \
+    return $?
 }
 
 dobuild() 
