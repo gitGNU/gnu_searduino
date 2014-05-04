@@ -26,20 +26,64 @@ package com.sandklef.jearduino;
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.BorderFactory;
+import java.awt.GridLayout;
+import java.io.File;
 
 public class InfoPanel extends JPanel 
 {
 
-    JLabel infoLabel;
+    JLabel searduinoLabel;
+    JLabel boardLabel;
+    JLabel projectName;
+    JLabel arduinoCodeName;
+
     String boardName;
     String searduinoVersion;
+
+    private String getName(String s, boolean isDir) {
+	String ret="--";
+
+	if (s!=null) {
+	    File f = new File(s);
+	    
+	    if (f.isFile()) {
+		if (isDir) {
+		    ret = " -- ";
+		} else {
+		    ret = f.getName();
+		}
+	    } else if (f.isDirectory()) {
+		if (isDir) {
+		    ret = f.getName();
+		} else {
+		    ret = " -- " ;
+		}
+	    } else {
+		ret = s;
+	    }
+	}
+	//	System.out.println("getName(" + s +");  => " + ret);
+	return ret;
+    }
+
+    public void setProjectName(String p)
+    {
+	projectName.setText(getName(p, true));
+    }
+
+    public void setArduinoCodeName(String ac)
+    {
+	arduinoCodeName.setText(getName(ac, false));
+    }
+
     
     public void updateText()
     {
-	String text = "Searduino: "      + searduinoVersion + 
-	    "  Board: "        + boardName ;
-	infoLabel.setText(text);
+	String seard = searduinoVersion ;
+	searduinoLabel.setText(seard);
 
+	String board = boardName ;
+	boardLabel.setText(board);
     }
 
     public void setBoardName(String b)
@@ -56,14 +100,35 @@ public class InfoPanel extends JPanel
 
     public InfoPanel()
     {
-	infoLabel = new JLabel();
-
+	super(new GridLayout(4, 2));    
 	setBorder(BorderFactory.createTitledBorder("Information"));
+
+	searduinoLabel = new JLabel();
+	boardLabel = new JLabel();
+
+	projectName      = new JLabel();
+	arduinoCodeName  = new JLabel();
+
+	add(new JLabel("Searduino:" ));
+	add(searduinoLabel);
+
+	add(new JLabel("Board:" ));
+	add(boardLabel);
+
+	add(new JLabel("Arduino code:" ));
+	add(arduinoCodeName); 
+	setArduinoCodeName("-");
+
+	add(new JLabel("Project:" ));
+	add(projectName); 
+	setProjectName("-");
+
+
 	
 	setSearduinoVersion("0");
 	setBoardName("none");
 
-	add(infoLabel);
+
 
 	updateText();
     }
