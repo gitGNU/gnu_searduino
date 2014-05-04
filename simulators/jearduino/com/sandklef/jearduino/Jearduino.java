@@ -130,6 +130,7 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
 
 	loggerPanel = new JPanel();
 	fileLoggerPanel = new JPanel();
+	fileLoggerPanel.setLayout(new BoxLayout(fileLoggerPanel, BoxLayout.PAGE_AXIS));
 	/*
 	commandPanel = new JPanel();
 	commandPanel.setLayout(new FlowLayout(FlowLayout.CENTER));

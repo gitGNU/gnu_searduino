@@ -44,7 +44,9 @@ class FileLogger extends JPanel implements TailerEvent, ActionListener {
     JScrollPane scrollPane;
 
     public FileLogger(String str, Jearduino j) {
-	super(new GridLayout(2, 1));    
+	//	super(new GridLayout(2, 1));    
+
+	JPanel textPanel = new JPanel();
 	setBorder(BorderFactory.createTitledBorder(str));
 
 	textArea = new JTextArea();
@@ -60,10 +62,11 @@ class FileLogger extends JPanel implements TailerEvent, ActionListener {
 
 	add(scrollPane);
 	add(pane);
+	pane.setLayout(new GridLayout(1,2));    
 	pane.add(clear);
 	pane.add(printState);
 
-	scrollPane.setPreferredSize(new Dimension(600, 700)); 
+	scrollPane.setPreferredSize(new Dimension(600, 500)); 
 	//textArea.setMinimumSize (new Dimension(300, 750)); 
 
 	clear.addActionListener(this);
