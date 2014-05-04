@@ -142,7 +142,11 @@ build_bin_dist()
 
 build()
 {
-    make -f Makefile.git && \
+    if [ "$DIST" = "darwin" ]
+    then
+        MAKE_GIT_ARGS="mac-setup"
+    fi
+    make -f Makefile.git $MAKE_GIT_ARGS && \
 	./configure  --prefix=/opt/searduino --disable-python-extension  --disable-pearduino $CONF_ARGS  && \
 	make clean && make && \
 	sudo make install && \
@@ -152,12 +156,16 @@ build()
 
 dobuild() 
 {
+    if [ "$DIST" = "darwin" ]
+    then
+	. ~/.bashrc
+    fi
     parse $*
     setup
 
     if [ "$BUILD_ARGS" = "true" ]
     then
-	bin/build-bin-dist.sh
+	build_bin_dist
     else
 	build
     fi
