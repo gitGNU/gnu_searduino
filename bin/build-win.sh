@@ -16,7 +16,7 @@ init_logging
 
 
 CONF_FLAGS="--host=i686-w64-mingw32"
-CONF_FLAGS="$CONF_FLAGS  --disable-python"
+CONF_FLAGS="$CONF_FLAGS  --disable-python-extension --disable-pearduino"
 CONF_FLAGS="$CONF_FLAGS  --prefix=/opt/searduino-win"
 CONF_FLAGS="$CONF_FLAGS  --disable-unittest"
 
@@ -33,6 +33,8 @@ export LDFLAGS="-L/opt/searduino-win/dlfcn/lib -ldl"
 # -L/opt/searduino-win/pthread/lib -lpthread"
 ./configure $CONF_FLAGS   >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
 exit_on_failure $? ""
+
+
 
 #rm -fr /opt/searduino/*
 #log_and_exec   make
