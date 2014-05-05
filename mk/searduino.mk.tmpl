@@ -50,6 +50,7 @@ else
   ARDUINO_LIB_INC_PATH=$(SEARDUINO_PATH)/include/searduino/arduino-sources/
 endif
 
+
 #
 # Searduino version
 # 
@@ -121,6 +122,6 @@ else
 include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
 endif
 
-SEARDUINO_LIB_PATH=-L$(ROOT_PATH)__INSTALL_DIR__/lib/searduino/arduino-libs/$(BOARD) -L$(ROOT_PATH)__INSTALL_DIR__/lib
+SEARDUINO_LIB_PATH=-L$(ROOT_PATH)__INSTALL_DIR__/share/searduino/arduino-libs/$(BOARD) -L$(ROOT_PATH)__INSTALL_DIR__/lib
 
 include $(SEARDUINO_MK_PATH)/mk/searduino-functions.mk
