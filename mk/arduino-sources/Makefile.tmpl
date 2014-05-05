@@ -4,7 +4,7 @@
 # Basically a couple of Makefile wrapping the Ardunio
 # C and C++ files
 #                                                                   
-#  Copyright (C) 2011, 2012 Henrik Sandklef      
+#  Copyright (C) 2011, 2012, 2014 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -23,6 +23,7 @@
 # MA  02110-1301, USA.                                              
 #
 #
+
 
 all: uno mega due mega2560 leonardo
 	cd libraries && make all
@@ -53,10 +54,15 @@ clean:
 check:
 	@echo "Nothing to do in arduino-sources"
 
-install: due uno mega mega2560 leonardo
+
+
+
+
+
+install: due uno mega mega2560 leonardo 
 	 @echo "installing to __INSTALL_DIR__"
-	 mkdir -p  __INSTALL_DIR__/lib/searduino/arduino-libs 
-	 @cp -r lib/*     __INSTALL_DIR__/lib/searduino/arduino-libs/
+	 mkdir -p         __INSTALL_DIR__/share/searduino/arduino-libs 
+	 @cp -r lib/*     __INSTALL_DIR__/share/searduino/arduino-libs/
 
 	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/core
 	 @mkdir -p         __INSTALL_DIR__/include/searduino/arduino-sources/variants
@@ -64,12 +70,15 @@ install: due uno mega mega2560 leonardo
 
 	 @cp -r core/*.h   __INSTALL_DIR__/include/searduino/arduino-sources/core/
 	 @cp -r variants/* __INSTALL_DIR__/include/searduino/arduino-sources/variants/
+	 @echo "installing to __INSTALL_DIR__"
+	 mkdir -p         __INSTALL_DIR__/share/searduino/arduino-libs 
+	 @cp -r lib/*     __INSTALL_DIR__/share/searduino/arduino-libs/
+
 #
 # This is an ugly hack to get around the problem of 99 chars max length in tar
 #	 
 	 @cp -r ../ard-ex/*  __INSTALL_DIR__/share/examples/arduino/
-
-	cd libraries && make install
+	 cd libraries && make install
 
 
 distdir:
