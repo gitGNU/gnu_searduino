@@ -17,7 +17,7 @@ are available, are:
 @end itemize
 
 @i{Note: The first option is easiest. Only downside is that you have
-to live with our fixed installation path (/opt)}
+to live with our fixed installation path (/opt/searduino)}
 @*
 @*
 For some OS/distributions we have prepared scripts for setup and build
