@@ -78,7 +78,6 @@ public class PinTable extends JPanel implements ActionListener, ChangeListener
 
     public PinTable(PinEvent e, JearduinoState js, Searduino searduinoIn)    {
 	super(new GridLayout(2, 1));    
-	setBorder(BorderFactory.createTitledBorder("einar"));
 	searduino = searduinoIn;
 	panel = this; 
 	    //new JPanel(new GridBagLayout());
