@@ -1,7 +1,8 @@
 #!/bin/sh
 
 VMM=/opt/bin/tm-vmm
-CLIENT=Debian-6-0-6
+#CLIENT=Debian-6-06
+CLIENT=Debian-7-4-0
 SNAPSHOT_NAME=SEARD_BASE
 DIST="debian"
 
