@@ -142,6 +142,8 @@ MANUALS= \
  doc/searduino-arch.txt \
  doc/searduino-jearduino.txt \
  doc/searduino-manual.txt 
+ doc/jearduino.png \
+ doc/jearduino-log.png 
 else
 MANUALS=
 endif
