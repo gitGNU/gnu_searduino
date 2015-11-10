@@ -105,7 +105,7 @@ void tone(uint8_t _pin, unsigned int frequency, unsigned long duration)
       TONE_PIN_SET_STOP(i, current_time);
 
     }
-  analogWrite(_pin, frequency);
+  analogWrite(_pin, 255);
 }
 
 
