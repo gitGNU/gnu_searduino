@@ -6,7 +6,7 @@ BUILD_DIR=.
 LOG_FILE=build-and-test.log
 
 
-DEFAULT_JAVA_PATH=/usr/lib/jvm/java-7-openjdk-amd64/include/
+DEFAULT_JAVA_PATH=/usr/lib/jvm/java-8-openjdk-amd64/include/
 #/usr/lib/jvm/java-6-sun-1.6.0.26/include/
 #/usr/lib/jvm/java-7-openjdk-amd64/include/
 
