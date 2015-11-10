@@ -1,7 +1,7 @@
 \input texinfo   @c -*-texinfo-*-
 
 @c %**start of header
-@setfilename architecture.texi
+@setfilename searduino-manual.texi
 @settitle Searduino - Manual
 @c %**end of header
 @afourpaper
@@ -78,6 +78,25 @@ variable in the Makefile. The following values of that variable are implemented.
 @item leonardo - builds software for the Arduino Leonardo board
 @item stub - builds software for the PC
 @end itemize
+
+If your Makefile is actually called Makefile, and not has a
+suffix like Makefile.something, you can use special make targets:
+@b{Special make targets}
+@itemize @bullet
+@item make uno - builds software for the Arduino UNO board
+@item make mega - builds software for the Arduino Mega board
+@item make mega2560 - builds software for the Arduino Mega 2560 board
+@item make due - builds software for the Arduino Mega board
+@item make leonardo - builds software for the Arduino Leonardo board
+@item make stub - builds software for the PC
+@item make uno-upload - uploads software to the Arduino UNO board
+@item make mega-upload - uploads software to the Arduino Mega board
+@item make mega2560-upload - uploads software to the Arduino Mega 2560 board
+@item make due-upload - uploads software to the Arduino Mega board
+@item make leonardo-upload - uploads software to the Arduino Leonardo board
+@item make stub-upload - uploadssoftware to the PC
+@end itemize
+
 
 
 @include macros.texi

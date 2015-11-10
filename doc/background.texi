@@ -1,14 +1,14 @@
 The authors of Searduino loves developing code for Arduino. We love
 using Arduino and we believe that developing code for Arduino has been
-made significantly easier for not-so-experienced-developers. However,
-for some of us it is easier to develop code in our favorite editors
-and build and compile via the command line.
+made significantly easier for not-so-experienced-developers with the
+Arduino IDE. However, for some of us it is easier to develop code in our
+favorite editors and build and upload via the command line.
 
 Searduino was initially created to make it possible to automate the
-building of your arduino program and to do this outside of the Arduino
-IDE. Once we had the compilation and linking up and running we quickly
-noticed that it wouldn't take that much to make it possible to turn
-your Arduino program into a program executing on your local
+building of your arduino program which has to be done outside of the
+Arduino IDE. Once we had the build and linking up and running we
+quickly noticed that it wouldn't take that much to make it possible to
+turn your Arduino program into a program executing on your local
 computer. The writes and reads on pins in your Arduino program were
 'translated' in to reads and writes on stdin/stdout, which we used to
 create a simple simulator communicating via a pipe. We saw the
@@ -19,5 +19,5 @@ so we added a Python extension to the simulator API. After a while we
 started hacking on a GUI frontend in Java.  And here we are right
 now....
 
-Hope you like it!
+Hope you like it! And feel free to join us!
 

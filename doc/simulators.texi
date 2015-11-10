@@ -3,17 +3,16 @@
 With Searduino you can easily build your code for use with:
 
 @itemize @bullet
-@item stubed program - the Arduino fuctions print when they are being called
-(stdout by default)
+@item stub program - the Arduino fuctions print when they are being
+called (stdout by default)
 @item stream - same as with stub, but now also with a listening
 (stdin) thread to which you can send commands (such as settig digital input
 pin 2 to 1).
-@item pardon - a Simulator, written in Python, using the Python
-simulator interface (pearduino)
+@item Jearduino - a simulator GUI (Java). 
+@item pardon - simulator interface (Python). Obsoleted and unmaintained.
+@item Pearduino - a simulator, written in C++/Qt/Qml. Obsoleted and unmaintained.
 @item python scripts - your own Python scripts, using the Python
 simulator interface (pearduino)
-@item xxxx - a simulator, written in C++/Qt/Qml.
-simulator interface - more info soon
 @end itemize
 How to use each of the above is explained below in separate sections.
 

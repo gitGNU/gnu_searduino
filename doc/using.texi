@@ -2,12 +2,22 @@
 @chapter Using Searduino
 
 In the previous chapter we looked a bit at the digpins example, so we
-now have some feeling for what a Searduino Makefile contains. We will
-now proceed by writing our first Arduino program using Searduino.
+now have some feeling for using Searduino. We will now proceed by
+writing our first Arduino program using Searduino.
 
 @section Writing the first program
 
 @subsection The first C file
+@*
+@*
+There are a couple of steps needed to get a program built and loaded
+in to ether an Arduino board or any of the Searduino simulators. In
+short the steps are:
+@itemize @bullet
+@item write a main function
+@item call init() explicitly
+@item write an eternal loop in your program's main function
+@end itemize
 @*
 @*
 Open up your favorite editor (emacs?) and begin....
@@ -85,8 +95,9 @@ Searduino. The makefiles do however provide a lot of help (board settings etc).}
 
 
 
-@subsection Building the program for PC
-To build your software to be executed on your PC:
+@subsection Building the program for your local computer
+To build your software to be executed on your local computer, and not
+for a real Arduino board:
 
 make sure the the variable @b{ARDUINO} in the Makefile is set to
 @b{stub}.
@@ -125,10 +136,10 @@ To run the code in the stream simulator
 @code{/opt/searduino/bin/searduino-stream-sim --arduino-code ./seardex.so}
 @*
 @*
-To run the code in the Pardon simulator
+To run the code in the Jearduino simulator
 @*
 @*
-@code{/opt/searduino/bin/searduino-pardon.sh --arduino-code ./seardex.so}
+@code{/opt/searduino/bin/searduino-jearduino.sh --arduino-code ./seardex.so}
 
 
 @subsection Building the program for UNO
@@ -183,7 +194,7 @@ compilation
 
 @item
 @tab @code{USER_LD_FLAGS}
-@tab Adds the value of the variable to both Arduino and simulation C++
+@tab Adds the value of the variable to both Arduino and simulation C/C++
 linking
 
 @item

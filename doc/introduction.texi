@@ -1,4 +1,4 @@
-Searduino is made to ease and speed up development for the Arduino
+Searduino is made to ease and speed up developing code for the Arduino
 boards. In short, with Searduino you get
 
 @itemize @bullet
@@ -6,19 +6,17 @@ boards. In short, with Searduino you get
 @item Makefiles - easy to use Makefiles for inclusion in your project
 @item Stand alone program - build your Arduino code to run on your
 local computer instead
-@item Simulator - run your Arduino code in a simulator to test it
+@item Simulators - run your Arduino code in a simulator to test it
 @item Simulation API - write your own test cases in C/C++
-@item Python simulation API - write your tests in Python
-@item Arduino example translation (not ready yet, but really close) 
+@item Java simulation API - write your tests in Python
+@item Arduino example import
+@item Python simulation API - write your tests in Python (obsoleted)
 @end itemize
 
 @section C/C++ interface
 With Searduino you can use your favorite Editor to develop your
 program. Write plain C code and compile it either for any of the
 Arduino boards or for your local computer.
-
-The chapter ``Future ...'' has some notes on other languages than C
-and C++.
 
 @section Makefiles
 Autobuild and test your code with no user interaction. Searduino comes
@@ -54,8 +52,21 @@ bladi
 @section Python simulation API
 write your tests in Python
 
-@section Arduino example translation (not ready yet!)
-One 
+@section Arduino example import
+
+You can import Arduinon examples and turn them into Searduino projects
+with Makefiles and everything set up for you. You can do this either
+using the graphical simulator (@code{Jearduino}) or a script (@code{searduino-arduino-ex2c}).
+
+Exampe on how to use the script:
+
+@code{/opt/searduino/bin/searduino-arduino-ex2c --yes --shlib }
+@*
+@code{   --destination-dir /home/hesa/searduino/ }
+@*
+@code{   /usr/share/arduino/examples/01.Basics/Blink }
+@*
+@*
 
 
 

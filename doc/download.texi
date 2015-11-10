@@ -1,13 +1,13 @@
 @chapter Getting and installing Searduino
 
 To use Searduino you need some software installed (see Required
-software). To developer searduino you need some more tools in order to
+software). To developer searduino you need some additional tools in order to
 create the makefiles, configure scripts etc. The latter will not be
 discussed in this manual. Instead, we will focus on how to use, and
 build Searduino.
 
 You have a couple of options to build and install the software. The
-options we provide, until the software packages for the distributions
+options we provide, until software packages for your distributions
 are available, are:
 
 @itemize @bullet
@@ -34,10 +34,10 @@ development environment and build the software this way:
 @i{Note: Check the content in the scripts above to see if the settings
 fits your environment}
 @*
-
-
+@*
+@*
 @section Required software
-
+@*
 @subsection Debian based GNU/Linux distributions:
 @itemize @bullet
 @item gcc-avr
@@ -52,10 +52,9 @@ fits your environment}
 @subsection Windows:
 @itemize @bullet
 @item Arduino (we need the avrdue program in there)
+@item Win-AVR
 @item cygwin (gcc-core, gcc-g++, make)
 @end itemize
-
-@i{Note: Don't install WinAVR (avrdude doesn't seem to work)}
 
 @subsection Mac:
 @itemize @bullet
@@ -64,6 +63,33 @@ fits your environment}
 @item and via MacPorts install avrdude, avr-libc, gcc-avr, gcc, make
 @item Java JDK
 @end itemize
+
+@section Binary releases
+
+@subsection GNU/Linux
+@*
+@b{Create a installation directiory (e.g /opt/searduino)}
+@*
+@code{mkdir -p /opt/}
+@*
+@*
+@b{Go to the installation directory}
+@*
+@code{cd /opt/}
+@*
+@*
+@b{Download a release from}
+@*
+@url{http://download.savannah.gnu.org/releases/searduino/bin/}
+@*
+E.g http://download.savannah.gnu.org/releases/searduino/bin/searduino-bin-0.4-x86.tar.gz
+@*
+@*
+@b{Unpack}
+@*
+@code{tar zxvf searduino-bin-0.4-x86.tar.gz}
+@*
+@*
 
 
 @section Released version of the source code 
@@ -107,7 +133,7 @@ without Python). See Configuring Searduino for more information}
 
 We try to keep the latest version in the repository working but
 there's no guarantee. If you want to play safe use the released
-versions (see above).
+versions (see above). 
 
 @subsection Getting a tgz/tar.gz file from the git repository
 @*
@@ -136,47 +162,12 @@ First, create tke configure script to set up the Makefiles
 After this, you should follow the procedures for Installing a released
 version (see above).
 
-@section Binary releases
-
-@subsection GNU/Linux
-@*
-@b{Create a installation directiory (e.g /opt/searduino)}
-@*
-@code{mkdir -p /opt/}
-@*
-@*
-@b{Go to the installation directory}
-@*
-@code{cd /opt/}
-@*
-@*
-@b{Download a release from}
-@*
-@url{http://download.savannah.gnu.org/releases/searduino/bin/}
-@*
-E.g http://download.savannah.gnu.org/releases/searduino/bin/searduino-bin-0.4-x86.tar.gz
-@*
-@*
-@b{Unpack}
-@*
-@code{tar zxvf searduino-bin-0.4-x86.tar.gz}
-@*
-@*
-
 
 @section Verify installation
 
 @subsection With Arduino examples
 
-To verify the Searduino installation we have developed a script that:
-@itemize @bullet
-@item Converts Arduino examples (.ino files) to C files
-@item Builds a stand alone program
-@item Builds a shared library (for use in simulator)
-@item Builds for all supported Arduino boards
-@end itemize
-@*
-To use it, type:
+To verify the Searduino installation we have developed a script. To use it, type:
 @*
 @*
 @code{cd /opt/searduino}
@@ -191,8 +182,7 @@ You can upload all built program to the uno boards by adding the option @code{--
 @code{scripts/verify-install.sh --upload}
 @*
 @*
-@i{Note: this only uploads to the Uno boards, not to the other
-supported boards}
+@i{Note: this only uploads to the Uno boards}
 @*
 @*
 @b{Experimental feature!!}
@@ -211,10 +201,16 @@ the simulator by pressing pressing Ctrl-c}
 
 @subsection With the digpins example
 
-Go the the digpins example directory.
+Copy the digpins example directory.
 @*
 @*
-@code{cd /opt/searduino/share/searduino/example/digpins}
+@code{cp -r /opt/searduino/share/searduino/example/digpins /tmp}
+@*
+@*
+Enter the digpins example directory.
+@*
+@*
+@code{cd /tmp/digpins}
 @*
 @*
 Make sure that the SEARDUINO_PATH in the Makefile points to your
@@ -245,35 +241,64 @@ pressing Ctrl-C.
 @code{make shlib}
 @*
 @*
-There should be a shared library file called @code{digpins.so} in the
+There should be a shared library file called @code{libdigpins.so} in the
 current directory. You can load this shared library (think of it as a
 plugin) in any of the simulators. We will load it in the stream
 simulator.
 @*
 @*
-@code{/opt/searduino/bin/searduino-stream-sim  --arduino-code ./digpins.so }
+@code{/opt/searduino/bin/searduino-stream-sim  --arduino-code ./libdigpins.so }
 @*
 @*
 You should now see printouts from the Searduino simulator. You can
 stop the program by pressing Ctrl-C ('Control key' and 'c key' at the
 same time). 
+@*
+@*
+To load the library in the graphical simulator, type:
+@*
+@*
+@code{/opt/searduino/bin/searduino-jearduino.sh  --arduino-code ./libdigpins.so }
+@*
+@*
+To load the entire project in the graphical simulator, type:
+@*
+@*
+@code{/opt/searduino/bin/searduino-jearduino.sh  --searduino-project ../digpins}
 
 @section Configuring Searduino
 
-@subsection Python support
-By default Searduino builds a Python extension and a
-Simulator GUI. To disable this support, configure with the option
-@code{--disable-python}:
+@subsection Java support
+By default Searduino builds a Java extension. To disable this support, configure with the option
+@code{--disable-java-extension}:
 @*
-@code{./configure --disable-python}:
+@code{./configure --disable-java-extension}:
+@*
+@*
 
+@subsection Graphical Simulator support
+By default Searduino builds a graphical simulator. To disable this support, configure with the option
+@code{--disable-jeardunio}:
+@*
+@code{./configure --disable-jearduino}:
 @*
 @*
-More info will come.
+
+@subsection Python support
+Searduino has an unmaintained Python extension and a
+Simulator GUI. These are diabled by default. To enable this support, configure with the option
+@code{--enable-python-extension}:
+@code{--enable-pearduino}:
+@*
+@code{./configure --enable-python-extension --enable-pearduino}:
+@*
+@*
+
 
 @subsection Enable unit tests with check
 Configure with the option @code{--enable-unittest}
 @*
 @code{./configure --enable-unittest}:
 @*
-More info will come.
+@i{Note: The unit test software package check must be installed.}
+

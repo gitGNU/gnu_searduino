@@ -15,7 +15,8 @@ It's easy to test your code using the simulator interface
 Assume that we have written some code to give us the distance to an
 object of some kind. The function is called get_distance
 (@code{uint8_t get_distance(void)}) and returns the sum of the analog
-pin 11 and 12. We want to test this function by writing values to the
+pin 11 and 12. We want to test this function locally, and not on a
+real Arduino board, by writing values to the
 pins 11 and 12 and check of our function returns the correct value.
 @*
 @*
@@ -32,7 +33,6 @@ serves well as an example.
 @subsection Your Makefile
 @include example_m_02.texi
 @*
-@i{Note: this makefile includes some hacks with USER_C_FLAGS which will be removed asap}
 
 @subsection Executing the test
 @*
@@ -45,13 +45,13 @@ Then simply execute the test program
 @*
 @code{./distance}
 
-@section Writing Python code to test your application
+@section Writing Java code to test your application
 
 @section Test your application as a stand alone binary
 
 @section Test your application in the stream simulator
 
-@section Test your application in the Pardon simulator
+@section Test your application in the Jearduino simulator
 
 
 

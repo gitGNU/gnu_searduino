@@ -29,7 +29,8 @@ Example use: @code{SEARDUINO_DEBUG(("The variable x is:%d",x));}
 @item 
 @tab @code{searduino_usb_init()}
 @tab If building for Arduino boards this macro initialises the
-USB Device (USBDevice). If building for simulator this macro is unused.
+USB Device (USBDevice). If building for simulator this macro is not
+doing anything.
 Example use: @code{searduino_usb_init();}
 
 @item 
@@ -43,10 +44,4 @@ Example use: @code{SEARDUINO_FLUSH_USB();}
 @*
 @*
 
-
-
-
-@section pause/resume macros 
-@*
-coming soon
 

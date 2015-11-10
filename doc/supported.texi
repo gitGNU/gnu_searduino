@@ -9,8 +9,11 @@
 @end itemize
 @*
 @b{Supported Operating Systems}
+@*
 @itemize @bullet
-@item GNU/Linux (source code supports both 32 and 64 bits. Binaries available for 32 bits only)
+@item GNU/Linux (source code supports both 32 and 64 bits. Binaries available)
+@item MacOS (source code supports both 32 and 64 bits. Binaries available)
+@item Windows (source code supports both 32 and 64 bits. Binaries NOT available at the moment)
 @end itemize
 
 
