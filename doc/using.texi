@@ -7,7 +7,38 @@ writing our first Arduino program using Searduino.
 
 @section Writing the first program
 
-@subsection The first C file
+@subsection Let Searduino generate the first C file and Makefile 
+@*
+@*
+Let's assume you want to create a program and you want to store it in
+a directory called blinker. Then, all you have to do is to run the
+following command:
+@*
+@*
+@code{/opt/searduino/bin/searduino-builder --create blinker }
+@*
+@*
+Searduino will now create a main.c file and a Makefile. Let's have a look.
+@*
+@*
+@code{cd}
+@*
+@code{cd searduino/blinker}
+@*
+@code{ls -al}
+@*
+@*
+Let's build the example and run it in the simulator.
+@*
+@*
+@code{make}
+@*
+@code{make sim-start}
+@*
+@*
+Nice :)
+
+@subsection Write first C file on your own
 @*
 @*
 There are a couple of steps needed to get a program built and loaded
@@ -59,7 +90,7 @@ So a very simple main function looks like this
 interval. You don't need to connect a led to output pin 13, since
 pin 13 already has a built in led on the board.}
 
-@subsection Write the first Makefile
+@subsection Write the first Makefile on your own
 
 @b{Inporant settings in the Makefile}
 @itemize @bullet
