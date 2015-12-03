@@ -281,7 +281,7 @@ create_dir()
 
 
     export C_FILES=""
-    for i in $(find $ARD_DIR_LONG -type f -name "*.ino")
+    for i in $(find $ARD_DIR_LONG -type f -name "*.ino" 2>/dev/null)
     do
 #	echo "Create C file from : $i"
 	create_c_file $i
@@ -310,7 +310,7 @@ create_dir()
     C_FILES=
     export MAIN_FILE=main.c
 
-    for i in $(find $ARD_DIR_LONG -type f -name "*.h")
+    for i in $(find $ARD_DIR_LONG -type f -name "*.h" 2>/dev/null)
     do
 	cp $i $ARD_DIR
     done
