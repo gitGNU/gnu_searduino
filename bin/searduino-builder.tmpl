@@ -26,6 +26,28 @@ exit_on_failure()
 }
 
 
+help_text() {
+    echo "searduino-builer <options>"
+    echo ""
+    echo "OPTIONS"
+    echo ""
+    echo "  --ino <FILE>"
+    echo "      set the ino file to convert to Searduino"
+    echo "  --build"
+    echo "      builds code (specified by --ino or --ino-dir)"
+    echo "  --upload"
+    echo "      uploads code (specified by --ino or --ino-dir)"
+    echo "  --ino-dir <DIR>"
+    echo "      set the ino file to convert to Searduino files in dir calle"
+    echo "  --create <DIR>"
+    echo "      create Searduino files (main.c and Makefile) in directory DIR"
+    echo "  --board"
+    echo "     specify which board to use as default. If not set, stub is set"
+    echo "  --help"
+    echo "      prints this help text and exists"
+}
+
+
 parse_args()
 {
     export BUILD_TYPE=stub
@@ -57,6 +79,10 @@ parse_args()
 		BOARD=$2
 		shift
 		;;
+	    "--help")
+                help_text
+                exit 0
+		;;
 	    *)
 		PROJECT_DIR="$1"
 		break
@@ -69,8 +95,6 @@ parse_args()
 }
 
 RET=0
-
-
 
 parse_args $*
 
