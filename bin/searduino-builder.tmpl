@@ -48,6 +48,11 @@ parse_args()
 		INO_DIR=$2
 		shift
 		;;
+	    "--create")
+                CREATE="true"
+		CREATE_DIR=$2
+		shift
+		;;
 	    "--board")
 		BOARD=$2
 		shift
@@ -115,6 +120,11 @@ then
     fi
     
     ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} $INO_DIR 2>&1 
+    RET=$?
+
+elif [ "$CREATE" = "true" ]
+then
+    ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} --create $CREATE_DIR 2>&1 
     RET=$?
 
 elif [ "$PROJECT_DIR" != "" ]

@@ -92,7 +92,10 @@ setup_c_flags()
 	setup_gnulinux_c_flags
     elif [ "$1" = "ubuntu" ]
     then
-        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.7.0-openjdk/include
+        DEFAULT_JAVA_PATH=/usr/lib/jvm/java-1.8.0-openjdk-amd64/include/
+        export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-amd64/
+        export JAVA_HOME=/usr/lib/jvm/java/
+        
 	setup_gnulinux_c_flags
     fi
 
@@ -136,7 +139,7 @@ parse()
 prepare()
 {
    make -f Makefile.git $MAKE_GIT_ARGS && \
-       ./configure $CONF_ARGS --prefix=/opt/searduino --disable-python-extension  --disable-pearduino  
+       CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} ./configure $CONF_ARGS --prefix=/opt/searduino --disable-python-extension  --disable-pearduino  
 	
 }
 
@@ -192,6 +195,7 @@ dobuild()
     then
 	build_bin_dist
     else
-	build
+        prepare     
+        build       
     fi
 }
