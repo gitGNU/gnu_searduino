@@ -436,7 +436,7 @@ test_examples()
 
     log_and_exec_no_print cd $EX_EX 
 
-    log_and_exec_no_print cp -r $EXAMPLES_PATH/ .
+    log_and_exec_no_print cp -r $EXAMPLES_PATH .
 
     log_and_exec_no_print cd example
 
