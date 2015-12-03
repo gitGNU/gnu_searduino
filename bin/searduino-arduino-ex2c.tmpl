@@ -56,6 +56,9 @@ parse_args()
 	    "--yes")
 		YES=true
 		;;
+	    "--new")
+		NEW=true
+		;;
 	    "--destination-dir")
 		DEST_DIR=$2
 		shift
@@ -95,6 +98,10 @@ parse_args()
     elif [ -d $1 ]
     then
 	EX_DIR=$1
+    elif [ "$NEW" = "true" ]
+    then
+        NEW_DIR=$1
+        shift
     else
 	echo "No dir or file given"
 	exit 1
@@ -281,8 +288,15 @@ create_dir()
 	C_FILES="$C_FILES $C_FILE"
     done
     rm -f $ARD_DIR/main.c
-    cat $TMPL_DIR/main_tot_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >  $ARD_DIR/main.c
-    exit_on_failure $? "Creating C file 4 ($C_FILES) "
+    if [ "$NEW" = "true" ]
+    then
+        cat $TMPL_DIR/main_tot_c.tmpl | sed -e  "s,__ARD_FILE__, Searduino template file,g"  | sed -e  "s,__SETUP__,void setup(void) {\n  ;\n},g" >  $ARD_DIR/main.c
+        exit_on_failure $? "Creating C file 4 ($C_FILES) "
+    else
+        cat $TMPL_DIR/main_tot_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g"  | sed -e  "s,__SETUP__,,g" >  $ARD_DIR/main.c
+        exit_on_failure $? "Creating C file 4 ($C_FILES) "
+    fi
+
 
     export CXX_FILES=${C_FILES}
     C_FILES=
