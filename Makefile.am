@@ -148,7 +148,7 @@ else
 MANUALS=
 endif
 
-EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} scripts/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl $(MANUALS)
+EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} scripts/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl $(MANUALS) bin/build-functions bin/functions bin/build-ubuntu.sh bin/build-fedora.sh  bin/build-darwin.sh bin/build-debian.sh bin/build-cygwin.sh
 
 #m4/gnulib-cache.m4
 #  ${ARD_SRC}
@@ -216,3 +216,6 @@ install-data-local: $(MANUALS)
 	cp version.txt $(pkgdatadir)/
 	mkdir -p $(docdir)/
 	cp version.txt $(MANUALS)  $(docdir)/
+
+clean:
+	for dir in $(SUBDIRS); do cd $$dir ; make clean ; cd - ; done
