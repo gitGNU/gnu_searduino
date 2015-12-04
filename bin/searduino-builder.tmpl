@@ -27,24 +27,36 @@ exit_on_failure()
 
 
 help_text() {
-    echo "searduino-builer <options>"
+    echo "searduino-builder - helper tool for Searduino"
+    echo ""
+    echo "SYNOPSIS"
+    echo "  searduino-builder <options>"
+    echo ""
+    echo "DESCRIPTION"
+    echo "  searduino-builder can convert Arduino examples to pure C that you can use with Seaduino. It can build for and upload to Arduino boards and it can create C code (a blink example) from scratch."
     echo ""
     echo "OPTIONS"
-    echo ""
     echo "  --ino <FILE>"
     echo "      set the ino file to convert to Searduino"
+    echo ""
     echo "  --build"
     echo "      builds code (specified by --ino or --ino-dir)"
+    echo ""
     echo "  --upload"
     echo "      uploads code (specified by --ino or --ino-dir)"
+    echo ""
     echo "  --ino-dir <DIR>"
     echo "      set the ino file to convert to Searduino files in dir calle"
+    echo ""
     echo "  --create <DIR>"
-    echo "      create Searduino files (main.c and Makefile) in directory DIR"
+    echo "      create template Searduino files in directory DIR"
+    echo ""
     echo "  --board"
     echo "     specify which board to use as default. If not set, stub is set"
+    echo ""
     echo "  --help"
     echo "      prints this help text and exists"
+    echo ""
 }
 
 
@@ -81,6 +93,14 @@ parse_args()
 		;;
 	    "--help")
                 help_text
+                exit 0
+		;;
+	    "--nroff")
+                MAN_PAGE=$2
+                help_text > /tmp/seard-help.txt
+                . ./scripts/man-support
+                gen_nroff /tmp/seard-help.txt > $MAN_PAGE
+                shift
                 exit 0
 		;;
 	    *)
