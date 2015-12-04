@@ -118,7 +118,7 @@ ARD_EXAMPLES =
 endif
 
 
-bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder scripts/functions  bin/searduino_find_port.sh 
+bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder scripts/functions  bin/searduino_find_port.sh scripts/man-support
 # bin/verify-install.sh
 #ACLOCAL_AMFLAGS = -I.m4
 
@@ -218,6 +218,12 @@ old-check:
 	cd test/ && cd shared && make clean && make && make check 
 	cd test/ && cd shared-main && make clean && make && make check
 	cd test/ && cd stub && make clean && make && make check
+
+
+searduino-builder.1: bin/searduino-builder
+
+man1_MANS = searduino-builder.1
+	bash bin/searduino-builder --nroff searduino-builder.1
 
 install-data-local: $(MANUALS)
 	echo "$(PACKAGE)" >  version.txt
