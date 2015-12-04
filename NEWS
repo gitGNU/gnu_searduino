@@ -12,7 +12,13 @@ News in coming
   Version number visible in Jearduino->About
 
   Slightly better looking Jearduino->About->License
-  
+
+  New configure option "--enable-avrtools-copy"
+
+  New options:
+  -------------------
+  searduino-builder --create <name>
+
   Bugs fixed:
   -------------------
 
