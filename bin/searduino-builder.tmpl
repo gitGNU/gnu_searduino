@@ -148,9 +148,14 @@ then
 
 elif [ "$CREATE" = "true" ]
 then
-    ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} --create $CREATE_DIR 2>&1 
+    if [ "$CREATE_DIR" = "" ]
+    then
+        echo "Missing arguments to --create"
+        exit 1
+    fi
+    ${ARDUINO_EX2C} --yes --shlib --destination-dir ${SEARDUINO_HOME_DIR} --create $CREATE_DIR 2>/dev/null >/dev/null
     RET=$?
-
+    echo "Created files in ${SEARDUINO_HOME_DIR}/$CREATE_DIR"
 elif [ "$PROJECT_DIR" != "" ]
 then
     if [ ! -d $PROJECT_DIR ]
