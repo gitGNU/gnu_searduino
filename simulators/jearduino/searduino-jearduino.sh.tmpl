@@ -37,17 +37,17 @@ SEARDUINO_SHARE=${SEARDUINO_PATH}/share/searduino/
 read_file ${SEARDUINO_SHARE}/scripts/settings
 read_file ${SEARDUINO_SHARE}/scripts/functions
 
+export PATH=/opt/searduino/bin:${PATH}
+export LD_LIBRARY_PATH=/opt/searduino/lib:${LD_LIBRARY_PATH}
+export JAVA_LIBRARY_PATH=/opt/searduino/lib:${JAVA_LIBRARY_PATH}
+export CLASSPATH=${JAVA_LIBRARY_PATH}/Searduino.jar:${JAVA_LIBRARY_PATH}/Jearduino.jar:${CLASSPATH}
 
-export PATH=__INSTALL_DIR__/bin:${PATH}
-export LD_LIBRARY_PATH=__INSTALL_DIR__/lib
-export JAVA_LIBRARY_PATH=__INSTALL_DIR__/lib
-
-JAVA_ARGS=-cp ${JAVA_LIBRARY_PATH}/Searduino.jar:${JAVA_LIBRARY_PATH}/Jearduino.jar\
-     -Dsearduino.dir=${SEARDUINO_PATH} \
-     -Dsearduino.project.dir=${SEARDUINO_PROJECT_DIR} \
-     -Dsearduino.arduinoex.dir=${ARDUINO_INO_EX} \
-     -Djava.library.path=${JAVA_LIBRARY_PATH} \
-     com.sandklef.jearduino.Jearduino
+export JAVA_ARGS="-cp ${CLASSPATH} "
+export JAVA_ARGS=" $JAVA_ARGS -Dsearduino.dir=${SEARDUINO_PATH}"
+export JAVA_ARGS=" $JAVA_ARGS -Dsearduino.project.dir=${SEARDUINO_PROJECT_DIR}"
+export JAVA_ARGS=" $JAVA_ARGS      -Dsearduino.arduinoex.dir=${ARDUINO_INO_EX}"
+export JAVA_ARGS=" $JAVA_ARGS      -Djava.library.path=${JAVA_LIBRARY_PATH}"
+export JAVA_ARGS=" $JAVA_ARGS      com.sandklef.jearduino.Jearduino"
 
 nroff() {
     SEARD_HELP=/tmp/searduino-help.txt
