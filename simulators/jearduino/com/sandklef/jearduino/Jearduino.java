@@ -1002,12 +1002,17 @@ public class Jearduino extends JFrame implements SearduinoObserver, ExecEvent, P
     public static void usage() {
 	System.out.println("Jearduino - a graphical frontend to Searduino's simulator");
 	System.out.println("");
-	System.out.println("OPTIONS");
+	System.out.println("SYNOPSIS");
+	System.out.println("  java com.sandklef.jearduino.Jearduino [OPTIONS]");
 	System.out.println("");
+	System.out.println("DESCRIPTION");
+	System.out.println("  Graphical frontend that simulates an Arduino board and runs Arduino code in it.");
+	System.out.println("");
+	System.out.println("OPTIONS");
 	usage_option("--board", 
 		     "<board>", 
 		     "Set Arduino board to use");
-	usage_option("arduino-code", 
+	usage_option("--arduino-code", 
 		     "<file>", 
 		     "Set file (shared object) to execute");
 	usage_option("--searduino-project", 
