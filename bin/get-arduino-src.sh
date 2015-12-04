@@ -1,5 +1,14 @@
 #!/bin/bash
 
+#
+# Parse
+#
+if [ "$1" = "--avrtools-copy" ]
+then
+    AVRTOOLS_COPY=true
+fi
+
+
 if [ "$SEARD_OS" != "" ]
 then
     MY_OS=$SEARD_OS
@@ -111,11 +120,18 @@ setup_sources()
     mkdir -p arduino-sources/core
     mkdir -p arduino-sources/variants
     mkdir -p ard-ex
-
+    
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/cores/arduino/* arduino-sources/core
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/hardware/arduino/variants/* arduino-sources/variants/
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/libraries arduino-sources/
     exec_comm cp -r download-tmp/${OS_EXTRA_DIR}/examples/* ard-ex/
+
+    if [ "$AVRTOOLS_COPY" = "true" ]
+    then
+        mkdir -p avr-tools-copy/
+        cp -r download-tmp/${OS_EXTRA_DIR}/hardware/tools/* avr-tools-copy/
+    fi
+    
 }
 
 

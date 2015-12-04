@@ -18,7 +18,7 @@ following command:
 @code{/opt/searduino/bin/searduino-builder --create blinker }
 @*
 @*
-Searduino will now create a main.c file and a Makefile. Let's have a look.
+Searduino will now create a main.c file and a Makefile. Let's have a look:
 @*
 @*
 @code{cd}
@@ -28,12 +28,22 @@ Searduino will now create a main.c file and a Makefile. Let's have a look.
 @code{ls -al}
 @*
 @*
-Let's build the example and run it in the simulator.
+Let's build the example and run it in the simulator:
 @*
 @*
 @code{make}
 @*
 @code{make sim-start}
+@*
+@*
+@*
+@*
+Let's build the example and run it on a board (Uno in this example):
+@*
+@*
+@code{make}
+@*
+@code{make uno-upload}
 @*
 @*
 Nice :)

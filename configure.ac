@@ -18,7 +18,7 @@ dnl You should have received a copy of the GNU General Public License
 dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #AC_PREREQ(2.63)
-AC_INIT([Searduino], [0.9.93b], [hesa@sandklef.com])
+AC_INIT([Searduino], [0.9.94], [hesa@sandklef.com])
 AC_COPYRIGHT([Copyright (c) 2012-2015 Henrik Sandklef <hesa@sandklef.com>, Viktor Green.])
 AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE
@@ -178,7 +178,7 @@ AC_ARG_ENABLE([debian-sources],
 
 AC_ARG_ENABLE([doc],
   [AS_HELP_STRING([--enable-doc],
-	  [Build documentation)])],
+	  [Build documentation])],
   [case $enableval in
      yes|no) ;;
      *)      AC_MSG_ERROR([bad value $enableval for doc option]) ;;
@@ -188,11 +188,23 @@ AC_ARG_ENABLE([doc],
 )
 
 
+AC_ARG_ENABLE([avrtools-copy],
+  [AS_HELP_STRING([--enable-avrtools-copy],
+	  [Copy avr tools from Arduino])],
+  [case $enableval in
+     yes|no) ;;
+     *)      AC_MSG_ERROR([bad value $enableval for avrtools-copy option]) ;;
+   esac
+   avrtools_copy=$enableval],
+  [avrtools_copy=no]
+)
+
+
 
 
 AC_ARG_ENABLE([fedora-sources],
   [AS_HELP_STRING([--enable-fedora-sources],
-	  [Use Arduino source code from Fedora packages)])],
+	  [Use Arduino source code from Fedora packages])],
   [case $enableval in
      yes|no) ;;
      *)      AC_MSG_ERROR([bad value $enableval for fedora-sources option]) ;;
@@ -253,6 +265,8 @@ AM_CONDITIONAL(PYTHON_EXT_SUPPORT, test "x$python_ext_enabled" = "xyes")
 AM_CONDITIONAL(PEARDUINO_SUPPORT,  test "x$pearduino_enabled" = "xyes")
 AM_CONDITIONAL(JAVA_EXT_SUPPORT,   test "x$java_ext_enabled" = "xyes")
 AM_CONDITIONAL(JEARDUINO_SUPPORT,  test "x$jearduino_enabled" = "xyes")
+AM_CONDITIONAL(COPY_AVR,           test "x$avrtools_copy" = "xyes")
+
 
 AM_CONDITIONAL(BUILD_DOC,          test x$seard_doc = xyes)
 AM_CONDITIONAL(DEBIAN_SOURCES,     test x$debian_sources = xyes)
@@ -347,8 +361,23 @@ check_avr()
       echo "***** ERROR *****"
       echo "   Can't find: $2"
       echo "   Without it, Searduino will not work. Bailing out....."
+      echo " "
+      echo "One solution is to use the avr tools as found in the Arduino sources."
+      echo "Searduino will assist you doing that, simple configure again with the following flag:"
+      echo ""
+      echo "    --enable-avrtools-copy"
+      echo ""
       exit 1
   fi   
+}
+
+setup_avr_copy()
+{
+    AVR_GCC=${SEARD_PREFIX}/searduino/lib/avr/bin/avr-gcc
+    AVR_GCXX=${SEARD_PREFIX}/searduino/lib/avr/bin/avr-g++
+    AVR_OBJCP=${SEARD_PREFIX}/searduino/lib/avr/bin/avr-objcopy
+    AVR_AR=${SEARD_PREFIX}/searduino/lib/avr/bin/avr-ar
+    AVR_DUDE=${SEARD_PREFIX}/searduino/lib/avrdude
 }
 
 check_avr_stuff()
@@ -587,6 +616,25 @@ fi
 echo "prefix: ${prefix}   SEARD_PREFIX=${SEARD_PREFIX}"
 export SEARD_PREFIX
 
+#
+#
+#
+echo "CHECKING AVR: $avrtools_copy"
+if test "x$avrtools_copy" != "xyes" ;
+then
+    check_avr_stuff
+    AVR_COPY_MSG0=""
+    AVR_COPY_MSG1=""
+    AVR_COPY_MSG2=""
+    AVR_COPY_MSG3=""
+else
+    setup_avr_copy
+    AVR_COPY_MSG0=""
+    AVR_COPY_MSG1="Make sure to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
+    AVR_COPY_MSG2="In bash you do this by adding the following line (typically in ~/.bash_profile):"
+    AVR_COPY_MSG3="  PATH=${SEARD_PREFIX}/searduino/lib/avr/bin/:${SEARD_PREFIX}/searduino/lib/:\$PATH"
+fi
+print_avr_settings
 
 
 #
@@ -594,10 +642,16 @@ export SEARD_PREFIX
 # 
 if test "x$debian_sources"  != "xyes"  ;
 then
-  ./bin/get-arduino-src.sh
-  exit_on_failure $? ./bin/get-arduino-src.sh
-  export ARDUINO_PATH=${SEARD_PREFIX}/
-  export ARDUINO_SOURCES_FROM=Arduino
+    GET_SRC_ARGS=""
+    if test "x$avrtools_copy" = "xyes" ;
+    then
+        GET_SRC_ARGS=" --avrtools-copy"
+    fi
+    echo "./bin/get-arduino-src.sh $GET_SRC_ARGS"
+    ./bin/get-arduino-src.sh $GET_SRC_ARGS
+    exit_on_failure $? ./bin/get-arduino-src.sh
+    export ARDUINO_PATH=${SEARD_PREFIX}/
+    export ARDUINO_SOURCES_FROM=Arduino
 else
   echo "Not downloading Arduino sources from internet"
   setup_debianized
@@ -610,10 +664,6 @@ fi
 cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
 exit_on_failure $? "Prepared doc Makefile"
 
-#
-#
-#
-check_avr_stuff
 
 prepare_examples
 prepare_searduino_mk
@@ -719,8 +769,12 @@ AC_MSG_NOTICE([summary of build options:
     X11:              $USE_XTEST ($LIBXTST)
 
   Use Debian/Fedora Arduino: $debian_sources
- 
 
+  $AVR_COPY_MSG0
+  $AVR_COPY_MSG1
+  $AVR_COPY_MSG2
+  $AVR_COPY_MSG3
+  
 
 ])
 

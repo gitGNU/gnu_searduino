@@ -172,6 +172,15 @@ PROFILE_OUT ?= $(TOPDIR)/reports/profile
 GCOV_FLAG = " -fprofile-arcs -ftest-coverage -g"
 GPROF_FLAG = "-pg -g"
 
+if COPY_AVR
+install-avr:
+	@echo Copying avr tools from Arduino sources
+	@mkdir -p $(prefix)/searduino/lib/
+	@cp -r avr-tools-copy/* $(prefix)/searduino/lib/
+else
+install-avr:
+	@echo Using existing avr tools, not copying
+endif
 
 if DEBIANSOURCES
 check-local:
@@ -216,6 +225,7 @@ install-data-local: $(MANUALS)
 	cp version.txt $(pkgdatadir)/
 	mkdir -p $(docdir)/
 	cp version.txt $(MANUALS)  $(docdir)/
+	make install-avr
 
 clean:
 	for dir in $(SUBDIRS); do cd $$dir ; make clean ; cd - ; done
