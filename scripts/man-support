@@ -1,0 +1,30 @@
+gen_nroff() {
+    SEARD_HELP=$1
+
+    if [ ! -s ${SEARD_HELP} ]; then echo "Missing help file for nroff" ; return 1 ; fi
+    
+
+    TITLE=$(head -1 ${SEARD_HELP} | awk '{ print $1}')
+    DESCRIPTION=$(head -1 ${SEARD_HELP} | awk '{ print $1}')
+    echo ".TH $TITLE 1"
+    echo ".SH NAME"
+    head -1 ${SEARD_HELP} | sed 's,\-,\\\-,g'
+    echo .SH SYNOPSIS
+    echo  $(basename $0)  [OPTIONS]
+    echo .SH DESCRIPTION
+    echo  $(grep -A 1 DESCRIPTION ${SEARD_HELP} | sed 's,^DESCRIPTION[ ]*,,g')
+    echo .SH OPTIONS
+    echo .TP
+    awk '{  if ( $1 ~ /OPTIONS/ ) { SYN=1; } else { if (SYN==1) { printf "%s\n", $0; } } }' ${SEARD_HELP} | while(true)
+    do
+        read OPT
+        read OPT_DESC
+        read EMPTY
+        echo ".B $OPT"
+        echo " $OPT_DESC"
+        echo .TP
+        if [ "$OPT" = "" ] ; then break; fi
+    done
+}
+
+
