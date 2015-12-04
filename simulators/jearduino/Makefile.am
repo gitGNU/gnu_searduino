@@ -51,6 +51,10 @@ bin_SCRIPTS = searduino-jearduino.sh
 EXTRA_DIST = searduino-jearduino.sh.tmpl $(bin_SCRIPTS) $(JAVA_SOURCES)
 
 
+searduino-jearduino.1: searduino-jearduino.sh
+	export CLASSPATH=./Jearduino.jar:../../extensions/java/Searduino.jar; export LD_LIBRARY_PATH=/opt/searduino/lib ; JAVA_LIBRARY_PATH=/opt/searduino/lib ; bash ./searduino-jearduino.sh --nroff $@
+
+man1_MANS = searduino-jearduino.1
 
 
 install-exec-hook: $(JEARDUINO_JAR)
