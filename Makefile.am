@@ -119,6 +119,7 @@ endif
 
 
 bin_SCRIPTS = bin/searduino-arduino-ex2c bin/searduino-builder scripts/functions  bin/searduino_find_port.sh scripts/man-support
+
 # bin/verify-install.sh
 #ACLOCAL_AMFLAGS = -I.m4
 
@@ -148,7 +149,7 @@ else
 MANUALS=
 endif
 
-EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} scripts/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl $(MANUALS) bin/build-functions bin/functions bin/build-ubuntu.sh bin/build-fedora.sh  bin/build-darwin.sh bin/build-debian.sh bin/build-cygwin.sh
+EXTRA_DIST =  ${SCRIPT_SRC} ${ARD_EXAMPLES} scripts/verify-install.sh.tmpl doc/Makefile.tmpl Makefile.git debian-mk/Makefile scripts/functions.tmpl scripts/settings.tmpl $(MANUALS) bin/build-functions bin/functions bin/build-ubuntu.sh bin/build-fedora.sh  bin/build-darwin.sh bin/build-debian.sh bin/build-cygwin.sh scripts/man-support
 
 #m4/gnulib-cache.m4
 #  ${ARD_SRC}
@@ -222,8 +223,10 @@ old-check:
 
 searduino-builder.1: bin/searduino-builder
 
-man1_MANS = searduino-builder.1
-	bash bin/searduino-builder --nroff searduino-builder.1
+#man1_MANS = searduino-builder.1
+#	bash bin/searduino-builder --nroff searduino-builder.1
+
+dist_man_MANS = searduino-builder.1
 
 install-data-local: $(MANUALS)
 	echo "$(PACKAGE)" >  version.txt

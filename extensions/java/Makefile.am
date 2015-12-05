@@ -66,7 +66,7 @@ SEARDUINO_PATH=com/sandklef/searduino/
 SEARDUINO_JAVA_SOURCES=$(SEARDUINO_PATH)/Searduino.java $(SEARDUINO_PATH)/SearduinoObserver.java
 $(SEARDUINO_JAR): $(SEARDUINO_JAVA_SOURCES) 
 	javac $(JAVACFLAGS) $(SEARDUINO_JAVA_SOURCES)
-	javah com.sandklef.searduino.Searduino
+	javah $(JAVACFLAGS) com.sandklef.searduino.Searduino
 	jar cf $(SEARDUINO_JAR) $(SEARDUINO_PATH)/*.class
 
 EXTRA_DIST = $(SEARD_JNI_SRC) $(SEARDUINO_JAVA_SOURCES)

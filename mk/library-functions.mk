@@ -23,8 +23,8 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=/usr/local/
-ARDUINO_PATH==/usr/local/
+SEARDUINO_PATH=/opt/
+ARDUINO_PATH==/opt/
 
 export SRC_C
 export SRC_CXX

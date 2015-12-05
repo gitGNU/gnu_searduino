@@ -1,6 +1,8 @@
 gen_nroff() {
     SEARD_HELP=$1
 
+    echo hihihih
+
     if [ ! -s ${SEARD_HELP} ]; then echo "Missing help file for nroff" ; return 1 ; fi
     
 
@@ -11,6 +13,8 @@ gen_nroff() {
     head -1 ${SEARD_HELP} | sed 's,\-,\\\-,g'
     echo .SH SYNOPSIS
     echo  $(basename $0)  [OPTIONS]
+    echo .SH DESCRIPTION
+    echo  grep -A 1 ${SEARD_HELP}
     echo .SH OPTIONS
     echo .TP
     awk '{  if ( $1 ~ /OPTIONS/ ) { SYN=1; } else { if (SYN==1) { printf "%s\n", $0; } } }' ${SEARD_HELP} | while(true)

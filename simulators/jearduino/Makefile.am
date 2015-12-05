@@ -12,7 +12,7 @@ AUTOMAKE_OPTIONS = gnu
 #        still not replaced old way of working with Java.
 # 
 PKG_PATH=com/sandklef/jearduino/
-JAVA_SOURCES = \
+JAVA_SOURCE_FILES = \
         ${PKG_PATH}/FileEvent.java \
         ${PKG_PATH}/Logger.java \
         ${PKG_PATH}/Tailer.java \
@@ -42,19 +42,21 @@ JAVACFLAGS=  -cp $(LIB_PATHS)
 
 JEARDUINO_JAR=Jearduino.jar
 
-$(JEARDUINO_JAR): $(JAVA_SOURCES)
-	javac $(JAVACFLAGS) $(JAVA_SOURCES)
+$(JEARDUINO_JAR): $(JAVA_SOURCE_FILES)
+	javac $(JAVACFLAGS) $(JAVA_SOURCE_FILES)
 	jar cf  $(JEARDUINO_JAR) ./com/sandklef/jearduino/*.class
 
 bin_SCRIPTS = searduino-jearduino.sh 
 
-EXTRA_DIST = searduino-jearduino.sh.tmpl $(bin_SCRIPTS) $(JAVA_SOURCES)
+EXTRA_DIST = searduino-jearduino.sh.tmpl $(bin_SCRIPTS) $(JAVA_SOURCE_FILES) 
 
 
-searduino-jearduino.1: searduino-jearduino.sh
-	export CLASSPATH=./Jearduino.jar:../../extensions/java/Searduino.jar; export LD_LIBRARY_PATH=/opt/searduino/lib ; JAVA_LIBRARY_PATH=/opt/searduino/lib ; bash ./searduino-jearduino.sh --nroff $@
+searduino-jearduino.1: searduino-jearduino.sh Jearduino.jar ../../extensions/java/Searduino.jar
+	export CLASSPATH=./Jearduino.jar:../../extensions/java/Searduino.jar; export LD_LIBRARY_PATH=$(LIB_PATHS) ; JAVA_LIBRARY_PATH=$(LIB_PATHS) ; bash ./searduino-jearduino.sh --nroff $@
 
-man1_MANS = searduino-jearduino.1
+#export CLASSPATH=./Jearduino.jar:../../extensions/java/Searduino.jar; export LD_LIBRARY_PATH=/opt/searduino/lib ; JAVA_LIBRARY_PATH=/opt/searduino/lib ; bash ./searduino-jearduino.sh --nroff $@
+
+dist_man_MANS = searduino-jearduino.1
 
 
 install-exec-hook: $(JEARDUINO_JAR)
