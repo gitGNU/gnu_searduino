@@ -36,6 +36,13 @@ typedef struct {
   int   initialised;
 } searduino_logger ;
 
+int searduino_logger_set_file(searduino_logger *logger, char *fname);
+
+int searduino_logger_get_log_level(searduino_logger *logger);
+int searduino_logger_set_log_level(searduino_logger *logger, int level);
+int searduino_logger_inc_log_level(searduino_logger *logger);
+int searduino_logger_dec_log_level(searduino_logger *logger);
+
 
 int searduino_internal_init_log(char * name);
 /* int searduino_logger_set_file(searduino_logger *logger, char *fname); */

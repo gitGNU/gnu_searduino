@@ -142,7 +142,7 @@ unsigned int
 get_write_timelimit(void);
 
 int
-output_callback(uint8_t pin, uint8_t pin_type);
+output_callback(uint8_t pin);
 
 uint8_t
 digout_callback(uint8_t pin);

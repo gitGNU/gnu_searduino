@@ -76,6 +76,7 @@ size_t Serial_::write(uint8_t c)
     {
       fprintf(stderr, "You need to call begin before using the write functions\n");
     }
+  return 1;
 }
 
 Serial_ Serial;

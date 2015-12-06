@@ -29,6 +29,20 @@ AC_CHECK_HEADERS(pthread.h)
 AX_PROG_JAVA
 AX_PROG_JAVAC
 
+AC_CHECK_FUNCS([usleep])
+AC_CHECK_FUNCS([nanosleep])
+AC_CHECK_FUNCS([clock_nanosleep])
+
+#AC_MSG_CHECKING(for usleep)
+#AH_TEMPLATE(HAVE_USLEEP)
+#AC_EGREP_HEADER(usleep, unistd.h, is_usleep=yes, is_usleep=no)
+#if test $is_usleep = yes; then
+#  AC_DEFINE(HAVE_USLEEP)
+#  AC_MSG_RESULT(yes)
+#else
+#  AC_MSG_RESULT(no)
+#fi
+
 
 DARWIN=$(uname -s | grep -i Darw | wc -l)
 if test "x$JAVA_HOME" != "x" && test "x$DARWIN" != "x"

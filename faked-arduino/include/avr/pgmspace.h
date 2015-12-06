@@ -23,8 +23,9 @@
 
 #include "utils/types.h"
 
-
+#ifndef USBCON
 #define USBCON  _SFR_MEM8(0XD8)
+#endif
 
 /* Darwin or all platforms ?
 

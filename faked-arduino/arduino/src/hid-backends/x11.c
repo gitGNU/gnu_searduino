@@ -71,7 +71,7 @@ int hid_x11_initilise_hid(void)
 
 void hid_x11_hid_mouse_move(signed char x, signed char y, signed char wheel)
 {
-  printf ("%s():  %d %p\n", __func__, hid_x11_enabled, dpy);
+  printf ("%s():  %d %p\n", __func__, hid_x11_enabled, (void*)dpy);
   if ( (hid_x11_enabled!=0) && (dpy!=NULL))
     {
       fprintf(stderr, "X11:move %d,%d  \n", x, y);

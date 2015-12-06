@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011-2014 Henrik Sandklef 
+ *   Copyright (C) 2011-2015 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -39,11 +39,12 @@
 #include "searduino_pin.h"
 #include "searduino_log_impl.h"
 #include "searduino_internal_log.h"
+#include "time_stuff.h"
 
 int searduino_exec ;
 int searduino_exec_available = 0 ;
 
-volatile static int dlopen_counter=0;
+static volatile int dlopen_counter=0;
 
 /* global */
 searduino_main_ptr_ptr searduino_main_entry = NULL;
@@ -95,7 +96,7 @@ void init(void)
 int searduino_setup(void)
 {
   static int already_setup = 0;
-  int ret;
+  /* int ret; */
 
   /* printf("searduino_setup(void)\n"); */
 
@@ -105,26 +106,26 @@ int searduino_setup(void)
       return 0;
     }
   PRINT_FUNCTION_NAME_NOARGS();
-  //  printf("searduino_setup(void) init log\n");
+  /* printf("searduino_setup(void) init log\n"); */
   searduino_internal_init_log(NULL);
   
   searduino_internal_log_i("Setting up Searduino\n");
   
   searduino_internal_log_i("Loading Arduino code\n");
 
-  //printf("searduino_setup(void) init ext io\n");
+  /* printf("searduino_setup(void) init ext io\n"); */
   searduino_internal_log_i("Initialising external IO module\n");
   init_ext_io();
   
-  //printf("searduino_setup(void) init time\n");
+  /* printf("searduino_setup(void) init time\n"); */
   searduino_internal_log_i("Initialising time module\n");
   init_time();
 
-  //printf("searduino_setup(void) init pins\n");
+  /* printf("searduino_setup(void) init pins\n"); */
   searduino_internal_log_i("Initialising arduino pins module\n");
   init_arduino_pins();
 
-  //printf("searduino_setup(void) set running\n");
+  /* printf("searduino_setup(void) set running\n"); */
   searduino_internal_log_i("Setting program as running\n");
   searduino_set_running();
 
@@ -135,7 +136,7 @@ int searduino_setup(void)
   hid_enable_faked_hid();
 #endif
   
-  //printf("searduino_setup(void) returning\n");
+  /* printf("searduino_setup(void) returning\n"); */
   return 0;
 }
 
@@ -151,7 +152,7 @@ get_arduino_code_name(void)
       (arduino_code[0]=='\0'))
     {
       /* This is not an error.... simply means we haven't set the board name yet */
-      //fprintf (stderr, "Could not get the name of the arduino library to use\n");
+      /* fprintf (stderr, "Could not get the name of the arduino library to use\n"); */
       ret = NULL;
     }
   else
@@ -232,12 +233,12 @@ load_arduino_code(void)
   else
     {
       /* If we have been given a library name, load it */
-      // fprintf (stderr, "Dynamically linked code, will call dlopen(%s)\n", ard_lib_name); 
+       /* fprintf (stderr, "Dynamically linked code, will call dlopen(%s)\n", ard_lib_name);  */
       if ( (arduino_lib!=NULL) && (dlopen_counter>0) )
 	{
 	  dlclose(arduino_lib);
 	  dlopen_counter--;
-	  usleep(1000);
+	  seard_sleep(1000);
 	}
 
       arduino_lib = dlopen ((const char*)ard_lib_name, RTLD_LAZY);
@@ -252,14 +253,14 @@ load_arduino_code(void)
 	}
       /* printf ("setup.c:  code at %p\n", arduino_lib); */
       
-      searduino_main_entry = (searduino_main_ptr_ptr)dlsym(arduino_lib, "searduino_main");
+      searduino_main_entry = (searduino_main_ptr_ptr)(size_t)dlsym(arduino_lib, "searduino_main");
       if ( searduino_main_entry == NULL)
 	{
 	  fprintf (stderr, "Couldn't find searduino_main in arduino code\n");
 	  return 1;
 	}
     }
-  //  printf ("Successfully loaded code from %s\n", ard_lib_name);
+   /* printf ("Successfully loaded code from %s\n", ard_lib_name); */
   return 0;
 }
 
@@ -271,7 +272,7 @@ close_arduino_code(void)
 
   if (arduino_lib!=NULL) 
     {
-      //      fprintf(stderr, " ===========================================================CLOSING CL code? at %u  (counter: %d\n)", arduino_lib, dlopen_counter);
+           /* fprintf(stderr, " ===========================================================CLOSING CL code? at %u  (counter: %d\n)", arduino_lib, dlopen_counter); */
       if (dlopen_counter>0)
 	{
 	  dlclose(arduino_lib);

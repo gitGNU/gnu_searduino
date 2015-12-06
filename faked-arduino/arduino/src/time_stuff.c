@@ -21,11 +21,37 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#include "config.h"
+#ifdef HAVE_NANOSLEEP
+#define _POSIX_C_SOURCE 199309L
+#include <time.h>
+#endif
+
 #include "utils/print.h"
-#include <unistd.h>
+#include "time_stuff.h"
 #include <sys/time.h>
+#include <unistd.h>
+
 
 static struct timeval arduino_exec_start_time;
+
+#ifdef HAVE_NANOSLEEP
+int seard_sleep(int del) {
+  struct timespec ts;
+  ts.tv_sec  = del/1000000;
+  ts.tv_nsec = del- ts.tv_sec * 1000000;
+  return nanosleep(&ts, NULL);
+}
+#else
+#ifdef HAVE_USLEEP
+int seard_sleep(int del) {
+  return usleep(del);
+}
+#else
+#error missing sleep 
+#endif /* HAVE_USLEEP */
+#endif /* HAVE_NANOSLEEP */
+
 
 
 void init_time(void)
@@ -59,12 +85,12 @@ void
 delay(unsigned long del)
 {
   PRINT_FUNCTION_NAME(("%lu",del));
-  usleep(del*1000);
+  seard_sleep(del);
 }
 
 void 
 delayMicroseconds(unsigned long del)
 {
   PRINT_FUNCTION_NAME(("%lu",del));
-  usleep(del);
+  seard_sleep(del);
 }

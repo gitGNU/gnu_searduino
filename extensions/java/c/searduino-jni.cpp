@@ -211,15 +211,12 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setWriteTimelimit
 JNIEXPORT jint JNICALL 
 Java_com_sandklef_searduino_Searduino_getWriteTimelimit(JNIEnv *env, jobject obj)
 {
-  int ret;
-
   return seasim_get_write_timelimit();
 }
 
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
 {
   JNIEnv* env = NULL;
-  int ret;
 
   g_vm=vm;
   jint result;
@@ -242,7 +239,6 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
 (JNIEnv * env, jobject obj_tmp, jobject obj, jint type) {
 {
   int returnValue = 0;
-  int ret;
 
   g_obj = env->NewGlobalRef(obj);
 
@@ -260,7 +256,7 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
       }
       else
 	{
-	  ret  = seasim_register_dig_mode_sim_cb(my_dm_sim_callback);
+	  seasim_register_dig_mode_sim_cb(my_dm_sim_callback);
 	}
     }
   else if ( type == 2 ) 
@@ -271,7 +267,7 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
       }
       else
 	{
-	  ret  = seasim_register_out_sim_cb(my_out_sim_callback);
+	  seasim_register_out_sim_cb(my_out_sim_callback);
 	}
     }
   else if ( type == 3 ) 
@@ -282,7 +278,7 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
       }
       else
 	{
-	  ret  = seasim_register_type_cb(my_type_sim_callback);
+	  seasim_register_type_cb(my_type_sim_callback);
 	}
     }
   else if ( type == 4 ) 
@@ -293,7 +289,7 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
       }
       else
 	{
-	  ret  = seasim_register_log_cb(my_log_sim_callback);
+	  seasim_register_log_cb(my_log_sim_callback);
 	}
     }
   else if ( type == 5 ) 
@@ -305,7 +301,7 @@ Java_com_sandklef_searduino_Searduino_registerPinCallback
 	}
       else
 	{
-	  ret  = seasim_register_lcd_cb(my_lcd_sim_callback);
+	  seasim_register_lcd_cb(my_lcd_sim_callback);
 	}
     }
   else
@@ -333,14 +329,12 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_resumeArduinoCode
 JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
   (JNIEnv *, jobject)
 {
-  int ret;
-
   if (arduino_thread[thread_index]!=0)
     {
       seasim_set_halted();
       usleep(200);
 
-      ret = pthread_cancel(arduino_thread[thread_index]);
+      pthread_cancel(arduino_thread[thread_index]);
       usleep(200);
 
       arduino_thread[thread_index]=0;
@@ -391,8 +385,6 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_enableStreamedOutpu
 JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
   (JNIEnv *, jobject)
 {
-  int retval;
-  int ret;
   seasim_set_halted();
 
 
@@ -401,7 +393,7 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
       //      pthread_join(arduino_thread[thread_index], (void**)&retval);
       //printf ("starting thread....join returned: %d\n", retval);
 
-      ret = pthread_cancel(arduino_thread[thread_index]);
+      pthread_cancel(arduino_thread[thread_index]);
       arduino_thread[thread_index]=0;
     }
 
@@ -431,7 +423,8 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSearduinoVers
   strcpy(buf, );
   */
   JNIEnv * g_env;
-  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  // int getEnvStat =
+  g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   jstring jstrBuf = (g_env)->NewStringUTF( src);
 
   return jstrBuf;
@@ -440,7 +433,15 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSearduinoVers
 JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSearduinoName
   (JNIEnv *, jobject)
 {
-  //  return seasim_get_searduino_name();  
+  JNIEnv * g_env;
+  const char * src = seasim_get_searduino_name();  
+  if (src==NULL)
+    {
+      src = (char*) "<none>";
+    }
+  g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  jstring jstrBuf = (g_env)->NewStringUTF(src);
+  return jstrBuf;
 }
 
 JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getBoardName
@@ -454,7 +455,8 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getBoardName
     }
 
   JNIEnv * g_env;
-  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  // int getEnvStat =
+  g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   jstring jstrBuf = (g_env)->NewStringUTF( src);
 
   return jstrBuf;
@@ -508,7 +510,7 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_hasGenericPinType
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setGenericInput
 (JNIEnv *env, jobject obj, jint pin, jint val, jint pin_type)
 {
-  seasim_fake_input(pin, val, pin_type);
+  return seasim_fake_input(pin, val, pin_type);
 }
 
 JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_getNrOfPins
@@ -531,7 +533,8 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getArduinoCodeNa
   JNIEnv * g_env;
   char *str;
 
-  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  // int getEnvStat = 
+  g_vm->GetEnv((void**)&g_env, JNI_VERSION_1_4);
 
   str = seasim_get_arduino_code_name();
   jstring jstrBuf = (g_env)->NewStringUTF(str);
@@ -548,7 +551,8 @@ JNIEXPORT jint JNICALL Java_com_sandklef_searduino_Searduino_setArduinoCodeName
   static int is_setup = 0 ;
   
 
-  getEnvStat  = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  getEnvStat  =
+  g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   CHECK_JNI(getEnvStat, g_env, g_vm);
 
   const char* strCIn = (env)->GetStringUTFChars(str , 0);
@@ -628,7 +632,8 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSystemInforma
   ADD_TEXT_IF_OK(codeN);
 
   JNIEnv * g_env;
-  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  // int getEnvStat = 
+    g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   jstring jstrBuf = (g_env)->NewStringUTF(buf);
 
   return jstrBuf;
@@ -640,7 +645,8 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getSupportedBoar
   const char *src = seasim_get_supported_boards();
 
   JNIEnv * g_env;
-  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  // int getEnvStat = 
+    g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   jstring jstrBuf = (g_env)->NewStringUTF( src);
 
   return jstrBuf;
@@ -652,7 +658,8 @@ JNIEXPORT jstring JNICALL Java_com_sandklef_searduino_Searduino_getBoardSetup
   const char *src = seasim_get_board_setup();
 
   JNIEnv * g_env;
-  int getEnvStat = g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
+  // int getEnvStat = 
+  g_vm->GetEnv((void **)&g_env, JNI_VERSION_1_4);
   jstring jstrBuf = (g_env)->NewStringUTF( src);
 
   return jstrBuf;

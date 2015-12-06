@@ -87,5 +87,8 @@ get_nr_of_out_pins()
   return NR_OF_OUT_PINS;
 }
 
+#else
 
-#endif
+typedef int stupid_typedef_to_silent_iso_cc;
+#endif /* DEAD_CODE */
+

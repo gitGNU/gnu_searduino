@@ -321,7 +321,7 @@ close_simulator(pthread_t *t)
 int 
 main(int argc, char **argv)
 {
-  pthread_t command_thread;
+  /* pthread_t command_thread; */
   char *ard_code  = "" ;
   char *ard_board = "" ;
   int i = 0;

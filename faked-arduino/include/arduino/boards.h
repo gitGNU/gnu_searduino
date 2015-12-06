@@ -51,4 +51,7 @@ get_board_pins(char *board);
 char * 
 get_board_setup(void);
 
+int
+set_board_name(char *board);
+
 #endif /*BOARDS_H*/

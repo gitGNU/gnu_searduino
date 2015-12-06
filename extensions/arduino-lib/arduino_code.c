@@ -31,7 +31,7 @@ void setup() {
 
 int main(void)
 {
-  searduino_setup();   
+  /* searduino_setup();    */
 
   setup();
   

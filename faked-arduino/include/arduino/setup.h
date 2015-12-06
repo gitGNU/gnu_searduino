@@ -38,7 +38,9 @@
 #ifndef USBCON
 #define USBCON
 #endif
+#ifndef CDC_ENABLED
 #define CDC_ENABLED dummyvalue
+#endif
 
 
 uint8_t  dig_mode_callback(uint8_t pin);
@@ -93,6 +95,12 @@ int initialise_hid(void);
 
 char * 
 get_arduino_code_name(void);
+
+int
+close_arduino_code(void);
+
+int 
+is_pausable(void);
 
 #ifdef __cplusplus
 } /* extern "C" */

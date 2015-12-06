@@ -26,6 +26,13 @@ extern "C" {
   #include "utils/print.h"
 }
 
+/* 
+ *
+ *  define NEW_H - Arduino sources defines it since avr doesn't
+ * 
+ */
+#define NEW_H
+
 #include <iostream>
 #include <Arduino.h> 
 #include "Servo.h"
@@ -76,7 +83,7 @@ void Servo::write(int value) {
 }
     
 void Servo::writeMicroseconds(int value) {
-  if(this->servoIndex >= 0 && this->servoIndex < MAX_SERVOS) {
+  if(this->servoIndex < MAX_SERVOS) {
     if(value < SERVO_MIN()) {
       value = SERVO_MIN();
     }

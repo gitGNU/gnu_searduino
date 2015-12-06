@@ -23,8 +23,8 @@
 # MA  02110-1301, USA.                                              
 #
 #
-SEARDUINO_PATH=/opt/
-ARDUINO_PATH==/opt/
+SEARDUINO_PATH=/opt/searduino/
+ARDUINO_PATH==/opt/searduino/
 
 export SRC_C
 export SRC_CXX

@@ -69,8 +69,9 @@ size_t Print::print(const char str[])
   /* len is used to return the length to the Arduino code
   *  We don't care how many chars have been written
   */
+#ifdef TESTING
   unsigned int len;
-
+#endif
   /* Make sure string is not null ;)
    *   ... do we get higher comment grade from this comment? */
   if (str!=NULL){
@@ -176,7 +177,7 @@ size_t Print::println(const String &s)
 
 size_t Print::println(const char c[])
 {
-  static int ctr;
+  // static int ctr;
   // printf ("%d ", ctr++);
   /* Do as Arduino */
   size_t n = print(c);

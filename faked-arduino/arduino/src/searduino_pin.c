@@ -1,7 +1,7 @@
 /***** *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2012, 2013 Henrik Sandklef 
+ *   Copyright (C) 2012, 2013, 2015 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -416,7 +416,7 @@ genericWrite(uint8_t pin, int val, uint8_t pin_type)
   struct timeval  cur_time;
   struct timezone zoneData;
   long time_diff = 0 ;
-  uint8_t current_pin_type;
+  /* uint8_t current_pin_type; */
 
   searduino_setup();
 
@@ -521,10 +521,10 @@ input_callback(uint8_t pin, unsigned int val, uint8_t pin_type)
 
 
 int
-output_callback(uint8_t pin, uint8_t pin_type)
+output_callback(uint8_t pin)
 {
   searduino_setup();
-  PRINT_FUNCTION_NAME(("%d,%d",pin, pin_type));
+  PRINT_FUNCTION_NAME(("%d",pin));
 
   if (PIN_OUT_OF_RANGE(pin))
     {

@@ -514,7 +514,7 @@ board_setup_mega2560(void)
 int
 board_setup_leonardo(void)
 {
-  int i;
+  /* int i; */
   /*
     From the Arduino Leonardo page[1]:
 

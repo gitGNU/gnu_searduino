@@ -26,7 +26,7 @@ if [ "$VCS" = "true" ]
 then
     SEARDUINO_PATH=$(pwd)
 else
-    SEARDUINO_PATH=/opt
+    SEARDUINO_PATH=/opt/searduino
 fi
 
 

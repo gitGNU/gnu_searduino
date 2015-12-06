@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2015 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -107,6 +107,9 @@ uint8_t ext_register_digout_sim_cb(do_to_sim_callback_ptr cb);
  */
 void init_extio(void);
 
+void 
+init_ext_io(void);
+
 uint8_t
 ext_register_pinout_sim_cb(out_to_sim_callback_ptr cb);
 
@@ -207,7 +210,7 @@ ext_set_input(uint8_t pin, uint8_t val);
 */
 
 int
-ext_get_generic_output(uint8_t pin, uint8_t pin_type);
+ext_get_generic_output(uint8_t pin);
 
 uint8_t
 ext_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type);
@@ -277,6 +280,14 @@ ext_digital_set_mode(uint8_t pin, uint8_t mode);
 int 
 ext_analog_set_mode(uint8_t pin, uint8_t mode);
 
+uint8_t
+ext_inform_pin_type(int pin, int type);
 
+
+uint8_t
+ext_register_pin_type_sim_cb(pintype_to_sim_callback_ptr cb);
+
+int
+ext_get_generic_output(uint8_t pin);
 
 #endif /* ARDUINO_EXT_IO_H */

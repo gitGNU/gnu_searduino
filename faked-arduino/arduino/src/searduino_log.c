@@ -76,7 +76,7 @@ int searduino_log_impl(int level, char *msg, ...)
 
 void searduino_log_close_file(void)
 {
-  return searduino_logger_log_close_file(&logger);
+  searduino_logger_log_close_file(&logger);
 }
 
 #endif /* SEARDUINO_STUB */

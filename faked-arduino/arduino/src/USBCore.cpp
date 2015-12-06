@@ -96,17 +96,17 @@ static inline void Stall()
 
 static inline u8 ReadWriteAllowed()
 {
-  ;
+  return 0;
 }
 
 static inline u8 Stalled()
 {
-  ;
+  return 0;
 }
 
 static inline u8 FifoFree()
 {
-  ;
+  return 0;
 }
 
 static inline void ReleaseRX()
@@ -121,7 +121,7 @@ static inline void ReleaseTX()
 
 static inline u8 FrameNumber()
 {
-  ;
+  return 0;
 }
 
 //==================================================================
@@ -156,7 +156,7 @@ int USB_Recv(u8 ep)
 //	Space in send EP
 u8 USB_SendSpace(u8 ep)
 {
-  ;
+  return 0;
 }
 
 //	Blocking Send of data to an endpoint
@@ -194,7 +194,7 @@ static
 bool SendControl(u8 d)
 {
   return true;
-};
+}
 
 //	Clipped by _cmark/_cend
 int USB_SendControl(u8 flags, const void* d, int len)

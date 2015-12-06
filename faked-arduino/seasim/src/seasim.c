@@ -24,6 +24,8 @@
 #include "seasim/seasim.h"
 #include "searduino.h"
 #include "boards.h"
+#include "ext_io.h"
+#include "i2c_loader.h"
 
 const char* seasim_get_searduino_version(void)
 {
@@ -109,9 +111,9 @@ seasim_fake_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 
 
 int
-seasim_get_output(uint8_t pin, uint8_t pin_type)
+seasim_get_output(uint8_t pin)
 {
-  return ext_get_generic_output(pin, pin_type);
+  return ext_get_generic_output(pin);
 }
 
 
@@ -143,13 +145,13 @@ seasim_set_paused(void)
 void 
 seasim_set_running(void)
 {
-  return searduino_set_running();
+  searduino_set_running();
 }
 
 void 
 seasim_set_halted(void)
 {
-  return searduino_set_halted();
+  searduino_set_halted();
 }
 
 uint8_t 

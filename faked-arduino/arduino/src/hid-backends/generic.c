@@ -29,6 +29,7 @@ int hid_initialise_hid(void)
 #ifdef USE_X11
   hid_x11_initilise_hid();
 #endif  
+  return 0;
 }
 
 int hid_enable_faked_hid(void)
@@ -36,6 +37,7 @@ int hid_enable_faked_hid(void)
 #ifdef USE_X11
   hid_x11_enable_faked_hid();
 #endif  
+  return 0;
 }
 
 
@@ -44,6 +46,7 @@ int hid_disable_faked_hid(void)
 #ifdef USE_X11
   hid_x11_disable_faked_hid();
 #endif  
+  return 0;
 }
 
 

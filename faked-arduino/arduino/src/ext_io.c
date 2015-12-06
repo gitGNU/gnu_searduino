@@ -2,7 +2,7 @@
  *                                                                   
  *                   Searduino
  *                      
- *   Copyright (C) 2011, 2012, 2013 Henrik Sandklef 
+ *   Copyright (C) 2011, 2012, 2013, 2015 Henrik Sandklef 
  *                                                                   
  * This program is free software; you can redistribute it and/or     
  * modify it under the terms of the GNU General Public License       
@@ -80,11 +80,11 @@ ext_set_generic_input(uint8_t pin, unsigned int val, uint8_t pin_type)
 
 
 int
-ext_get_generic_output(uint8_t pin, uint8_t pin_type)
+ext_get_generic_output(uint8_t pin)
 {
-  DEBUG_INFO(("%d,%d",pin, pin_type));
+  DEBUG_INFO(("%d,%d",pin));
   LOG_PIN_FUNCTION(pin);
-  return output_callback(pin, pin_type);
+  return output_callback(pin);
 }
 
 uint8_t
@@ -104,9 +104,9 @@ ext_get_dig_output(uint8_t pin)
 {
   uint8_t val ;
   PRINT_FUNCTION_NAME(("%d",pin));
-  LOG_PIN_VAL_FUNCTION(pin, val);
 
   val = digout_callback(pin);
+  LOG_PIN_VAL_FUNCTION(pin, val);
 
 
   DEBUG_INFO(("%d => %d",pin,val));
@@ -120,10 +120,10 @@ ext_get_ana_output(uint8_t pin)
 {
   unsigned int val ;
   PRINT_FUNCTION_NAME(("%d",pin));
-  LOG_PIN_VAL_FUNCTION(pin, val);
 
   val = anaout_callback(pin);
 
+  LOG_PIN_VAL_FUNCTION(pin, val);
   DEBUG_INFO(("%d => %d",pin,val));
   return val;
 }

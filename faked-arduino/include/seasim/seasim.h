@@ -159,7 +159,7 @@ seasim_fake_input(uint8_t pin, unsigned int val, uint8_t type);
  * @endcode
  */
 int
-seasim_get_output(uint8_t pin, uint8_t pin_type);
+seasim_get_output(uint8_t pin);
 
 /**
  * @name    seasim_is_pausable

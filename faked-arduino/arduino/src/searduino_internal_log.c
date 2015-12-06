@@ -67,6 +67,8 @@ int searduino_internal_init_log(char * name)
   searduino_logger_set_file(internal_logger, name);
   level = atoi(getenv("SEARDUINO_LOG_LEVEL"));
   searduino_logger_set_log_level(internal_logger, level);
+
+  return 0;
 }
 
 /*
@@ -167,7 +169,7 @@ void searduino_internal_log_close_file(void)
       return;
     }
 
-  return searduino_logger_log_close_file(internal_logger);
+  searduino_logger_log_close_file(internal_logger);
 }
 
 #endif /* SEARDUINO_STUB */

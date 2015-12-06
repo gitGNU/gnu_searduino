@@ -91,6 +91,7 @@ pinMode(uint8_t pin, uint8_t mode)
 
 void turnOffPWM(uint8_t timer)
 {
+  fprintf(stderr, "turnOffPWM(%d) - not implemented\n", timer);
   PRINT_FUNCTION_NAME(("%d",timer));
 }
 
@@ -101,7 +102,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
   if (PIN_OUT_OF_RANGE(pin))
     {
       SEARD_ERROR(SEARD_ARDUINO_OUT_OF_BOUND);
-      return 0;
+      return ;
     }
 
 
@@ -128,7 +129,7 @@ void digitalWrite(uint8_t pin, uint8_t val)
   /* Make sure we're only storing 1 or 0 
    *   0 => 0
    *  !0 => 1*/
-  return genericWrite(pin, (val!=0), SEARDUINO_PIN_TYPE_DIGITAL);
+  genericWrite(pin, (val!=0), SEARDUINO_PIN_TYPE_DIGITAL);
 }
 
 

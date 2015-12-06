@@ -39,7 +39,6 @@ unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
 
   set_generic_pin_type(pin, SEARDUINO_PIN_TYPE_ANALOG);
 
-
   searduino_setup();
   if (PIN_OUT_OF_RANGE(pin))
     {
@@ -54,7 +53,7 @@ unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
   
   ret_val = get_analog_pin_val(pin);
 
-  if (ret_val < 0 ) 
+  if (ret_val < state ) 
     {
       log_error("Analog value to return to analogRead is less than 0, returning 0");
       ret_val = 0 ;
@@ -65,5 +64,5 @@ unsigned long pulseIn(uint8_t pin, uint8_t state, unsigned long timeout)
       ret_val = 1024 ;
     }
 
-  return ret_val;
+  return ret_val - timeout/1000;
 }

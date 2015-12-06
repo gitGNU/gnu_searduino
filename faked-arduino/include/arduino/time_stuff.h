@@ -22,3 +22,7 @@
  ****/
 
 /* EMPTY */
+
+#include <time.h>
+
+int seard_sleep(int del);
