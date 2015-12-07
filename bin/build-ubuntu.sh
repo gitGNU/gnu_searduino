@@ -13,5 +13,5 @@ else
     exit 1
 fi
 
-dobuild $*
+dobuild --cflags  $*
 
