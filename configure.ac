@@ -584,8 +584,8 @@ replace_vars()
         sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
         sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
         sed "s,__SEARDUINO_VERSION_PREPARE__,${VERSION_LONG_PREPARE},g" | \
-        sed "s,__AVR_PREFIX__,${AVR_PREFIX}/,g" | \
-        sed "s,__AVRDUDE_PREFIX__,${AVRDUDE_PREFIX}/,g" | \
+        sed "s,__AVR_PREFIX__,${AVR_PREFIX},g" | \
+        sed "s,__AVRDUDE_PREFIX__,${AVRDUDE_PREFIX},g" | \
         sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"  > \
         ${OUTFILE}
 }
@@ -650,8 +650,8 @@ then
     AVR_COPY_MSG2=""
     AVR_COPY_MSG3=""
 else
-    AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avr-gcc" | grep bin | xargs dirname)
-    AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avrdude" | grep bin | xargs dirname)
+    AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avr-gcc" | grep bin | xargs dirname)/
+    AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avrdude" | grep bin | xargs dirname)/
 
     setup_avr_copy
     AVR_COPY_MSG0="During installation, you need to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
