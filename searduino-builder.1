@@ -1,0 +1,33 @@
+.TH searduino-builder 1
+.SH NAME
+searduino\-builder \- helper tool for Searduino
+.SH SYNOPSIS
+searduino-builder [OPTIONS]
+.SH DESCRIPTION
+searduino-builder can convert Arduino examples to pure C that you can use with Seaduino. It can build for and upload to Arduino boards and it can create C code (a blink example) from scratch.
+.SH OPTIONS
+.TP
+.B --ino <FILE>
+ set the ino file to convert to Searduino
+.TP
+.B --build
+ builds code (specified by --ino or --ino-dir)
+.TP
+.B --upload
+ uploads code (specified by --ino or --ino-dir)
+.TP
+.B --ino-dir <DIR>
+ set the ino file to convert to Searduino files in dir calle
+.TP
+.B --create <DIR>
+ create template Searduino files in directory DIR
+.TP
+.B --board
+ specify which board to use as default. If not set, stub is set
+.TP
+.B --help
+ prints this help text and exists
+.TP
+.B 
+ 
+.TP
