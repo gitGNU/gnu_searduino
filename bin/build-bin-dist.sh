@@ -21,7 +21,7 @@ prepare()
 {
     if [ -d ${TMP_INST}/ ]
 	then
-	rm -fr ${TMP_INST}/*
+	sudo rm -fr ${TMP_INST}/*
     fi
     make -f Makefile.git 
     exit_on_failure $? "make -f Makefile.git"
@@ -39,10 +39,11 @@ prepare()
     
     if [ "x$MY_OS" != "xDarwin" ]
     then
-	./configure --prefix=${TMP_INST}  --enable-unittest --enable-doc
+	./configure --prefix=${TMP_INST}   --enable-doc --disable-pearduino --disable-python-extension --enable-avrtools-copy 
+        #--enable-unittest
 	exit_on_failure $? "configure"
     else
-	./configure --prefix=${TMP_INST}  --enable-doc
+	./configure --prefix=${TMP_INST}  --enable-doc  --disable-pearduino --disable-python-extension --enable-avrtools-copy 
 	exit_on_failure $? "configure"
     fi
 }
