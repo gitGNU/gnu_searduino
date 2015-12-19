@@ -44,11 +44,11 @@ OBJ_CXX = $(addprefix $(OBJ_PATH), $(SRC_CXX:.cpp=.o))
 OBJ_MAIN = $(addprefix $(OBJ_PATH), $(MAIN_SRC:.c=.o)) 
 
 
-CC=avr-gcc
-CXX=avr-g++
-OBJ_CP=avr-objcopy
-AR=avr-ar
-AVRDUDE=avrdude
+CC=$(AVR_PREFIX)avr-gcc
+CXX=$(AVR_PREFIX)avr-g++
+OBJ_CP=$(AVR_PREFIX)avr-objcopy
+AR=$(AVR_PREFIX)avr-ar
+AVRDUDE=$(AVRDUDE_PREFIX)avrdude
 F_CPU=$(board_build.f_cpu)
 
 

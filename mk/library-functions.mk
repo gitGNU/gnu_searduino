@@ -4,7 +4,7 @@
 # Basically a couple of Makefile wrapping the Ardunio
 # C and C++ files
 #                                                                   
-#  Copyright (C) 2014, 2015 Henrik Sandklef      
+#  Copyright (C) 2014 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       

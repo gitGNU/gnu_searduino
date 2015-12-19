@@ -130,7 +130,14 @@ dist_pkgdataexample_DATA = \
   tmpl/main_tot_c.tmpl \
   tmpl/post_c.tmpl     \
   tmpl/pre_c.tmpl      \
-  tmpl/Makefile.tmpl
+  tmpl/Makefile.tmpl   \
+  tmpl/loop.c          \
+  tmpl/loop.h          \
+  tmpl/main_new_1.tmpl \
+  tmpl/main_new_2.tmpl \
+  tmpl/setup.c         \
+  tmpl/setup.h
+
 
 if BUILD_DOC
 MANUALS= \

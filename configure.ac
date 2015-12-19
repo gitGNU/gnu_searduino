@@ -650,8 +650,8 @@ then
     AVR_COPY_MSG2=""
     AVR_COPY_MSG3=""
 else
-    AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/avr/bin
-    AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/
+    AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avr-gcc" | grep bin | xargs dirname)
+    AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avrdude" | grep bin | xargs dirname)
 
     setup_avr_copy
     AVR_COPY_MSG0="During installation, you need to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
