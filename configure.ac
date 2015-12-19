@@ -26,8 +26,6 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
 AC_CHECK_HEADERS(fcntl.h)
 AC_CHECK_HEADERS(pthread.h)
-AX_PROG_JAVA
-AX_PROG_JAVAC
 
 AC_CHECK_FUNCS([usleep])
 AC_CHECK_FUNCS([nanosleep])
@@ -44,22 +42,6 @@ AC_CHECK_FUNCS([clock_nanosleep])
 #fi
 
 
-DARWIN=$(uname -s | grep -i Darw | wc -l)
-if test "x$JAVA_HOME" != "x" && test "x$DARWIN" != "x"
-then
-  for dir in `find $JAVA_HOME/include -follow -type d`
-  do
-    CPPFLAGS="$CPPFLAGS -I$dir"
-  done
-else
-    AX_JNI_INCLUDE_DIR2
-    for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
-    do
-	CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR -I$JNI_INCLUDE_DIR/linux"
-    done
-    CXXFLAGS="$CXXFLAGS $CPPFLAGS"
-fi
-AC_CHECK_HEADERS(jni.h)
 AC_SUBST(CPPFLAGS)
 
 #AM_INIT_AUTOMAKE($PACKAGE, $VERSION)
@@ -117,7 +99,7 @@ AC_ARG_ENABLE([python-extension],
      *)      AC_MSG_ERROR([bad value $enableval for enable-python-extension option]) ;;
    esac
    python_ext_enabled=$enableval],
-  [python_ext_enabled=yes]
+  [python_ext_enabled=no]
 )
 
 
@@ -266,6 +248,25 @@ fi
 
 if test "x$java_ext_enabled" = "xyes" ; then
   AC_PATH_PROG(JAVA,java)
+AX_PROG_JAVA
+AX_PROG_JAVAC
+DARWIN=$(uname -s | grep -i Darw | wc -l)
+if test "x$JAVA_HOME" != "x" && test "x$DARWIN" != "x"
+then
+  for dir in `find $JAVA_HOME/include -follow -type d`
+  do
+    CPPFLAGS="$CPPFLAGS -I$dir"
+  done
+else
+    AX_JNI_INCLUDE_DIR2
+    for JNI_INCLUDE_DIR in $JNI_INCLUDE_DIRS
+    do
+	CPPFLAGS="$CPPFLAGS -I$JNI_INCLUDE_DIR -I$JNI_INCLUDE_DIR/linux"
+    done
+    CXXFLAGS="$CXXFLAGS $CPPFLAGS"
+fi
+AC_CHECK_HEADERS(jni.h)
+
 fi
 
 
@@ -304,6 +305,7 @@ if test "x$ac_cv_header_pthread_h"  = "xno"; then
    AC_SUBST([GL_GENERATE_STDDEF_H])
 fi
 
+echo "CHECK JAVA: $java_ext_enabled"
 if test "x$java_ext_enabled" = "xyes" ; then
     if test "x$ac_cv_header_jni_h"  = "xno"; then
 	echo "Java extension enabled, but cant find jni.h"
@@ -582,6 +584,8 @@ replace_vars()
         sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
         sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
         sed "s,__SEARDUINO_VERSION_PREPARE__,${VERSION_LONG_PREPARE},g" | \
+        sed "s,__AVR_PREFIX__,${AVR_PREFIX}/,g" | \
+        sed "s,__AVRDUDE_PREFIX__,${AVRDUDE_PREFIX}/,g" | \
         sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"  > \
         ${OUTFILE}
 }
@@ -637,19 +641,25 @@ echo "CHECKING AVR: $avrtools_copy"
 if test "x$avrtools_copy" != "xyes" ;
 then
     check_avr_stuff
+
+    AVR_PREFIX=
+    AVRDUDE_PREFIX=
+
     AVR_COPY_MSG0=""
-    AVR_COPY_MSG1=""
+    AVR_COPY_MSG1="Locally installed avr-gcc and avrdude used"
     AVR_COPY_MSG2=""
     AVR_COPY_MSG3=""
 else
+    AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/avr/bin
+    AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/
+
     setup_avr_copy
-    AVR_COPY_MSG0=""
-    AVR_COPY_MSG1="Make sure to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
-    AVR_COPY_MSG2="In bash you do this by adding the following line (typically in ~/.bash_profile):"
-    AVR_COPY_MSG3="  PATH=${SEARD_PREFIX}/searduino/lib/avr/bin/:${SEARD_PREFIX}/searduino/lib/:\$PATH"
+    AVR_COPY_MSG0="During installation, you need to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
+    AVR_COPY_MSG1="In bash you do this by adding the following line (typically in ~/.bash_profile): "
+    AVR_COPY_MSG2=" "
+    AVR_COPY_MSG3="  PATH=$(pwd)/$(find avr-tools-copy -name "avrdude" | grep bin | xargs dirname):$(pwd)/$(find avr-tools-copy -name "avr-gcc" | grep bin | xargs dirname):\$PATH"
 fi
 print_avr_settings
-
 
 #
 #  DEBIAN or not
