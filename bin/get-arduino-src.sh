@@ -45,6 +45,7 @@ then
 	ARD_FILE=arduino-1.0.5-macosx.zip
 	ARD_URL=$ARD_BASE/$ARD_FILE
 	OS_EXTRA_DIR="Arduino.app/Contents/Resources/Java"
+#OS_EXTRA_DIR="arduino-1.0.5"
 else
     echo "Currently no support for non GNU/Linux platforms"
     echo "Contact the searduino team"
