@@ -290,11 +290,15 @@ create_dir()
     rm -f $ARD_DIR/main.c
     if [ "$CREATE" = "true" ]
     then
-        cat $TMPL_DIR/main_tot_c.tmpl | \
+        cat $TMPL_DIR/main_new_1.tmpl | \
             sed -e  "s,__ARD_FILE__,Searduino template file,g"  | \
-            sed -e  "s/__SETUP__/void setup(void) {\n  pinMode(13,OUTPUT);\n}/g"  | \
-            sed -e  "s/__LOOP__/void loop(void) {\n  digitalWrite(13,HIGH);\n  delay(500);\n  digitalWrite(13,LOW);\n  delay(500);\n}/g"  \
-                >  $ARD_DIR/main.c
+            >  $ARD_DIR/main-tmp.c
+        cat $TMPL_DIR/loop.h >> $ARD_DIR/main-tmp.c
+        cat $TMPL_DIR/setup.h >> $ARD_DIR/main-tmp.c
+        cat $TMPL_DIR/loop.c >> $ARD_DIR/main-tmp.c
+        cat $TMPL_DIR/setup.c >> $ARD_DIR/main-tmp.c
+        cat $TMPL_DIR/main_new_2.tmpl > $ARD_DIR/main-tmp.c
+        mv $ARD_DIR/main-tmp.c $ARD_DIR/main.c 
         exit_on_failure $? "Creating C file 4 ($C_FILES) "
     else
         cat $TMPL_DIR/main_tot_c.tmpl | \
