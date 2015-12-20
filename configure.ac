@@ -600,15 +600,19 @@ prepare_searduino_mk()
     export VERSION_LONG=""
     set_lversion
 
-#echo "LOCAL_AVR_PREFIX:      '$LOCAL_AVR_PREFIX'"
-#echo "AVR_PREFIX:            '$AVR_PREFIX'"
-#echo "LOCAL_AVRDUDE_PREFIX:  '$LOCAL_AVRDUDE_PREFIX'"
-#echo "LOCAL_AVR_PREFIX:      '$LOCAL_AVR_PREFIX'"
+echo "LOCAL_AVR_PREFIX:      '$LOCAL_AVR_PREFIX'"
+echo "LOCAL_AVRDUDE_PREFIX:  '$LOCAL_AVRDUDE_PREFIX'"
+echo "AVR_PREFIX:            '$AVR_PREFIX'"
+echo "AVRDUDE_PREFIX:        '$AVRDUDE_PREFIX'"
+
+
+
     replace_vars mk/searduino.mk.tmpl mk/searduino.mk
     exit_on_failure $? "Prepared searduino.mk "
 
     replace_vars mk/searduino-arduino.mk.tmpl mk/searduino-arduino.mk
     exit_on_failure $? "Prepared searduino-arduino.mk "
+
 
     replace_vars mk/library-functions.mk.tmpl mk/library-functions.mk
     exit_on_failure $? "Prepared library-functions.mk "
@@ -687,15 +691,15 @@ else
     echo "USING ARD SOURCES"
     
 echo "Locally find avr-gcc "
-    export AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy ; find . -name "avr-gcc" | grep bin | head -1 | xargs dirname)/
+    export AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy ; find . -name "avr-gcc"  -type f  | grep bin | head -1 | xargs dirname)/
 echo "Locally find avrdude "
 echo "$(cd avr-tools-copy/ ; find . -name avrdude | xargs dirname)/"
-    export AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/ ; find . -name "avrdude" | xargs dirname)/
+    export AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/ ; find . -name "avrdude"  -type f | head -1 | xargs dirname)/
 
 echo "Locally find avr-gcc VCS"
-    export LOCAL_AVR_PREFIX=$(pwd)/$(find . -name "avr-gcc" | grep bin | head -1 | xargs dirname)/
+    export LOCAL_AVR_PREFIX=$(pwd)/$(find . -name "avr-gcc"  -type f  | grep bin | head -1 | xargs dirname)/
 echo "Locally find avrdude VCS"
-    export LOCAL_AVRDUDE_PREFIX=$(pwd)/$(find . -name "avrdude" | head -1 | xargs dirname)/
+    export LOCAL_AVRDUDE_PREFIX=$(pwd)/$(find . -name "avrdude" -type f | grep -v doc | head -1 | xargs dirname)/
 
     setup_avr_copy
     AVR_COPY_MSG0="During installation, you need to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
@@ -713,8 +717,6 @@ cat  mk/searduino-vcs.mk.tmpl | \
   > mk/searduino-vcs.mk 
 exit_on_failure $? "Prepared searduino-vcs.mk "
 print_avr_settings
-
-
 
 
 cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
@@ -737,13 +739,10 @@ chmod a+x scripts/verify-install.sh
 cat bin/searduino-arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/searduino-arduino-ex2c
 exit_on_failure $? "Prepared Arduino examples to C translator"
 
-echo "======================== 1"
-
 cat bin/searduino-builder.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/searduino-builder
 exit_on_failure $? "Prepared Searduino buider"
 
-echo "======================== 2"
-#prepare_examples
+prepare_examples
 prepare_searduino_mk
 prepare_test_mk
 prepare_scripts
