@@ -262,15 +262,15 @@ size_t LiquidCrystal::write(uint8_t value) {
       memset(tmpbuf2, 0, 81);
 
 
-      sprintf(tmpbuf1, "%-40s%-40s", 
+      snprintf(tmpbuf1, 81, "%-40s%-40s", 
 	      (char*)lcd_data_rows[0].data, 
 	      (char*)lcd_data_rows[0].data);
-      tmpbuf1[81]='\0';
+      tmpbuf1[80]='\0';
 
-      sprintf(tmpbuf2, "%-40s%-40s", 
+      snprintf(tmpbuf2, 81, "%-40s%-40s", 
 	      (char*)lcd_data_rows[1].data, 
 	      (char*)lcd_data_rows[1].data);
-      tmpbuf2[81]='\0';
+      tmpbuf2[80]='\0';
 
       if (scroll_enable==SCROLL_DISABLED)
 	{
