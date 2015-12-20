@@ -67,7 +67,7 @@ F_ARGS "
 	MAC_CONF="$MAC_CONF CPPFLAGS=-I$MAC_JAVA/Headers/"
 	MAC_CONF="$MAC_CONF CXXFLAGS=-I$MAC_JAVA/Headers/"
 	#           MAC_CONF="$MAC_CONF --enable-ltdl-convenience --no-create --no-recursion "
-	CONF_ARGS="$CONF_ARGS  $MAC_CONF"
+	CONF_ARGS="$CONF_ARGS  $MAC_CONF  --enable-avrtools-copy "
     fi
 
 }
