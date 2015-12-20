@@ -17,7 +17,7 @@ exit_on_failure()
 	echo ""
 	exit $1
     else
-       	  printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
+       	printf " OK ($(( $STOP_SEC - $LOCAL_START_SEC )) seconds)\n"
     fi
 }
 
@@ -59,8 +59,10 @@ exit_on_success_no_print()
 
 log_and_exec()
 {
+#    echo "log.... $* :: $LOCAL_START_SEC :: $REAL_LOG_FILE"
     LOCAL_START_SEC=$(date '+%s')
     logn "$*"
+ #   echo "EXEC: $*   LOG_:  $REAL_LOG_FILE"
     $*  >> $REAL_LOG_FILE  2>> $REAL_LOG_FILE 
     exit_on_failure $? ""
 }
@@ -112,9 +114,11 @@ set_vars()
 
 init_logging()
 {
+    echo "creating $(pwd)/logs  "
     mkdir -p $(pwd)/logs
     REAL_LOG_FILE=$(pwd)/logs/$(basename $0 | sed 's,\.sh,,g').log
     rm -f $REAL_LOG_FILE
+    echo "LOG_FILE:  $REAL_LOG_FILE"
     START_SEC=$(date '+%s')
 }
 

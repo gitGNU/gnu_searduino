@@ -160,6 +160,11 @@ stub-start:
 	make sim
 	$(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB)
 
+sim-start-start: stub-start-start
+stub-start-start:
+	make sim
+	$(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB) --start
+
 due-upload:
 	export SEARDUINO_OVERRIDE_ARDUINO=due && make clean all upload
 

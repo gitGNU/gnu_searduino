@@ -29,8 +29,8 @@ ARDUINO_VERSION=101
 SEARDUINO_MK_PATH=$(SEARDUINO_PATH)/
 SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
 
-AVR_PREFIX=/home/hesa/opt/searduino/./avr-tools-copy/avr/bin/
-AVRDUDE_PREFIX=/home/hesa/opt/searduino/./avr-tools-copy/
+AVR_PREFIX=
+AVRDUDE_PREFIX=
 
 
 CC=$(AVR_PREFIX)avr-gcc

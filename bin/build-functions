@@ -1,4 +1,5 @@
 PACKAGE=searduino
+TMP_INST=/opt/$PACKAGE
 
 FUNC_FILE=$(dirname $0)/functions
 if [ ! -f $FUNC_FILE ] || [ "$FUNC_FILE" = "" ]
@@ -69,7 +70,6 @@ F_ARGS "
 	#           MAC_CONF="$MAC_CONF --enable-ltdl-convenience --no-create --no-recursion "
 	CONF_ARGS="$CONF_ARGS  $MAC_CONF  --enable-avrtools-copy "
     fi
-
 }
 
 
@@ -119,6 +119,8 @@ setup_arduino_sources()
 
 parse() 
 {
+    CONF_ARGS=" --prefix=/opt/searduino --disable-python-extension  --disable-pearduino  "
+    
     while [ "$1" != "" ]
     do
 	if [ "$1" = "--arduino-sources" ]
@@ -127,9 +129,15 @@ parse()
 	elif [ "$1" = "--bin-dist" ]
 	then	
 	    BUILD_ARGS="true"
+	elif [ "$1" = "--only-check" ]
+	then	
+	    ONLY_CHECK="true"
 	elif [ "$1" = "--cflags" ]
 		then
 	    setup_c_flags $DIST
+	elif [ "$1" = "--avrtools-copy" ]
+	then
+	    CONF_ARGS="$CONF_ARGS --enable-avrtools-copy"
 	fi
 	shift
     done	
@@ -138,9 +146,48 @@ parse()
 
 prepare()
 {
-   make -f Makefile.git $MAKE_GIT_ARGS && \
-       CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} ./configure $CONF_ARGS --prefix=/opt/searduino --disable-python-extension  --disable-pearduino  
-	
+    make -f Makefile.git $MAKE_GIT_ARGS && \
+        CFLAGS=${CFLAGS} CXXFLAGS=${CXXFLAGS} ./configure $CONF_ARGS
+}
+
+
+check_create() {
+    FAKE_DIR=Test_Searduino_tmp
+
+    log "Check installed binary (--create)"
+    log_and_exec /opt/searduino/bin/searduino-builder --create $FAKE_DIR
+    exit_on_failure $? "searduino-builder create $FAKE_DIR"
+
+    log_and_exec cd ~/searduino/$FAKE_DIR
+
+    log_and_exec make clean
+    exit_on_failure $? "make clean"
+    
+    log_and_exec  make
+    exit_on_failure $? "make"
+    
+    make sim-start-start &
+    exit_on_failure $? "make sim-start"
+
+    sleep 7
+
+    JEARDUINO_PIDS=$(ps auxwww| grep jearduino | grep -v grep | awk '{ print $2 }')
+    NR_JEARDUINO_PID=$(echo $JEARDUINO_PIDS | wc -l )
+    if [ "$NR_JEARDUINO_PIDS" = "0" ]
+    then
+        echo "No Jearduino pids found ..... simulator not started"
+        return 1
+    else 
+        echo "Jearduino pids found ..... will kill them all"
+        for i in $JEARDUINO_PIDS
+        do
+            kill $i
+            sleep 2
+            kill -9 $i
+        done
+    fi
+
+    return 0
 }
 
 build_bin_dist()
@@ -148,10 +195,13 @@ build_bin_dist()
     log "Building and checking"
     
     init_logging
-    
     log_and_exec prepare
     log_and_exec build
-    #log_and_exec check
+
+    log_and_exec check
+
+    log_and_exec check_create
+    
     log_and_exec packit
 
     close_logging
@@ -171,10 +221,9 @@ build()
 
 install()
 {
-    sudo make install
+    make install
     return $?
 }
-
 
 verify()
 {
@@ -190,12 +239,31 @@ dobuild()
     fi
     parse $*
     setup
+    init_logging
 
     if [ "$BUILD_ARGS" = "true" ]
     then
 	build_bin_dist
+    elif [ "$ONLY_CHECK" = "true" ]
+    then
+        init_logging
+        check_create
     else
-        prepare     
-        build       
+        rm -fr /opt/searduino/*
+        log_and_exec prepare
+
+        log_and_exec build
+        
+        log_and_exec install
+        
+        log_and_exec check
+        
+        log_and_exec check_create
+
+#        log_and_exec packit
+        
+        close_logging
     fi
 }
+
+

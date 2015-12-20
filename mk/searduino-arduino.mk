@@ -45,11 +45,11 @@ OBJ_MAIN = $(addprefix $(OBJ_PATH), $(MAIN_SRC:.c=.o))
 
 
 ifndef SEARDUINO_VCS
-CC=/opt/searduino/searduino/lib/./avr/bin/avr-gcc
-CXX=/opt/searduino/searduino/lib/./avr/bin/avr-g++
-OBJ_CP=/opt/searduino/searduino/lib/./avr/bin/avr-objcopy
-AR=/opt/searduino/searduino/lib/./avr/bin/avr-ar
-AVRDUDE=/opt/searduino/searduino/lib/./avr/bin/avrdude
+CC=avr-gcc
+CXX=avr-g++
+OBJ_CP=avr-objcopy
+AR=avr-ar
+AVRDUDE=avrdude
 endif
 
 einar:
