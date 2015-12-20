@@ -49,7 +49,7 @@ CC=/opt/searduino/searduino/lib/./avr/bin/avr-gcc
 CXX=/opt/searduino/searduino/lib/./avr/bin/avr-g++
 OBJ_CP=/opt/searduino/searduino/lib/./avr/bin/avr-objcopy
 AR=/opt/searduino/searduino/lib/./avr/bin/avr-ar
-AVRDUDE=/opt/searduino/searduino/lib/./avrdude
+AVRDUDE=/opt/searduino/searduino/lib/./avr/bin/avrdude
 endif
 
 einar:
