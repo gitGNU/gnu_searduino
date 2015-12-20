@@ -126,6 +126,7 @@ check-objects: $(PROG).hex
 	@echo "<-- done scanning --"
 
 upload: $(PROG).hex 
+	@if [ "$(USB_DEV)" = "" ] || [ "`echo $(USB_DEV) | grep -i unknown`" != "" ] ; then echo "Could not find a USB port"; exit 1 ; fi 
 	@echo "Will upload to: $(ARDUINO)   $(BOARD)  (device: (" $(USB_DEV) ")"
 	$(AVRDUDE) -q -q -p$(CPU) -c$(board_upload.protocol) -P$(USB_DEV) \
                    -b$(board_upload.speed) -D -Uflash:w:${PROG}.hex:i
