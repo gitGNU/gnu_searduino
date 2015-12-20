@@ -148,8 +148,7 @@ get_arduino_code_name(void)
   char *ret = NULL;
 
   /* printf ("Getting arduino lib name\n"); */
-  if ((arduino_code==NULL) || 
-      (arduino_code[0]=='\0'))
+  if (arduino_code[0]=='\0')
     {
       /* This is not an error.... simply means we haven't set the board name yet */
       /* fprintf (stderr, "Could not get the name of the arduino library to use\n"); */
