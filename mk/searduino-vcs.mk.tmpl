@@ -29,6 +29,16 @@ ARDUINO_VERSION=101
 SEARDUINO_MK_PATH=$(SEARDUINO_PATH)/
 SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
 
+AVR_PREFIX=__AVR_PREFIX__
+AVRDUDE_PREFIX=__AVRDUDE_PREFIX__
+
+
+CC=$(AVR_PREFIX)avr-gcc
+CXX=$(AVR_PREFIX)avr-g++
+OBJ_CP=$(AVR_PREFIX)avr-objcopy
+AR=$(AVR_PREFIX)avr-ar
+AVRDUDE=$(AVRDUDE_PREFIX)avrdude
+
 
 ifeq (${DEBIANSOURCES},true)
 #ARDUINO_SOURCE_PATH=/usr/share/arduino/hardware/arduino/cores/arduino/
@@ -62,16 +72,17 @@ endif
 VCS_IFLAGS= -I$(SEARDUINO_INC_PATH)/arduino-extras/include \
             -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino
 
+export SEARDUINO_VCS=true
+
 ifeq (${ARDUINO},stub)
 include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
 else
 include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
 
-AVR_PREFIX=__AVR_PREFIX__
-AVRDUDE_PREFIX=__AVRDUDE_PREFIX__
-
 
 endif
+
+
 
 
 

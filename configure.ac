@@ -584,11 +584,11 @@ replace_vars()
         sed "s,__SEARDUINO_VERSION_STRING__,${VERSION},g"               | \
         sed "s,__SEARDUINO_VERSION_MINOR__,${VERSION_LONG_MINOR},g"     | \
         sed "s,__SEARDUINO_VERSION_PREPARE__,${VERSION_LONG_PREPARE},g" | \
-        sed "s,__AVR_PREFIX__,${AVR_PREFIX},g" | \
-        sed "s,__AVRDUDE_PREFIX__,${AVRDUDE_PREFIX},g" | \
-        sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"  > \
-        ${OUTFILE}
+        sed "s,__AVRDUDE_PREFIX__,${AVRDUDE_PREFIX},g"    | \
+        sed "s,__SEARDUINO_VERSION__,${VERSION_LONG},g"   | \
+        sed -e "s,__AVR_PREFIX__,${AVR_PREFIX},g" > ${OUTFILE}
 }
+#        sed "s,__AVR_PREFIX__,${AVR_PREFIX},g"            | \
 
 prepare_searduino_mk()
 {
@@ -600,8 +600,15 @@ prepare_searduino_mk()
     export VERSION_LONG=""
     set_lversion
 
+#echo "LOCAL_AVR_PREFIX:      '$LOCAL_AVR_PREFIX'"
+#echo "AVR_PREFIX:            '$AVR_PREFIX'"
+#echo "LOCAL_AVRDUDE_PREFIX:  '$LOCAL_AVRDUDE_PREFIX'"
+#echo "LOCAL_AVR_PREFIX:      '$LOCAL_AVR_PREFIX'"
     replace_vars mk/searduino.mk.tmpl mk/searduino.mk
     exit_on_failure $? "Prepared searduino.mk "
+
+    replace_vars mk/searduino-arduino.mk.tmpl mk/searduino-arduino.mk
+    exit_on_failure $? "Prepared searduino-arduino.mk "
 
     replace_vars mk/library-functions.mk.tmpl mk/library-functions.mk
     exit_on_failure $? "Prepared library-functions.mk "
@@ -635,33 +642,6 @@ echo "prefix: ${prefix}   SEARD_PREFIX=${SEARD_PREFIX}"
 export SEARD_PREFIX
 
 #
-#
-#
-echo "CHECKING AVR: $avrtools_copy"
-if test "x$avrtools_copy" != "xyes" ;
-then
-    check_avr_stuff
-
-    AVR_PREFIX=
-    AVRDUDE_PREFIX=
-
-    AVR_COPY_MSG0=""
-    AVR_COPY_MSG1="Locally installed avr-gcc and avrdude used"
-    AVR_COPY_MSG2=""
-    AVR_COPY_MSG3=""
-else
-    AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avr-gcc" | grep bin | xargs dirname)/
-    AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/avr ; find . -name "avrdude" | grep bin | xargs dirname)/
-
-    setup_avr_copy
-    AVR_COPY_MSG0="During installation, you need to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
-    AVR_COPY_MSG1="In bash you do this by adding the following line (typically in ~/.bash_profile): "
-    AVR_COPY_MSG2=" "
-    AVR_COPY_MSG3="  PATH=$(pwd)/$(find avr-tools-copy -name "avrdude" | grep bin | xargs dirname):$(pwd)/$(find avr-tools-copy -name "avr-gcc" | grep bin | xargs dirname):\$PATH"
-fi
-print_avr_settings
-
-#
 #  DEBIAN or not
 # 
 if test "x$debian_sources"  != "xyes"  ;
@@ -684,15 +664,62 @@ else
 fi
 
 
+#
+#
+#
+echo "CHECKING AVR: $avrtools_copy"
+if test "x$avrtools_copy" != "xyes" ;
+then
+    check_avr_stuff
+
+    export AVR_PREFIX=""
+    export AVRDUDE_PREFIX=""
+
+    AVR_COPY_MSG0=""
+    AVR_COPY_MSG1="Locally installed avr-gcc and avrdude used"
+    AVR_COPY_MSG2=""
+    AVR_COPY_MSG3=""
+    export LOCAL_AVR_PREFIX=${AVR_PREFIX}
+    export LOCAL_AVRDUDE_PREFIX=${AVRDUDE_PREFIX}
+
+else
+
+    echo "USING ARD SOURCES"
+    
+echo "Locally find avr-gcc "
+    export AVR_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy ; find . -name "avr-gcc" | grep bin | head -1 | xargs dirname)/
+echo "Locally find avrdude "
+echo "$(cd avr-tools-copy/ ; find . -name avrdude | xargs dirname)/"
+    export AVRDUDE_PREFIX=${SEARD_PREFIX}/searduino/lib/$(cd avr-tools-copy/ ; find . -name "avrdude" | xargs dirname)/
+
+echo "Locally find avr-gcc VCS"
+    export LOCAL_AVR_PREFIX=$(pwd)/$(find . -name "avr-gcc" | grep bin | head -1 | xargs dirname)/
+echo "Locally find avrdude VCS"
+    export LOCAL_AVRDUDE_PREFIX=$(pwd)/$(find . -name "avrdude" | head -1 | xargs dirname)/
+
+    setup_avr_copy
+    AVR_COPY_MSG0="During installation, you need to add ${SEARD_PREFIX}/searduino/lib/avr/bin/ and ${SEARD_PREFIX}/searduino/lib/ to your PATH"
+    AVR_COPY_MSG1="In bash you do this by adding the following line (typically in ~/.bash_profile): "
+    AVR_COPY_MSG2=" "
+    AVR_COPY_MSG3="  PATH=$(pwd)/$(find . -name "avrdude" | head -1 | xargs dirname):$(pwd)/$(find . -name "avr-gcc" | grep bin | head -1 | xargs dirname):\$PATH"
+fi
+
+
+
+
+cat  mk/searduino-vcs.mk.tmpl | \
+    sed "s,__AVR_PREFIX__,${LOCAL_AVR_PREFIX},g" | \
+    sed "s,__AVRDUDE_PREFIX__,${LOCAL_AVRDUDE_PREFIX},g" \
+  > mk/searduino-vcs.mk 
+exit_on_failure $? "Prepared searduino-vcs.mk "
+print_avr_settings
+
+
+
 
 cat doc/Makefile.tmpl  | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > doc/Makefile
 exit_on_failure $? "Prepared doc Makefile"
 
-
-prepare_examples
-prepare_searduino_mk
-prepare_test_mk
-prepare_scripts
 
 cat simulators/pardon/searduino-pardon.sh.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > simulators/pardon/searduino-pardon.sh
 exit_on_failure $? "Prepared python simulator wrapper script"
@@ -710,8 +737,17 @@ chmod a+x scripts/verify-install.sh
 cat bin/searduino-arduino-ex2c.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/searduino-arduino-ex2c
 exit_on_failure $? "Prepared Arduino examples to C translator"
 
+echo "======================== 1"
+
 cat bin/searduino-builder.tmpl | sed "s,__INSTALL_DIR__,${SEARD_PREFIX},g" > bin/searduino-builder
 exit_on_failure $? "Prepared Searduino buider"
+
+echo "======================== 2"
+#prepare_examples
+prepare_searduino_mk
+prepare_test_mk
+prepare_scripts
+
 
 
 AC_CONFIG_FILES([Makefile faked-arduino/Makefile faked-arduino/arduino/Makefile faked-arduino/arduino/test/Makefile    faked-arduino/wire/test/Makefile faked-arduino/wire/Makefile extensions/Makefile extensions/python/Makefile extensions/java/Makefile extensions/java/test/Makefile extensions/arduino-lib/Makefile simulators/Makefile simulators/stream/Makefile simulators/pardon/Makefile  simulators/jearduino/Makefile faked-arduino/include/Makefile  faked-arduino/include/arduino/boards/Makefile faked-arduino/include/avr/Makefile faked-arduino/include/avr/util/Makefile faked-arduino/include/arduino/Makefile faked-arduino/include/seasim/Makefile  faked-arduino/include/utils/Makefile example/Makefile example/digpins/Makefile  example/many-boards/Makefile example/hid/Makefile example/log/Makefile example/digital-rw/Makefile example/serial/Makefile mk/Makefile example/python-digcounter/Makefile  mk/arduino-sources/Makefile mk/libraries/Makefile mk/external-libraries/Makefile mk/board-makefiles/Makefile test/Makefile  test/mk/Makefile arduino-extras/include/Makefile arduino-extras/Makefile faked-arduino/EEPROM/test/Makefile faked-arduino/EEPROM/Makefile faked-arduino/Ethernet/test/Makefile faked-arduino/Ethernet/Makefile faked-arduino/Firmata/test/Makefile faked-arduino/Firmata/Makefile faked-arduino/LiquidCrystal/test/Makefile faked-arduino/LiquidCrystal/Makefile faked-arduino/SD/test/Makefile faked-arduino/SD/Makefile faked-arduino/Servo/test/Makefile faked-arduino/Servo/Makefile faked-arduino/SoftwareSerial/test/Makefile faked-arduino/SoftwareSerial/Makefile faked-arduino/SPI/test/Makefile faked-arduino/SPI/Makefile faked-arduino/Stepper/test/Makefile faked-arduino/Stepper/Makefile example/verification/Makefile example/verification/distance/Makefile example/lcd-shield/Makefile example/toggle-pins/Makefile example/relay/Makefile example/verification/ok-version/Makefile  example/verification/nok-version/Makefile tools/Makefile scripts/Makefile ])

@@ -90,7 +90,8 @@ get_sources()
 	exec_comm cp   $ARD_FILE download-tmp/
     else
 	exec_comm rm -f $ARD_FILE
-	wget $ARD_URL
+        #	wget $ARD_URL
+        cp /tmp/ardu*.t* .
 	exec_comm mv   $ARD_FILE download-tmp
     fi
 }

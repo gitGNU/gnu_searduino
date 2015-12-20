@@ -183,8 +183,8 @@ GPROF_FLAG = "-pg -g"
 if COPY_AVR
 install-avr:
 	@echo Copying avr tools from Arduino sources
-	@mkdir -p $(prefix)/searduino/lib/
 	@rm -fr $(prefix)/searduino/lib
+	@mkdir -p $(prefix)/searduino/lib/
 	@cp -r avr-tools-copy/* $(prefix)/searduino/lib/
 else
 install-avr:

@@ -1,7 +1,7 @@
 #
 #       Searduino
 #
-#  Copyright (C) 2011, 2012, 2013 Henrik Sandklef      
+#  Copyright (C) 2011, 2012, 2013, 2015 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -28,6 +28,16 @@ endif
 ARDUINO_VERSION=101
 SEARDUINO_MK_PATH=$(SEARDUINO_PATH)/
 SEARDUINO_INC_PATH=$(SEARDUINO_PATH)/
+
+AVR_PREFIX=/home/hesa/opt/searduino/./avr-tools-copy/avr/bin/
+AVRDUDE_PREFIX=/home/hesa/opt/searduino/./avr-tools-copy/
+
+
+CC=$(AVR_PREFIX)avr-gcc
+CXX=$(AVR_PREFIX)avr-g++
+OBJ_CP=$(AVR_PREFIX)avr-objcopy
+AR=$(AVR_PREFIX)avr-ar
+AVRDUDE=$(AVRDUDE_PREFIX)avrdude
 
 
 ifeq (${DEBIANSOURCES},true)
@@ -57,17 +67,25 @@ else
     SEARDUINO_LIB_PATH=  -L$(SEARDUINO_PATH)/arduino-sources/libs/$(BOARD) \
                          -L$(SEARDUINO_PATH)/arduino-sources/libraries/libs/$(BOARD) 
   endif
-
-
 endif
 
 VCS_IFLAGS= -I$(SEARDUINO_INC_PATH)/arduino-extras/include \
             -I$(SEARDUINO_INC_PATH)/faked-arduino/include/arduino
 
+export SEARDUINO_VCS=true
+
 ifeq (${ARDUINO},stub)
 include $(SEARDUINO_MK_PATH)/mk/searduino-stub.mk
 else
 include $(SEARDUINO_MK_PATH)/mk/searduino-arduino.mk
+
+
 endif
 
+
+
+
+
 include $(SEARDUINO_MK_PATH)/mk/searduino-functions.mk
+
+
