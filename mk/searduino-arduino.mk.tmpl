@@ -82,25 +82,25 @@ INC_FLAGS=  \
 else
 INC_FLAGS=  \
 INC_FLAGS=  \
-            -I"$(shell cygpath -w ${SEARDUINO_INC_PATH})/arduino-extras/" 	    \
-            -I"$(shell cygpath -w ${SEARDUINO_INC_PATH})/arduino-extras/include"   \
-            -I"$(shell cygpath -w ${ARDUINO_INC_PATH})/variants/$(VARIANT)"      \
-            -I"$(shell cygpath -w ${ARDUINO_INC_PATH})/cores/arduino/"               \
-            -I"$(shell cygpath -w ${ARDUINO_INC_PATH})/core/"                         \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Ethernet/utility"    \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Ethernet/"        \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SPI"       	 \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Firmata"   	  \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Wire/utility"   \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Wire/"	    \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/"       	     \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/utility"	      \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/EEPROM"     	       \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/EEPROM" 	        \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/LiquidCrystal"        \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Servo"                 \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SoftwareSerial"         \
-            -I"$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Stepper"
+            -I$(shell cygpath -w ${SEARDUINO_INC_PATH})/arduino-extras/ 	    \
+            -I$(shell cygpath -w ${SEARDUINO_INC_PATH})/arduino-extras/include   \
+            -I$(shell cygpath -w ${ARDUINO_INC_PATH})/variants/$(VARIANT)      \
+            -I$(shell cygpath -w ${ARDUINO_INC_PATH})/cores/arduino/               \
+            -I$(shell cygpath -w ${ARDUINO_INC_PATH})/core/                         \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Ethernet/utility    \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Ethernet/        \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SPI       	 \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Firmata   	  \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Wire/utility   \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Wire/	    \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/       	     \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/utility	      \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/EEPROM     	       \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/EEPROM 	        \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/LiquidCrystal        \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Servo                 \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SoftwareSerial         \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Stepper
 endif
 
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
