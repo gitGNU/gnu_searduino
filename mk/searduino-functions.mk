@@ -1,7 +1,7 @@
 #
 #       Searduino
 #
-#  Copyright (C) 2011, 2012, 2014 Henrik Sandklef      
+#  Copyright (C) 2011, 2012, 2014, 2015 Henrik Sandklef      
 #                                                                   
 # This program is free software; you can redistribute it and/or     
 # modify it under the terms of the GNU General Public License       
@@ -158,12 +158,12 @@ uno:
 sim-start: stub-start
 stub-start:
 	make sim
-	$(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB)
+	$(SEARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB)
 
 sim-start-start: stub-start-start
 stub-start-start:
 	make sim
-	$(ARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB) --start
+	$(SEARDUINO_PATH)/bin/searduino-jearduino.sh --arduino-code $(SHLIB) --start
 
 due-upload:
 	export SEARDUINO_OVERRIDE_ARDUINO=due && make clean all upload
