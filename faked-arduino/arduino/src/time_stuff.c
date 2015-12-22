@@ -41,8 +41,8 @@ int seard_sleep(int del) {
   struct timespec ts;
   ts.tv_sec  = del/1000;
   ts.tv_nsec = (del - ts.tv_sec * 1000)*1000000;
-  printf(" %d msecs => %ld %ld \n",
-         del, ts.tv_sec, ts.tv_nsec);
+  /* printf(" %d msecs => %ld %ld \n", */
+  /*        del, ts.tv_sec, ts.tv_nsec); */
   return nanosleep(&ts, NULL);
 }
 #else
