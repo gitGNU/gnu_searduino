@@ -21,7 +21,9 @@ dnl along with this program.  If not, see <http://www.gnu.org/licenses/>.
 AC_INIT([Searduino], [0.9.94], [hesa@sandklef.com])
 AC_COPYRIGHT([Copyright (c) 2012-2015 Henrik Sandklef <hesa@sandklef.com>, Viktor Green.])
 AC_CONFIG_AUX_DIR([build-aux])
-AM_INIT_AUTOMAKE
+#AM_INIT_AUTOMAKE
+AM_INIT_AUTOMAKE([subdir-objects])
+
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
 AC_CHECK_HEADERS(fcntl.h)
@@ -217,21 +219,28 @@ if test "$python_ext_enabled" = "yes"; then
 # Check for program
 # Keep this echo, it's needed on cygwin
 echo
-  AM_MISSING_PROG(PYTHON, python, $missing_dir)
+  ##################################AM_MISSING_PROG(PYTHON, python, $missing_dir)
 #   AX_PYTHON_DEVEL([])
 #    AX_PYTHON_DEVEL([">= '2.7'"])
 #AM_PATH_PYTHON([2.7],, [:])
 #AM_PATH_PYTHON()
-    AC_PYTHON_DEVEL([">= '2.7'"])
+    ##################################AC_PYTHON_DEVEL([">= '2.7'"])
 #     AX_PYTHON_VERSION_ENSURE( ["2.7"] )
 #   AC_SUBST(PYTHON_LDFLAGS)
 #    AC_CHECK_HEADER(Python.h)
    AC_SUBST(PYTHON_CPPFLAGS)
 fi
 
+echo "UT: $ut_enabled"
+
 if test "$ut_enabled" = "yes"; then
-     PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+   echo "CHEC"
+#   PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
+else
+	echo "NO CHECK"
 fi
+
+#exit 0
 
 export CYGWIN=""
 if test "$(uname -s | grep -i -c cygwin)" != "0" ;
