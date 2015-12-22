@@ -53,7 +53,7 @@ EXTRA_DIST= $(SEARD_JNI_SRC) $(SEARDUINO_JAVA_SOURCES)
 AM_CFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ @CPPFLAGS@ 
 AM_CXXFLAGS= -I$(SEARDUINO_INC_PATH)/   -I../../faked-arduino/include/arduino -I../../faked-arduino/include/  -I../../arduino-extras/include/ @CPPFLAGS@ 
 
-AM_LDFLAGS= -L../../faked-arduino/.libs   -lsearduinostub
+AM_LDFLAGS= -L../../faked-arduino/.libs   -lsearduinostub -no-undefined
 
 LIB_PATHS=./:../../faked-arduino/.libs/
 
@@ -66,7 +66,8 @@ SEARDUINO_PATH=com/sandklef/searduino/
 SEARDUINO_JAVA_SOURCES=$(SEARDUINO_PATH)/Searduino.java $(SEARDUINO_PATH)/SearduinoObserver.java
 $(SEARDUINO_JAR): $(SEARDUINO_JAVA_SOURCES) 
 	javac $(JAVACFLAGS) $(SEARDUINO_JAVA_SOURCES)
-	javah $(JAVACFLAGS) com.sandklef.searduino.Searduino
+#	javah $(JAVACFLAGS) com.sandklef.searduino.Searduino
+	javah com.sandklef.searduino.Searduino
 	jar cf $(SEARDUINO_JAR) $(SEARDUINO_PATH)/*.class
 
 EXTRA_DIST = $(SEARD_JNI_SRC) $(SEARDUINO_JAVA_SOURCES)

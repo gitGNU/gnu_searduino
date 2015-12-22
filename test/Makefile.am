@@ -1,6 +1,11 @@
 if SHAREDTEST
-SUBDIRS= arduino-lib mk hw stub searduino_loop arduino-code-dynamic arduino-code-static shared shared-main 
+if CYGWIN_USED
+SUBDIRS= arduino-lib mk hw stub searduino_loop arduino-code-dynamic arduino-code-static 
 else
+SUBDIRS= arduino-lib mk hw stub searduino_loop arduino-code-dynamic arduino-code-static shared shared-main 
+endif
+else
+fi
 SUBDIRS= arduino-lib mk hw stub searduino_loop arduino-code-dynamic arduino-code-static
 endif
 

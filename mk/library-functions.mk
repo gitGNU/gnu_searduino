@@ -24,7 +24,7 @@
 #
 #
 SEARDUINO_PATH=/opt/searduino/
-ARDUINO_PATH==/opt/searduino/
+ARDUINO_PATH==/usr/share/arduino/hardware/arduino/
 
 export SRC_C
 export SRC_CXX

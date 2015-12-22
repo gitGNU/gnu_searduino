@@ -39,6 +39,7 @@ then
 	ARD_BASE=http://arduino.googlecode.com/files/
 	ARD_FILE=arduino-1.0.5-r2-windows.zip
 	ARD_URL=$ARD_BASE/$ARD_FILE
+	OS_EXTRA_DIR="arduino-1.0.5-r2"
 elif [ "${MY_OS:0:6}" = "Darwin" ]
 then
 	ARD_BASE=http://arduino.googlecode.com/files/
@@ -89,10 +90,15 @@ get_sources()
 	ARD_FILE=$ARDUINO_SOURCE
 	exec_comm cp   $ARD_FILE download-tmp/
     else
-	exec_comm rm -f $ARD_FILE
-        #	wget $ARD_URL
-        cp /tmp/ardu*.t* .
-	exec_comm mv   $ARD_FILE download-tmp
+	if [ ! -f $ARD_FILE ] && [ ! -f download-tmp/$ARD_FILE ]
+	   then
+	       if [ ! -f $ARD_FILE ]
+	       then
+		   #	exec_comm rm -f $ARD_FILE
+		   wget $ARD_URL
+	       fi
+	       exec_comm mv   $ARD_FILE download-tmp
+	fi
     fi
 }
 
@@ -104,10 +110,10 @@ unpack_sources()
 	exec_comm tar zxvf $ARD_FILE
     elif [ "${MY_OS:0:5}" = "CYGWI" ]
     then
-	exec_comm unzip $ARD_FILE
+	exec_comm unzip -f $ARD_FILE
     elif [ "${MY_OS:0:6}" = "Darwin" ]
     then
-	exec_comm unzip $ARD_FILE
+	exec_comm unzip -f $ARD_FILE
     else
 	echo "Currently no support for non GNU/Linux platforms"
 	echo "Contact the searduino team"

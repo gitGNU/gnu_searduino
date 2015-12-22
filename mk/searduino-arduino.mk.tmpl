@@ -58,6 +58,7 @@ einar:
 F_CPU=$(board_build.f_cpu)
 
 
+ifdef CYGWIN_USED
 INC_FLAGS=  \
             -I$(SEARDUINO_INC_PATH)/arduino-extras/ 	    \
             -I$(SEARDUINO_INC_PATH)/arduino-extras/include   \
@@ -78,7 +79,28 @@ INC_FLAGS=  \
             -I$(ARDUINO_LIB_INC_PATH)/libraries/Servo                 \
             -I$(ARDUINO_LIB_INC_PATH)/libraries/SoftwareSerial         \
             -I$(ARDUINO_LIB_INC_PATH)/libraries/Stepper
-
+else
+INC_FLAGS=  \
+            -I$(shell cygpath -w ${SEARDUINO_INC_PATH})/arduino-extras/ 	    \
+            -I$(shell cygpath -w ${SEARDUINO_INC_PATH})/arduino-extras/include   \
+            -I$(shell cygpath -w ${ARDUINO_INC_PATH})/variants/$(VARIANT)	      \
+            -I$(shell cygpath -w ${ARDUINO_INC_PATH})/cores/arduino/               \
+            -I$(shell cygpath -w ${ARDUINO_INC_PATH})/core/                         \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Ethernet/utility    \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Ethernet/        \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SPI       	 \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Firmata   	  \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Wire/utility   \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Wire/	    \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/       	     \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/utility	      \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/EEPROM     	       \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SD/EEPROM 	        \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/LiquidCrystal        \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Servo                 \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/SoftwareSerial         \
+            -I$(shell cygpath -w ${ARDUINO_LIB_INC_PATH})/libraries/Stepper
+endif
 
 LIBSEARDUINO_C_CPP_FLAGS= -g -Os -w -fno-exceptions \
                           -ffunction-sections -fdata-sections \
@@ -101,7 +123,13 @@ _CXXFLAGS=-g -fPIC $(USER_CXX_FLAGS) \
              $(MODULE_CXX_FLAGS) \
              $(INC_FLAGS) $(USER_ARDUINO_CXX_FLAGS) 
 
-_LDFLAGS = $(USER_LD_FLAGS)  $(USER_ARDUINO_LD_FLAGS)  -Wl,-rpath,$(SEARDUINO_PATH)/lib 
+ifdef CYGWIN_USED
+SEARDUINO_LD_PATH=$(shell cygpath -w ${SEARDUINO_PATH})
+else
+SEARDUINO_LD_PATH=$(SEARDUINO_PATH)
+endif
+
+_LDFLAGS = $(USER_LD_FLAGS)  $(USER_ARDUINO_LD_FLAGS)  -Wl,-rpath,$(SEARDUINO_LD_PATH)/lib 
 
 
 all: $(PROG)

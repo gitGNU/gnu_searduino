@@ -1,6 +1,11 @@
 if JEARDUINO_SUPPORT
 
+
+if CYGWIN_USED
+LIB_PATHS=".\\;..\\..\\faked-arduino\\.libs\\;..\\..\\extensions\\java"
+else
 LIB_PATHS=./:../../faked-arduino/.libs/:../../extensions/java
+endif
 
 AUTOMAKE_OPTIONS = gnu
 

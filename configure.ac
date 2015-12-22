@@ -218,23 +218,23 @@ fi
 if test "$python_ext_enabled" = "yes"; then
 # Check for program
 # Keep this echo, it's needed on cygwin
-echo
   ##################################AM_MISSING_PROG(PYTHON, python, $missing_dir)
+  ####AM_MISSING_PROG(PYTHON, python, $missing_dir)
 #   AX_PYTHON_DEVEL([])
 #    AX_PYTHON_DEVEL([">= '2.7'"])
 #AM_PATH_PYTHON([2.7],, [:])
 #AM_PATH_PYTHON()
     ##################################AC_PYTHON_DEVEL([">= '2.7'"])
+    ####AC_PYTHON_DEVEL([">= '2.7'"])
 #     AX_PYTHON_VERSION_ENSURE( ["2.7"] )
 #   AC_SUBST(PYTHON_LDFLAGS)
 #    AC_CHECK_HEADER(Python.h)
-   AC_SUBST(PYTHON_CPPFLAGS)
+##   AC_SUBST(PYTHON_CPPFLAGS)
+echo
 fi
 
-echo "UT: $ut_enabled"
-
 if test "$ut_enabled" = "yes"; then
-   echo "CHEC"
+   echo "CHECK enabled"
 #   PKG_CHECK_MODULES([CHECK], [check >= 0.9.4])
 else
 	echo "NO CHECK"

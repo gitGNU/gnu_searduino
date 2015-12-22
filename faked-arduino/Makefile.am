@@ -103,8 +103,8 @@ LIB_SEARDUINO_SOURCES_FILES= \
 libsearduinostub_la_SOURCES = $(LIB_SEARDUINO_SOURCES_FILES)
 #libsearduino-stub_SOURCES=$(LIB_SEARDUINO_SOURCES_FILES)
 #EXTRA_LTLIBRARIES = libsearduino-stub.la
-lib_LTLIBRARIES = libsearduinostub.la
-
+lib_LTLIBRARIES = libsearduinostub.la 
+libsearduinostub_LIBTOOLFLAGS = -no-undefined
 
 if USE_XTEST
 XTEST_C_FLAGS = -DUSE_X11
@@ -156,4 +156,5 @@ else
 XTESTFLAGS = 
 endif
 
-AM_LDFLAGS= -ldl  $(LIBXTST)
+AM_LDFLAGS= -ldl  $(LIBXTST)  -no-undefined
+

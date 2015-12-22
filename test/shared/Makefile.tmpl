@@ -31,9 +31,9 @@ export MAIN_SRC=
 export SHLIB=libtest.so
 export LIB=libtest.a
 export USER_LIB_INSTALL_PATH=/tmp/searduino-lib-install
-export SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
-export USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
-export USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS) -ldl
+#export SHLIB_LIBS= -L../../faked-arduino/.libs/ -lpthread
+#export USER_C_FLAGS=-fPIC   -I../../faked-arduino/include 
+#export USER_LD_FLAGS=-lpthread -fPIC  $(SHLIB_LIBS) -ldl
 
 $(SHLIB):
 
