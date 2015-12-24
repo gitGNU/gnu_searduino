@@ -110,10 +110,10 @@ unpack_sources()
 	exec_comm tar zxvf $ARD_FILE
     elif [ "${MY_OS:0:5}" = "CYGWI" ]
     then
-	exec_comm unzip -f $ARD_FILE
+	exec_comm unzip -u $ARD_FILE
     elif [ "${MY_OS:0:6}" = "Darwin" ]
     then
-	exec_comm unzip -f $ARD_FILE
+	exec_comm unzip -u $ARD_FILE
     else
 	echo "Currently no support for non GNU/Linux platforms"
 	echo "Contact the searduino team"

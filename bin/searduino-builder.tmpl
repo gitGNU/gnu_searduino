@@ -4,8 +4,8 @@ SEARDUINO_PATH=__INSTALL_DIR__
 export LD_LIBRARY_PATH=__INSTALL_DIR__/lib
 TMPL_DIR=${SEARDUINO_PATH}/share/searduino/tmpl
 PROJECT_DIR=""
-HOME_DIR=${HOME}
-SEARDUINO_HOME_DIR="${HOME}/searduino/"
+HOME_DIR="${HOME}"
+SEARDUINO_HOME_DIR="${HOME_DIR}/searduino/"
 ARDUINO_EX2C=${SEARDUINO_PATH}/bin/searduino-arduino-ex2c 
 NON_EXIST_MAKEFILE=4
 NON_BOARD=5
@@ -173,9 +173,10 @@ then
         echo "Missing arguments to --create"
         exit 1
     fi
-    ${ARDUINO_EX2C} --yes --shlib --destination-dir "${SEARDUINO_HOME_DIR}" --create $CREATE_DIR 2>/dev/null >/dev/null
+    ${ARDUINO_EX2C} --yes --shlib --destination-dir "${SEARDUINO_HOME_DIR}" --create $CREATE_DIR
+    #2>/dev/null >/dev/null
     RET=$?
-    echo "Created files in \"${SEARDUINO_HOME_DIR}\"/$CREATE_DIR"
+    echo "Created files in ${SEARDUINO_HOME_DIR}/$CREATE_DIR"
 elif [ "$PROJECT_DIR" != "" ]
 then
     if [ ! -d $PROJECT_DIR ]

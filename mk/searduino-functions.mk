@@ -94,7 +94,7 @@ $(OBJ_PATH)%.o: %.cpp
 	$(CC) -E $(CXXFLAGS) -I. $(INTERNAL_FLAGS) $< -o $@ 
 
 clean:
-	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN) *.eep *.hex *.a $(LIB) $(SHLIB) *.so libs/*/* $(PROG) *.pyc *.d
+	rm -f *.o *.rom *.elf *.map *~ *.lst "$(OBJ_C)" "$(OBJ_CXX)" "$(OBJ_MAIN)" *.eep *.hex *.a $(LIB) $(SHLIB) *.so libs/*/* $(PROG) *.pyc *.d
 
 light-clean:
 	rm -f *.o *.rom *.elf *.map *~ *.lst $(OBJ_C) $(OBJ_CXX) $(OBJ_MAIN) *.eep *.hex $(PROG) *.pyc

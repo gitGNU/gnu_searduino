@@ -24,9 +24,10 @@ exit_on_failure()
 parse_args()
 {
     export BUILD_TYPE=stub
-
+    
     while [ "$1" != "" ]
     do
+#        echo "arg:  $1"
 	case $1 in
 	    "--shlib")
 		BUILD_TYPE=shlib
@@ -62,8 +63,9 @@ parse_args()
                 shift
 		;;
 	    "--destination-dir")
-		DEST_DIR=$2
+		DEST_DIR="$2"
 		shift
+                echo "DEST_DIR: $DEST_DIR"
 		;;
 	    "--vcs")
 		VCS_BUILD="true"
@@ -128,25 +130,25 @@ create_c_file()
 
     if [ "$ARD_DIR" = "" ]
     then
-	ARD_DIR=$(basename $ARD_FILE | sed 's,\.ino,,g')
+	ARD_DIR="$(basename $ARD_FILE | sed 's,\.ino,,g')"
 	if [ "$DEST_DIR" != "" ]
 	then
-	    ARD_DIR=$DEST_DIR/$ARD_DIR
+	    ARD_DIR="$DEST_DIR/$ARD_DIR"
 	fi
     fi
 
 
-    if [ ! -d $ARD_DIR ]
+    if [ ! -d "$ARD_DIR" ]
     then
 	echo "Creating dir '$ARD_DIR'" 
-	mkdir -p $ARD_DIR
+	mkdir -p "$ARD_DIR"
     fi
 
 
-    C_FILE=$(basename $ARD_FILE | sed 's,\.ino,\.cpp,g')
+    C_FILE="$(basename \"$ARD_FILE\" | sed 's,\.ino,\.cpp,g')"
     echo "From $ARD_FILE To $C_FILE"
     
-    if [ -f $ARD_DIR/$C_FILE ]
+    if [ -f "$ARD_DIR/$C_FILE" ]
     then
 	if [ "$YES" != "true" ] 
 	then
@@ -158,45 +160,45 @@ create_c_file()
 		exit 0
 	    fi
 	fi
-	rm -f $ARD_DIR/$C_FILE
+	rm -f "$ARD_DIR/$C_FILE"
     fi
     
     echo "  * creating $C_FILE  (from $ARD_FILE)" 
 
-    cat $TMPL_DIR/pre_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  $C_FILE
+    cat $TMPL_DIR/pre_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  "$C_FILE"
     exit_on_failure $? "Creating C file 1 ($C_FILE) "
 
-    ard2c_file $ARD_FILE
+    ard2c_file "$ARD_FILE"
     exit_on_failure $? "Creating C file 2 ($C_FILE) "
 
 #    ard2c_file $TMPL_DIR/main_c.tmpl
 #    exit_on_failure $? "Creating C file 3 ($C_FILE) "
 
-    cat $TMPL_DIR/post_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  $C_FILE
+    cat $TMPL_DIR/post_c.tmpl | sed -e  "s,__ARD_FILE__,$ARD_FILE,g" >>  "$C_FILE"
     exit_on_failure $? "Creating C file 4 ($C_FILE) "
 
-    mv $C_FILE $ARD_DIR/
+    mv "$C_FILE" "$ARD_DIR/"
     exit_on_failure $? "Moving C file ($C_FILE) "
 }
 
 
 create_makefile()
 {
-    ARD_DIR=$1
+    ARD_DIR="$1"
 
     if [ "$ARD_DIR" = "" ]
     then
-	ARD_DIR=$(basename $ARD_FILE | sed 's,\.ino,,g')
+	ARD_DIR="$(basename $ARD_FILE | sed 's,\.ino,,g')"
 	if [ "$DEST_DIR" != "" ]
 	then
-	    ARD_DIR=$DEST_DIR/$ARD_DIR
+	    ARD_DIR="$DEST_DIR/$ARD_DIR"
 	fi
     fi
 
-    if [ ! -d $ARD_DIR ]
+    if [ ! -d "$ARD_DIR" ]
     then
 	echo "Creating dir '$ARD_DIR'" 
-	mkdir -p $ARD_DIR
+	mkdir -p "$ARD_DIR"
     fi
 
 
@@ -206,17 +208,19 @@ create_makefile()
 #    export MAIN_FILE=""
     export BUILD_LD_FLAGS=""
 
+    
+    
     if [ "$BUILD_TYPE" = "prog" ]
     then
 	ARDUINO_VALUE=stub
 	TO_BUILD_TARGET="\$(PROG)"
-	TO_BUILD="PROG=$(echo $(basename ARD_DIR) | tr [A-Z] [a-z])"
+	TO_BUILD="PROG=$(echo $(basename "$ARD_DIR") | tr [A-Z] [a-z])"
 	SHLIB_LIBS=-lpthread
     elif [ "$BUILD_TYPE" = "shlib" ]
     then
 	ARDUINO_VALUE=stub
 	TO_BUILD_TARGET="\$(SHLIB)"
-	TO_BUILD="SHLIB=lib$(echo $(basename $ARD_DIR) | tr [A-Z] [a-z]).so"
+	TO_BUILD="SHLIB=lib$(echo $(basename "$ARD_DIR") | tr [A-Z] [a-z]).so"
 	BUILD_LD_FLAGS="\$(SHLIB_LIBS)"
 	SHLIB_LIBS=-lpthread
     elif [ "$BUILD_TYPE" = "uno" ] || [ "$BUILD_TYPE" = "due" ] || [ "$BUILD_TYPE" = "mega" ] || [ "$BUILD_TYPE" = "leonardo" ]
@@ -229,7 +233,8 @@ create_makefile()
 	SHLIB_LIBS=""
     fi
 
-#    echo "Makefile - $ARD_DIR"
+    echo "Makefile  - $ARD_DIR"
+    echo "TO_BUILD  - $TO_BUILD"
     echo "  * creating Makefile" 
     cat $TMPL_DIR/Makefile.tmpl | \
           sed "s,__C_FILES__,$C_FILES,g" | \
@@ -241,45 +246,46 @@ create_makefile()
           sed "s,__SEARDUINO_PATH__,$SEARDUINO_PATH,g" | \
           sed "s,__SEARDUINO_MK__,\$(SEARDUINO_PATH)//share/searduino/mk/searduino.mk,g" | \
 	  sed "s,__BUILD_LD_FLAGS__,$BUILD_LD_FLAGS,g" | \
-	  sed "s,__SHLIB_LIBS__,$SHLIB_LIBS,g"  > $ARD_DIR/Makefile
+	  sed "s,__SHLIB_LIBS__,$SHLIB_LIBS,g"  > "$ARD_DIR/Makefile"
     exit_on_failure $? "Creating Makefile "
 #          sed "s,__MAIN_FILE__,$MAIN_FILE,g" | \
     if [ "$VCS_BUILD" = "true" ]
     then
-	mv  $ARD_DIR/Makefile $ARD_DIR/Makefile.tmp
-	cat $ARD_DIR/Makefile.tmp | \
-            sed "s,\/share\/searduino,,g" > $ARD_DIR/Makefile
-	mv  $ARD_DIR/Makefile $ARD_DIR/Makefile.tmp
-	cat $ARD_DIR/Makefile.tmp | \
-            sed "s,searduino\.mk,searduino\-vcs\.mk,g" > $ARD_DIR/Makefile
+	mv  "$ARD_DIR/Makefile" "$ARD_DIR/Makefile.tmp"
+	cat "$ARD_DIR/Makefile.tmp" | \
+            sed "s,\/share\/searduino,,g" > "$ARD_DIR/Makefile"
+	mv  "$ARD_DIR/Makefile" "$ARD_DIR/Makefile.tmp"
+	cat "$ARD_DIR/Makefile.tmp" | \
+            sed "s,searduino\.mk,searduino\-vcs\.mk,g" > "$ARD_DIR/Makefile"
     fi
 
 }
 
 create_dir()
 {
-    ARD_DIR_LONG=$1
-    ARD_DIR=$(basename $ARD_DIR_LONG)
+    ARD_DIR_LONG="$1"
+    ARD_DIR="$(basename $ARD_DIR_LONG)"
     
     if [ "$DEST_DIR" != "" ]
     then
-	ARD_DIR=$DEST_DIR/$ARD_DIR
+	ARD_DIR="$DEST_DIR/$ARD_DIR"
     fi
 
+#    echo "ARD_DIR: $ARD_DIR"
 
-    if [ -d $ARD_DIR ]
+    if [ -d "$ARD_DIR" ]
 	then
 	sleep 0
-#	echo "Dir exists...handle later ,for now: ignoring"
+	echo "Dir exists...handle later ,for now: ignoring"
     fi
 
-    if [ ! -d $ARD_DIR ]
+    if [ ! -d "$ARD_DIR" ]
     then
 	echo "Creating dir '$ARD_DIR'" 
-	mkdir -p $ARD_DIR
+	mkdir -p "$ARD_DIR"
     fi
 
-
+    
     export C_FILES=""
     for i in $(find $ARD_DIR_LONG -type f -name "*.ino" 2>/dev/null)
     do
@@ -287,25 +293,26 @@ create_dir()
 	create_c_file $i
 	C_FILES="$C_FILES $C_FILE"
     done
-    rm -f $ARD_DIR/main.c
+    rm -f "$ARD_DIR/main.c"
     if [ "$CREATE" = "true" ]
     then
         cat $TMPL_DIR/main_new_1.tmpl | \
             sed -e  "s,__ARD_FILE__,Searduino template file,g"   \
-            >  $ARD_DIR/main-tmp.c
-        cat $TMPL_DIR/loop.h >> $ARD_DIR/main-tmp.c
-        cat $TMPL_DIR/setup.h >> $ARD_DIR/main-tmp.c
-        cat $TMPL_DIR/loop.c >> $ARD_DIR/main-tmp.c
-        cat $TMPL_DIR/setup.c >> $ARD_DIR/main-tmp.c
-        cat $TMPL_DIR/main_new_2.tmpl >> $ARD_DIR/main-tmp.c
-        mv $ARD_DIR/main-tmp.c $ARD_DIR/main.c 
+            >  "$ARD_DIR/main-tmp.c"
+        cat $TMPL_DIR/loop.h          >> "$ARD_DIR/main-tmp.c"
+        cat $TMPL_DIR/setup.h         >> "$ARD_DIR/main-tmp.c"
+        cat $TMPL_DIR/loop.c          >> "$ARD_DIR/main-tmp.c"
+        cat $TMPL_DIR/setup.c         >> "$ARD_DIR/main-tmp.c"
+        cat $TMPL_DIR/main_new_2.tmpl >> "$ARD_DIR/main-tmp.c"
+
+        mv "$ARD_DIR/main-tmp.c" "$ARD_DIR/main.c" 
         exit_on_failure $? "Creating C file 4 ($C_FILES) "
     else
         cat $TMPL_DIR/main_tot_c.tmpl | \
             sed -e  "s,__ARD_FILE__,$ARD_FILE,g"  | \
             sed -e  "s,__SETUP__,,g" | \
             sed -e  "s,__LOOP__,,g"  \
-                >  $ARD_DIR/main.c
+                >  "$ARD_DIR/main.c"
         exit_on_failure $? "Creating C file 4 ($C_FILES) "
     fi
 
@@ -316,28 +323,29 @@ create_dir()
 
     for i in $(find $ARD_DIR_LONG -type f -name "*.h" 2>/dev/null)
     do
-	cp $i $ARD_DIR
+	cp $i "$ARD_DIR"
     done
 
-    create_makefile $ARD_DIR
+    create_makefile "$ARD_DIR"
 }
 
 build_dir()
 {
     ARD_DIR_LONG=$1
-    ARD_DIR=$(basename $ARD_DIR_LONG)
+    ARD_DIR="$(basename $ARD_DIR_LONG)"
     
     if [ "$DEST_DIR" != "" ]
     then
-	ARD_DIR=$DEST_DIR/$ARD_DIR
+	ARD_DIR="$DEST_DIR/$ARD_DIR"
     fi
 
-    cd $ARD_DIR
+    cd "$ARD_DIR"
     make
     cd -
 }
 
-parse_args $*
+#    for i in "$@"; do echo $i; done
+parse_args "$@"
 
 if [ "$EX_FILE" != "" ]
 then
