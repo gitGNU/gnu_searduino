@@ -9,6 +9,8 @@ then
 fi
 
 
+
+
 while  [ "$1" != "" ]
 do
     if [ "$1" = "--vcs" ]
@@ -50,6 +52,9 @@ then
 else
     SEARDUINO_PATH=__INSTALL_DIR__
 fi
+
+# cygwin pleaser
+PATH=$PATH:$SEARDUINO_PATH/bin
 
 
 LOG_FILE=$(pwd)/verify-sh.log
