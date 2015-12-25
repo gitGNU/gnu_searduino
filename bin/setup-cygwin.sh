@@ -6,6 +6,6 @@ PKGS="  make automake autoconf autoconf-archive libtool gcc-core gcc-g++ check p
 
 for i in $PKGS
 do
-    echo apt-cyg install  $i
+    apt-cyg install  $i
 done
 
