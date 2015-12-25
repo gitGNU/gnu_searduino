@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PKGS=" install make automake autoconf autoconf-archive libtool gcc-core gcc-g++ check pkg-config unzip "
+PKGS="  make automake autoconf autoconf-archive libtool gcc-core gcc-g++ check pkg-config unzip "
 
 
 
