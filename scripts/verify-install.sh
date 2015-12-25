@@ -1,5 +1,8 @@
 #!/bin/bash
 
+UNO=false
+VISUAL=false
+
 while  [ "$1" != "" ]
 do
     if [ "$1" = "--vcs" ]
@@ -8,12 +11,25 @@ do
     elif [ "$1" = "--arduino-examples" ]
     then
 	ARD_EX=true
+    elif [ "$1" = "--uno" ]
+    then
+	export UNO="true"
+    elif [ "$1" = "--visual" ]
+    then
+	export VISUAL="true"
     elif [ "$1" = "--upload" ]
     then
 	export UPLOAD="true"
     elif [ "$1" = "--simulate" ]
     then
 	export SIMULATE="true"
+    elif [ "$1" = "--full" ]
+    then
+	export ARD_EX=true
+	export UNO="true"
+	export VISUAL="true"
+ 	export UPLOAD="true"
+	export SIMULATE="false"
     else
 	echo "SYNTAX ERROR"
 	echo 
@@ -50,7 +66,7 @@ then
     EX_PATH=$SEARDUINO_PATH/ard-ex
     EXAMPLES_PATH=$SEARDUINO_PATH/example
 else
-    EX_PATH=$SEARDUINO_PATH/share/searduino/examples/arduino
+    EX_PATH=$SEARDUINO_PATH/share/examples/arduino
     EXAMPLES_PATH=$SEARDUINO_PATH/share/searduino/example
 fi
 
@@ -103,10 +119,10 @@ test_report()
     then
 	echo "   ----------------------------------------------"
 	echo -n "      Succeeded:              $ARDUINO_EX_CTR_SUCC "
-	printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_SUCC / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
+#	printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_SUCC / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
 	
 	echo -n "      Failed:                 $ARDUINO_EX_CTR_FAIL "
-	printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_FAIL / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
+#	printf "(%.2f%%)\n" $(echo  "$ARDUINO_EX_CTR_FAIL / ($ARDUINO_EX_CTR_FAIL + $ARDUINO_EX_CTR_SUCC ) * 100" | bc -l )
 	
 	echo    "                              (failures indicates features not supported in Searduino's simulator)"
 	echo ""
@@ -119,6 +135,14 @@ test_report()
 	echo "      Failed:                 $SEARDUINO_EX_CTR_FAIL (if not 0, report it as a bug. Please attach the whole log file $REAL_LOG_FILE)"
 	echo ""
     fi
+    echo "   Serduino builder tested:   1"
+    echo "    uno upload:      $UNO"
+    echo "    sim start :      $VISUAL"
+    echo "    Results:       "
+    echo "      Succeeded:              $S_BUILD_SUCC"
+    echo "      Failed:                 $S_BUILD_FAIL"
+    
+    
 }
 
 test_ex()
@@ -136,11 +160,12 @@ fi
        --searduino-path $SEARDUINO_PATH \
        --$TYPE                          \
        --yes                            \
+       --destination-dir ${HOME}/searduino-tmp \
        $ARDEX2C_ARGS                    \
        $EX_PATH/$EXA
-    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/searduino-arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes  $ARDEX2C_ARGS $EX_PATH/$EXA  
+    exit_on_failure_no_print $? "Failed creating C code for $EXA with type $TYPE in $(pwd)  (    $SEARDUINO_PATH/bin/searduino-arduino-ex2c --searduino-path $SEARDUINO_PATH --$TYPE --yes --destination-dir ${HOME}/searduino-tmp $ARDEX2C_ARGS $EX_PATH/$EXA  
 )"
-    cd $(basename $EXA)
+    cd ${HOME}/searduino-tmp/$(basename $EXA)
 
     make clean 
     if [ "$?" != "0" ] ; then echo "  -------  1 "; cd .. ; return 1; fi
@@ -268,7 +293,7 @@ test_arduino_examples()
     my_log test_types "./02.Digital/BlinkWithoutDelay"
     my_log test_types "./02.Digital/Button"
     my_log test_types "./02.Digital/Debounce"
-    my_log test_types "./02.Digital/DigitalIputPullup"
+    my_log test_types "./02.Digital/DigitalInputPullup"
     my_log test_types "./02.Digital/StateChangeDetection"
     my_log test_types "./02.Digital/toneKeyboard"
     my_log test_types "./02.Digital/toneMelody"
@@ -328,13 +353,13 @@ test_arduino_usb_examples()
     log "Arduino built in USB Device examples"
     log "-----------------------------------------"
 
-    my_log test_types_usb "./09.USB(Leonardo)/KeyboardAndMouseControl"
-    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardLogout"
-    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardMessage"
-    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardReprogram"
-    my_log test_types_usb "./09.USB(Leonardo)/Keyboard/KeyboardSerial"
-    my_log test_types_usb "./09.USB(Leonardo)/Mouse/ButtonMouseControl"
-    my_log test_types_usb "./09.USB(Leonardo)/Mouse/JoystickMouseControl"
+    my_log test_types_usb "./09.USB/KeyboardAndMouseControl"
+    my_log test_types_usb "./09.USB/Keyboard/KeyboardLogout"
+    my_log test_types_usb "./09.USB/Keyboard/KeyboardMessage"
+    my_log test_types_usb "./09.USB/Keyboard/KeyboardReprogram"
+    my_log test_types_usb "./09.USB/Keyboard/KeyboardSerial"
+    my_log test_types_usb "./09.USB/Mouse/ButtonMouseControl"
+    my_log test_types_usb "./09.USB/Mouse/JoystickMouseControl"
     my_log test_types "./ArduinoISP"
 }
 
@@ -456,6 +481,103 @@ test_examples()
 }
 
 
+S_BUILD_SUCC=0
+S_BUILD_FAIL=0
+
+inc_s_build_succ() {
+    S_BUILD_SUCC=$(( $S_BUILD_SUCC + 1 ))
+}
+
+inc_s_build_fail() {
+    S_BUILD_FAIL=$(( $S_BUILD_FAIL + 1 ))
+}
+
+test_searduino_builder_create() {
+    NEW_PROJ=Searduino_tmp_test
+
+    S_BUILD_SUCC=
+    
+    $SEARDUINO_PATH/bin/searduino-builder  --destination-dir ${HOME}/searduino-tmp --create "$NEW_PROJ"
+    if [ "$?" != "0" ] ;
+    then
+        echo "Failed creating new searduino project" ;
+        inc_s_build_fail
+        return 1;
+    fi
+
+    cd  ~ && cd "searduino/$NEW_PROJ"
+    if [ "$?" != "0" ] ;
+    then
+        inc_s_build_fail
+        echo "Failed changing dir to $NEW_RPOJ" ;
+        return 1;
+    fi
+
+    make clean && make 
+    if [ "$?" != "0" ] ;
+    then
+        inc_s_build_fail
+        echo "Failed building" ;
+        return 1;
+    fi
+
+    if [ "$VISUAL" = "true" ]
+    then
+        make sim-start-start &
+    fi
+    if [ "$?" != "0" ] ;
+    then
+        echo "Failed starting simulator" ;
+        return 1;
+    fi
+    if [ "$VISUAL" = "true" ]
+    then
+        sleep 7
+        JEARDUINO_PIDS=$(ps auxwww| grep jearduino | grep -v grep | awk '{ print $2 }')
+        NR_JEARDUINO_PID=$(echo $JEARDUINO_PIDS | wc -l )
+        if [ "$NR_JEARDUINO_PIDS" = "0" ]
+        then
+            SIM_RESULT=failure
+            echo "No Jearduino pids found ..... simulator not started"
+            return 1
+        else 
+            SIM_RESULT=success
+            echo "Jearduino pids found ..... will kill them all"
+            for i in $JEARDUINO_PIDS
+            do
+                kill $i
+                sleep 2
+                kill -9 $i
+            done
+        fi
+    fi
+    inc_s_build_succ
+
+
+    
+#    echo " ------------- UNO ---------------------"
+    make clean  && SEARDUINO_OVERRIDE_ARDUINO=uno make prog
+    if [ "$?" != "0" ] ;
+    then
+        inc_s_build_fail
+        echo "Failed building for uno" ;
+        return 1;
+    fi
+    if [ "$UNO" = "true" ]
+    then
+        make uno-upload
+        if [ "$?" != "0" ] ;
+        then
+            inc_s_build_fail
+            echo "Failed uploading to uno" ;
+            return 1;
+        fi
+    fi
+    inc_s_build_succ
+    
+}
+
+
 
 init_logging
 echo "All logs will be stored in: $REAL_LOG_FILE"
@@ -469,6 +591,7 @@ then
     echo "Skipping internal examples, since they are checking an installed version of searduino"
 else
     test_examples
+    test_searduino_builder_create
 fi
 
 if [ "$ARD_EX" = "true" ]
