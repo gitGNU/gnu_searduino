@@ -240,7 +240,8 @@ install()
 
 verify()
 {
-    bash /opt/searduino/share/searduino/scripts/verify-install.sh && \
+    VERIFY_LOG_FILE=$(pwd)/logs/$(basename $0 | sed 's,\.sh,,g')-verify.log
+    bash /opt/searduino/share/searduino/scripts/verify-install.sh --full > $VERIFY_LOG_FILE && \
     return $?
 }
 
@@ -268,7 +269,9 @@ dobuild()
         log_and_exec build
         
         log_and_exec install
-        
+
+        log_and_exec verify
+
         log_and_exec check
         
         log_and_exec check_create
