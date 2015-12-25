@@ -72,7 +72,7 @@ parse_args()
 		TMPL_DIR=${SEARDUINO_PATH}/tmpl
 		;;
 	    *)
-#		echo "PARSE: $1"
+		echo "PARSE ERROR: $1"
 		break
 		;;
 	esac	
@@ -145,7 +145,7 @@ create_c_file()
     fi
 
 
-    C_FILE="$(basename \"$ARD_FILE\" | sed 's,\.ino,\.cpp,g')"
+    C_FILE="$(basename $ARD_FILE | sed 's,\.ino,\.cpp,g')"
     echo "From $ARD_FILE To $C_FILE"
     
     if [ -f "$ARD_DIR/$C_FILE" ]
