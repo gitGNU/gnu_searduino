@@ -33,7 +33,7 @@ help_text() {
     echo "  searduino-builder <options>"
     echo ""
     echo "DESCRIPTION"
-    echo "  searduino-builder can convert Arduino examples to pure C that you can use with Seaduino. It can build for and upload to Arduino boards and it can create C code (a blink example) from scratch."
+    echo "  searduino-builder can convert Arduino examples to pure C that you can use with Searduino. It can build for and upload to Arduino boards and it can create C code (a blink example) from scratch."
     echo ""
     echo "OPTIONS"
     echo "  --ino <FILE>"
@@ -41,6 +41,9 @@ help_text() {
     echo ""
     echo "  --build"
     echo "      builds code (specified by --ino or --ino-dir)"
+    echo ""
+    echo "  --destination-dir"
+    echo "      sets the output dir (project name will be added)"
     echo ""
     echo "  --upload"
     echo "      uploads code (specified by --ino or --ino-dir)"
@@ -73,6 +76,11 @@ parse_args()
 		;;
 	    "--build")
 		PROJECT_DIR=$2
+		shift
+		;;
+	    "--destination-dir")
+                SEARDUINO_HOME_DIR="$2/"
+                mkdir "$SEARDUINO_HOME_DIR"
 		shift
 		;;
 	    "--upload")
