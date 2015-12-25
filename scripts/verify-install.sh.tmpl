@@ -3,6 +3,12 @@
 UNO=false
 VISUAL=false
 
+if [ "$(uname -s | grep -i cygwin | wc -l)" != "0" ]
+then
+    export CYGWIN_USED=true
+fi
+
+
 while  [ "$1" != "" ]
 do
     if [ "$1" = "--vcs" ]
