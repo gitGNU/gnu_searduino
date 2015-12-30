@@ -338,7 +338,7 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
       pthread_cancel(arduino_thread[thread_index]);
       usleep(200);
 
-      arduino_thread[thread_index]=0;
+      // arduino_thread[thread_index]=0;
     // }
 
   usleep(100);
@@ -395,7 +395,7 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
       //printf ("starting thread....join returned: %d\n", retval);
 
       pthread_cancel(arduino_thread[thread_index]);
-      arduino_thread[thread_index]=0;
+      // arduino_thread[thread_index]=0;
     // }
 
   //  thread_index++;
