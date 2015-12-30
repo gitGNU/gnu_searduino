@@ -21,13 +21,14 @@
  * MA  02110-1301, USA.                                              
  ****/
 
+#include <pthread.h>
+
 #include "../com_sandklef_searduino_Searduino.h"
 
 #include "searduino-jni.h"
 #include "seasim/seasim.h"
 
 #include <stdio.h>
-#include <pthread.h>
 
 static pthread_t arduino_thread[10];
 int thread_index=0;
