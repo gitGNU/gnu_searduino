@@ -329,8 +329,8 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_resumeArduinoCode
 JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
   (JNIEnv *, jobject)
 {
-  if (arduino_thread[thread_index]!=0)
-    {
+  // if (pthread_equal(arduino_thread[thread_index]!=0)
+  //   {
       seasim_set_halted();
       usleep(200);
 
@@ -338,7 +338,7 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_haltArduinoCode
       usleep(200);
 
       arduino_thread[thread_index]=0;
-    }
+    // }
 
   usleep(100);
   return ;
@@ -388,14 +388,14 @@ JNIEXPORT void JNICALL Java_com_sandklef_searduino_Searduino_startArduinoCode
   seasim_set_halted();
 
 
-  if (arduino_thread[thread_index]!=0) 
-    {
+  // if (arduino_thread[thread_index]!=0) 
+  //   {
       //      pthread_join(arduino_thread[thread_index], (void**)&retval);
       //printf ("starting thread....join returned: %d\n", retval);
 
       pthread_cancel(arduino_thread[thread_index]);
       arduino_thread[thread_index]=0;
-    }
+    // }
 
   //  thread_index++;
 
